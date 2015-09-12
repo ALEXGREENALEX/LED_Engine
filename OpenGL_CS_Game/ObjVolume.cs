@@ -5,7 +5,7 @@ using System.Text;
 using System.Windows.Forms;
 using OpenTK;
 
-namespace OpenTK_Test1
+namespace OpenGL_CS_Game
 {
     /// <summary>
     /// Структура для хранения 3-ох int, замена "Tuple<int, int, int>"

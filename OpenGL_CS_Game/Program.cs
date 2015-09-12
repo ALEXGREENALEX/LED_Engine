@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using OpenTK;
 
-namespace OpenTK_Test1
+namespace OpenGL_CS_Game
 {
     class Program
     {

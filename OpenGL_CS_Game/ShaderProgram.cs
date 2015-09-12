@@ -4,7 +4,7 @@ using System.Text;
 using System.IO;
 using OpenTK.Graphics.OpenGL;
 
-namespace OpenTK_Test1
+namespace OpenGL_CS_Game
 {
     public class UniformInfo
     {

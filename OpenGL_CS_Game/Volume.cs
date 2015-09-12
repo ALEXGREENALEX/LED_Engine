@@ -1,6 +1,6 @@
 ﻿using OpenTK;
 
-namespace OpenTK_Test1
+namespace OpenGL_CS_Game
 {
     /// <summary>
     /// Объект, состоящий из вершин

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenTK_Test1", "OpenTK_Test1\OpenTK_Test1.csproj", "{D7BF6AA9-62DE-49E7-93BF-199E21221AA2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenGL_CS_Game", "OpenGL_CS_Game\OpenGL_CS_Game.csproj", "{D7BF6AA9-62DE-49E7-93BF-199E21221AA2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

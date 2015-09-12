@@ -10,12 +10,12 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 
-namespace OpenTK_Test1
+namespace OpenGL_CS_Game
 {
     class Game : GameWindow
     {
         public Game() :
-            base(640, 480, new GraphicsMode(32, 24, 0, 8), "OpenTK")
+            base(640, 480, new GraphicsMode(32, 24, 0, 8), "OpenGL(OpenTK) C# Game")
         {
         }
 

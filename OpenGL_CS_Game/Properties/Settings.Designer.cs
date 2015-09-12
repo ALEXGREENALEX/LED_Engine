@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace OpenTK_Test1.Properties
+namespace OpenGL_CS_Game.Properties
 {
 
 

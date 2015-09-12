@@ -7,8 +7,8 @@
     <ProjectGuid>{D7BF6AA9-62DE-49E7-93BF-199E21221AA2}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OpenTK_Test1</RootNamespace>
-    <AssemblyName>OpenTK_Test1</AssemblyName>
+    <RootNamespace>OpenGL_CS_Game</RootNamespace>
+    <AssemblyName>OpenGL_CS_Game</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

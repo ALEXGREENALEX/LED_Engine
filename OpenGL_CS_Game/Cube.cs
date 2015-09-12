@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using OpenTK;
 
-namespace OpenTK_Test1
+namespace OpenGL_CS_Game
 {
     /// <summary>
     /// Куб с текстурными координатами (вся структуру на каждой стороне)

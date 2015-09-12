@@ -1,7 +1,7 @@
 ﻿using OpenTK;
 using System;
 
-namespace OpenTK_Test1
+namespace OpenGL_CS_Game
 {
     class Camera
     {
