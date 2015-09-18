@@ -30,9 +30,9 @@ namespace OpenGL_CS_Game
 
         List<TupleInt3> faces = new List<TupleInt3>();
 
-        public override int VertCount { get { return vertices.Length; } }
-        public override int NormCount { get { return normals.Length; } }
-        public override int IndiceCount { get { return faces.Count * 3; } }
+        public override int VerticesCount { get { return vertices.Length; } }
+        public override int NormalsCount { get { return normals.Length; } }
+        public override int FacesCount { get { return faces.Count * 3; } }
         public override int TextureCoordsCount { get { return texturecoords.Length; } }
         public override int TangentsesCount { get { return tangentses.Length; } }
 
@@ -40,7 +40,7 @@ namespace OpenGL_CS_Game
         /// Получить вершины этого объекта
         /// </summary>
         /// <returns></returns>
-        public override Vector3[] GetVerts()
+        public override Vector3[] GetVertices()
         {
             return vertices;
         }
@@ -59,7 +59,7 @@ namespace OpenGL_CS_Game
         /// </summary>
         /// <param name="offset">Номер первой вершины в объекте</param>
         /// <returns>Array of indices offset to match buffered data</returns>
-        public override uint[] GetIndices(uint offset = 0)
+        public override uint[] GetFaces(uint offset = 0)
         {
             List<uint> temp = new List<uint>();
 
@@ -69,7 +69,6 @@ namespace OpenGL_CS_Game
                 temp.Add((uint)(face.Item2 + offset));
                 temp.Add((uint)(face.Item3 + offset));
             }
-
             return temp.ToArray();
         }
 
@@ -89,9 +88,9 @@ namespace OpenGL_CS_Game
 
         private void CalcTangentses()
         {
-            Vector3[] points = GetVerts();
+            Vector3[] points = GetVertices();
             Vector3[] normals = GetNormals();
-            uint[] faces = GetIndices();
+            uint[] faces = GetFaces();
             Vector2[] texCoords = GetTextureCoords();
             List<Vector4> TangensesList = new List<Vector4>();
             List<Vector3> tan1Accum = new List<Vector3>();
@@ -202,13 +201,15 @@ namespace OpenGL_CS_Game
             List<Vector2> TextureCoords = new List<Vector2>();
             List<TupleInt3> Faces = new List<TupleInt3>();
 
+            String FloatComa = (0.5f).ToString().Substring(1, 1);
+
             // Построчное считывание
             foreach (String line in lines)
             {
                 if (line.StartsWith("v ")) // Определение вершин
                 {
                     // Подготавливаем строку (удаляем начало, пробелы в начале, конце...)
-                    String temp = line.Substring(2).Replace(".", (0.5f).ToString().Substring(1, 1)).Trim();
+                    String temp = line.Substring(2).Replace(".", FloatComa).Replace("  ", " ").Trim();
 
                     Vector3 vec = new Vector3();
 
@@ -230,7 +231,7 @@ namespace OpenGL_CS_Game
                 else if (line.StartsWith("f ")) // Определение граней
                 {
                     // Подготавливаем строку (удаляем начало, пробелы в начале, конце...)
-                    String temp = line.Substring(2).Replace(".", (0.5f).ToString().Substring(1, 1)).Trim();
+                    String temp = line.Substring(2).Replace(".", FloatComa).Replace("  ", " ").Trim();
 
                     if (temp.Length - temp.Replace(" ", "").Length == 2) // Проверка, достаточно ли элементов для грани
                     {
@@ -253,7 +254,7 @@ namespace OpenGL_CS_Game
                 else if (line.StartsWith("vn ")) // Определение нормалей
                 {
                     // Подготавливаем строку (удаляем начало, пробелы в начале, конце...)
-                    String temp = line.Substring(3).Replace(".", (0.5f).ToString().Substring(1, 1)).Trim();
+                    String temp = line.Substring(3).Replace(".", FloatComa).Replace("  ", " ").Trim();
 
                     if (temp.Length - temp.Replace(" ", "").Length == 2) // Проверка, достаточно ли элементов
                     {
@@ -275,7 +276,7 @@ namespace OpenGL_CS_Game
                 else if (line.StartsWith("vt ")) // Определение текстурных координат
                 {
                     // Подготавливаем строку (удаляем начало, пробелы в начале, конце...)
-                    String temp = line.Substring(3).Replace(".", (0.5f).ToString().Substring(1, 1)).Trim();
+                    String temp = line.Substring(3).Replace(".", FloatComa).Replace("  ", " ").Trim();
 
                     if (temp.Length - temp.Replace(" ", "").Length == 1) // Проверка, достаточно ли элементов
                     {

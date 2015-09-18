@@ -28,8 +28,8 @@ namespace OpenGL_CS_Game
         Vector2 lastMousePos = new Vector2();
         Vector2 lastMousePos_Delta = new Vector2();
         float time = 0.0f;
-        float rotSpeed = (float)Math.PI / 4.0f;
-        float Angle = MathHelper.DegreesToRadians(100.0f);
+        //float rotSpeed = (float)Math.PI / 4.0f;
+        float Angle = MathHelper.DegreesToRadians(290.0f);
         double FPS;
 
         List<Volume> objects = new List<Volume>();
@@ -62,11 +62,13 @@ namespace OpenGL_CS_Game
             //GL.Enable(EnableCap.CullFace);
 
             /// Создаем примитивы
-            Cube tc = new Cube();
-            objects.Add(tc);
+            Cube cube = new Cube();
+            Plain plain = new Plain();
+            objects.Add(cube);
+            //objects.Add(plain);
 
             // Отдаляем камеру от начала координат
-            cam.Position = new Vector3(0.0f, 0.0f, 1.5f);
+            cam.Position = new Vector3(0.0f, 0.0f, 0.5f);
         }
 
         protected override void OnLoad(EventArgs e)
@@ -125,12 +127,12 @@ namespace OpenGL_CS_Game
             int vertcount = 0;
             foreach (Volume v in objects)
             {
-                verts.AddRange(v.GetVerts());
+                verts.AddRange(v.GetVertices());
                 norms.AddRange(v.GetNormals());
-                inds.AddRange(v.GetIndices((uint)vertcount));
+                inds.AddRange(v.GetFaces((uint)vertcount));
                 texcoords.AddRange(v.GetTextureCoords());
                 tangentses.AddRange(v.GetTangentses());
-                vertcount += v.VertCount;
+                vertcount += v.VerticesCount;
             }
 
             vertdata = verts.ToArray();
@@ -231,8 +233,8 @@ namespace OpenGL_CS_Game
                 GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(indicedata.Length * sizeof(uint)), indicedata, BufferUsageHint.StaticDraw);
                 
                 GL.BindVertexArray(shaders[activeShader].GetAttribute("VertexPosition"));
-                GL.DrawElements(BeginMode.Triangles, v.IndiceCount, DrawElementsType.UnsignedInt, indiceat * sizeof(uint));
-                indiceat += v.IndiceCount;
+                GL.DrawElements(BeginMode.Triangles, v.FacesCount, DrawElementsType.UnsignedInt, indiceat * sizeof(uint));
+                indiceat += v.FacesCount;
             }
 
             GL.Flush();
@@ -258,9 +260,9 @@ namespace OpenGL_CS_Game
             if (KbdState.IsKeyDown(Key.Q))
                 cam.Move(0f, 0f, -0.01f);
 
-            Angle += rotSpeed * (float)e.Time;
-            if (Angle > MathHelper.TwoPi)
-                Angle -= MathHelper.TwoPi;
+            //Angle += rotSpeed * (float)e.Time;
+            //if (Angle > MathHelper.TwoPi)
+            //    Angle -= MathHelper.TwoPi;
         }
 
         int loadImage(Bitmap image)
