@@ -43,8 +43,6 @@
   <ItemGroup>
     <Compile Include="Camera.cs" />
     <Compile Include="Game.cs" />
-    <Compile Include="ObjMesh.cs" />
-    <Compile Include="ObjMeshLoader.cs" />
     <Compile Include="ObjVolume.cs" />
     <Compile Include="Plain.cs" />
     <Compile Include="Program.cs" />

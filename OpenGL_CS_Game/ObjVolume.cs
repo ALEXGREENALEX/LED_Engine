@@ -8,16 +8,16 @@ using OpenTK;
 namespace OpenGL_CS_Game
 {
     /// <summary>
-    /// Структура для хранения 3-ох int, замена "Tuple<int, int, int>"
+    /// Структура для хранения 3-ох uint, замена "Tuple<uint, uint, uint>"
     /// </summary>
-    public struct TupleInt3
+    struct TupleUInt3
     {
-        public int Item1, Item2, Item3;
-        public TupleInt3(int item1, int item2, int item3)
+        public uint Item1, Item2, Item3;
+        public TupleUInt3(uint Item1, uint Item2, uint Item3)
         {
-            Item1 = item1;
-            Item2 = item2;
-            Item3 = item3;
+            this.Item1 = Item1;
+            this.Item2 = Item2;
+            this.Item3 = Item3;
         }
     }
 
@@ -28,7 +28,7 @@ namespace OpenGL_CS_Game
         Vector2[] texturecoords;
         Vector4[] tangentses;
 
-        List<TupleInt3> faces = new List<TupleInt3>();
+        List<TupleUInt3> faces = new List<TupleUInt3>();
 
         public override int VerticesCount { get { return vertices.Length; } }
         public override int NormalsCount { get { return normals.Length; } }
@@ -65,9 +65,9 @@ namespace OpenGL_CS_Game
 
             foreach (var face in faces)
             {
-                temp.Add((uint)(face.Item1 + offset));
-                temp.Add((uint)(face.Item2 + offset));
-                temp.Add((uint)(face.Item3 + offset));
+                temp.Add(face.Item1 + offset);
+                temp.Add(face.Item2 + offset);
+                temp.Add(face.Item3 + offset);
             }
             return temp.ToArray();
         }
@@ -92,7 +92,7 @@ namespace OpenGL_CS_Game
             Vector3[] normals = GetNormals();
             uint[] faces = GetFaces();
             Vector2[] texCoords = GetTextureCoords();
-            List<Vector4> TangensesList = new List<Vector4>();
+            Vector4[] TangensesList = new Vector4[points.Length];
             List<Vector3> tan1Accum = new List<Vector3>();
             List<Vector3> tan2Accum = new List<Vector3>();
 
@@ -100,7 +100,6 @@ namespace OpenGL_CS_Game
             {
                 tan1Accum.Add(new Vector3(0.0f));
                 tan2Accum.Add(new Vector3(0.0f));
-                TangensesList.Add(new Vector4(0.0f));
             }
 
             // Compute the tangent vector
@@ -154,7 +153,7 @@ namespace OpenGL_CS_Game
 
             tan1Accum.Clear();
             tan2Accum.Clear();
-            tangentses = TangensesList.ToArray();
+            tangentses = TangensesList;
         }
 
         /// <summary>
@@ -196,113 +195,175 @@ namespace OpenGL_CS_Game
             List<String> lines = new List<string>(obj.Split('\n'));
 
             // Списки для хранения данных модели
-            List<Vector3> Verts = new List<Vector3>();
+            List<Vector3> Vertices = new List<Vector3>();
             List<Vector3> Normals = new List<Vector3>();
             List<Vector2> TextureCoords = new List<Vector2>();
-            List<TupleInt3> Faces = new List<TupleInt3>();
+            List<Vector3> VerticesResult = new List<Vector3>();
+            List<Vector3> NormalsResult = new List<Vector3>();
+            List<Vector2> TextureCoordsResult = new List<Vector2>();
+            List<TupleUInt3> FacesV = new List<TupleUInt3>();
+            List<TupleUInt3> FacesT = new List<TupleUInt3>();
+            List<TupleUInt3> FacesN = new List<TupleUInt3>();
 
             String FloatComa = (0.5f).ToString().Substring(1, 1);
 
+            string[] lineparts;
             // Построчное считывание
-            foreach (String line in lines)
+            for (int i = 0; i < lines.Count; i++)
             {
-                if (line.StartsWith("v ")) // Определение вершин
+                lineparts = lines[i].Replace(".", FloatComa).Replace("  ", " ").Trim().Split(' ');
+
+                switch (lineparts[0])
                 {
-                    // Подготавливаем строку (удаляем начало, пробелы в начале, конце...)
-                    String temp = line.Substring(2).Replace(".", FloatComa).Replace("  ", " ").Trim();
+                    case "p": // Point
+                        break;
 
-                    Vector3 vec = new Vector3();
+                    case "v": // Vertex
+                        try
+                        {
+                            if (lineparts.Length >= 4)
+                            {
+                                float x = float.Parse(lineparts[1]);
+                                float y = float.Parse(lineparts[2]);
+                                float z = float.Parse(lineparts[3]);
+                                Vertices.Add(new Vector3(x, y, z));
+                                break;
+                            }
+                            else
+                                break;
+                        }
+                        catch
+                        {
+                            MessageBox.Show("Error parsing Vertex in line " + (i + 1).ToString() + ": " + lines[i]);
+                            break;
+                        }
 
-                    if (temp.Length - temp.Replace(" ", "").Length == 2) // Проверка, достаточно ли элементов для вершины
-                    {
-                        String[] vertparts = temp.Split(' ');
+                    case "vt": // TexCoord
+                        try
+                        {
+                            if (lineparts.Length >= 3)
+                            {
+                                float u = float.Parse(lineparts[1]);
+                                float v = float.Parse(lineparts[2]);
+                                TextureCoords.Add(new Vector2(u, v));
+                                break;
+                            }
+                            else
+                                break;
+                        }
+                        catch
+                        {
+                            MessageBox.Show("Error parsing TextureCoords in line " + (i + 1).ToString() + ": " + lines[i]);
+                            break;
+                        }
 
-                        // Попытка разобрать каждую часть вертекса
-                        bool success = float.TryParse(vertparts[0], out vec.X);
-                        success |= float.TryParse(vertparts[1], out vec.Y);
-                        success |= float.TryParse(vertparts[2], out vec.Z);
+                    case "vn": // Normal
+                        try
+                        {
+                            if (lineparts.Length >= 4)
+                            {
+                                float nx = float.Parse(lineparts[1]);
+                                float ny = float.Parse(lineparts[2]);
+                                float nz = float.Parse(lineparts[3]);
+                                Normals.Add(new Vector3(nx, ny, nz));
+                                break;
+                            }
+                            else
+                                break;
+                        }
+                        catch
+                        {
+                            MessageBox.Show("Error parsing Normals in line " + (i + 1).ToString() + ": " + lines[i]);
+                            break;
+                        }
 
-                        if (!success)
-                            MessageBox.Show("Error parsing vertex: " + line.ToString());
-                        else
-                            Verts.Add(vec);
-                    }
-                }
-                else if (line.StartsWith("f ")) // Определение граней
-                {
-                    // Подготавливаем строку (удаляем начало, пробелы в начале, конце...)
-                    String temp = line.Substring(2).Replace(".", FloatComa).Replace("  ", " ").Trim();
+                    case "f":
+                        try
+                        {
+                            switch (lineparts.Length)
+                            {
+                                case 4: //Triangle
+                                    TupleUInt3[] FaceVTN = new TupleUInt3[3]; // VertexIndex/TextureCoordIndex/NormalIndex
 
-                    if (temp.Length - temp.Replace(" ", "").Length == 2) // Проверка, достаточно ли элементов для грани
-                    {
-                        String[] faceparts = temp.Split(' ');
+                                    for (int j = 1; j < lineparts.Length; j++)
+                                    {
+                                        String[] FaceParams = lineparts[j].Split('/');
+                                        if (FaceParams.Length == 3)
+                                        {
+                                            foreach (string fp in FaceParams)
+                                                if (fp.Trim() == String.Empty)
+                                                    throw new Exception();
+                                        }
+                                        else
+                                            throw new Exception();
 
-                        int i1, i2, i3;
+                                        FaceVTN[j - 1].Item1 = uint.Parse(FaceParams[0]) - 1;
+                                        FaceVTN[j - 1].Item2 = uint.Parse(FaceParams[1]) - 1;
+                                        FaceVTN[j - 1].Item3 = uint.Parse(FaceParams[2]) - 1;
+                                    }
 
-                        // Попытка разобрать каждую часть грани
-                        bool success = int.TryParse(faceparts[0].Substring(0, faceparts[0].IndexOf('/')), out i1);
-                        success |= int.TryParse(faceparts[1].Substring(0, faceparts[1].IndexOf('/')), out i2);
-                        success |= int.TryParse(faceparts[2].Substring(0, faceparts[2].IndexOf('/')), out i3);
+                                    FacesV.Add(new TupleUInt3(FaceVTN[0].Item1, FaceVTN[1].Item1, FaceVTN[2].Item1));
+                                    FacesT.Add(new TupleUInt3(FaceVTN[0].Item2, FaceVTN[1].Item2, FaceVTN[2].Item2));
+                                    FacesN.Add(new TupleUInt3(FaceVTN[0].Item3, FaceVTN[1].Item3, FaceVTN[2].Item3));
+                                    break;
 
-                        if (!success)
-                            MessageBox.Show("Error parsing face: " + line.ToString());
-                        else
-                            // Decrement to get zero-based vertex numbers
-                            Faces.Add(new TupleInt3(--i1, --i2, --i3));
-                    }
-                }
-                else if (line.StartsWith("vn ")) // Определение нормалей
-                {
-                    // Подготавливаем строку (удаляем начало, пробелы в начале, конце...)
-                    String temp = line.Substring(3).Replace(".", FloatComa).Replace("  ", " ").Trim();
+                                //case 5: //Quad
+                                //    ObjMesh.ObjQuad objQuad = new ObjMesh.ObjQuad();
+                                //    objQuad.Index0 = ParseFaceParameter(lineparts[1]);
+                                //    objQuad.Index1 = ParseFaceParameter(lineparts[2]);
+                                //    objQuad.Index2 = ParseFaceParameter(lineparts[3]);
+                                //    objQuad.Index3 = ParseFaceParameter(lineparts[4]);
+                                //    objQuads.Add(objQuad);
+                                //    break;
 
-                    if (temp.Length - temp.Replace(" ", "").Length == 2) // Проверка, достаточно ли элементов
-                    {
-                        String[] NormalParts = temp.Split(' ');
-
-                        float n1, n2, n3;
-
-                        // Попытка разобрать каждую часть
-                        bool success = float.TryParse(NormalParts[0], out n1);
-                        success |= float.TryParse(NormalParts[1], out n2);
-                        success |= float.TryParse(NormalParts[2], out n3);
-
-                        if (!success)
-                            MessageBox.Show("Error parsing normal: " + line.ToString());
-                        else
-                            Normals.Add(new Vector3(n1, n2, n3));
-                    }
-                }
-                else if (line.StartsWith("vt ")) // Определение текстурных координат
-                {
-                    // Подготавливаем строку (удаляем начало, пробелы в начале, конце...)
-                    String temp = line.Substring(3).Replace(".", FloatComa).Replace("  ", " ").Trim();
-
-                    if (temp.Length - temp.Replace(" ", "").Length == 1) // Проверка, достаточно ли элементов
-                    {
-                        String[] TextureCoordsParts = temp.Split(' ');
-
-                        float t1, t2;
-
-                        // Попытка разобрать каждую часть
-                        bool success = float.TryParse(TextureCoordsParts[0], out t1);
-                        success |= float.TryParse(TextureCoordsParts[1], out t2);
-                        
-                        if (!success)
-                            MessageBox.Show("Error parsing TextureCoords: " + line.ToString());
-                        else
-                            TextureCoords.Add(new Vector2(t1, t2));
-                    }
+                                default:
+                                    throw new Exception();
+                            }
+                            break;
+                        }
+                        catch
+                        {
+                            MessageBox.Show("Error parsing Face in line " + (i + 1).ToString() + ": " + lines[i]);
+                            break;
+                        }
                 }
             }
 
             // Создаем ObjVolume
             ObjVolume vol = new ObjVolume();
-            vol.vertices = Verts.ToArray();
-            vol.normals = Normals.ToArray();
-            vol.faces = new List<TupleInt3>(Faces);
-            vol.texturecoords = TextureCoords.ToArray();
+
+            for (int i = 0; i < FacesV.Count; i++)
+            {
+                VerticesResult.Add(Vertices[(int)FacesV[i].Item1]);
+                VerticesResult.Add(Vertices[(int)FacesV[i].Item2]);
+                VerticesResult.Add(Vertices[(int)FacesV[i].Item3]);
+
+                TextureCoordsResult.Add(TextureCoords[(int)FacesT[i].Item1]);
+                TextureCoordsResult.Add(TextureCoords[(int)FacesT[i].Item2]);
+                TextureCoordsResult.Add(TextureCoords[(int)FacesT[i].Item3]);
+
+                NormalsResult.Add(Normals[(int)FacesN[i].Item1]);
+                NormalsResult.Add(Normals[(int)FacesN[i].Item2]);
+                NormalsResult.Add(Normals[(int)FacesN[i].Item3]);
+
+                FacesV[i] = new TupleUInt3((uint)i * 3, (uint)i * 3 + 1, (uint)i * 3 + 2);
+            }
+
+            vol.vertices = VerticesResult.ToArray();
+            vol.texturecoords = TextureCoordsResult.ToArray();
+            vol.normals = NormalsResult.ToArray();
+            vol.faces = FacesV;
             vol.CalcTangentses();
+
+            Vertices = null;
+            TextureCoords = null;
+            Normals = null;
+            VerticesResult = null;
+            TextureCoordsResult = null;
+            NormalsResult = null;
+            FacesV = null;
+            FacesT = null;
+            FacesN = null;
             return vol;
         }
     }

@@ -62,10 +62,12 @@ namespace OpenGL_CS_Game
             //GL.Enable(EnableCap.CullFace);
 
             /// Создаем примитивы
-            Cube cube = new Cube();
-            Plain plain = new Plain();
-            objects.Add(cube);
-            //objects.Add(plain);
+            //Cube cube = new Cube();
+            //Plain plain = new Plain();
+            //objects.Add(cube);
+            ////objects.Add(plain);
+            ObjVolume obj = ObjVolume.LoadFromFile("Model.obj");
+            objects.Add(obj);
 
             // Отдаляем камеру от начала координат
             cam.Position = new Vector3(0.0f, 0.0f, 0.5f);
