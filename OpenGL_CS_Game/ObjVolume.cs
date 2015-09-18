@@ -28,11 +28,11 @@ namespace OpenGL_CS_Game
         Vector2[] texturecoords;
         Vector4[] tangentses;
 
-        List<TupleUInt3> faces = new List<TupleUInt3>();
+        uint[] faces;
 
         public override int VerticesCount { get { return vertices.Length; } }
         public override int NormalsCount { get { return normals.Length; } }
-        public override int FacesCount { get { return faces.Count * 3; } }
+        public override int FacesCount { get { return faces.Length; } }
         public override int TextureCoordsCount { get { return texturecoords.Length; } }
         public override int TangentsesCount { get { return tangentses.Length; } }
 
@@ -57,19 +57,10 @@ namespace OpenGL_CS_Game
         /// <summary>
         /// Получить индексы что-бы нарисовать этот объект
         /// </summary>
-        /// <param name="offset">Номер первой вершины в объекте</param>
         /// <returns>Array of indices offset to match buffered data</returns>
-        public override uint[] GetFaces(uint offset = 0)
+        public override uint[] GetFaces()
         {
-            List<uint> temp = new List<uint>();
-
-            foreach (var face in faces)
-            {
-                temp.Add(face.Item1 + offset);
-                temp.Add(face.Item2 + offset);
-                temp.Add(face.Item3 + offset);
-            }
-            return temp.ToArray();
+            return faces;
         }
 
         /// <summary>
@@ -201,9 +192,9 @@ namespace OpenGL_CS_Game
             List<Vector3> VerticesResult = new List<Vector3>();
             List<Vector3> NormalsResult = new List<Vector3>();
             List<Vector2> TextureCoordsResult = new List<Vector2>();
-            List<TupleUInt3> FacesV = new List<TupleUInt3>();
-            List<TupleUInt3> FacesT = new List<TupleUInt3>();
-            List<TupleUInt3> FacesN = new List<TupleUInt3>();
+            List<uint> FacesV = new List<uint>();
+            List<uint> FacesT = new List<uint>();
+            List<uint> FacesN = new List<uint>();
 
             String FloatComa = (0.5f).ToString().Substring(1, 1);
 
@@ -302,19 +293,23 @@ namespace OpenGL_CS_Game
                                         FaceVTN[j - 1].Item3 = uint.Parse(FaceParams[2]) - 1;
                                     }
 
-                                    FacesV.Add(new TupleUInt3(FaceVTN[0].Item1, FaceVTN[1].Item1, FaceVTN[2].Item1));
-                                    FacesT.Add(new TupleUInt3(FaceVTN[0].Item2, FaceVTN[1].Item2, FaceVTN[2].Item2));
-                                    FacesN.Add(new TupleUInt3(FaceVTN[0].Item3, FaceVTN[1].Item3, FaceVTN[2].Item3));
+                                    for (int j = 0; j < FaceVTN.Length; j++)
+                                    {
+                                        FacesV.Add(FaceVTN[j].Item1);
+                                        FacesT.Add(FaceVTN[j].Item2);
+                                        FacesN.Add(FaceVTN[j].Item3);
+                                    }
                                     break;
 
-                                //case 5: //Quad
-                                //    ObjMesh.ObjQuad objQuad = new ObjMesh.ObjQuad();
-                                //    objQuad.Index0 = ParseFaceParameter(lineparts[1]);
-                                //    objQuad.Index1 = ParseFaceParameter(lineparts[2]);
-                                //    objQuad.Index2 = ParseFaceParameter(lineparts[3]);
-                                //    objQuad.Index3 = ParseFaceParameter(lineparts[4]);
-                                //    objQuads.Add(objQuad);
-                                //    break;
+                                case 5: //Quad
+                                    //    ObjMesh.ObjQuad objQuad = new ObjMesh.ObjQuad();
+                                    //    objQuad.Index0 = ParseFaceParameter(lineparts[1]);
+                                    //    objQuad.Index1 = ParseFaceParameter(lineparts[2]);
+                                    //    objQuad.Index2 = ParseFaceParameter(lineparts[3]);
+                                    //    objQuad.Index3 = ParseFaceParameter(lineparts[4]);
+                                    //    objQuads.Add(objQuad);
+                                    MessageBox.Show("Quad's Faces not supported!!!");
+                                    break;
 
                                 default:
                                     throw new Exception();
@@ -332,27 +327,29 @@ namespace OpenGL_CS_Game
             // Создаем ObjVolume
             ObjVolume vol = new ObjVolume();
 
-            for (int i = 0; i < FacesV.Count; i++)
+            for (int i = 0; i < FacesV.Count; i += 3)
             {
-                VerticesResult.Add(Vertices[(int)FacesV[i].Item1]);
-                VerticesResult.Add(Vertices[(int)FacesV[i].Item2]);
-                VerticesResult.Add(Vertices[(int)FacesV[i].Item3]);
+                VerticesResult.Add(Vertices[(int)FacesV[i]]);
+                VerticesResult.Add(Vertices[(int)FacesV[i + 1]]);
+                VerticesResult.Add(Vertices[(int)FacesV[i + 2]]);
 
-                TextureCoordsResult.Add(TextureCoords[(int)FacesT[i].Item1]);
-                TextureCoordsResult.Add(TextureCoords[(int)FacesT[i].Item2]);
-                TextureCoordsResult.Add(TextureCoords[(int)FacesT[i].Item3]);
+                TextureCoordsResult.Add(TextureCoords[(int)FacesT[i]]);
+                TextureCoordsResult.Add(TextureCoords[(int)FacesT[i + 1]]);
+                TextureCoordsResult.Add(TextureCoords[(int)FacesT[i + 2]]);
 
-                NormalsResult.Add(Normals[(int)FacesN[i].Item1]);
-                NormalsResult.Add(Normals[(int)FacesN[i].Item2]);
-                NormalsResult.Add(Normals[(int)FacesN[i].Item3]);
+                NormalsResult.Add(Normals[(int)FacesN[i]]);
+                NormalsResult.Add(Normals[(int)FacesN[i + 1]]);
+                NormalsResult.Add(Normals[(int)FacesN[i + 2]]);
 
-                FacesV[i] = new TupleUInt3((uint)i * 3, (uint)i * 3 + 1, (uint)i * 3 + 2);
+                FacesV[i] = (uint)i;
+                FacesV[i + 1] = (uint)i + 1;
+                FacesV[i + 2] = (uint)i + 2;
             }
 
             vol.vertices = VerticesResult.ToArray();
             vol.texturecoords = TextureCoordsResult.ToArray();
             vol.normals = NormalsResult.ToArray();
-            vol.faces = FacesV;
+            vol.faces = FacesV.ToArray();
             vol.CalcTangentses();
 
             Vertices = null;

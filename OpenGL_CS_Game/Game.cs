@@ -126,15 +126,13 @@ namespace OpenGL_CS_Game
             List<Vector4> tangentses = new List<Vector4>();
 
             // Assemble vertex and indice data for all volumes
-            int vertcount = 0;
             foreach (Volume v in objects)
             {
                 verts.AddRange(v.GetVertices());
                 norms.AddRange(v.GetNormals());
-                inds.AddRange(v.GetFaces((uint)vertcount));
+                inds.AddRange(v.GetFaces());
                 texcoords.AddRange(v.GetTextureCoords());
                 tangentses.AddRange(v.GetTangentses());
-                vertcount += v.VerticesCount;
             }
 
             vertdata = verts.ToArray();
