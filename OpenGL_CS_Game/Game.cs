@@ -28,7 +28,7 @@ namespace OpenGL_CS_Game
         Vector2 lastMousePos = new Vector2();
         Vector2 lastMousePos_Delta = new Vector2();
         float time = 0.0f;
-        //float rotSpeed = (float)Math.PI / 4.0f;
+        float rotSpeed = (float)Math.PI / 4.0f;
         float Angle = MathHelper.DegreesToRadians(290.0f);
         double FPS;
 
@@ -61,13 +61,17 @@ namespace OpenGL_CS_Game
             //Отрисовка только тех сторон, что повернуты к камере нормалями.
             //GL.Enable(EnableCap.CullFace);
 
-            /// Создаем примитивы
+            // Создаем примитивы
             //Cube cube = new Cube();
             //Plain plain = new Plain();
             //objects.Add(cube);
-            ////objects.Add(plain);
-            ObjVolume obj = ObjVolume.LoadFromFile("Model.obj");
-            objects.Add(obj);
+            //objects.Add(plain);
+
+            // Загружаем модели
+            ObjVolume obj_Triangulated = ObjVolume.LoadFromFile("Model_Triangulated.obj");
+            ObjVolume obj_Quads = ObjVolume.LoadFromFile("Model_Quads.obj");
+            objects.Add(obj_Triangulated);
+            objects.Add(obj_Quads);
 
             // Отдаляем камеру от начала координат
             cam.Position = new Vector3(0.0f, 0.0f, 0.5f);
@@ -126,20 +130,22 @@ namespace OpenGL_CS_Game
             List<Vector4> tangentses = new List<Vector4>();
 
             // Assemble vertex and indice data for all volumes
+            int vertcount = 0;
             foreach (Volume v in objects)
             {
                 verts.AddRange(v.GetVertices());
                 norms.AddRange(v.GetNormals());
-                inds.AddRange(v.GetFaces());
                 texcoords.AddRange(v.GetTextureCoords());
                 tangentses.AddRange(v.GetTangentses());
+                inds.AddRange(v.GetFaceIndeces((uint)vertcount));
+                vertcount += v.VerticesCount;
             }
 
             vertdata = verts.ToArray();
             normdata = norms.ToArray();
-            indicedata = inds.ToArray();
             texcoorddata = texcoords.ToArray();
             tangdata = tangentses.ToArray();
+            indicedata = inds.ToArray();
 
             // Обновляем позиции объектов
             time += (float)e.Time;
@@ -260,9 +266,9 @@ namespace OpenGL_CS_Game
             if (KbdState.IsKeyDown(Key.Q))
                 cam.Move(0f, 0f, -0.01f);
 
-            //Angle += rotSpeed * (float)e.Time;
-            //if (Angle > MathHelper.TwoPi)
-            //    Angle -= MathHelper.TwoPi;
+            Angle += rotSpeed * (float)e.Time;
+            if (Angle > MathHelper.TwoPi)
+                Angle -= MathHelper.TwoPi;
         }
 
         int loadImage(Bitmap image)

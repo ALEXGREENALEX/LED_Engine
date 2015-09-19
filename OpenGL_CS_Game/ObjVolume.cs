@@ -7,20 +7,6 @@ using OpenTK;
 
 namespace OpenGL_CS_Game
 {
-    /// <summary>
-    /// Структура для хранения 3-ох uint, замена "Tuple<uint, uint, uint>"
-    /// </summary>
-    struct TupleUInt3
-    {
-        public uint Item1, Item2, Item3;
-        public TupleUInt3(uint Item1, uint Item2, uint Item3)
-        {
-            this.Item1 = Item1;
-            this.Item2 = Item2;
-            this.Item3 = Item3;
-        }
-    }
-
     class ObjVolume : Volume
     {
         Vector3[] vertices;
@@ -58,9 +44,14 @@ namespace OpenGL_CS_Game
         /// Получить индексы что-бы нарисовать этот объект
         /// </summary>
         /// <returns>Array of indices offset to match buffered data</returns>
-        public override uint[] GetFaces()
+        public override uint[] GetFaceIndeces(uint offset = 0)
         {
-            return faces;
+            uint[] inds = new uint[faces.Length];
+            
+            for (int i = 0; i < faces.Length; i++)
+                inds[i] = faces[i] + offset;
+
+            return inds;
         }
 
         /// <summary>
@@ -81,7 +72,7 @@ namespace OpenGL_CS_Game
         {
             Vector3[] points = GetVertices();
             Vector3[] normals = GetNormals();
-            uint[] faces = GetFaces();
+            uint[] faces = GetFaceIndeces();
             Vector2[] texCoords = GetTextureCoords();
             Vector4[] TangensesList = new Vector4[points.Length];
             List<Vector3> tan1Accum = new List<Vector3>();
@@ -271,49 +262,45 @@ namespace OpenGL_CS_Game
                     case "f":
                         try
                         {
-                            switch (lineparts.Length)
+                            uint[,] FaceVTN = new uint[4, 3]; // VertexIndex/TextureCoordIndex/NormalIndex
+
+                            if (lineparts.Length == 4 || lineparts.Length == 5) //Triangle or Quad
                             {
-                                case 4: //Triangle
-                                    TupleUInt3[] FaceVTN = new TupleUInt3[3]; // VertexIndex/TextureCoordIndex/NormalIndex
-
-                                    for (int j = 1; j < lineparts.Length; j++)
+                                for (int j = 0; j < lineparts.Length - 1; j++)
+                                {
+                                    String[] FaceParams = lineparts[j + 1].Split('/');
+                                    if (FaceParams.Length == 3) // If Vertex/TexCoords/Normals
                                     {
-                                        String[] FaceParams = lineparts[j].Split('/');
-                                        if (FaceParams.Length == 3)
-                                        {
-                                            foreach (string fp in FaceParams)
-                                                if (fp.Trim() == String.Empty)
-                                                    throw new Exception();
-                                        }
-                                        else
-                                            throw new Exception();
-
-                                        FaceVTN[j - 1].Item1 = uint.Parse(FaceParams[0]) - 1;
-                                        FaceVTN[j - 1].Item2 = uint.Parse(FaceParams[1]) - 1;
-                                        FaceVTN[j - 1].Item3 = uint.Parse(FaceParams[2]) - 1;
+                                        foreach (string fp in FaceParams)
+                                            if (fp.Trim() == String.Empty)
+                                                throw new Exception();
                                     }
+                                    else
+                                        throw new Exception();
 
-                                    for (int j = 0; j < FaceVTN.Length; j++)
+                                    for (int k = 0; k < 3; k++) //Add Vertex/TexCoords/Normals
+                                        FaceVTN[j, k] = uint.Parse(FaceParams[k]) - 1;
+                                }
+
+                                //Add first triangle if Triangle
+                                for (int j = 0; j < 3; j++)
+                                {
+                                    FacesV.Add(FaceVTN[j, 0]);
+                                    FacesT.Add(FaceVTN[j, 1]);
+                                    FacesN.Add(FaceVTN[j, 2]);
+                                }
+
+                                //Add second triangle if Quad
+                                if (lineparts.Length == 5)
+                                    for (int j = 2; j < 5; j++)
                                     {
-                                        FacesV.Add(FaceVTN[j].Item1);
-                                        FacesT.Add(FaceVTN[j].Item2);
-                                        FacesN.Add(FaceVTN[j].Item3);
+                                        FacesV.Add(FaceVTN[j % 4, 0]);
+                                        FacesT.Add(FaceVTN[j % 4, 1]);
+                                        FacesN.Add(FaceVTN[j % 4, 2]);
                                     }
-                                    break;
-
-                                case 5: //Quad
-                                    //    ObjMesh.ObjQuad objQuad = new ObjMesh.ObjQuad();
-                                    //    objQuad.Index0 = ParseFaceParameter(lineparts[1]);
-                                    //    objQuad.Index1 = ParseFaceParameter(lineparts[2]);
-                                    //    objQuad.Index2 = ParseFaceParameter(lineparts[3]);
-                                    //    objQuad.Index3 = ParseFaceParameter(lineparts[4]);
-                                    //    objQuads.Add(objQuad);
-                                    MessageBox.Show("Quad's Faces not supported!!!");
-                                    break;
-
-                                default:
-                                    throw new Exception();
                             }
+                            else
+                                throw new Exception();
                             break;
                         }
                         catch

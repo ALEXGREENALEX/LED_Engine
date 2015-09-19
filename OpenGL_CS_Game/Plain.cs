@@ -37,9 +37,15 @@ namespace OpenGL_CS_Game
             };
         }
 
-        public override uint[] GetFaces()
+        public override uint[] GetFaceIndeces(uint offset = 0)
         {
-            return new uint[] { 0, 1, 2, 0, 2, 3 };
+            uint[] inds = new uint[] { 0, 1, 2, 0, 2, 3 };
+
+            if (offset != 0)
+                for (int i = 0; i < inds.Length; i++)
+                    inds[i] += offset;
+
+            return inds;
         }
 
         public override Vector2[] GetTextureCoords()

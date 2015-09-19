@@ -24,7 +24,7 @@ namespace OpenGL_CS_Game
         public abstract Vector3[] GetVertices();
         public abstract Vector2[] GetTextureCoords();
         public abstract Vector3[] GetNormals();
-        public abstract uint[] GetFaces();
+        public abstract uint[] GetFaceIndeces(uint offset = 0);
         public abstract Vector4[] GetTangentses();
         public abstract void CalculateModelMatrix();
     }
