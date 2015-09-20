@@ -29,7 +29,7 @@ namespace OpenGL_CS_Game
         double FPS;
 
         List<Volume> objects = new List<Volume>();
-        Dictionary<string, int> textures = new Dictionary<string, int>();
+        Dictionary<int, int> textures = new Dictionary<int, int>();
         Dictionary<string, ShaderProgram> shaders = new Dictionary<string, ShaderProgram>();
 
         void initProgram()
@@ -45,10 +45,10 @@ namespace OpenGL_CS_Game
 
             // Загружаем текстуры
             GL.ActiveTexture(TextureUnit.Texture0);
-            textures.Add("DiffuseMap", loadImage("brick-wall.jpg"));
+            textures.Add(0, loadImage("brick-wall.jpg"));
 
             GL.ActiveTexture(TextureUnit.Texture1);
-            textures.Add("NormalMap", loadImage("brick-wall_N.jpg"));
+            textures.Add(1, loadImage("brick-wall_N.jpg"));
 
             //Отрисовка только тех сторон, что повернуты к камере нормалями.
             //GL.Enable(EnableCap.CullFace);
@@ -62,7 +62,9 @@ namespace OpenGL_CS_Game
             // Загружаем модели
             ObjVolume obj_Triangulated = ObjVolume.LoadFromFile("Model_Triangulated.obj");
             obj_Triangulated.ShaderName = "PhongNormalMap";
+            obj_Triangulated.TextureID[1] = 1;
             ObjVolume obj_Quads = ObjVolume.LoadFromFile("Model_Quads.obj");
+            obj_Quads.TextureID[0] = 0;
             objects.Add(obj_Triangulated);
             objects.Add(obj_Quads);
 
@@ -127,6 +129,15 @@ namespace OpenGL_CS_Game
                 v.ViewProjectionMatrix = cam.GetViewMatrix() * Matrix4.CreatePerspectiveFieldOfView(1.3f, ClientSize.Width / (float)ClientSize.Height, 0.2f, 50.0f);
                 v.ModelViewProjectionMatrix = v.ModelMatrix * v.ViewProjectionMatrix;
 
+                GL.ActiveTexture(TextureUnit.Texture0);
+                GL.BindTexture(TextureTarget.Texture2D, textures[v.TextureID[0]]);
+                GL.ActiveTexture(TextureUnit.Texture1);
+                GL.BindTexture(TextureTarget.Texture2D, textures[v.TextureID[1]]);
+                GL.ActiveTexture(TextureUnit.Texture2);
+                GL.BindTexture(TextureTarget.Texture2D, textures[v.TextureID[2]]);
+                GL.ActiveTexture(TextureUnit.Texture3);
+                GL.BindTexture(TextureTarget.Texture2D, textures[v.TextureID[3]]);
+                
                 // Подключаем шейдеры для отрисовки объекта
                 GL.LinkProgram(shaders[v.ShaderName].ProgramID);
                 GL.UseProgram(shaders[v.ShaderName].ProgramID);

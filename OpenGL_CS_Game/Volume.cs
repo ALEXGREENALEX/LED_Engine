@@ -18,6 +18,7 @@ namespace OpenGL_CS_Game
         public virtual int TangentsesCount { get; set; }
 
         public virtual string ShaderName { get; set; }
+        public virtual int[] TextureID { get; set; }
         
         public Matrix4 ModelMatrix = Matrix4.Identity;
         public Matrix4 ViewProjectionMatrix = Matrix4.Identity;

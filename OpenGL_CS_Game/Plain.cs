@@ -14,6 +14,7 @@ namespace OpenGL_CS_Game
             TextureCoordsCount = 4;
             TangentsesCount = 4;
             ShaderName = "Default";
+            TextureID = new int[] { 0, 0, 0, 0 };
         }
 
         public override Vector3[] GetVertices()

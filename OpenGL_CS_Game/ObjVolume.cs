@@ -16,6 +16,7 @@ namespace OpenGL_CS_Game
         uint[] faces;
 
         string shaderName = "Default";
+        int[] textureID = { 0, 0, 0, 0 };
 
         public override int VerticesCount { get { return vertices.Length; } }
         public override int NormalsCount { get { return normals.Length; } }
@@ -27,6 +28,12 @@ namespace OpenGL_CS_Game
         {
             get { return shaderName; }
             set { shaderName = value; }
+        }
+
+        public override int[] TextureID
+        {
+            get { return textureID; }
+            set { textureID = value; }
         }
 
         /// <summary>
@@ -54,7 +61,7 @@ namespace OpenGL_CS_Game
         public override uint[] GetFaceIndeces(uint offset = 0)
         {
             uint[] inds = new uint[faces.Length];
-            
+
             for (int i = 0; i < faces.Length; i++)
                 inds[i] = faces[i] + offset;
 
@@ -265,7 +272,7 @@ namespace OpenGL_CS_Game
                             MessageBox.Show("Error parsing Normals in line " + (i + 1).ToString() + ": " + lines[i]);
                             break;
                         }
-
+                        
                     case "f":
                         try
                         {
