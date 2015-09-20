@@ -1,0 +1,11 @@
+﻿<!--В этом файле хранятся все главные настройки-->
+
+<Config>
+	<Title>OpenGL(OpenTK) C# Game</Title>
+	<Path>
+		<GameData>GameData</GameData>
+		<Meshes>Meshes</Meshes>
+		<Shaders>Shaders</Shaders>
+		<Textures>Textures</Textures>
+	</Path>
+</Config>

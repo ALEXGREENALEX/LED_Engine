@@ -1,0 +1,17 @@
+﻿<!--Список всех шейдеров, с структурой:
+	Название;
+	Файл вершинного шейдера;
+	Файл фрагментного шейдера.-->
+
+<Shaders>
+	<Shader>
+		<Name></Name>
+		<VertexShader>Default_VS.glsl</VertexShader>
+		<FragmentShader>Default_FS.glsl</FragmentShader>
+	</Shader>
+	<Shader>
+		<Name>PhongNormalMap</Name>
+		<VertexShader>PhongNormalMap_VS.glsl</VertexShader>
+		<FragmentShader>PhongNormalMap_FS.glsl</FragmentShader>
+	</Shader>
+</Shaders>

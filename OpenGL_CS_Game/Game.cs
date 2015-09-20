@@ -5,6 +5,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
@@ -15,7 +16,7 @@ namespace OpenGL_CS_Game
     class Game : GameWindow
     {
         public Game() :
-            base(640, 480, new GraphicsMode(32, 24, 0, 8), "OpenGL(OpenTK) C# Game")
+            base(640, 480, new GraphicsMode(32, 24, 0, 8))
         {
         }
 
@@ -29,26 +30,82 @@ namespace OpenGL_CS_Game
         double FPS;
 
         List<Volume> objects = new List<Volume>();
-        Dictionary<int, int> textures = new Dictionary<int, int>();
+        Dictionary<string, int> textures = new Dictionary<string, int>();
         Dictionary<string, ShaderProgram> shaders = new Dictionary<string, ShaderProgram>();
+
+        void LoadConfigAndResources()
+        {
+            string StartupPath = Application.StartupPath;
+
+            XmlDocument XML = new XmlDocument();
+            XML.Load(Path.Combine(StartupPath, "config.xml"));
+            Title = XML.DocumentElement.SelectSingleNode("Title").InnerText;
+
+            XmlNode NodePath = XML.DocumentElement.SelectSingleNode("Path");
+            string GameDataPath = Path.Combine(StartupPath, NodePath.SelectSingleNode("GameData").InnerText);
+
+            // Проверка на запуск из студии!!!
+            if (!Directory.Exists(GameDataPath))
+            {
+                StartupPath = Path.GetDirectoryName(Path.GetDirectoryName(StartupPath));
+                GameDataPath = Path.Combine(StartupPath, NodePath.SelectSingleNode("GameData").InnerText);
+            }
+
+            // Находим пути к ресурсам
+            string MeshesPath = Path.Combine(GameDataPath, NodePath.SelectSingleNode("Meshes").InnerText);
+            string ShadersPath = Path.Combine(GameDataPath, NodePath.SelectSingleNode("Shaders").InnerText);
+            string TexturesPath = Path.Combine(GameDataPath, NodePath.SelectSingleNode("Textures").InnerText);
+
+            // Загружаем шейдеры
+            XML.Load(Path.Combine(GameDataPath, "shaders.xml"));
+            XmlNodeList xmlNodeList = XML.DocumentElement.SelectNodes("Shader");
+
+            foreach (XmlNode xmlNode in xmlNodeList)
+            {
+                shaders.Add(xmlNode.SelectSingleNode("Name").InnerText, new ShaderProgram(
+                    Path.Combine(ShadersPath, xmlNode.SelectSingleNode("VertexShader").InnerText),
+                    Path.Combine(ShadersPath, xmlNode.SelectSingleNode("FragmentShader").InnerText), true));
+            }
+
+            // Загружаем текстуры
+            XML.Load(Path.Combine(GameDataPath, "textures.xml"));
+            xmlNodeList = XML.DocumentElement.SelectNodes("Texture");
+
+            foreach (XmlNode xmlNode in xmlNodeList)
+            {
+                textures.Add(xmlNode.SelectSingleNode("Name").InnerText, loadImage(
+                    Path.Combine(TexturesPath, xmlNode.SelectSingleNode("File").InnerText)));
+            }
+
+            //// Загружаем модели
+            //XML.Load(Path.Combine(GameDataPath, "models.xml"));
+            //xmlNodeList = XML.DocumentElement.SelectNodes("Models");
+
+            //foreach (XmlNode xmlNode in xmlNodeList)
+            //{
+            //    textures.Add(xmlNode.SelectSingleNode("Name").InnerText, loadImage(
+            //        Path.Combine(TexturesPath, xmlNode.SelectSingleNode("File").InnerText)));
+            //}
+
+            ObjVolume obj_Triangulated = ObjVolume.LoadFromFile(MeshesPath + "\\Model_Triangulated.obj");
+            obj_Triangulated.ShaderName = "PhongNormalMap";
+            obj_Triangulated.Textures[0] = "brick-wall";
+            obj_Triangulated.Textures[1] = "brick-wall_N";
+            ObjVolume obj_Quads = ObjVolume.LoadFromFile(MeshesPath + "\\Model_Quads.obj");
+            obj_Quads.Textures[0] = "brick-wall";
+            objects.Add(obj_Triangulated);
+            objects.Add(obj_Quads);
+        }
 
         void initProgram()
         {
+            // Загружаем конфигурацию и ресурсы
+            LoadConfigAndResources();
+
             GL.GenBuffers(1, out indecesArrayBuffer);
 
             // Enable Depth Test
             GL.Enable(EnableCap.DepthTest);
-
-            // Загружаем шейдеры
-            shaders.Add("Default", new ShaderProgram(Properties.Resources.Default_VS, Properties.Resources.Default_FS, false));
-            shaders.Add("PhongNormalMap", new ShaderProgram(Properties.Resources.PhongNormalMap_VS, Properties.Resources.PhongNormalMap_FS, false));
-
-            // Загружаем текстуры
-            GL.ActiveTexture(TextureUnit.Texture0);
-            textures.Add(0, loadImage("brick-wall.jpg"));
-
-            GL.ActiveTexture(TextureUnit.Texture1);
-            textures.Add(1, loadImage("brick-wall_N.jpg"));
 
             //Отрисовка только тех сторон, что повернуты к камере нормалями.
             //GL.Enable(EnableCap.CullFace);
@@ -58,15 +115,6 @@ namespace OpenGL_CS_Game
             //Plain plain = new Plain();
             //objects.Add(cube);
             //objects.Add(plain);
-
-            // Загружаем модели
-            ObjVolume obj_Triangulated = ObjVolume.LoadFromFile("Model_Triangulated.obj");
-            obj_Triangulated.ShaderName = "PhongNormalMap";
-            obj_Triangulated.TextureID[1] = 1;
-            ObjVolume obj_Quads = ObjVolume.LoadFromFile("Model_Quads.obj");
-            obj_Quads.TextureID[0] = 0;
-            objects.Add(obj_Triangulated);
-            objects.Add(obj_Quads);
 
             // Отдаляем камеру от начала координат
             cam.Position = new Vector3(0.0f, 0.0f, 0.5f);
@@ -130,14 +178,14 @@ namespace OpenGL_CS_Game
                 v.ModelViewProjectionMatrix = v.ModelMatrix * v.ViewProjectionMatrix;
 
                 GL.ActiveTexture(TextureUnit.Texture0);
-                GL.BindTexture(TextureTarget.Texture2D, textures[v.TextureID[0]]);
+                GL.BindTexture(TextureTarget.Texture2D, textures[v.Textures[0]]);
                 GL.ActiveTexture(TextureUnit.Texture1);
-                GL.BindTexture(TextureTarget.Texture2D, textures[v.TextureID[1]]);
+                GL.BindTexture(TextureTarget.Texture2D, textures[v.Textures[1]]);
                 GL.ActiveTexture(TextureUnit.Texture2);
-                GL.BindTexture(TextureTarget.Texture2D, textures[v.TextureID[2]]);
+                GL.BindTexture(TextureTarget.Texture2D, textures[v.Textures[2]]);
                 GL.ActiveTexture(TextureUnit.Texture3);
-                GL.BindTexture(TextureTarget.Texture2D, textures[v.TextureID[3]]);
-                
+                GL.BindTexture(TextureTarget.Texture2D, textures[v.Textures[3]]);
+
                 // Подключаем шейдеры для отрисовки объекта
                 GL.LinkProgram(shaders[v.ShaderName].ProgramID);
                 GL.UseProgram(shaders[v.ShaderName].ProgramID);

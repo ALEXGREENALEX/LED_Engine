@@ -1,0 +1,16 @@
+﻿<!--Список всех текстур-->
+
+<Textures>
+	<Texture>
+		<Name></Name>
+		<File>_checker.bmp</File>
+	</Texture>
+	<Texture>
+		<Name>brick-wall</Name>
+		<File>brick-wall.jpg</File>
+	</Texture>
+	<Texture>
+		<Name>brick-wall_N</Name>
+		<File>brick-wall_N.jpg</File>
+	</Texture>
+</Textures>

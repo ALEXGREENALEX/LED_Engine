@@ -13,8 +13,8 @@ namespace OpenGL_CS_Game
             FacesCount = 36;
             TextureCoordsCount = 24;
             TangentsesCount = 24;
-            ShaderName = "Default";
-            TextureID = new int[] { 0, 0, 0, 0 };
+            ShaderName = String.Empty;
+            Textures = new string[] { String.Empty, String.Empty, String.Empty, String.Empty };
         }
 
         public override Vector3[] GetVertices()

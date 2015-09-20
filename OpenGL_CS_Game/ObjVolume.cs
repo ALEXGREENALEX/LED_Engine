@@ -15,8 +15,8 @@ namespace OpenGL_CS_Game
         Vector4[] tangentses;
         uint[] faces;
 
-        string shaderName = "Default";
-        int[] textureID = { 0, 0, 0, 0 };
+        string shaderName = String.Empty;
+        string[] textures = { String.Empty, String.Empty, String.Empty, String.Empty };
 
         public override int VerticesCount { get { return vertices.Length; } }
         public override int NormalsCount { get { return normals.Length; } }
@@ -30,10 +30,10 @@ namespace OpenGL_CS_Game
             set { shaderName = value; }
         }
 
-        public override int[] TextureID
+        public override string[] Textures
         {
-            get { return textureID; }
-            set { textureID = value; }
+            get { return textures; }
+            set { textures = value; }
         }
 
         /// <summary>
