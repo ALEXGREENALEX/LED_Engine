@@ -104,7 +104,7 @@ namespace OpenGL_CS_Game
                 else if (e.Button == MouseButton.Middle)
                 {
                     lastMousePos_Delta = new Vector2(0.0f, 0.0f);
-                    objects[0].Rotation = new Vector3(0.0f, 0.0f, 0);
+                    objects[0].Rotation = new Vector3(0.0f, 0.0f, 0.0f);
                 }
         }
 
