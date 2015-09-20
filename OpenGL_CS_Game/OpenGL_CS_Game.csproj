@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OpenGL_CS_Game</RootNamespace>
     <AssemblyName>OpenGL_CS_Game</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -75,8 +76,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="Shaders\FS_NormalMap.glsl" />
-    <None Include="Shaders\VS_NormalMap.glsl" />
+    <None Include="Shaders\Default_FS.glsl" />
+    <None Include="Shaders\Default_VS.glsl" />
+    <None Include="Shaders\PhongNormalMap_FS.glsl" />
+    <None Include="Shaders\PhongNormalMap_VS.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="brick-wall.jpg">

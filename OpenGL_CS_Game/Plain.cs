@@ -6,14 +6,14 @@ namespace OpenGL_CS_Game
 {
     class Plain : Volume
     {
-        public Plain()
-            : base()
+        public Plain() : base()
         {
             VerticesCount = 4;
             NormalsCount = 4;
             FacesCount = 6;
             TextureCoordsCount = 4;
             TangentsesCount = 4;
+            ShaderName = "Default";
         }
 
         public override Vector3[] GetVertices()
@@ -58,11 +58,6 @@ namespace OpenGL_CS_Game
             };
         }
 
-        public override void CalculateModelMatrix()
-        {
-            ModelMatrix = Matrix4.CreateScale(Scale) * Matrix4.CreateRotationX(Rotation.X) * Matrix4.CreateRotationY(Rotation.Y) * Matrix4.CreateRotationZ(Rotation.Z) * Matrix4.CreateTranslation(Position);
-        }
-
         public override Vector4[] GetTangentses()
         {
             return new Vector4[] {
@@ -71,6 +66,11 @@ namespace OpenGL_CS_Game
                 new Vector4(1.0f, 0.0f, 0.0f, -1.0f),
                 new Vector4(1.0f, 0.0f, 0.0f, -1.0f)
             };
+        }
+
+        public override void CalculateModelMatrix()
+        {
+            ModelMatrix = Matrix4.CreateScale(Scale) * Matrix4.CreateRotationX(Rotation.X) * Matrix4.CreateRotationY(Rotation.Y) * Matrix4.CreateRotationZ(Rotation.Z) * Matrix4.CreateTranslation(Position);
         }
     }
 }

@@ -61,7 +61,50 @@ namespace OpenGL_CS_Game.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на #version 430
+        ///   Ищет локализованную строку, похожую на #version 330
+        ///
+        ///in vec2 f_texcoord;
+        ///out vec4 outputColor;
+        ///
+        ///uniform sampler2D maintexture;
+        ///
+        ///void
+        ///main()
+        ///{
+        ///	vec2 flipped_texcoord = vec2(f_texcoord.x, 1.0 - f_texcoord.y);
+        ///    outputColor = texture(maintexture, flipped_texcoord);
+        ///}.
+        /// </summary>
+        internal static string Default_FS {
+            get {
+                return ResourceManager.GetString("Default_FS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на #version 330
+        ///
+        ///in  vec3 vPosition;
+        ///in vec2 texcoord;
+        ///out vec2 f_texcoord;
+        ///
+        ///uniform mat4 modelview;
+        ///
+        ///void
+        ///main()
+        ///{
+        ///    gl_Position = modelview * vec4(vPosition, 1.0);
+        ///    f_texcoord = texcoord;
+        ///}.
+        /// </summary>
+        internal static string Default_VS {
+            get {
+                return ResourceManager.GetString("Default_VS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на #version 420
         ///
         ///in vec3 LightDir;
         ///in vec2 TexCoord;
@@ -85,14 +128,14 @@ namespace OpenGL_CS_Game.Properties {
         ///};
         ///uniform Material [остаток строки не уместился]&quot;;.
         /// </summary>
-        internal static string FS_NormalMap {
+        internal static string PhongNormalMap_FS {
             get {
-                return ResourceManager.GetString("FS_NormalMap", resourceCulture);
+                return ResourceManager.GetString("PhongNormalMap_FS", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на #version 430
+        ///   Ищет локализованную строку, похожую на #version 420
         ///
         ///layout (location = 0) in vec3 VertexPosition;
         ///layout (location = 1) in vec3 VertexNormal;
@@ -114,9 +157,9 @@ namespace OpenGL_CS_Game.Properties {
         ///uniform mat4 ProjectionMatrix;
         ///uniform mat4 MV [остаток строки не уместился]&quot;;.
         /// </summary>
-        internal static string VS_NormalMap {
+        internal static string PhongNormalMap_VS {
             get {
-                return ResourceManager.GetString("VS_NormalMap", resourceCulture);
+                return ResourceManager.GetString("PhongNormalMap_VS", resourceCulture);
             }
         }
     }

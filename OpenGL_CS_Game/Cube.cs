@@ -6,14 +6,14 @@ namespace OpenGL_CS_Game
 {
     class Cube : Volume
     {
-        public Cube()
-            : base()
+        public Cube() : base()
         {
             VerticesCount = 24;
             NormalsCount = 24;
             FacesCount = 36;
             TextureCoordsCount = 24;
             TangentsesCount = 24;
+            ShaderName = "Default";
         }
 
         public override Vector3[] GetVertices()
@@ -141,11 +141,6 @@ namespace OpenGL_CS_Game
             };
         }
 
-        public override void CalculateModelMatrix()
-        {
-            ModelMatrix = Matrix4.CreateScale(Scale) * Matrix4.CreateRotationX(Rotation.X) * Matrix4.CreateRotationY(Rotation.Y) * Matrix4.CreateRotationZ(Rotation.Z) * Matrix4.CreateTranslation(Position);
-        }
-
         public override Vector4[] GetTangentses()
         {
             return new Vector4[] {
@@ -179,6 +174,11 @@ namespace OpenGL_CS_Game
                 new Vector4(0.0f, 0.0f, -1.0f, 1.0f),
                 new Vector4(0.0f, 0.0f, -1.0f, 1.0f)
             };
+        }
+
+        public override void CalculateModelMatrix()
+        {
+            ModelMatrix = Matrix4.CreateScale(Scale) * Matrix4.CreateRotationX(Rotation.X) * Matrix4.CreateRotationY(Rotation.Y) * Matrix4.CreateRotationZ(Rotation.Z) * Matrix4.CreateTranslation(Position);
         }
     }
 }

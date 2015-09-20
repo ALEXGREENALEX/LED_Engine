@@ -13,14 +13,21 @@ namespace OpenGL_CS_Game
         Vector3[] normals;
         Vector2[] texturecoords;
         Vector4[] tangentses;
-
         uint[] faces;
+
+        string shaderName = "Default";
 
         public override int VerticesCount { get { return vertices.Length; } }
         public override int NormalsCount { get { return normals.Length; } }
         public override int FacesCount { get { return faces.Length; } }
         public override int TextureCoordsCount { get { return texturecoords.Length; } }
         public override int TangentsesCount { get { return tangentses.Length; } }
+
+        public override string ShaderName
+        {
+            get { return shaderName; }
+            set { shaderName = value; }
+        }
 
         /// <summary>
         /// Получить вершины этого объекта
