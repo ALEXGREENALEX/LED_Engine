@@ -40,8 +40,8 @@ vec3 phongModel( vec3 norm, vec3 diffR )
 
 void main() {
     // Lookup the normal from the normal map
-    vec4 normal = 2.0 * texture(NormalMapTex, vec2(TexCoord.x, -TexCoord.y)) - 1.0;
+    vec4 normal = 2.0 * texture(NormalMapTex, TexCoord) - 1.0;
 
-    vec4 texColor = texture(ColorTex, vec2(TexCoord.x, -TexCoord.y));
+    vec4 texColor = texture(ColorTex, TexCoord);
     FragColor = vec4(phongModel(normal.xyz, texColor.rgb), 1.0);
 }

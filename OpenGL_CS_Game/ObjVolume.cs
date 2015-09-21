@@ -15,8 +15,17 @@ namespace OpenGL_CS_Game
         Vector4[] tangentses;
         uint[] faces;
 
-        string shaderName = String.Empty;
-        string[] textures = { String.Empty, String.Empty, String.Empty, String.Empty };
+        int texturesCount = 0;
+        string[] textures = new string[32];
+
+        public ObjVolume()
+            : base()
+        {
+            ShaderName = String.Empty;
+
+            for (int i = 0; i < textures.Length; i++)
+                textures[i] = String.Empty;
+        }
 
         public override int VerticesCount { get { return vertices.Length; } }
         public override int NormalsCount { get { return normals.Length; } }
@@ -24,16 +33,32 @@ namespace OpenGL_CS_Game
         public override int TextureCoordsCount { get { return texturecoords.Length; } }
         public override int TangentsesCount { get { return tangentses.Length; } }
 
-        public override string ShaderName
+        public override bool SetTexture(int TextureUnit, string Texture)
         {
-            get { return shaderName; }
-            set { shaderName = value; }
+            if (TextureUnit >= 0 && TextureUnit < 32)
+            {
+                textures[TextureUnit] = Texture;
+                texturesCount = 0;
+                for (int i = 0; i < textures.Length; i++)
+                    if (textures[i] != String.Empty)
+                        texturesCount++;
+                return true;
+            }
+            else
+                return false;
         }
 
-        public override string[] Textures
+        public override string GetTexture(int TextureUnit)
         {
-            get { return textures; }
-            set { textures = value; }
+            if (TextureUnit < 0 || TextureUnit > 31)
+                return String.Empty;
+            else
+                return textures[TextureUnit];
+        }
+
+        public override int TexturesCount
+        {
+            get { return texturesCount; }
         }
 
         /// <summary>
@@ -88,7 +113,7 @@ namespace OpenGL_CS_Game
             Vector3[] normals = GetNormals();
             uint[] faces = GetFaceIndeces();
             Vector2[] texCoords = GetTextureCoords();
-            Vector4[] TangensesList = new Vector4[points.Length];
+            Vector4[] Tangenses = new Vector4[points.Length];
             List<Vector3> tan1Accum = new List<Vector3>();
             List<Vector3> tan2Accum = new List<Vector3>();
 
@@ -140,16 +165,16 @@ namespace OpenGL_CS_Game
                 Vector3 t2 = tan2Accum[i];
 
                 // Gram-Schmidt orthogonalize
-                TangensesList[i] = new Vector4(Vector3.Normalize(t1 - (Vector3.Dot(n, t1) * n)), 0.0f);
+                Tangenses[i] = new Vector4(Vector3.Normalize(t1 - (Vector3.Dot(n, t1) * n)), 0.0f);
                 // Store handedness in W
-                Vector4 V_temp = TangensesList[i];
+                Vector4 V_temp = Tangenses[i];
                 V_temp.W = (Vector3.Dot(Vector3.Cross(n, t1), t2) < 0.0f) ? -1.0f : 1.0f;
-                TangensesList[i] = V_temp;
+                Tangenses[i] = V_temp;
             }
 
             tan1Accum.Clear();
             tan2Accum.Clear();
-            tangentses = TangensesList;
+            tangentses = Tangenses;
         }
 
         /// <summary>
@@ -272,7 +297,7 @@ namespace OpenGL_CS_Game
                             MessageBox.Show("Error parsing Normals in line " + (i + 1).ToString() + ": " + lines[i]);
                             break;
                         }
-                        
+
                     case "f":
                         try
                         {

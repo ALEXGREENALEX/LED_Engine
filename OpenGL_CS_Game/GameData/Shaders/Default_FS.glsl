@@ -7,5 +7,5 @@ uniform sampler2D maintexture;
 
 void main()
 {
-    outputColor = texture(maintexture, vec2(f_texcoord.x, -f_texcoord.y));
+    outputColor = texture(maintexture, f_texcoord);
 }

@@ -1,0 +1,27 @@
+﻿<!--Список материалов-->
+
+<Materials>
+	<Material>
+		<Name></Name>
+		<Shader></Shader>
+		<Texture></Texture>
+	</Material>
+	<Material>
+		<Name>BrickWall</Name>
+		<Shader>PhongNormalMap</Shader>
+		<Texture>brick-wall</Texture>
+		<Texture>brick-wall_N</Texture>
+		<SpecularReflectivity>0.9 0.9 0.9</SpecularReflectivity>
+		<AmbientReflectivity>0.2 0.2 0.2</AmbientReflectivity>
+		<SpecularShininess>1.0</SpecularShininess>
+	</Material>
+	<Material>
+		<Name>BrickWall</Name>
+		<Shader>PhongNormalMap</Shader>
+		<Texture>brick-wall</Texture>
+		<Texture>brick-wall_N</Texture>
+		<SpecularReflectivity>0.9 0.9 0.9</SpecularReflectivity>
+		<AmbientReflectivity>0.2 0.2 0.2</AmbientReflectivity>
+		<SpecularShininess>1.0</SpecularShininess>
+	</Material>
+</Materials>

@@ -16,9 +16,8 @@ namespace OpenGL_CS_Game
         public virtual int NormalsCount { get; set; }
         public virtual int FacesCount { get; set; }
         public virtual int TangentsesCount { get; set; }
-
         public virtual string ShaderName { get; set; }
-        public virtual string[] Textures { get; set; }
+        public virtual int TexturesCount { get; set; }
         
         public Matrix4 ModelMatrix = Matrix4.Identity;
         public Matrix4 ViewProjectionMatrix = Matrix4.Identity;
@@ -30,5 +29,8 @@ namespace OpenGL_CS_Game
         public abstract uint[] GetFaceIndeces(uint offset = 0);
         public abstract Vector4[] GetTangentses();
         public abstract void CalculateModelMatrix();
+
+        public abstract bool SetTexture(int TextureUnit, string Texture);
+        public abstract string GetTexture(int TextureUnit);
     }
 }

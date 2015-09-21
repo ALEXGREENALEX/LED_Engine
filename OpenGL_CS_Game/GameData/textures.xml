@@ -1,9 +1,47 @@
-﻿<!--Список всех текстур-->
+﻿<!--Список всех текстур
+TextureMagFilter:
+	Nearest
+	Linear
+	LinearDetailSgis
+	LinearDetailAlphaSgis
+	LinearDetailColorSgis
+	LinearSharpenSgis
+	LinearSharpenAlphaSgis
+	LinearSharpenColorSgis
+	Filter4Sgis
+	PixelTexGenQCeilingSgix
+	PixelTexGenQRoundSgix
+	PixelTexGenQFloorSgix
+
+TextureMinFilter:
+	Nearest
+	Linear
+	NearestMipmapNearest
+	LinearMipmapNearest
+	NearestMipmapLinear
+	LinearMipmapLinear
+	Filter4Sgis
+	LinearClipmapLinearSgix
+	PixelTexGenQCeilingSgix
+	PixelTexGenQRoundSgix
+	PixelTexGenQFloorSgix
+	NearestClipmapNearestSgix
+	NearestClipmapLinearSgix
+	LinearClipmapNearestSgix
+-->
 
 <Textures>
 	<Texture>
 		<Name></Name>
 		<File>_checker.bmp</File>
+		<TextureMagFilter>Nearest</TextureMagFilter>
+		<TextureMinFilter>Nearest</TextureMinFilter>
+	</Texture>
+	<Texture>
+		<Name>Checker_N</Name>
+		<File>_checker_N.bmp</File>
+		<TextureMagFilter>Nearest</TextureMagFilter>
+		<TextureMinFilter>Nearest</TextureMinFilter>
 	</Texture>
 	<Texture>
 		<Name>brick-wall</Name>
@@ -12,5 +50,13 @@
 	<Texture>
 		<Name>brick-wall_N</Name>
 		<File>brick-wall_N.jpg</File>
+	</Texture>
+	<Texture>
+		<Name>Keypad</Name>
+		<File>Keypad.png</File>
+	</Texture>
+	<Texture>
+		<Name>Keypad_N</Name>
+		<File>Keypad_N.png</File>
 	</Texture>
 </Textures>

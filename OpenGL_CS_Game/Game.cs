@@ -16,7 +16,7 @@ namespace OpenGL_CS_Game
     class Game : GameWindow
     {
         public Game() :
-            base(640, 480, new GraphicsMode(32, 24, 0, 8))
+            base(640, 480, new GraphicsMode(32, 24, 0, 4))
         {
         }
 
@@ -26,7 +26,7 @@ namespace OpenGL_CS_Game
         Vector2 lastMousePos_Delta = new Vector2();
         float time = 0.0f;
         float rotSpeed = (float)Math.PI / 4.0f;
-        float Angle = MathHelper.DegreesToRadians(290.0f);
+        float Angle = MathHelper.DegreesToRadians(100.0f);
         double FPS;
 
         List<Volume> objects = new List<Volume>();
@@ -73,8 +73,41 @@ namespace OpenGL_CS_Game
 
             foreach (XmlNode xmlNode in xmlNodeList)
             {
-                textures.Add(xmlNode.SelectSingleNode("Name").InnerText, loadImage(
-                    Path.Combine(TexturesPath, xmlNode.SelectSingleNode("File").InnerText)));
+                try
+                {
+                    string StrMagFilter = String.Empty;
+                    string StrMinFilter = String.Empty;
+                    int MagFilterCount = xmlNode.SelectNodes("TextureMagFilter").Count;
+                    int MinFilterCount = xmlNode.SelectNodes("TextureMinFilter").Count;
+
+                    if (MagFilterCount > 0)
+                        StrMagFilter = xmlNode.SelectSingleNode("TextureMagFilter").InnerText;
+                    if (MinFilterCount > 0)
+                        StrMinFilter = xmlNode.SelectSingleNode("TextureMinFilter").InnerText;
+
+                    // Исли не указаны текстурные фильтры, тогда
+                    if (StrMagFilter == String.Empty && StrMinFilter == String.Empty)
+                        textures.Add(xmlNode.SelectSingleNode("Name").InnerText, loadImage(
+                            Path.Combine(TexturesPath, xmlNode.SelectSingleNode("File").InnerText)));
+                    else if (StrMagFilter == String.Empty)
+                        textures.Add(xmlNode.SelectSingleNode("Name").InnerText, loadImage(
+                            Path.Combine(TexturesPath, xmlNode.SelectSingleNode("File").InnerText),
+                            TextureMagFilter.Linear,
+                            (TextureMinFilter)Enum.Parse(typeof(TextureMinFilter), StrMinFilter, true)));
+                    else if (StrMinFilter == String.Empty)
+                        textures.Add(xmlNode.SelectSingleNode("Name").InnerText, loadImage(
+                            Path.Combine(TexturesPath, xmlNode.SelectSingleNode("File").InnerText),
+                            (TextureMagFilter)Enum.Parse(typeof(TextureMagFilter), StrMagFilter, true)));
+                    else
+                        textures.Add(xmlNode.SelectSingleNode("Name").InnerText, loadImage(
+                            Path.Combine(TexturesPath, xmlNode.SelectSingleNode("File").InnerText),
+                            (TextureMagFilter)Enum.Parse(typeof(TextureMagFilter), StrMagFilter, true),
+                            (TextureMinFilter)Enum.Parse(typeof(TextureMinFilter), StrMinFilter, true)));
+                }
+                catch
+                {
+                    MessageBox.Show("Texture Loading Error!");
+                }
             }
 
             //// Загружаем модели
@@ -89,12 +122,21 @@ namespace OpenGL_CS_Game
 
             ObjVolume obj_Triangulated = ObjVolume.LoadFromFile(MeshesPath + "\\Model_Triangulated.obj");
             obj_Triangulated.ShaderName = "PhongNormalMap";
-            obj_Triangulated.Textures[0] = "brick-wall";
-            obj_Triangulated.Textures[1] = "brick-wall_N";
+            obj_Triangulated.SetTexture(0, "brick-wall");
+            obj_Triangulated.SetTexture(1, "brick-wall_N");
+
             ObjVolume obj_Quads = ObjVolume.LoadFromFile(MeshesPath + "\\Model_Quads.obj");
-            obj_Quads.Textures[0] = "brick-wall";
+            obj_Quads.SetTexture(0, "brick-wall");
+
+            ObjVolume obj_Keypad = ObjVolume.LoadFromFile(MeshesPath + "\\Keypad.obj");
+            obj_Keypad.ShaderName = "PhongNormalMap";
+            obj_Keypad.SetTexture(0, "Keypad");
+            obj_Keypad.SetTexture(1, "Keypad_N");
+            obj_Keypad.Position.Z = -10;
+
             objects.Add(obj_Triangulated);
             objects.Add(obj_Quads);
+            objects.Add(obj_Keypad);
         }
 
         void initProgram()
@@ -108,16 +150,20 @@ namespace OpenGL_CS_Game
             GL.Enable(EnableCap.DepthTest);
 
             //Отрисовка только тех сторон, что повернуты к камере нормалями.
-            //GL.Enable(EnableCap.CullFace);
+            GL.Enable(EnableCap.CullFace);
 
             // Создаем примитивы
             //Cube cube = new Cube();
-            //Plain plain = new Plain();
             //objects.Add(cube);
+
+            //Plain plain = new Plain();
+            //plain.ShaderName = "PhongNormalMap";
+            //plain.SetTexture(0, "brick-wall");
+            //plain.SetTexture(1, "brick-wall_N");
             //objects.Add(plain);
 
             // Отдаляем камеру от начала координат
-            cam.Position = new Vector3(0.0f, 0.0f, 0.5f);
+            cam.Position = new Vector3(0.0f, 0.0f, 1.5f);
         }
 
         protected override void OnLoad(EventArgs e)
@@ -125,9 +171,7 @@ namespace OpenGL_CS_Game
             base.OnLoad(e);
 
             initProgram();
-
             GL.ClearColor(Color.CornflowerBlue);
-            GL.PointSize(5f);
         }
 
         protected override void OnKeyDown(KeyboardKeyEventArgs e)
@@ -178,13 +222,26 @@ namespace OpenGL_CS_Game
                 v.ModelViewProjectionMatrix = v.ModelMatrix * v.ViewProjectionMatrix;
 
                 GL.ActiveTexture(TextureUnit.Texture0);
-                GL.BindTexture(TextureTarget.Texture2D, textures[v.Textures[0]]);
-                GL.ActiveTexture(TextureUnit.Texture1);
-                GL.BindTexture(TextureTarget.Texture2D, textures[v.Textures[1]]);
-                GL.ActiveTexture(TextureUnit.Texture2);
-                GL.BindTexture(TextureTarget.Texture2D, textures[v.Textures[2]]);
-                GL.ActiveTexture(TextureUnit.Texture3);
-                GL.BindTexture(TextureTarget.Texture2D, textures[v.Textures[3]]);
+                GL.BindTexture(TextureTarget.Texture2D, textures[v.GetTexture(0)]);
+
+                if (v.TexturesCount > 1)
+                {
+                    GL.ActiveTexture(TextureUnit.Texture1);
+                    GL.BindTexture(TextureTarget.Texture2D, textures[v.GetTexture(1)]);
+
+                    if (v.TexturesCount > 2)
+                    {
+                        GL.ActiveTexture(TextureUnit.Texture2);
+                        GL.BindTexture(TextureTarget.Texture2D, textures[v.GetTexture(2)]);
+
+                        if (v.TexturesCount > 3)
+                        {
+                            GL.ActiveTexture(TextureUnit.Texture3);
+                            GL.BindTexture(TextureTarget.Texture2D, textures[v.GetTexture(3)]);
+                            // И так далее по аналогии, до TextureUnit.Texture31
+                        }
+                    }
+                }
 
                 // Подключаем шейдеры для отрисовки объекта
                 GL.LinkProgram(shaders[v.ShaderName].ProgramID);
@@ -312,8 +369,10 @@ namespace OpenGL_CS_Game
                 Angle -= MathHelper.TwoPi;
         }
 
-        int loadImage(Bitmap image)
+        int loadImage(Bitmap image, TextureMagFilter MagFilter = TextureMagFilter.Linear, TextureMinFilter MinFilter = TextureMinFilter.LinearMipmapLinear)
         {
+            image.RotateFlip(RotateFlipType.RotateNoneFlipY);
+
             int texID = GL.GenTexture();
 
             GL.BindTexture(TextureTarget.Texture2D, texID);
@@ -332,20 +391,20 @@ namespace OpenGL_CS_Game
             image.UnlockBits(data);
 
             //Filter params
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)MagFilter);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)MinFilter);
 
             GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
 
             return texID;
         }
 
-        int loadImage(string filename)
+        int loadImage(string filename, TextureMagFilter MagFilter = TextureMagFilter.Linear, TextureMinFilter MinFilter = TextureMinFilter.LinearMipmapLinear)
         {
             try
             {
                 Bitmap file = new Bitmap(filename);
-                return loadImage(file);
+                return loadImage(file, MagFilter, MinFilter);
             }
             catch (FileNotFoundException e)
             {
