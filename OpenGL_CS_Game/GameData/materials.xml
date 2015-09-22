@@ -1,4 +1,12 @@
-﻿<!--Список материалов-->
+﻿<!--Список материалов и их свойств
+	Name
+	Shader
+	Texture, Texture, Texture ...
+	CullFace
+	SpecularReflectivity
+	AmbientReflectivity
+	SpecularShininess
+-->
 
 <Materials>
 	<Material>
@@ -6,6 +14,7 @@
 		<Shader></Shader>
 		<Texture></Texture>
 		<Texture>Checker_N</Texture>
+		<CullFace>False</CullFace>
 	</Material>
 	<Material>
 		<Name>BrickWall</Name>

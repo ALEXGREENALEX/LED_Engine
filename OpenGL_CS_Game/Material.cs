@@ -11,7 +11,8 @@ namespace OpenGL_CS_Game
         string shaderName = String.Empty;
         int texturesCount = 0;
         string[] textures = new string[32];
-        Vector3 specularReflectivity = new Vector3(0.2f, 0.2f, 0.2-f);
+        bool cullFace = true;
+        Vector3 specularReflectivity = new Vector3(0.2f, 0.2f, 0.2f);
         Vector3 ambientReflectivity = new Vector3(0.1f, 0.1f, 0.1f);
         float specularShininess = 1.0f;
 
@@ -55,22 +56,10 @@ namespace OpenGL_CS_Game
             specularShininess = SpecularShininess;
         }
 
-        public Vector3 SpecularReflectivity
+        public string ShaderName
         {
-            get { return specularReflectivity; }
-            set { specularReflectivity = value; }
-        }
-
-        public Vector3 AmbientReflectivity
-        {
-            get { return ambientReflectivity; }
-            set { ambientReflectivity = value; }
-        }
-
-        public float SpecularShininess
-        {
-            get { return specularShininess; }
-            set { specularShininess = value; }
+            get { return shaderName; }
+            set { shaderName = value; }
         }
 
         public string[] Textures
@@ -78,7 +67,6 @@ namespace OpenGL_CS_Game
             get { return textures; }
             set { textures = value; }
         }
-
 
         public bool SetTexture(int TextureUnit, string Texture)
         {
@@ -108,10 +96,28 @@ namespace OpenGL_CS_Game
             get { return texturesCount; }
         }
 
-        public string ShaderName
+        public bool CullFace
         {
-            get { return shaderName; }
-            set { shaderName = value; }
+            get { return cullFace; }
+            set { cullFace = value; }
+        }
+
+        public Vector3 SpecularReflectivity
+        {
+            get { return specularReflectivity; }
+            set { specularReflectivity = value; }
+        }
+
+        public Vector3 AmbientReflectivity
+        {
+            get { return ambientReflectivity; }
+            set { ambientReflectivity = value; }
+        }
+
+        public float SpecularShininess
+        {
+            get { return specularShininess; }
+            set { specularShininess = value; }
         }
     }
 }

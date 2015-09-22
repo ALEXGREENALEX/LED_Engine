@@ -22,6 +22,7 @@ namespace OpenGL_CS_Game
 
         int indecesArrayBuffer;
         Camera cam = new Camera();
+        float FOV = MathHelper.DegreesToRadians(70.0f);
         Vector2 lastMousePos = new Vector2();
         Vector2 lastMousePos_Delta = new Vector2();
         float time = 0.0f;
@@ -56,7 +57,7 @@ namespace OpenGL_CS_Game
             string ShadersPath = Path.Combine(GameDataPath, NodePath.SelectSingleNode("Shaders").InnerText);
             string TexturesPath = Path.Combine(GameDataPath, NodePath.SelectSingleNode("Textures").InnerText);
 
-            // Загружаем шейдеры
+            #region Загружаем шейдеры
             XML.Load(Path.Combine(GameDataPath, "shaders.xml"));
             XmlNodeList xmlNodeList = XML.DocumentElement.SelectNodes("Shader");
 
@@ -66,8 +67,9 @@ namespace OpenGL_CS_Game
                     Path.Combine(ShadersPath, xmlNode.SelectSingleNode("VertexShader").InnerText),
                     Path.Combine(ShadersPath, xmlNode.SelectSingleNode("FragmentShader").InnerText), true));
             }
+            #endregion
 
-            // Загружаем текстуры
+            #region Загружаем текстуры
             XML.Load(Path.Combine(GameDataPath, "textures.xml"));
             xmlNodeList = XML.DocumentElement.SelectNodes("Texture");
 
@@ -109,8 +111,24 @@ namespace OpenGL_CS_Game
                     MessageBox.Show("Texture Loading Error!");
                 }
             }
+            #endregion
 
-            // Загрузка материалов
+            #region Загружаем текстуры
+            XML.Load(Path.Combine(GameDataPath, "materials.xml"));
+            xmlNodeList = XML.DocumentElement.SelectNodes("Material");
+
+            foreach (XmlNode xmlNode in xmlNodeList)
+            {
+                try
+                {
+                    //xmlNode.SelectSingleNode("Name").InnerText;
+                }
+                catch
+                {
+                    MessageBox.Show("Material Loading Error!");
+                }
+            }
+            #endregion
 
             ObjVolume obj_Triangulated = ObjVolume.LoadFromFile(MeshesPath + "\\Model_Triangulated.obj");
             obj_Triangulated.Material.ShaderName = "PhongNormalMap";
@@ -141,18 +159,15 @@ namespace OpenGL_CS_Game
             // Enable Depth Test
             GL.Enable(EnableCap.DepthTest);
 
-            //Отрисовка только тех сторон, что повернуты к камере нормалями.
-            GL.Enable(EnableCap.CullFace);
-
             // Создаем примитивы
-            //Cube cube = new Cube();
-            //objects.Add(cube);
+            Cube cube = new Cube();
+            objects.Add(cube);
 
-            //Plain plain = new Plain();
-            //plain.ShaderName = "PhongNormalMap";
-            //plain.SetTexture(0, "brick-wall");
-            //plain.SetTexture(1, "brick-wall_N");
-            //objects.Add(plain);
+            Plain plain = new Plain();
+            plain.Material.ShaderName = "PhongNormalMap";
+            plain.Material.SetTexture(0, "brick-wall");
+            plain.Material.SetTexture(1, "brick-wall_N");
+            objects.Add(plain);
 
             // Отдаляем камеру от начала координат
             cam.Position = new Vector3(0.0f, 0.0f, 1.5f);
@@ -210,29 +225,22 @@ namespace OpenGL_CS_Game
             foreach (Volume v in objects)
             {
                 v.CalculateModelMatrix();
-                v.ViewProjectionMatrix = cam.GetViewMatrix() * Matrix4.CreatePerspectiveFieldOfView(1.3f, ClientSize.Width / (float)ClientSize.Height, 0.2f, 50.0f);
+                v.ViewProjectionMatrix = cam.GetViewMatrix() * Matrix4.CreatePerspectiveFieldOfView(FOV, ClientSize.Width / (float)ClientSize.Height, 0.2f, 100.0f);
                 v.ModelViewProjectionMatrix = v.ModelMatrix * v.ViewProjectionMatrix;
 
+                // Отрисовка только тех сторон, что повернуты к камере
+                if (v.Material.CullFace)
+                    GL.Enable(EnableCap.CullFace);
+                else
+                    GL.Disable(EnableCap.CullFace);
+
+                // Активируем нужный TextureUnit и назначаем текстуру
                 GL.ActiveTexture(TextureUnit.Texture0);
                 GL.BindTexture(TextureTarget.Texture2D, textures[v.Material.GetTexture(0)]);
-
-                if (v.Material.TexturesCount > 1)
+                for (int i = 1; i < v.Material.TexturesCount; i++)
                 {
-                    GL.ActiveTexture(TextureUnit.Texture1);
-                    GL.BindTexture(TextureTarget.Texture2D, textures[v.Material.GetTexture(1)]);
-
-                    if (v.Material.TexturesCount > 2)
-                    {
-                        GL.ActiveTexture(TextureUnit.Texture2);
-                        GL.BindTexture(TextureTarget.Texture2D, textures[v.Material.GetTexture(2)]);
-
-                        if (v.Material.TexturesCount > 3)
-                        {
-                            GL.ActiveTexture(TextureUnit.Texture3);
-                            GL.BindTexture(TextureTarget.Texture2D, textures[v.Material.GetTexture(3)]);
-                            // И так далее по аналогии, до TextureUnit.Texture31
-                        }
-                    }
+                    GL.ActiveTexture((TextureUnit)(0x84C0 + i));
+                    GL.BindTexture(TextureTarget.Texture2D, textures[v.Material.GetTexture(i)]);
                 }
 
                 // Подключаем шейдеры для отрисовки объекта
