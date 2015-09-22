@@ -15,16 +15,10 @@ namespace OpenGL_CS_Game
         Vector4[] tangentses;
         uint[] faces;
 
-        int texturesCount = 0;
-        string[] textures = new string[32];
-
         public ObjVolume()
             : base()
         {
-            ShaderName = String.Empty;
-
-            for (int i = 0; i < textures.Length; i++)
-                textures[i] = String.Empty;
+            Material = new Material();
         }
 
         public override int VerticesCount { get { return vertices.Length; } }
@@ -32,34 +26,6 @@ namespace OpenGL_CS_Game
         public override int FacesCount { get { return faces.Length; } }
         public override int TextureCoordsCount { get { return texturecoords.Length; } }
         public override int TangentsesCount { get { return tangentses.Length; } }
-
-        public override bool SetTexture(int TextureUnit, string Texture)
-        {
-            if (TextureUnit >= 0 && TextureUnit < 32)
-            {
-                textures[TextureUnit] = Texture;
-                texturesCount = 0;
-                for (int i = 0; i < textures.Length; i++)
-                    if (textures[i] != String.Empty)
-                        texturesCount++;
-                return true;
-            }
-            else
-                return false;
-        }
-
-        public override string GetTexture(int TextureUnit)
-        {
-            if (TextureUnit < 0 || TextureUnit > 31)
-                return String.Empty;
-            else
-                return textures[TextureUnit];
-        }
-
-        public override int TexturesCount
-        {
-            get { return texturesCount; }
-        }
 
         /// <summary>
         /// Получить вершины этого объекта

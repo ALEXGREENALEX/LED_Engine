@@ -6,9 +6,6 @@ namespace OpenGL_CS_Game
 {
     class Cube : Volume
     {
-        int texturesCount = 0;
-        string[] textures = new string[32];
-
         public Cube()
             : base()
         {
@@ -18,10 +15,7 @@ namespace OpenGL_CS_Game
             TextureCoordsCount = 24;
             TangentsesCount = 24;
 
-            ShaderName = String.Empty;
-
-            for (int i = 0; i < textures.Length; i++)
-                textures[i] = String.Empty;
+            Material = new Material();
         }
 
         public override Vector3[] GetVertices()
@@ -187,33 +181,6 @@ namespace OpenGL_CS_Game
         public override void CalculateModelMatrix()
         {
             ModelMatrix = Matrix4.CreateScale(Scale) * Matrix4.CreateRotationX(Rotation.X) * Matrix4.CreateRotationY(Rotation.Y) * Matrix4.CreateRotationZ(Rotation.Z) * Matrix4.CreateTranslation(Position);
-        }
-
-        public override bool SetTexture(int TextureUnit, string Texture)
-        {
-            if (TextureUnit >= 0 && TextureUnit < 32)
-            {
-                textures[TextureUnit] = Texture;
-                texturesCount = 0;
-                for (int i = 0; i < textures.Length; i++)
-                    if (textures[i] != String.Empty)
-                        texturesCount++;
-                return true;
-            }
-            else
-                return false;
-        }
-
-        public override string GetTexture(int TextureUnit)
-        {
-            if (TextureUnit < 0 || TextureUnit > 31)
-                return String.Empty;
-            else
-                return textures[TextureUnit];
-        }
-        public override int TexturesCount
-        {
-            get { return texturesCount; }
         }
     }
 }

@@ -110,28 +110,20 @@ namespace OpenGL_CS_Game
                 }
             }
 
-            //// Загружаем модели
-            //XML.Load(Path.Combine(GameDataPath, "models.xml"));
-            //xmlNodeList = XML.DocumentElement.SelectNodes("Models");
-
-            //foreach (XmlNode xmlNode in xmlNodeList)
-            //{
-            //    textures.Add(xmlNode.SelectSingleNode("Name").InnerText, loadImage(
-            //        Path.Combine(TexturesPath, xmlNode.SelectSingleNode("File").InnerText)));
-            //}
+            // Загрузка материалов
 
             ObjVolume obj_Triangulated = ObjVolume.LoadFromFile(MeshesPath + "\\Model_Triangulated.obj");
-            obj_Triangulated.ShaderName = "PhongNormalMap";
-            obj_Triangulated.SetTexture(0, "brick-wall");
-            obj_Triangulated.SetTexture(1, "brick-wall_N");
+            obj_Triangulated.Material.ShaderName = "PhongNormalMap";
+            obj_Triangulated.Material.SetTexture(0, "brick-wall");
+            obj_Triangulated.Material.SetTexture(1, "brick-wall_N");
 
             ObjVolume obj_Quads = ObjVolume.LoadFromFile(MeshesPath + "\\Model_Quads.obj");
-            obj_Quads.SetTexture(0, "brick-wall");
+            obj_Quads.Material.SetTexture(0, "brick-wall");
 
             ObjVolume obj_Keypad = ObjVolume.LoadFromFile(MeshesPath + "\\Keypad.obj");
-            obj_Keypad.ShaderName = "PhongNormalMap";
-            obj_Keypad.SetTexture(0, "Keypad");
-            obj_Keypad.SetTexture(1, "Keypad_N");
+            obj_Keypad.Material.ShaderName = "PhongNormalMap";
+            obj_Keypad.Material.SetTexture(0, "Keypad");
+            obj_Keypad.Material.SetTexture(1, "Keypad_N");
             obj_Keypad.Position.Z = -10;
 
             objects.Add(obj_Triangulated);
@@ -222,33 +214,33 @@ namespace OpenGL_CS_Game
                 v.ModelViewProjectionMatrix = v.ModelMatrix * v.ViewProjectionMatrix;
 
                 GL.ActiveTexture(TextureUnit.Texture0);
-                GL.BindTexture(TextureTarget.Texture2D, textures[v.GetTexture(0)]);
+                GL.BindTexture(TextureTarget.Texture2D, textures[v.Material.GetTexture(0)]);
 
-                if (v.TexturesCount > 1)
+                if (v.Material.TexturesCount > 1)
                 {
                     GL.ActiveTexture(TextureUnit.Texture1);
-                    GL.BindTexture(TextureTarget.Texture2D, textures[v.GetTexture(1)]);
+                    GL.BindTexture(TextureTarget.Texture2D, textures[v.Material.GetTexture(1)]);
 
-                    if (v.TexturesCount > 2)
+                    if (v.Material.TexturesCount > 2)
                     {
                         GL.ActiveTexture(TextureUnit.Texture2);
-                        GL.BindTexture(TextureTarget.Texture2D, textures[v.GetTexture(2)]);
+                        GL.BindTexture(TextureTarget.Texture2D, textures[v.Material.GetTexture(2)]);
 
-                        if (v.TexturesCount > 3)
+                        if (v.Material.TexturesCount > 3)
                         {
                             GL.ActiveTexture(TextureUnit.Texture3);
-                            GL.BindTexture(TextureTarget.Texture2D, textures[v.GetTexture(3)]);
+                            GL.BindTexture(TextureTarget.Texture2D, textures[v.Material.GetTexture(3)]);
                             // И так далее по аналогии, до TextureUnit.Texture31
                         }
                     }
                 }
 
                 // Подключаем шейдеры для отрисовки объекта
-                GL.LinkProgram(shaders[v.ShaderName].ProgramID);
-                GL.UseProgram(shaders[v.ShaderName].ProgramID);
+                GL.LinkProgram(shaders[v.Material.ShaderName].ProgramID);
+                GL.UseProgram(shaders[v.Material.ShaderName].ProgramID);
 
                 // Передаем шейдеру вектор Light Position, если шейдер поддерживает это.
-                if (shaders[v.ShaderName].GetUniform("Light.Position") != -1)
+                if (shaders[v.Material.ShaderName].GetUniform("Light.Position") != -1)
                 {
                     Vector4 V = new Vector4(10.0f * (float)Math.Cos(Angle), 1.0f, 10.0f * (float)Math.Sin(Angle), 1.0f);
                     Matrix4 M = cam.GetViewMatrix();
@@ -257,72 +249,72 @@ namespace OpenGL_CS_Game
                         M.M21 * V.X + M.M22 * V.Y + M.M23 * V.Z + M.M24 * V.W,
                         M.M31 * V.X + M.M32 * V.Y + M.M33 * V.Z + M.M34 * V.W,
                         M.M41 * V.X + M.M42 * V.Y + M.M43 * V.Z + M.M44 * V.W);
-                    GL.Uniform4(GL.GetUniformLocation(shaders[v.ShaderName].ProgramID, "Light.Position"), ref LightPos);
+                    GL.Uniform4(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "Light.Position"), ref LightPos);
                 }
 
                 // Передаем шейдеру вектор Light Intensity, если шейдер поддерживает это.
-                if (shaders[v.ShaderName].GetUniform("Light.Intensity") != -1)
-                    GL.Uniform3(GL.GetUniformLocation(shaders[v.ShaderName].ProgramID, "Light.Intensity"), 0.9f, 0.9f, 0.9f);
+                if (shaders[v.Material.ShaderName].GetUniform("Light.Intensity") != -1)
+                    GL.Uniform3(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "Light.Intensity"), 0.9f, 0.9f, 0.9f);
 
                 // Передаем шейдеру вектор Specular reflectivity, если шейдер поддерживает это.
-                if (shaders[v.ShaderName].GetUniform("Material.Ks") != -1)
-                    GL.Uniform3(GL.GetUniformLocation(shaders[v.ShaderName].ProgramID, "Material.Ks"), 0.2f, 0.2f, 0.2f);
+                if (shaders[v.Material.ShaderName].GetUniform("Material.Ks") != -1)
+                    GL.Uniform3(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "Material.Ks"), v.Material.SpecularReflectivity);
 
                 // Передаем шейдеру вектор Ambient reflectivity, если шейдер поддерживает это.
-                if (shaders[v.ShaderName].GetUniform("Material.Ka") != -1)
-                    GL.Uniform3(GL.GetUniformLocation(shaders[v.ShaderName].ProgramID, "Material.Ka"), 0.1f, 0.1f, 0.1f);
+                if (shaders[v.Material.ShaderName].GetUniform("Material.Ka") != -1)
+                    GL.Uniform3(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "Material.Ka"), v.Material.AmbientReflectivity);
 
                 // Передаем шейдеру значение Specular shininess factor, если шейдер поддерживает это.
-                if (shaders[v.ShaderName].GetUniform("Material.Shininess") != -1)
-                    GL.Uniform1(GL.GetUniformLocation(shaders[v.ShaderName].ProgramID, "Material.Shininess"), 1.0f);
+                if (shaders[v.Material.ShaderName].GetUniform("Material.Shininess") != -1)
+                    GL.Uniform1(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "Material.Shininess"), v.Material.SpecularShininess);
 
                 // Передаем шейдеру матрицу ModelView, если шейдер поддерживает это.
                 Matrix4 MV = cam.GetViewMatrix() * v.ModelMatrix;
-                if (shaders[v.ShaderName].GetUniform("ModelViewMatrix") != -1)
-                    GL.UniformMatrix4(shaders[v.ShaderName].GetUniform("ModelViewMatrix"), false, ref MV);
+                if (shaders[v.Material.ShaderName].GetUniform("ModelViewMatrix") != -1)
+                    GL.UniformMatrix4(shaders[v.Material.ShaderName].GetUniform("ModelViewMatrix"), false, ref MV);
 
                 // Передаем шейдеру матрицу NormalMatrix, если шейдер поддерживает это.
-                if (shaders[v.ShaderName].GetUniform("NormalMatrix") != -1)
+                if (shaders[v.Material.ShaderName].GetUniform("NormalMatrix") != -1)
                 {
                     Matrix3 NM = new Matrix3(MV.Row0.Xyz, MV.Row1.Xyz, MV.Row2.Xyz);
-                    GL.UniformMatrix3(shaders[v.ShaderName].GetUniform("NormalMatrix"), false, ref NM);
+                    GL.UniformMatrix3(shaders[v.Material.ShaderName].GetUniform("NormalMatrix"), false, ref NM);
                 }
 
                 // Передаем шейдеру матрицу ModelViewProjection, если шейдер поддерживает это (должна быть 100% поддержка).
-                if (shaders[v.ShaderName].GetUniform("MVP") != -1)
-                    GL.UniformMatrix4(shaders[v.ShaderName].GetUniform("MVP"), false, ref v.ModelViewProjectionMatrix);
+                if (shaders[v.Material.ShaderName].GetUniform("MVP") != -1)
+                    GL.UniformMatrix4(shaders[v.Material.ShaderName].GetUniform("MVP"), false, ref v.ModelViewProjectionMatrix);
 
                 // Передаем шейдеру буфер позицый вертексов, если шейдер поддерживает это (должна быть 100% поддержка).
-                if (shaders[v.ShaderName].GetAttribute("VertexPosition") != -1)
+                if (shaders[v.Material.ShaderName].GetAttribute("VertexPosition") != -1)
                 {
-                    GL.BindBuffer(BufferTarget.ArrayBuffer, shaders[v.ShaderName].GetBuffer("VertexPosition"));
+                    GL.BindBuffer(BufferTarget.ArrayBuffer, shaders[v.Material.ShaderName].GetBuffer("VertexPosition"));
                     GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(v.GetVertices().Length * Vector3.SizeInBytes), v.GetVertices(), BufferUsageHint.StaticDraw);
-                    GL.VertexAttribPointer(shaders[v.ShaderName].GetAttribute("VertexPosition"), 3, VertexAttribPointerType.Float, false, 0, 0);
-                    GL.EnableVertexAttribArray(shaders[v.ShaderName].GetAttribute("VertexPosition"));
+                    GL.VertexAttribPointer(shaders[v.Material.ShaderName].GetAttribute("VertexPosition"), 3, VertexAttribPointerType.Float, false, 0, 0);
+                    GL.EnableVertexAttribArray(shaders[v.Material.ShaderName].GetAttribute("VertexPosition"));
                 }
 
                 // Передаем шейдеру буфер нормалей, если шейдер поддерживает это.
-                if (shaders[v.ShaderName].GetAttribute("VertexNormal") != -1)
+                if (shaders[v.Material.ShaderName].GetAttribute("VertexNormal") != -1)
                 {
-                    GL.BindBuffer(BufferTarget.ArrayBuffer, shaders[v.ShaderName].GetBuffer("VertexNormal"));
+                    GL.BindBuffer(BufferTarget.ArrayBuffer, shaders[v.Material.ShaderName].GetBuffer("VertexNormal"));
                     GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(v.GetNormals().Length * Vector3.SizeInBytes), v.GetNormals(), BufferUsageHint.StaticDraw);
-                    GL.VertexAttribPointer(shaders[v.ShaderName].GetAttribute("VertexNormal"), 3, VertexAttribPointerType.Float, false, 0, 0);
-                    GL.EnableVertexAttribArray(shaders[v.ShaderName].GetAttribute("VertexNormal"));
+                    GL.VertexAttribPointer(shaders[v.Material.ShaderName].GetAttribute("VertexNormal"), 3, VertexAttribPointerType.Float, false, 0, 0);
+                    GL.EnableVertexAttribArray(shaders[v.Material.ShaderName].GetAttribute("VertexNormal"));
                 }
 
                 // Передаем шейдеру буфер текстурных координат, если шейдер поддерживает это.
-                if (shaders[v.ShaderName].GetAttribute("VertexTexCoord") != -1)
+                if (shaders[v.Material.ShaderName].GetAttribute("VertexTexCoord") != -1)
                 {
-                    GL.BindBuffer(BufferTarget.ArrayBuffer, shaders[v.ShaderName].GetBuffer("VertexTexCoord"));
+                    GL.BindBuffer(BufferTarget.ArrayBuffer, shaders[v.Material.ShaderName].GetBuffer("VertexTexCoord"));
                     GL.BufferData<Vector2>(BufferTarget.ArrayBuffer, (IntPtr)(v.GetTextureCoords().Length * Vector2.SizeInBytes), v.GetTextureCoords(), BufferUsageHint.StaticDraw);
-                    GL.VertexAttribPointer(shaders[v.ShaderName].GetAttribute("VertexTexCoord"), 2, VertexAttribPointerType.Float, false, 0, 0);
-                    GL.EnableVertexAttribArray(shaders[v.ShaderName].GetAttribute("VertexTexCoord"));
+                    GL.VertexAttribPointer(shaders[v.Material.ShaderName].GetAttribute("VertexTexCoord"), 2, VertexAttribPointerType.Float, false, 0, 0);
+                    GL.EnableVertexAttribArray(shaders[v.Material.ShaderName].GetAttribute("VertexTexCoord"));
                 }
 
                 // Передаем шейдеру буфер тангенсов, если шейдер поддерживает это.
-                if (shaders[v.ShaderName].GetAttribute("VertexTangent") != -1)
+                if (shaders[v.Material.ShaderName].GetAttribute("VertexTangent") != -1)
                 {
-                    GL.BindBuffer(BufferTarget.ArrayBuffer, shaders[v.ShaderName].GetBuffer("VertexTangent"));
+                    GL.BindBuffer(BufferTarget.ArrayBuffer, shaders[v.Material.ShaderName].GetBuffer("VertexTangent"));
                     GL.BufferData<Vector4>(BufferTarget.ArrayBuffer, (IntPtr)(v.GetTangentses().Length * Vector4.SizeInBytes), v.GetTangentses(), BufferUsageHint.StaticDraw);
                     GL.BindVertexArray(0);
                 }
@@ -330,7 +322,7 @@ namespace OpenGL_CS_Game
                 GL.BindBuffer(BufferTarget.ElementArrayBuffer, indecesArrayBuffer);
                 GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(v.GetFaceIndeces().Length * sizeof(uint)), v.GetFaceIndeces(), BufferUsageHint.StaticDraw);
 
-                GL.BindVertexArray(shaders[v.ShaderName].GetAttribute("VertexPosition"));
+                GL.BindVertexArray(shaders[v.Material.ShaderName].GetAttribute("VertexPosition"));
                 GL.DrawElements(BeginMode.Triangles, v.FacesCount, DrawElementsType.UnsignedInt, 0 * sizeof(uint));
             }
 

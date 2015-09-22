@@ -5,6 +5,7 @@
 		<Name></Name>
 		<Shader></Shader>
 		<Texture></Texture>
+		<Texture>Checker_N</Texture>
 	</Material>
 	<Material>
 		<Name>BrickWall</Name>
@@ -16,10 +17,10 @@
 		<SpecularShininess>1.0</SpecularShininess>
 	</Material>
 	<Material>
-		<Name>BrickWall</Name>
+		<Name>Keypad</Name>
 		<Shader>PhongNormalMap</Shader>
-		<Texture>brick-wall</Texture>
-		<Texture>brick-wall_N</Texture>
+		<Texture>Keypad</Texture>
+		<Texture>Keypad_N</Texture>
 		<SpecularReflectivity>0.9 0.9 0.9</SpecularReflectivity>
 		<AmbientReflectivity>0.2 0.2 0.2</AmbientReflectivity>
 		<SpecularShininess>1.0</SpecularShininess>
