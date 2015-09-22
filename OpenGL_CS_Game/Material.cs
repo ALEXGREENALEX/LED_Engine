@@ -7,7 +7,6 @@ namespace OpenGL_CS_Game
 {
     public class Material
     {
-        string name = String.Empty;
         string shaderName = String.Empty;
         int texturesCount = 0;
         string[] textures = new string[32];
@@ -22,38 +21,18 @@ namespace OpenGL_CS_Game
                 textures[i] = String.Empty;
         }
 
-        public Material(string Name)
+        public Material(string ShaderName)
         {
-            name = Name;
-
-            for (int i = 0; i < textures.Length; i++)
-                textures[i] = String.Empty;
-        }
-
-        public Material(string Name, string ShaderName)
-        {
-            name = Name;
             shaderName = ShaderName;
 
             for (int i = 0; i < textures.Length; i++)
                 textures[i] = String.Empty;
         }
 
-        public Material(string Name, string ShaderName, string[] Textures)
+        public Material(string ShaderName, string[] Textures)
         {
-            name = Name;
             shaderName = ShaderName;
             textures = Textures;
-        }
-
-        public Material(string Name, string ShaderName, string[] Textures, Vector3 SpecularReflectivity, Vector3 AmbientReflectivity, float SpecularShininess)
-        {
-            name = Name;
-            shaderName = ShaderName;
-            textures = Textures;
-            specularReflectivity = SpecularReflectivity;
-            ambientReflectivity = AmbientReflectivity;
-            specularShininess = SpecularShininess;
         }
 
         public string ShaderName

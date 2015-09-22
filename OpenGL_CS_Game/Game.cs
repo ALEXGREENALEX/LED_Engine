@@ -32,10 +32,12 @@ namespace OpenGL_CS_Game
 
         List<Volume> objects = new List<Volume>();
         Dictionary<string, int> textures = new Dictionary<string, int>();
+        Dictionary<string, Material> materials = new Dictionary<string, Material>();
         Dictionary<string, ShaderProgram> shaders = new Dictionary<string, ShaderProgram>();
 
         void LoadConfigAndResources()
         {
+            String FloatComa = (0.5f).ToString().Substring(1, 1); // Символ запятой в float ("," или ".")
             string StartupPath = Application.StartupPath;
 
             XmlDocument XML = new XmlDocument();
@@ -79,12 +81,10 @@ namespace OpenGL_CS_Game
                 {
                     string StrMagFilter = String.Empty;
                     string StrMinFilter = String.Empty;
-                    int MagFilterCount = xmlNode.SelectNodes("TextureMagFilter").Count;
-                    int MinFilterCount = xmlNode.SelectNodes("TextureMinFilter").Count;
 
-                    if (MagFilterCount > 0)
+                    if (xmlNode.SelectNodes("TextureMagFilter").Count > 0)
                         StrMagFilter = xmlNode.SelectSingleNode("TextureMagFilter").InnerText;
-                    if (MinFilterCount > 0)
+                    if (xmlNode.SelectNodes("TextureMinFilter").Count > 0)
                         StrMinFilter = xmlNode.SelectSingleNode("TextureMinFilter").InnerText;
 
                     // Исли не указаны текстурные фильтры, тогда
@@ -113,7 +113,7 @@ namespace OpenGL_CS_Game
             }
             #endregion
 
-            #region Загружаем текстуры
+            #region Загружаем материалы
             XML.Load(Path.Combine(GameDataPath, "materials.xml"));
             xmlNodeList = XML.DocumentElement.SelectNodes("Material");
 
@@ -121,7 +121,43 @@ namespace OpenGL_CS_Game
             {
                 try
                 {
-                    //xmlNode.SelectSingleNode("Name").InnerText;
+                    string[] StrArrTMP;
+                    string StrTMP;
+
+                    string Name = xmlNode.SelectSingleNode("Name").InnerText;
+                    materials.Add(Name, new Material());
+
+                    if (xmlNode.SelectNodes("Shader").Count > 0)
+                        materials[Name].ShaderName = xmlNode.SelectSingleNode("Shader").InnerText;
+
+                    int TexturesCount = xmlNode.SelectNodes("Texture").Count;
+                    if (TexturesCount > 0 && TexturesCount <= 32)
+                    {
+                        XmlNodeList xmlNodesTMP = xmlNode.SelectNodes("Texture");
+                        for (int i = 0; i < xmlNodesTMP.Count; i++)
+                            materials[Name].SetTexture(i, xmlNodesTMP[i].InnerText);
+                    }
+
+                    if (xmlNode.SelectNodes("CullFace").Count > 0)
+                        materials[Name].CullFace = bool.Parse(xmlNode.SelectSingleNode("CullFace").InnerText);
+
+                    StrTMP = String.Empty;
+                    if (xmlNode.SelectNodes("SpecularReflectivity").Count > 0)
+                        StrTMP = xmlNode.SelectSingleNode("SpecularReflectivity").InnerText;
+                    StrArrTMP = StrTMP.Trim().Replace(".", FloatComa).Replace(",", FloatComa).Split(new char[] { ' ' });
+                    if (StrArrTMP.Length == 3)
+                        materials[Name].SpecularReflectivity = new Vector3(float.Parse(StrArrTMP[0]), float.Parse(StrArrTMP[1]), float.Parse(StrArrTMP[2]));
+
+                    StrTMP = String.Empty;
+                    if (xmlNode.SelectNodes("AmbientReflectivity").Count > 0)
+                        StrTMP = xmlNode.SelectSingleNode("AmbientReflectivity").InnerText;
+                    StrArrTMP = StrTMP.Trim().Replace(".", FloatComa).Replace(",", FloatComa).Split(new char[] { ' ' });
+                    if (StrArrTMP.Length == 3)
+                        materials[Name].AmbientReflectivity = new Vector3(float.Parse(StrArrTMP[0]), float.Parse(StrArrTMP[1]), float.Parse(StrArrTMP[2]));
+
+                    if (xmlNode.SelectNodes("SpecularShininess").Count > 0)
+                        materials[Name].SpecularShininess = float.Parse(xmlNode.SelectSingleNode("SpecularShininess")
+                            .InnerText.Trim().Replace(".", FloatComa).Replace(",", FloatComa));
                 }
                 catch
                 {
@@ -130,18 +166,14 @@ namespace OpenGL_CS_Game
             }
             #endregion
 
-            ObjVolume obj_Triangulated = ObjVolume.LoadFromFile(MeshesPath + "\\Model_Triangulated.obj");
-            obj_Triangulated.Material.ShaderName = "PhongNormalMap";
-            obj_Triangulated.Material.SetTexture(0, "brick-wall");
-            obj_Triangulated.Material.SetTexture(1, "brick-wall_N");
+            ObjVolume obj_Triangulated = ObjVolume.LoadFromFile(Path.Combine(MeshesPath, "Model_Triangulated.obj"));
+            obj_Triangulated.Material = materials["BrickWall"];
 
-            ObjVolume obj_Quads = ObjVolume.LoadFromFile(MeshesPath + "\\Model_Quads.obj");
-            obj_Quads.Material.SetTexture(0, "brick-wall");
+            ObjVolume obj_Quads = ObjVolume.LoadFromFile(Path.Combine(MeshesPath, "Model_Quads.obj"));
+            obj_Quads.Material = materials["BrickWall"];
 
-            ObjVolume obj_Keypad = ObjVolume.LoadFromFile(MeshesPath + "\\Keypad.obj");
-            obj_Keypad.Material.ShaderName = "PhongNormalMap";
-            obj_Keypad.Material.SetTexture(0, "Keypad");
-            obj_Keypad.Material.SetTexture(1, "Keypad_N");
+            ObjVolume obj_Keypad = ObjVolume.LoadFromFile(Path.Combine(MeshesPath, "Keypad.obj"));
+            obj_Keypad.Material = materials["Keypad"];
             obj_Keypad.Position.Z = -10;
 
             objects.Add(obj_Triangulated);
@@ -158,16 +190,14 @@ namespace OpenGL_CS_Game
 
             // Enable Depth Test
             GL.Enable(EnableCap.DepthTest);
+            GL.DepthFunc(DepthFunction.Less);
 
             // Создаем примитивы
-            Cube cube = new Cube();
-            objects.Add(cube);
+            //Cube cube = new Cube();
+            //objects.Add(cube);
 
-            Plain plain = new Plain();
-            plain.Material.ShaderName = "PhongNormalMap";
-            plain.Material.SetTexture(0, "brick-wall");
-            plain.Material.SetTexture(1, "brick-wall_N");
-            objects.Add(plain);
+            //Plain plain = new Plain();
+            //objects.Add(plain);
 
             // Отдаляем камеру от начала координат
             cam.Position = new Vector3(0.0f, 0.0f, 1.5f);

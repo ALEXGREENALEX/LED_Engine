@@ -21,8 +21,9 @@
 		<Shader>PhongNormalMap</Shader>
 		<Texture>brick-wall</Texture>
 		<Texture>brick-wall_N</Texture>
-		<SpecularReflectivity>0.9 0.9 0.9</SpecularReflectivity>
-		<AmbientReflectivity>0.2 0.2 0.2</AmbientReflectivity>
+		<CullFace>False</CullFace>
+		<SpecularReflectivity>0.2 0.2 0.2</SpecularReflectivity>
+		<AmbientReflectivity>0.1 0.1 0.1</AmbientReflectivity>
 		<SpecularShininess>1.0</SpecularShininess>
 	</Material>
 	<Material>
@@ -30,8 +31,8 @@
 		<Shader>PhongNormalMap</Shader>
 		<Texture>Keypad</Texture>
 		<Texture>Keypad_N</Texture>
-		<SpecularReflectivity>0.9 0.9 0.9</SpecularReflectivity>
-		<AmbientReflectivity>0.2 0.2 0.2</AmbientReflectivity>
+		<SpecularReflectivity>0.2 0.2 0.2</SpecularReflectivity>
+		<AmbientReflectivity>0.1 0.1 0.1</AmbientReflectivity>
 		<SpecularShininess>1.0</SpecularShininess>
 	</Material>
 </Materials>
