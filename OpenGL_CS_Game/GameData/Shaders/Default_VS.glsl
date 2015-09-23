@@ -1,13 +1,14 @@
 #version 330
 
-in  vec3 VertexPosition;
-in vec2 VertexTexCoord;
-out vec2 f_texcoord;
+layout(location = 0) in vec3 VertexPosition;
 
 uniform mat4 MVP;
+uniform vec4 MaterialColor;
+
+out vec4 f_color;
 
 void main()
 {
     gl_Position = MVP * vec4(VertexPosition, 1.0);
-    f_texcoord = VertexTexCoord;
+    f_color = MaterialColor;
 }

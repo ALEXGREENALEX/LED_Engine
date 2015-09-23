@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Collections.Generic;
 using System.Text;
 using OpenTK;
@@ -8,9 +9,12 @@ namespace OpenGL_CS_Game
     public class Material
     {
         string shaderName = String.Empty;
+        static Random R = new Random();
+        Vector4 color = new Vector4((float)R.NextDouble(), (float)R.NextDouble(), (float)R.NextDouble(), 1.0f);
         int texturesCount = 0;
         string[] textures = new string[32];
         bool cullFace = true;
+        bool transparent = false;
         Vector3 specularReflectivity = new Vector3(0.2f, 0.2f, 0.2f);
         Vector3 ambientReflectivity = new Vector3(0.1f, 0.1f, 0.1f);
         float specularShininess = 1.0f;
@@ -29,6 +33,15 @@ namespace OpenGL_CS_Game
                 textures[i] = String.Empty;
         }
 
+        public Material(string ShaderName, Vector4 MaterialColor)
+        {
+            shaderName = ShaderName;
+            color = MaterialColor;
+
+            for (int i = 0; i < textures.Length; i++)
+                textures[i] = String.Empty;
+        }
+
         public Material(string ShaderName, string[] Textures)
         {
             shaderName = ShaderName;
@@ -39,6 +52,12 @@ namespace OpenGL_CS_Game
         {
             get { return shaderName; }
             set { shaderName = value; }
+        }
+
+        public Vector4 Color
+        {
+            get { return color; }
+            set { color = value; }
         }
 
         public string[] Textures
@@ -79,6 +98,12 @@ namespace OpenGL_CS_Game
         {
             get { return cullFace; }
             set { cullFace = value; }
+        }
+
+        public bool Transparent
+        {
+            get { return transparent; }
+            set { transparent = value; }
         }
 
         public Vector3 SpecularReflectivity

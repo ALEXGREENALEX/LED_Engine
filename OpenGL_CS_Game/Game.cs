@@ -21,10 +21,16 @@ namespace OpenGL_CS_Game
         }
 
         int indecesArrayBuffer;
+
         Camera cam = new Camera();
         float FOV = MathHelper.DegreesToRadians(70.0f);
+        float zNear = 0.2f;
+        float zFar = 100.0f;
+        Matrix4 ProjectionMatrix;
+
         Vector2 lastMousePos = new Vector2();
         Vector2 lastMousePos_Delta = new Vector2();
+
         float time = 0.0f;
         float rotSpeed = (float)Math.PI / 4.0f;
         float Angle = MathHelper.DegreesToRadians(100.0f);
@@ -130,6 +136,15 @@ namespace OpenGL_CS_Game
                     if (xmlNode.SelectNodes("Shader").Count > 0)
                         materials[Name].ShaderName = xmlNode.SelectSingleNode("Shader").InnerText;
 
+                    if (xmlNode.SelectNodes("Color").Count > 0)
+                    {
+                        StrTMP = String.Empty;
+                        StrTMP = xmlNode.SelectSingleNode("Color").InnerText;
+                        StrArrTMP = StrTMP.Trim().Replace(".", FloatComa).Replace(",", FloatComa).Split(new char[] { ' ' });
+                        if (StrArrTMP.Length == 4)
+                            materials[Name].Color = new Vector4(float.Parse(StrArrTMP[0]), float.Parse(StrArrTMP[1]), float.Parse(StrArrTMP[2]), float.Parse(StrArrTMP[3]));
+                    }
+
                     int TexturesCount = xmlNode.SelectNodes("Texture").Count;
                     if (TexturesCount > 0 && TexturesCount <= 32)
                     {
@@ -141,19 +156,26 @@ namespace OpenGL_CS_Game
                     if (xmlNode.SelectNodes("CullFace").Count > 0)
                         materials[Name].CullFace = bool.Parse(xmlNode.SelectSingleNode("CullFace").InnerText);
 
-                    StrTMP = String.Empty;
-                    if (xmlNode.SelectNodes("SpecularReflectivity").Count > 0)
-                        StrTMP = xmlNode.SelectSingleNode("SpecularReflectivity").InnerText;
-                    StrArrTMP = StrTMP.Trim().Replace(".", FloatComa).Replace(",", FloatComa).Split(new char[] { ' ' });
-                    if (StrArrTMP.Length == 3)
-                        materials[Name].SpecularReflectivity = new Vector3(float.Parse(StrArrTMP[0]), float.Parse(StrArrTMP[1]), float.Parse(StrArrTMP[2]));
+                    if (xmlNode.SelectNodes("Transparent").Count > 0)
+                        materials[Name].Transparent = bool.Parse(xmlNode.SelectSingleNode("Transparent").InnerText);
 
-                    StrTMP = String.Empty;
+                    if (xmlNode.SelectNodes("SpecularReflectivity").Count > 0)
+                    {
+                        StrTMP = String.Empty;
+                        StrTMP = xmlNode.SelectSingleNode("SpecularReflectivity").InnerText;
+                        StrArrTMP = StrTMP.Trim().Replace(".", FloatComa).Replace(",", FloatComa).Split(new char[] { ' ' });
+                        if (StrArrTMP.Length == 3)
+                            materials[Name].SpecularReflectivity = new Vector3(float.Parse(StrArrTMP[0]), float.Parse(StrArrTMP[1]), float.Parse(StrArrTMP[2]));
+                    }
+
                     if (xmlNode.SelectNodes("AmbientReflectivity").Count > 0)
+                    {
+                        StrTMP = String.Empty;
                         StrTMP = xmlNode.SelectSingleNode("AmbientReflectivity").InnerText;
-                    StrArrTMP = StrTMP.Trim().Replace(".", FloatComa).Replace(",", FloatComa).Split(new char[] { ' ' });
-                    if (StrArrTMP.Length == 3)
-                        materials[Name].AmbientReflectivity = new Vector3(float.Parse(StrArrTMP[0]), float.Parse(StrArrTMP[1]), float.Parse(StrArrTMP[2]));
+                        StrArrTMP = StrTMP.Trim().Replace(".", FloatComa).Replace(",", FloatComa).Split(new char[] { ' ' });
+                        if (StrArrTMP.Length == 3)
+                            materials[Name].AmbientReflectivity = new Vector3(float.Parse(StrArrTMP[0]), float.Parse(StrArrTMP[1]), float.Parse(StrArrTMP[2]));
+                    }
 
                     if (xmlNode.SelectNodes("SpecularShininess").Count > 0)
                         materials[Name].SpecularShininess = float.Parse(xmlNode.SelectSingleNode("SpecularShininess")
@@ -170,7 +192,7 @@ namespace OpenGL_CS_Game
             obj_Triangulated.Material = materials["BrickWall"];
 
             ObjVolume obj_Quads = ObjVolume.LoadFromFile(Path.Combine(MeshesPath, "Model_Quads.obj"));
-            obj_Quads.Material = materials["BrickWall"];
+            obj_Quads.Material = materials["TransparentRedGlass"];
 
             ObjVolume obj_Keypad = ObjVolume.LoadFromFile(Path.Combine(MeshesPath, "Keypad.obj"));
             obj_Keypad.Material = materials["Keypad"];
@@ -179,6 +201,17 @@ namespace OpenGL_CS_Game
             objects.Add(obj_Triangulated);
             objects.Add(obj_Quads);
             objects.Add(obj_Keypad);
+
+            List<Volume> objectsTransparent = new List<Volume>();
+            for (int i = 0; i < objects.Count; i++)
+                if (objects[i].Material.Transparent)
+                {
+                    objectsTransparent.Add(objects[i]);
+                    objects.RemoveAt(i);
+                    i--;
+                }
+            objects.AddRange(objectsTransparent);
+            objectsTransparent = null;
         }
 
         void initProgram()
@@ -188,9 +221,12 @@ namespace OpenGL_CS_Game
 
             GL.GenBuffers(1, out indecesArrayBuffer);
 
-            // Enable Depth Test
+            // Включаем тест глубины
             GL.Enable(EnableCap.DepthTest);
             GL.DepthFunc(DepthFunction.Less);
+
+            // Функция смешивания цветов для прозрачных материалов
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
             // Создаем примитивы
             //Cube cube = new Cube();
@@ -209,6 +245,14 @@ namespace OpenGL_CS_Game
 
             initProgram();
             GL.ClearColor(Color.CornflowerBlue);
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+
+            // Настраиваем проэкцию (Угол обзора, Мин и Макс расстояния рендера)
+            ProjectionMatrix = Matrix4.CreatePerspectiveFieldOfView(FOV, ClientSize.Width / (float)ClientSize.Height, zNear, zFar);
         }
 
         protected override void OnKeyDown(KeyboardKeyEventArgs e)
@@ -249,13 +293,12 @@ namespace OpenGL_CS_Game
 
             GL.Viewport(0, 0, Width, Height);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            GL.Enable(EnableCap.DepthTest);
 
             // Отрисовываем все объекты
             foreach (Volume v in objects)
             {
                 v.CalculateModelMatrix();
-                v.ViewProjectionMatrix = cam.GetViewMatrix() * Matrix4.CreatePerspectiveFieldOfView(FOV, ClientSize.Width / (float)ClientSize.Height, 0.2f, 100.0f);
+                v.ViewProjectionMatrix = cam.GetViewMatrix() * ProjectionMatrix;
                 v.ModelViewProjectionMatrix = v.ModelMatrix * v.ViewProjectionMatrix;
 
                 // Отрисовка только тех сторон, что повернуты к камере
@@ -263,6 +306,18 @@ namespace OpenGL_CS_Game
                     GL.Enable(EnableCap.CullFace);
                 else
                     GL.Disable(EnableCap.CullFace);
+
+                // Вкл. прозрачность только для прозрачных объектов
+                if (v.Material.Transparent)
+                {
+                    GL.Enable(EnableCap.AlphaTest);
+                    GL.Enable(EnableCap.Blend);
+                }
+                else
+                {
+                    GL.Disable(EnableCap.AlphaTest);
+                    GL.Disable(EnableCap.Blend);
+                }
 
                 // Активируем нужный TextureUnit и назначаем текстуру
                 GL.ActiveTexture(TextureUnit.Texture0);
@@ -273,6 +328,7 @@ namespace OpenGL_CS_Game
                     GL.BindTexture(TextureTarget.Texture2D, textures[v.Material.GetTexture(i)]);
                 }
 
+                #region Работаем с шейдерами
                 // Подключаем шейдеры для отрисовки объекта
                 GL.LinkProgram(shaders[v.Material.ShaderName].ProgramID);
                 GL.UseProgram(shaders[v.Material.ShaderName].ProgramID);
@@ -306,10 +362,22 @@ namespace OpenGL_CS_Game
                 if (shaders[v.Material.ShaderName].GetUniform("Material.Shininess") != -1)
                     GL.Uniform1(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "Material.Shininess"), v.Material.SpecularShininess);
 
-                // Передаем шейдеру матрицу ModelView, если шейдер поддерживает это.
+                // Передаем шейдеру значение цвета материала, если шейдер поддерживает это.
+                if (shaders[v.Material.ShaderName].GetUniform("MaterialColor") != -1)
+                    GL.Uniform4(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "MaterialColor"), v.Material.Color);
+
+                // Передаем шейдеру матрицу ModelMatrix, если шейдер поддерживает это.
+                if (shaders[v.Material.ShaderName].GetUniform("ModelMatrix") != -1)
+                    GL.UniformMatrix4(shaders[v.Material.ShaderName].GetUniform("ModelMatrix"), false, ref v.ModelMatrix);
+
+                // Передаем шейдеру матрицу ModelViewMatrix, если шейдер поддерживает это.
                 Matrix4 MV = cam.GetViewMatrix() * v.ModelMatrix;
                 if (shaders[v.Material.ShaderName].GetUniform("ModelViewMatrix") != -1)
                     GL.UniformMatrix4(shaders[v.Material.ShaderName].GetUniform("ModelViewMatrix"), false, ref MV);
+
+                //// Передаем шейдеру матрицу ProjectionMatrix, если шейдер поддерживает это.
+                //if (shaders[v.Material.ShaderName].GetUniform("ProjectionMatrix") != -1)
+                //    GL.UniformMatrix4(shaders[v.Material.ShaderName].GetUniform("ProjectionMatrix"), false, ref ProjectionMatrix);
 
                 // Передаем шейдеру матрицу NormalMatrix, если шейдер поддерживает это.
                 if (shaders[v.Material.ShaderName].GetUniform("NormalMatrix") != -1)
@@ -322,6 +390,18 @@ namespace OpenGL_CS_Game
                 if (shaders[v.Material.ShaderName].GetUniform("MVP") != -1)
                     GL.UniformMatrix4(shaders[v.Material.ShaderName].GetUniform("MVP"), false, ref v.ModelViewProjectionMatrix);
 
+                // Передаем шейдеру позицию камеры, если шейдер поддерживает это.
+                if (shaders[v.Material.ShaderName].GetUniform("WorldCameraPosition") != -1)
+                    GL.Uniform3(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "WorldCameraPosition"), cam.Position);
+
+                //// Передаем шейдеру переменную типа bool DrawSkyBox, если шейдер поддерживает это.
+                //if (shaders[v.Material.ShaderName].GetUniform("DrawSkyBox") != -1)
+                //    if (DrawSkyBox)
+                //        GL.Uniform1(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "DrawSkyBox"), 1);
+                //    else
+                //        GL.Uniform1(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "DrawSkyBox"), 0);
+
+                #region Передаем шейдеру VertexPosition, VertexNormal, VertexTexCoord, VertexTangent
                 // Передаем шейдеру буфер позицый вертексов, если шейдер поддерживает это (должна быть 100% поддержка).
                 if (shaders[v.Material.ShaderName].GetAttribute("VertexPosition") != -1)
                 {
@@ -356,6 +436,8 @@ namespace OpenGL_CS_Game
                     GL.BufferData<Vector4>(BufferTarget.ArrayBuffer, (IntPtr)(v.GetTangentses().Length * Vector4.SizeInBytes), v.GetTangentses(), BufferUsageHint.StaticDraw);
                     GL.BindVertexArray(0);
                 }
+                #endregion
+                #endregion
 
                 GL.BindBuffer(BufferTarget.ElementArrayBuffer, indecesArrayBuffer);
                 GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(v.GetFaceIndeces().Length * sizeof(uint)), v.GetFaceIndeces(), BufferUsageHint.StaticDraw);

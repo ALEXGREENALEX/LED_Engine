@@ -1,19 +1,50 @@
 ﻿<!--Список материалов и их свойств
 	Name
+		string
 	Shader
-	Texture, Texture, Texture ...
+		string
+	Color
+		Vector4 RGBA;
+		Если не указать или оставить пустым - Случайній цвет;
+	Texture
+		string;
+		Колличество от 0 до 32
 	CullFace
+		bool
+	Transparent
+		bool
 	SpecularReflectivity
+		Vector3
 	AmbientReflectivity
+		Vector3
 	SpecularShininess
+		float
 -->
 
 <Materials>
 	<Material>
 		<Name></Name>
 		<Shader></Shader>
+		<CullFace>False</CullFace>
+	</Material>
+	<Material>
+		<Name>Checker</Name>
+		<Shader>DefaultTexture</Shader>
 		<Texture></Texture>
 		<Texture>Checker_N</Texture>
+		<CullFace>False</CullFace>
+	</Material>
+	<Material>
+		<Name>TransparentRedGlass</Name>
+		<Shader></Shader>
+		<Color>1.0 0.0 0.0 0.5</Color>
+		<CullFace>False</CullFace>
+		<Transparent>True</Transparent>
+	</Material>
+	<Material>
+		<Name>Reflect</Name>
+		<Shader>CubemapReflection</Shader>
+		<Color>0.5 0.5 0.5 1.0</Color>
 		<CullFace>False</CullFace>
 	</Material>
 	<Material>

@@ -1,11 +1,9 @@
 ﻿#version 330
 
-in vec2 f_texcoord;
-out vec4 outputColor;
-
-uniform sampler2D maintexture;
+in vec4 f_color;
+out vec4 color;
 
 void main()
 {
-    outputColor = texture(maintexture, f_texcoord);
+    color = f_color;
 }
