@@ -56,6 +56,7 @@
     </Compile>
     <Compile Include="ShaderProgram.cs" />
     <Compile Include="Cube.cs" />
+    <Compile Include="Texture.cs" />
     <Compile Include="Volume.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

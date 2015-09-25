@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Collections.Generic;
 using System.Text;
 using OpenTK;
+using OpenTK.Graphics.OpenGL;
 
 namespace OpenGL_CS_Game
 {
@@ -18,7 +19,8 @@ namespace OpenGL_CS_Game
         Vector3 specularReflectivity = new Vector3(0.2f, 0.2f, 0.2f);
         Vector3 ambientReflectivity = new Vector3(0.1f, 0.1f, 0.1f);
         float specularShininess = 1.0f;
-        float reflectFactor = 0.85f;
+        float reflectionFactor = 0.5f;
+        float refractiveIndex = 1.0f;
 
         public Material()
         {
@@ -125,10 +127,16 @@ namespace OpenGL_CS_Game
             set { specularShininess = value; }
         }
 
-        public float ReflectFactor
+        public float ReflectionFactor
         {
-            get { return reflectFactor; }
-            set { reflectFactor = value; }
+            get { return reflectionFactor; }
+            set { reflectionFactor = value; }
+        }
+
+        public float RefractiveIndex
+        {
+            get { return refractiveIndex; }
+            set { refractiveIndex = value; }
         }
     }
 }

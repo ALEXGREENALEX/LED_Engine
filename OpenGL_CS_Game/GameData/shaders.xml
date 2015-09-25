@@ -29,9 +29,9 @@
 		<VertexShader>CubemapReflect_VS.glsl</VertexShader>
 		<FragmentShader>CubemapReflect_FS.glsl</FragmentShader>
 	</Shader>
-<!-- 	<Shader>
-		<Name>CubemapRefraction</Name>
+	<Shader>
+		<Name>Refraction</Name>
 		<VertexShader>CubemapRefract_VS.glsl</VertexShader>
 		<FragmentShader>CubemapRefract_FS.glsl</FragmentShader>
-	</Shader>-->
+	</Shader>
 </Shaders>

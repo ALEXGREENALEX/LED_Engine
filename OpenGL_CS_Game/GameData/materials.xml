@@ -19,7 +19,9 @@
 		Vector3
 	SpecularShininess
 		float
-	ReflectFactor
+	ReflectionFactor
+		float
+	RefractiveIndex
 		float
 -->
 
@@ -43,19 +45,38 @@
 		<Transparent>True</Transparent>
 	</Material>
 	<Material>
-		<Name>SkyCubeMap_1</Name>
+		<Name>SkyCubemap_Test</Name>
 		<Shader>CubemapSky</Shader>
-		<CubemapTexture>SkyCubeMap_Yokohama3</CubemapTexture>
+		<CubemapTexture>SkyCubemap_Test</CubemapTexture>
 		<CullFace>False</CullFace>
 	</Material>
-	<!--<Material>
+	<Material>
+		<Name>SkyCubemap_Storforsen</Name>
+		<Shader>CubemapSky</Shader>
+		<CubemapTexture>SkyCubemap_Storforsen</CubemapTexture>
+		<CullFace>False</CullFace>
+	</Material>
+	<Material>
+		<Name>SkyCubemap_Yokohama3</Name>
+		<Shader>CubemapSky</Shader>
+		<CubemapTexture>SkyCubemap_Yokohama3</CubemapTexture>
+		<CullFace>False</CullFace>
+	</Material>
+	<Material>
 		<Name>Reflection</Name>
 		<Shader>Reflection</Shader>
 		<Color>0.5 0.5 0.5 1.0</Color>
-		<Texture>Cubemap</Texture>
-		<ReflectFactor>0.85</ReflectFactor>
+		<Texture>SkyCubemap_Yokohama3</Texture>
+		<ReflectionFactor>0.85</ReflectionFactor>
 		<CullFace>False</CullFace>
-	</Material>-->
+	</Material>
+	<Material>
+		<Name>Refraction</Name>
+		<Shader>Refraction</Shader>
+		<Texture>SkyCubemap_Storforsen</Texture>
+		<ReflectionFactor>0.1</ReflectionFactor>
+		<RefractiveIndex>0.94</RefractiveIndex>
+	</Material>
 	<Material>
 		<Name>BrickWall</Name>
 		<Shader>PhongNormalMap</Shader>

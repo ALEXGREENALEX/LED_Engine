@@ -34,7 +34,7 @@ namespace OpenGL_CS_Game
         double FPS;
 
         List<Volume> objects = new List<Volume>();
-        Dictionary<string, int> textures = new Dictionary<string, int>();
+        Dictionary<string, Texture> textures = new Dictionary<string, Texture>();
         Dictionary<string, Material> materials = new Dictionary<string, Material>();
         Dictionary<string, ShaderProgram> shaders = new Dictionary<string, ShaderProgram>();
 
@@ -99,22 +99,30 @@ namespace OpenGL_CS_Game
 
                     // Исли не указаны текстурные фильтры, тогда
                     if (StrMagFilter == String.Empty && StrMinFilter == String.Empty)
-                        textures.Add(xmlNode.SelectSingleNode("Name").InnerText, loadImage(
-                            Path.Combine(TexturesPath, xmlNode.SelectSingleNode("File").InnerText)));
+                    {
+                        textures.Add(xmlNode.SelectSingleNode("Name").InnerText, new Texture(loadImage(
+                            Path.Combine(TexturesPath, xmlNode.SelectSingleNode("File").InnerText))));
+                    }
                     else if (StrMagFilter == String.Empty)
-                        textures.Add(xmlNode.SelectSingleNode("Name").InnerText, loadImage(
+                    {
+                        textures.Add(xmlNode.SelectSingleNode("Name").InnerText, new Texture(loadImage(
                             Path.Combine(TexturesPath, xmlNode.SelectSingleNode("File").InnerText),
                             TextureMagFilter.Linear,
-                            (TextureMinFilter)Enum.Parse(typeof(TextureMinFilter), StrMinFilter, true)));
+                            (TextureMinFilter)Enum.Parse(typeof(TextureMinFilter), StrMinFilter, true))));
+                    }
                     else if (StrMinFilter == String.Empty)
-                        textures.Add(xmlNode.SelectSingleNode("Name").InnerText, loadImage(
+                    {
+                        textures.Add(xmlNode.SelectSingleNode("Name").InnerText, new Texture(loadImage(
                             Path.Combine(TexturesPath, xmlNode.SelectSingleNode("File").InnerText),
-                            (TextureMagFilter)Enum.Parse(typeof(TextureMagFilter), StrMagFilter, true)));
+                            (TextureMagFilter)Enum.Parse(typeof(TextureMagFilter), StrMagFilter, true))));
+                    }
                     else
-                        textures.Add(xmlNode.SelectSingleNode("Name").InnerText, loadImage(
+                    {
+                        textures.Add(xmlNode.SelectSingleNode("Name").InnerText, new Texture(loadImage(
                             Path.Combine(TexturesPath, xmlNode.SelectSingleNode("File").InnerText),
                             (TextureMagFilter)Enum.Parse(typeof(TextureMagFilter), StrMagFilter, true),
-                            (TextureMinFilter)Enum.Parse(typeof(TextureMinFilter), StrMinFilter, true)));
+                            (TextureMinFilter)Enum.Parse(typeof(TextureMinFilter), StrMinFilter, true))));
+                    }
                 }
                 catch
                 {
@@ -146,7 +154,7 @@ namespace OpenGL_CS_Game
                         if (xmlNode.SelectNodes("SideSize").Count > 0 && xmlNode.SelectSingleNode("SideSize").InnerText != String.Empty)
                             SideSize = int.Parse(xmlNode.SelectSingleNode("SideSize").InnerText);
 
-                        textures.Add(Name, loadCubeMap(CubeMapsBMP, SideSize));
+                        textures.Add(Name, new Texture(loadCubeMap(CubeMapsBMP, SideSize), TextureTarget.TextureCubeMap));
                         CubeMapsBMP = null;
                     }
                     else
@@ -193,6 +201,14 @@ namespace OpenGL_CS_Game
                             materials[Name].SetTexture(i, xmlNodesTMP[i].InnerText);
                     }
 
+                    TexturesCount = xmlNode.SelectNodes("CubemapTexture").Count;
+                    if (TexturesCount > 0 && TexturesCount <= 32)
+                    {
+                        XmlNodeList xmlNodesTMP = xmlNode.SelectNodes("CubemapTexture");
+                        for (int i = 0; i < xmlNodesTMP.Count; i++)
+                            materials[Name].SetTexture(i, xmlNodesTMP[i].InnerText);
+                    }
+
                     if (xmlNode.SelectNodes("CullFace").Count > 0)
                         materials[Name].CullFace = bool.Parse(xmlNode.SelectSingleNode("CullFace").InnerText);
 
@@ -221,8 +237,12 @@ namespace OpenGL_CS_Game
                         materials[Name].SpecularShininess = float.Parse(xmlNode.SelectSingleNode("SpecularShininess")
                             .InnerText.Trim().Replace(".", FloatComa).Replace(",", FloatComa));
 
-                    if (xmlNode.SelectNodes("ReflectFactor").Count > 0)
-                        materials[Name].ReflectFactor = float.Parse(xmlNode.SelectSingleNode("ReflectFactor")
+                    if (xmlNode.SelectNodes("ReflectionFactor").Count > 0)
+                        materials[Name].ReflectionFactor = float.Parse(xmlNode.SelectSingleNode("ReflectionFactor")
+                            .InnerText.Trim().Replace(".", FloatComa).Replace(",", FloatComa));
+
+                    if (xmlNode.SelectNodes("RefractiveIndex").Count > 0)
+                        materials[Name].RefractiveIndex = float.Parse(xmlNode.SelectSingleNode("RefractiveIndex")
                             .InnerText.Trim().Replace(".", FloatComa).Replace(",", FloatComa));
                 }
                 catch
@@ -234,11 +254,7 @@ namespace OpenGL_CS_Game
 
             ObjVolume obj_Triangulated = ObjVolume.LoadFromFile(Path.Combine(MeshesPath, "Model_Triangulated.obj"));
             //obj_Triangulated.Material = materials["BrickWall"];
-            obj_Triangulated.Material = new Material("Reflection");
-            obj_Triangulated.Material.SetTexture(0, "SkyCubeMap_Yokohama3");
-            obj_Triangulated.Material.Color = new Vector4(0.5f, 0.26f, 0.15f, 1.0f);
-            obj_Triangulated.Material.ReflectFactor = 0.9f;
-            obj_Triangulated.Material.CullFace = false;
+            obj_Triangulated.Material = materials["Refraction"];
 
             //ObjVolume obj_Quads = ObjVolume.LoadFromFile(Path.Combine(MeshesPath, "Model_Quads.obj"));
             //obj_Quads.Material = materials["TransparentRedGlass"];
@@ -279,7 +295,7 @@ namespace OpenGL_CS_Game
 
             // Создаем примитивы
             Cube cube = new Cube(zFar);
-            cube.Material = materials["SkyCubeMap_1"];
+            cube.Material = materials["SkyCubemap_Test"];
             objects.Add(cube);
 
             //Plain plain = new Plain();
@@ -358,11 +374,11 @@ namespace OpenGL_CS_Game
                 if (v.Material.TexturesCount > 0)
                 {
                     GL.ActiveTexture(TextureUnit.Texture0);
-                    GL.BindTexture(TextureTarget.Texture2D, textures[v.Material.GetTexture(0)]);
+                    GL.BindTexture(textures[v.Material.GetTexture(0)].TextureTarget, textures[v.Material.GetTexture(0)].TextureID);
                     for (int i = 1; i < v.Material.TexturesCount; i++)
                     {
                         GL.ActiveTexture((TextureUnit)(0x84C0 + i));
-                        GL.BindTexture(TextureTarget.Texture2D, textures[v.Material.GetTexture(i)]);
+                        GL.BindTexture(textures[v.Material.GetTexture(i)].TextureTarget, textures[v.Material.GetTexture(i)].TextureID);
                     }
                 }
 
@@ -405,8 +421,12 @@ namespace OpenGL_CS_Game
                     GL.Uniform4(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "MaterialColor"), v.Material.Color);
 
                 // Передаем шейдеру значение ReflectFactor, если шейдер поддерживает это.
-                if (shaders[v.Material.ShaderName].GetUniform("ReflectFactor") != -1)
-                    GL.Uniform1(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "ReflectFactor"), v.Material.ReflectFactor);
+                if (shaders[v.Material.ShaderName].GetUniform("ReflectionFactor") != -1)
+                    GL.Uniform1(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "ReflectionFactor"), v.Material.ReflectionFactor);
+
+                // Передаем шейдеру значение RefractiveIndex, если шейдер поддерживает это.
+                if (shaders[v.Material.ShaderName].GetUniform("RefractiveIndex") != -1)
+                    GL.Uniform1(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "RefractiveIndex"), v.Material.RefractiveIndex);
 
                 // Передаем шейдеру матрицу ModelMatrix, если шейдер поддерживает это.
                 if (shaders[v.Material.ShaderName].GetUniform("ModelMatrix") != -1)
@@ -503,14 +523,16 @@ namespace OpenGL_CS_Game
                 cam.Move(0f, 0f, 0.01f);
             if (KbdState.IsKeyDown(Key.Q))
                 cam.Move(0f, 0f, -0.01f);
+
+            float camSens = 2.0f;
             if (KbdState.IsKeyDown(Key.Left))
-                cam.AddRotation(1.0f, 0.0f);
+                cam.AddRotation(camSens, 0.0f);
             if (KbdState.IsKeyDown(Key.Right))
-                cam.AddRotation(-1.0f, 0.0f);
+                cam.AddRotation(-camSens, 0.0f);
             if (KbdState.IsKeyDown(Key.Up))
-                cam.AddRotation(0.0f, 1.0f);
+                cam.AddRotation(0.0f, camSens);
             if (KbdState.IsKeyDown(Key.Down))
-                cam.AddRotation(0.0f, -1.0f);
+                cam.AddRotation(0.0f, -camSens);
 
             // Обновляем позиции объектов
             time += (float)e.Time;
@@ -519,6 +541,20 @@ namespace OpenGL_CS_Game
             Angle += rotSpeed * (float)e.Time;
             if (Angle > MathHelper.TwoPi)
                 Angle -= MathHelper.TwoPi;
+        }
+
+        int loadImage(string filename, TextureMagFilter MagFilter = TextureMagFilter.Linear, TextureMinFilter MinFilter = TextureMinFilter.LinearMipmapLinear)
+        {
+            try
+            {
+                Bitmap file = new Bitmap(filename);
+                return loadImage(file, MagFilter, MinFilter);
+            }
+            catch (FileNotFoundException e)
+            {
+                MessageBox.Show("Error: Cannot load image.\n" + e.Message);
+                return -1;
+            }
         }
 
         int loadImage(Bitmap image, TextureMagFilter MagFilter = TextureMagFilter.Linear, TextureMinFilter MinFilter = TextureMinFilter.LinearMipmapLinear)
@@ -552,20 +588,6 @@ namespace OpenGL_CS_Game
             return texID;
         }
 
-        int loadImage(string filename, TextureMagFilter MagFilter = TextureMagFilter.Linear, TextureMinFilter MinFilter = TextureMinFilter.LinearMipmapLinear)
-        {
-            try
-            {
-                Bitmap file = new Bitmap(filename);
-                return loadImage(file, MagFilter, MinFilter);
-            }
-            catch (FileNotFoundException e)
-            {
-                MessageBox.Show("Error: Cannot load image \"lilename\"\n\n" + e.Message);
-                return -1;
-            }
-        }
-
         int loadCubeMap(Bitmap[] CubeMapTextures)
         {
             return loadCubeMap(CubeMapTextures, -1);
@@ -575,12 +597,17 @@ namespace OpenGL_CS_Game
         {
             if (CubeMapTextures.Length == 6)
             {
-                // Изменяем размер и ~отображаем текстуры по X
+                // Изменяем, отображаем и вращаем текстуры
                 for (int i = 0; i < CubeMapTextures.Length; i++)
                 {
                     if (TextureSideSize > 0)
                         CubeMapTextures[i] = new Bitmap(CubeMapTextures[i], TextureSideSize, TextureSideSize);
-                    //CubeMapTextures[i].RotateFlip(RotateFlipType.RotateNoneFlipX);
+                    if (i < 2 || i > 3)
+                        CubeMapTextures[i].RotateFlip(RotateFlipType.RotateNoneFlipX);
+                    if (i == 2 || i == 3)
+                        CubeMapTextures[i].RotateFlip(RotateFlipType.Rotate270FlipY);
+                    if (i == 2)
+                        CubeMapTextures[i].RotateFlip(RotateFlipType.Rotate180FlipNone);
                 }
 
                 int texID = GL.GenTexture();
@@ -590,7 +617,7 @@ namespace OpenGL_CS_Game
                 TextureTarget[] targets = new TextureTarget[]
                 {
                     TextureTarget.TextureCubeMapPositiveX, TextureTarget.TextureCubeMapNegativeX,
-                    TextureTarget.TextureCubeMapPositiveY, TextureTarget.TextureCubeMapNegativeY,
+                    TextureTarget.TextureCubeMapNegativeY, TextureTarget.TextureCubeMapPositiveY,
                     TextureTarget.TextureCubeMapPositiveZ, TextureTarget.TextureCubeMapNegativeZ
                 };
 
@@ -604,7 +631,7 @@ namespace OpenGL_CS_Game
                 {
                     data = CubeMapTextures[i].LockBits(new System.Drawing.Rectangle(0, 0, CubeMapTextures[i].Width,
                         CubeMapTextures[i].Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                    GL.TexSubImage2D(targets[i], 0, 0, 0, data.Width, data.Height, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
+                    GL.TexSubImage2D(targets[5 - i], 0, 0, 0, data.Width, data.Height, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
                     CubeMapTextures[i].UnlockBits(data);
                 }
 
