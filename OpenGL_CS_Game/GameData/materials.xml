@@ -19,6 +19,8 @@
 		Vector3
 	SpecularShininess
 		float
+	ReflectFactor
+		float
 -->
 
 <Materials>
@@ -31,7 +33,6 @@
 		<Name>Checker</Name>
 		<Shader>DefaultTexture</Shader>
 		<Texture></Texture>
-		<Texture>Checker_N</Texture>
 		<CullFace>False</CullFace>
 	</Material>
 	<Material>
@@ -42,11 +43,19 @@
 		<Transparent>True</Transparent>
 	</Material>
 	<Material>
-		<Name>Reflect</Name>
-		<Shader>CubemapReflection</Shader>
-		<Color>0.5 0.5 0.5 1.0</Color>
+		<Name>SkyCubeMap_1</Name>
+		<Shader>CubemapSky</Shader>
+		<CubemapTexture>SkyCubeMap_Yokohama3</CubemapTexture>
 		<CullFace>False</CullFace>
 	</Material>
+	<!--<Material>
+		<Name>Reflection</Name>
+		<Shader>Reflection</Shader>
+		<Color>0.5 0.5 0.5 1.0</Color>
+		<Texture>Cubemap</Texture>
+		<ReflectFactor>0.85</ReflectFactor>
+		<CullFace>False</CullFace>
+	</Material>-->
 	<Material>
 		<Name>BrickWall</Name>
 		<Shader>PhongNormalMap</Shader>

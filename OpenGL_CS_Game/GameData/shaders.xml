@@ -20,7 +20,12 @@
 		<FragmentShader>PhongNormalMap_FS.glsl</FragmentShader>
 	</Shader>
 	<Shader>
-		<Name>CubemapReflection</Name>
+		<Name>CubemapSky</Name>
+		<VertexShader>CubemapSky_VS.glsl</VertexShader>
+		<FragmentShader>CubemapSky_FS.glsl</FragmentShader>
+	</Shader>
+	<Shader>
+		<Name>Reflection</Name>
 		<VertexShader>CubemapReflect_VS.glsl</VertexShader>
 		<FragmentShader>CubemapReflect_FS.glsl</FragmentShader>
 	</Shader>

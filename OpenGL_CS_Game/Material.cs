@@ -18,11 +18,12 @@ namespace OpenGL_CS_Game
         Vector3 specularReflectivity = new Vector3(0.2f, 0.2f, 0.2f);
         Vector3 ambientReflectivity = new Vector3(0.1f, 0.1f, 0.1f);
         float specularShininess = 1.0f;
+        float reflectFactor = 0.85f;
 
         public Material()
         {
             for (int i = 0; i < textures.Length; i++)
-                textures[i] = String.Empty;
+                textures[i] = null;
         }
 
         public Material(string ShaderName)
@@ -30,7 +31,7 @@ namespace OpenGL_CS_Game
             shaderName = ShaderName;
 
             for (int i = 0; i < textures.Length; i++)
-                textures[i] = String.Empty;
+                textures[i] = null;
         }
 
         public Material(string ShaderName, Vector4 MaterialColor)
@@ -73,7 +74,7 @@ namespace OpenGL_CS_Game
                 textures[TextureUnit] = Texture;
                 texturesCount = 0;
                 for (int i = 0; i < textures.Length; i++)
-                    if (textures[i] != String.Empty)
+                    if (textures[i] != null)
                         texturesCount++;
                 return true;
             }
@@ -84,7 +85,7 @@ namespace OpenGL_CS_Game
         public string GetTexture(int TextureUnit)
         {
             if (TextureUnit < 0 || TextureUnit > 31)
-                return String.Empty;
+                return null;
             else
                 return textures[TextureUnit];
         }
@@ -122,6 +123,12 @@ namespace OpenGL_CS_Game
         {
             get { return specularShininess; }
             set { specularShininess = value; }
+        }
+
+        public float ReflectFactor
+        {
+            get { return reflectFactor; }
+            set { reflectFactor = value; }
         }
     }
 }

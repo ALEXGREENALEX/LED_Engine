@@ -1,0 +1,21 @@
+﻿<!--Список всех CubeMapTextures
+	SubDir - Подпапка, для удобства, если нужно.
+	Texture[6] = {X+, X-, Y+, Y-, Z+, Z-}
+	SideSize - Сторона текстуры
+		Если пропустить или оставить пустым, то размер считывается из текстур
+		Это ускоряет загрузку, но замедляет рендер при больших текстурах.
+-->
+
+<CubeMapTextures>
+	<CubeMapTexture>
+		<Name>SkyCubeMap_Yokohama3</Name>
+		<SubDir>Yokohama3</SubDir>
+		<Texture>posx.jpg</Texture>
+		<Texture>negx.jpg</Texture>
+		<Texture>posy.jpg</Texture>
+		<Texture>negy.jpg</Texture>
+		<Texture>posz.jpg</Texture>
+		<Texture>negz.jpg</Texture>
+		<SideSize></SideSize>
+	</CubeMapTexture>
+</CubeMapTextures>

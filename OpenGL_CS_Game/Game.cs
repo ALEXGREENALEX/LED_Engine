@@ -16,20 +16,17 @@ namespace OpenGL_CS_Game
     class Game : GameWindow
     {
         public Game() :
-            base(640, 480, new GraphicsMode(32, 24, 0, 4))
+            base(640, 480, new GraphicsMode(32, 24, 0, 4)) // MSAA = 4
         {
         }
 
         int indecesArrayBuffer;
 
         Camera cam = new Camera();
-        float FOV = MathHelper.DegreesToRadians(70.0f);
-        float zNear = 0.2f;
-        float zFar = 100.0f;
+        float FOV = MathHelper.DegreesToRadians(50.0f);
+        float zNear = 0.3f;
+        float zFar = 10000.0f;
         Matrix4 ProjectionMatrix;
-
-        Vector2 lastMousePos = new Vector2();
-        Vector2 lastMousePos_Delta = new Vector2();
 
         float time = 0.0f;
         float rotSpeed = (float)Math.PI / 4.0f;
@@ -47,10 +44,10 @@ namespace OpenGL_CS_Game
             string StartupPath = Application.StartupPath;
 
             XmlDocument XML = new XmlDocument();
-            XML.Load(Path.Combine(StartupPath, "config.xml"));
+            XML.Load(Path.Combine(StartupPath, "Config.xml"));
             Title = XML.DocumentElement.SelectSingleNode("Title").InnerText;
 
-            XmlNode NodePath = XML.DocumentElement.SelectSingleNode("Path");
+            XmlNode NodePath = XML.DocumentElement.SelectSingleNode("Paths");
             string GameDataPath = Path.Combine(StartupPath, NodePath.SelectSingleNode("GameData").InnerText);
 
             // Проверка на запуск из студии!!!
@@ -64,9 +61,16 @@ namespace OpenGL_CS_Game
             string MeshesPath = Path.Combine(GameDataPath, NodePath.SelectSingleNode("Meshes").InnerText);
             string ShadersPath = Path.Combine(GameDataPath, NodePath.SelectSingleNode("Shaders").InnerText);
             string TexturesPath = Path.Combine(GameDataPath, NodePath.SelectSingleNode("Textures").InnerText);
+            string CubeMapTexturesPath = Path.Combine(GameDataPath, NodePath.SelectSingleNode("CubeMapTextures").InnerText);
+
+            NodePath = XML.DocumentElement.SelectSingleNode("ConfigFiles");
+            string TexturesConfigFile = Path.Combine(GameDataPath, NodePath.SelectSingleNode("Textures").InnerText);
+            string CubeMapTexturesConfigFile = Path.Combine(GameDataPath, NodePath.SelectSingleNode("CubeMapTextures").InnerText);
+            string MaterialsConfigFile = Path.Combine(GameDataPath, NodePath.SelectSingleNode("Materials").InnerText);
+            string ShadersConfigFile = Path.Combine(GameDataPath, NodePath.SelectSingleNode("Shaders").InnerText);
 
             #region Загружаем шейдеры
-            XML.Load(Path.Combine(GameDataPath, "shaders.xml"));
+            XML.Load(ShadersConfigFile);
             XmlNodeList xmlNodeList = XML.DocumentElement.SelectNodes("Shader");
 
             foreach (XmlNode xmlNode in xmlNodeList)
@@ -78,7 +82,7 @@ namespace OpenGL_CS_Game
             #endregion
 
             #region Загружаем текстуры
-            XML.Load(Path.Combine(GameDataPath, "textures.xml"));
+            XML.Load(TexturesConfigFile);
             xmlNodeList = XML.DocumentElement.SelectNodes("Texture");
 
             foreach (XmlNode xmlNode in xmlNodeList)
@@ -119,8 +123,44 @@ namespace OpenGL_CS_Game
             }
             #endregion
 
+            #region CubeMapTextures
+            XML.Load(CubeMapTexturesConfigFile);
+            xmlNodeList = XML.DocumentElement.SelectNodes("CubeMapTexture");
+
+            foreach (XmlNode xmlNode in xmlNodeList)
+            {
+                try
+                {
+                    string Name = xmlNode.SelectSingleNode("Name").InnerText;
+                    string CubeMapDir = Path.Combine(CubeMapTexturesPath, xmlNode.SelectSingleNode("SubDir").InnerText);
+                    XmlNodeList TMPXmlNodeList = xmlNode.SelectNodes("Texture");
+
+                    if (TMPXmlNodeList.Count == 6)
+                    {
+                        Bitmap[] CubeMapsBMP = new Bitmap[TMPXmlNodeList.Count];
+
+                        for (int i = 0; i < TMPXmlNodeList.Count; i++)
+                            CubeMapsBMP[i] = new Bitmap(Path.Combine(CubeMapDir, TMPXmlNodeList[i].InnerText));
+
+                        int SideSize = 0;
+                        if (xmlNode.SelectNodes("SideSize").Count > 0 && xmlNode.SelectSingleNode("SideSize").InnerText != String.Empty)
+                            SideSize = int.Parse(xmlNode.SelectSingleNode("SideSize").InnerText);
+
+                        textures.Add(Name, loadCubeMap(CubeMapsBMP, SideSize));
+                        CubeMapsBMP = null;
+                    }
+                    else
+                        new Exception();
+                }
+                catch
+                {
+                    MessageBox.Show("CubeMapTexture Loading Error!");
+                }
+            }
+            #endregion
+
             #region Загружаем материалы
-            XML.Load(Path.Combine(GameDataPath, "materials.xml"));
+            XML.Load(MaterialsConfigFile);
             xmlNodeList = XML.DocumentElement.SelectNodes("Material");
 
             foreach (XmlNode xmlNode in xmlNodeList)
@@ -180,6 +220,10 @@ namespace OpenGL_CS_Game
                     if (xmlNode.SelectNodes("SpecularShininess").Count > 0)
                         materials[Name].SpecularShininess = float.Parse(xmlNode.SelectSingleNode("SpecularShininess")
                             .InnerText.Trim().Replace(".", FloatComa).Replace(",", FloatComa));
+
+                    if (xmlNode.SelectNodes("ReflectFactor").Count > 0)
+                        materials[Name].ReflectFactor = float.Parse(xmlNode.SelectSingleNode("ReflectFactor")
+                            .InnerText.Trim().Replace(".", FloatComa).Replace(",", FloatComa));
                 }
                 catch
                 {
@@ -189,17 +233,22 @@ namespace OpenGL_CS_Game
             #endregion
 
             ObjVolume obj_Triangulated = ObjVolume.LoadFromFile(Path.Combine(MeshesPath, "Model_Triangulated.obj"));
-            obj_Triangulated.Material = materials["BrickWall"];
+            //obj_Triangulated.Material = materials["BrickWall"];
+            obj_Triangulated.Material = new Material("Reflection");
+            obj_Triangulated.Material.SetTexture(0, "SkyCubeMap_Yokohama3");
+            obj_Triangulated.Material.Color = new Vector4(0.5f, 0.26f, 0.15f, 1.0f);
+            obj_Triangulated.Material.ReflectFactor = 0.9f;
+            obj_Triangulated.Material.CullFace = false;
 
-            ObjVolume obj_Quads = ObjVolume.LoadFromFile(Path.Combine(MeshesPath, "Model_Quads.obj"));
-            obj_Quads.Material = materials["TransparentRedGlass"];
+            //ObjVolume obj_Quads = ObjVolume.LoadFromFile(Path.Combine(MeshesPath, "Model_Quads.obj"));
+            //obj_Quads.Material = materials["TransparentRedGlass"];
 
             ObjVolume obj_Keypad = ObjVolume.LoadFromFile(Path.Combine(MeshesPath, "Keypad.obj"));
             obj_Keypad.Material = materials["Keypad"];
             obj_Keypad.Position.Z = -10;
 
             objects.Add(obj_Triangulated);
-            objects.Add(obj_Quads);
+            //objects.Add(obj_Quads);
             objects.Add(obj_Keypad);
 
             List<Volume> objectsTransparent = new List<Volume>();
@@ -229,14 +278,15 @@ namespace OpenGL_CS_Game
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
             // Создаем примитивы
-            //Cube cube = new Cube();
-            //objects.Add(cube);
+            Cube cube = new Cube(zFar);
+            cube.Material = materials["SkyCubeMap_1"];
+            objects.Add(cube);
 
             //Plain plain = new Plain();
             //objects.Add(plain);
 
             // Отдаляем камеру от начала координат
-            cam.Position = new Vector3(0.0f, 0.0f, 1.5f);
+            //cam.Position = new Vector3(0.0f, 0.0f, 1.5f);
         }
 
         protected override void OnLoad(EventArgs e)
@@ -261,26 +311,11 @@ namespace OpenGL_CS_Game
 
             if (e.Key == Key.Escape)
                 Exit();
-        }
-
-        protected override void OnMouseDown(MouseButtonEventArgs e)
-        {
-            base.OnMouseDown(e);
-            if (Focused)
-                if (e.Button == MouseButton.Left)
-                    lastMousePos = new Vector2(OpenTK.Input.Mouse.GetCursorState().X, OpenTK.Input.Mouse.GetCursorState().Y);
-                else if (e.Button == MouseButton.Middle)
-                {
-                    lastMousePos_Delta = new Vector2(0.0f, 0.0f);
-                    objects[0].Rotation = new Vector3(0.0f, 0.0f, 0.0f);
-                }
-        }
-
-        protected override void OnMouseWheel(MouseWheelEventArgs e)
-        {
-            base.OnMouseWheel(e);
-
-            objects[0].Scale += new Vector3(e.Delta / 10.0f, e.Delta / 10.0f, e.Delta / 10.0f);
+            else if (e.Alt && e.Key == Key.Enter)
+                if (this.WindowState == WindowState.Fullscreen)
+                    this.WindowState = WindowState.Normal;
+                else
+                    this.WindowState = WindowState.Fullscreen;
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
@@ -320,12 +355,15 @@ namespace OpenGL_CS_Game
                 }
 
                 // Активируем нужный TextureUnit и назначаем текстуру
-                GL.ActiveTexture(TextureUnit.Texture0);
-                GL.BindTexture(TextureTarget.Texture2D, textures[v.Material.GetTexture(0)]);
-                for (int i = 1; i < v.Material.TexturesCount; i++)
+                if (v.Material.TexturesCount > 0)
                 {
-                    GL.ActiveTexture((TextureUnit)(0x84C0 + i));
-                    GL.BindTexture(TextureTarget.Texture2D, textures[v.Material.GetTexture(i)]);
+                    GL.ActiveTexture(TextureUnit.Texture0);
+                    GL.BindTexture(TextureTarget.Texture2D, textures[v.Material.GetTexture(0)]);
+                    for (int i = 1; i < v.Material.TexturesCount; i++)
+                    {
+                        GL.ActiveTexture((TextureUnit)(0x84C0 + i));
+                        GL.BindTexture(TextureTarget.Texture2D, textures[v.Material.GetTexture(i)]);
+                    }
                 }
 
                 #region Работаем с шейдерами
@@ -366,6 +404,10 @@ namespace OpenGL_CS_Game
                 if (shaders[v.Material.ShaderName].GetUniform("MaterialColor") != -1)
                     GL.Uniform4(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "MaterialColor"), v.Material.Color);
 
+                // Передаем шейдеру значение ReflectFactor, если шейдер поддерживает это.
+                if (shaders[v.Material.ShaderName].GetUniform("ReflectFactor") != -1)
+                    GL.Uniform1(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "ReflectFactor"), v.Material.ReflectFactor);
+
                 // Передаем шейдеру матрицу ModelMatrix, если шейдер поддерживает это.
                 if (shaders[v.Material.ShaderName].GetUniform("ModelMatrix") != -1)
                     GL.UniformMatrix4(shaders[v.Material.ShaderName].GetUniform("ModelMatrix"), false, ref v.ModelMatrix);
@@ -393,13 +435,6 @@ namespace OpenGL_CS_Game
                 // Передаем шейдеру позицию камеры, если шейдер поддерживает это.
                 if (shaders[v.Material.ShaderName].GetUniform("WorldCameraPosition") != -1)
                     GL.Uniform3(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "WorldCameraPosition"), cam.Position);
-
-                //// Передаем шейдеру переменную типа bool DrawSkyBox, если шейдер поддерживает это.
-                //if (shaders[v.Material.ShaderName].GetUniform("DrawSkyBox") != -1)
-                //    if (DrawSkyBox)
-                //        GL.Uniform1(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "DrawSkyBox"), 1);
-                //    else
-                //        GL.Uniform1(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "DrawSkyBox"), 0);
 
                 #region Передаем шейдеру VertexPosition, VertexNormal, VertexTexCoord, VertexTangent
                 // Передаем шейдеру буфер позицый вертексов, если шейдер поддерживает это (должна быть 100% поддержка).
@@ -468,13 +503,18 @@ namespace OpenGL_CS_Game
                 cam.Move(0f, 0f, 0.01f);
             if (KbdState.IsKeyDown(Key.Q))
                 cam.Move(0f, 0f, -0.01f);
+            if (KbdState.IsKeyDown(Key.Left))
+                cam.AddRotation(1.0f, 0.0f);
+            if (KbdState.IsKeyDown(Key.Right))
+                cam.AddRotation(-1.0f, 0.0f);
+            if (KbdState.IsKeyDown(Key.Up))
+                cam.AddRotation(0.0f, 1.0f);
+            if (KbdState.IsKeyDown(Key.Down))
+                cam.AddRotation(0.0f, -1.0f);
 
             // Обновляем позиции объектов
             time += (float)e.Time;
-
-            if (Focused && OpenTK.Input.Mouse.GetState().LeftButton == OpenTK.Input.ButtonState.Pressed)
-                lastMousePos_Delta = lastMousePos - new Vector2(OpenTK.Input.Mouse.GetCursorState().X, OpenTK.Input.Mouse.GetCursorState().Y);
-            objects[0].Rotation += new Vector3(-0.0001f * time * lastMousePos_Delta.Y, -0.0001f * time * lastMousePos_Delta.X, 0);
+            objects[0].Rotation += new Vector3(0, -0.001f * time, 0);
 
             Angle += rotSpeed * (float)e.Time;
             if (Angle > MathHelper.TwoPi)
@@ -483,6 +523,7 @@ namespace OpenGL_CS_Game
 
         int loadImage(Bitmap image, TextureMagFilter MagFilter = TextureMagFilter.Linear, TextureMinFilter MinFilter = TextureMinFilter.LinearMipmapLinear)
         {
+            // Отображаем текстуру по Y
             image.RotateFlip(RotateFlipType.RotateNoneFlipY);
 
             int texID = GL.GenTexture();
@@ -523,6 +564,61 @@ namespace OpenGL_CS_Game
                 MessageBox.Show("Error: Cannot load image \"lilename\"\n\n" + e.Message);
                 return -1;
             }
+        }
+
+        int loadCubeMap(Bitmap[] CubeMapTextures)
+        {
+            return loadCubeMap(CubeMapTextures, -1);
+        }
+
+        int loadCubeMap(Bitmap[] CubeMapTextures, int TextureSideSize)
+        {
+            if (CubeMapTextures.Length == 6)
+            {
+                // Изменяем размер и ~отображаем текстуры по X
+                for (int i = 0; i < CubeMapTextures.Length; i++)
+                {
+                    if (TextureSideSize > 0)
+                        CubeMapTextures[i] = new Bitmap(CubeMapTextures[i], TextureSideSize, TextureSideSize);
+                    //CubeMapTextures[i].RotateFlip(RotateFlipType.RotateNoneFlipX);
+                }
+
+                int texID = GL.GenTexture();
+                GL.ActiveTexture(TextureUnit.Texture0);
+                GL.BindTexture(TextureTarget.TextureCubeMap, texID);
+
+                TextureTarget[] targets = new TextureTarget[]
+                {
+                    TextureTarget.TextureCubeMapPositiveX, TextureTarget.TextureCubeMapNegativeX,
+                    TextureTarget.TextureCubeMapPositiveY, TextureTarget.TextureCubeMapNegativeY,
+                    TextureTarget.TextureCubeMapPositiveZ, TextureTarget.TextureCubeMapNegativeZ
+                };
+
+                // Allocate storage
+                GL.TexStorage2D(TextureTarget2d.TextureCubeMap, 1, SizedInternalFormat.Rgba8,
+                    CubeMapTextures[0].Width, CubeMapTextures[0].Height);
+
+                BitmapData data;
+                // Загружаем все текстуры граней
+                for (int i = 0; i < CubeMapTextures.Length; i++)
+                {
+                    data = CubeMapTextures[i].LockBits(new System.Drawing.Rectangle(0, 0, CubeMapTextures[i].Width,
+                        CubeMapTextures[i].Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                    GL.TexSubImage2D(targets[i], 0, 0, 0, data.Width, data.Height, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
+                    CubeMapTextures[i].UnlockBits(data);
+                }
+
+                GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+                GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+                GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
+                GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
+                GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapR, (int)TextureWrapMode.ClampToEdge);
+
+                //GL.GenerateMipmap(GenerateMipmapTarget.TextureCubeMap);
+                return texID;
+            }
+            else
+                return -1;
         }
     }
 }

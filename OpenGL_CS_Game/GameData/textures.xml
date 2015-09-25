@@ -38,12 +38,6 @@ TextureMinFilter:
 		<TextureMinFilter>Nearest</TextureMinFilter>
 	</Texture>
 	<Texture>
-		<Name>Checker_N</Name>
-		<File>_checker_N.bmp</File>
-		<TextureMagFilter>Nearest</TextureMagFilter>
-		<TextureMinFilter>Nearest</TextureMinFilter>
-	</Texture>
-	<Texture>
 		<Name>brick-wall</Name>
 		<File>brick-wall.jpg</File>
 	</Texture>
