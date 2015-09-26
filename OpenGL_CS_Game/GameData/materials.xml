@@ -68,12 +68,11 @@
 		<Color>0.5 0.5 0.5 1.0</Color>
 		<Texture>SkyCubemap_Yokohama3</Texture>
 		<ReflectionFactor>0.85</ReflectionFactor>
-		<CullFace>False</CullFace>
 	</Material>
 	<Material>
 		<Name>Refraction</Name>
 		<Shader>Refraction</Shader>
-		<Texture>SkyCubemap_Storforsen</Texture>
+		<Texture>Cubemap_Storforsen</Texture>
 		<ReflectionFactor>0.1</ReflectionFactor>
 		<RefractiveIndex>0.94</RefractiveIndex>
 	</Material>

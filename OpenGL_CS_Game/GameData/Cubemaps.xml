@@ -40,4 +40,16 @@
 		<Texture>negz.jpg</Texture>
 		<SideSize></SideSize>
 	</CubeMapTexture>
+	<!--Далее идут CubeMaps для отражений-->
+	<CubeMapTexture>
+		<Name>Cubemap_Storforsen</Name>
+		<SubDir>Storforsen</SubDir>
+		<Texture>posx.jpg</Texture>
+		<Texture>negx.jpg</Texture>
+		<Texture>posy.jpg</Texture>
+		<Texture>negy.jpg</Texture>
+		<Texture>posz.jpg</Texture>
+		<Texture>negz.jpg</Texture>
+		<SideSize>256</SideSize>
+	</CubeMapTexture>
 </CubeMapTextures>
