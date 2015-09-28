@@ -127,12 +127,24 @@ namespace OpenGL_CS_Game
             set { specularShininess = value; }
         }
 
+        /// <summary>
+        /// Коефициент отражения (процент отраженного света). Диапазон 0.0 - 1.0.<br>
+        /// По умолчанию = 0.5;
+        /// Данный параметр позволяет выбирать между отражением (при 1.0) ИЛИ преломлением (при 0.0)!
+        /// Если приломления не будет (RefractiveIndex = 1), как и отражений (ReflectionFactor = 0),
+        /// то объект будет невидимым!
+        /// </summary>
         public float ReflectionFactor
         {
             get { return reflectionFactor; }
             set { reflectionFactor = value; }
         }
 
+        /// <summary>
+        /// Коефициент преломлнения. Диапазон 0.0 - 1.0.
+        /// По умолчанию = 1; Refraction = Угол1/Угол2. Рекомендуется брать примерно от 0.9 до 1.1.
+        /// Работает только при ReflectionFactor меньше 1.0!
+        /// </summary>
         public float RefractiveIndex
         {
             get { return refractiveIndex; }

@@ -25,13 +25,8 @@
 		<FragmentShader>CubemapSky_FS.glsl</FragmentShader>
 	</Shader>
 	<Shader>
-		<Name>Reflection</Name>
-		<VertexShader>CubemapReflect_VS.glsl</VertexShader>
-		<FragmentShader>CubemapReflect_FS.glsl</FragmentShader>
-	</Shader>
-	<Shader>
-		<Name>Refraction</Name>
-		<VertexShader>CubemapRefract_VS.glsl</VertexShader>
-		<FragmentShader>CubemapRefract_FS.glsl</FragmentShader>
+		<Name>ReflectRefract</Name>
+		<VertexShader>CubemapReflectRefract_VS.glsl</VertexShader>
+		<FragmentShader>CubemapReflectRefract_FS.glsl</FragmentShader>
 	</Shader>
 </Shaders>

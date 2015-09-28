@@ -64,17 +64,18 @@
 	</Material>
 	<Material>
 		<Name>Reflection</Name>
-		<Shader>Reflection</Shader>
-		<Color>0.5 0.5 0.5 1.0</Color>
-		<Texture>SkyCubemap_Yokohama3</Texture>
-		<ReflectionFactor>0.85</ReflectionFactor>
+		<Shader>ReflectRefract</Shader>
+		<Color>0.831 0.686 0.216 0.9</Color>
+		<CubemapTexture>Cubemap_Storforsen</CubemapTexture>
+		<ReflectionFactor>1.0</ReflectionFactor>
 	</Material>
 	<Material>
 		<Name>Refraction</Name>
-		<Shader>Refraction</Shader>
+		<Shader>ReflectRefract</Shader>
+		<Color>0.5 0.5 0.9 0.4</Color>
 		<Texture>Cubemap_Storforsen</Texture>
 		<ReflectionFactor>0.1</ReflectionFactor>
-		<RefractiveIndex>0.94</RefractiveIndex>
+		<RefractiveIndex>0.9</RefractiveIndex>
 	</Material>
 	<Material>
 		<Name>BrickWall</Name>

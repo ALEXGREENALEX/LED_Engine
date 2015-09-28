@@ -5,10 +5,8 @@ layout (location = 1) in vec3 VertexNormal;
 
 out vec3 ReflectDir;
 out vec3 RefractDir;
-out float reflectionFactor;
 
 uniform float RefractiveIndex;  // Index of refraction
-uniform float ReflectionFactor; // Percentage of reflected light
 
 uniform vec3 WorldCameraPosition;
 uniform mat4 ModelMatrix;
@@ -22,7 +20,6 @@ void main()
 
     ReflectDir = reflect(-worldView, worldNorm);
     RefractDir = refract(-worldView, worldNorm, RefractiveIndex);
-    reflectionFactor = ReflectionFactor;
 	
     gl_Position = MVP * vec4(VertexPosition, 1.0);
 }

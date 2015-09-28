@@ -258,7 +258,7 @@ namespace OpenGL_CS_Game
 
             ObjVolume obj_Triangulated = ObjVolume.LoadFromFile(Path.Combine(MeshesPath, "Model_Triangulated.obj"));
             //obj_Triangulated.Material = materials["BrickWall"];
-            obj_Triangulated.Material = materials["Refraction"];
+            obj_Triangulated.Material = materials["Refraction"]; // Reflection Refraction
 
             //ObjVolume obj_Quads = ObjVolume.LoadFromFile(Path.Combine(MeshesPath, "Model_Quads.obj"));
             //obj_Quads.Material = materials["TransparentRedGlass"];
@@ -296,6 +296,7 @@ namespace OpenGL_CS_Game
 
             // Функция смешивания цветов для прозрачных материалов
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+            //GL.BlendFuncSeparate(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha, BlendingFactorSrc.One, BlendingFactorDest.One);
 
             // Создаем примитивы
             Cube cube = new Cube(zFar);
