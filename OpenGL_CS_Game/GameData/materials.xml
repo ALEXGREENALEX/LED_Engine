@@ -11,6 +11,8 @@
 		Колличество от 0 до 32
 	CullFace
 		bool
+		Не работает для Transparent=true - в прозрачном материале всегда
+		рендндерится задняя, а потом передняя стороні граней!
 	Transparent
 		bool
 	SpecularReflectivity
@@ -41,7 +43,6 @@
 		<Name>TransparentRedGlass</Name>
 		<Shader></Shader>
 		<Color>1.0 0.0 0.0 0.5</Color>
-		<CullFace>False</CullFace>
 		<Transparent>True</Transparent>
 	</Material>
 	<Material>
@@ -73,7 +74,7 @@
 		<Name>Refraction</Name>
 		<Shader>ReflectRefract</Shader>
 		<Color>0.5 0.5 0.9 0.4</Color>
-		<Texture>Cubemap_Storforsen</Texture>
+		<CubemapTexture>Cubemap_Storforsen</CubemapTexture>
 		<ReflectionFactor>0.1</ReflectionFactor>
 		<RefractiveIndex>0.9</RefractiveIndex>
 	</Material>

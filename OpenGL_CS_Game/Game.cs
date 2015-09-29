@@ -16,11 +16,11 @@ namespace OpenGL_CS_Game
     class Game : GameWindow
     {
         public Game() :
-            base(640, 480, new GraphicsMode(32, 24, 0, 4)) // MSAA = 4
+            base(800, 600, new GraphicsMode(32, 24, 0, 4), "Hello") // MSAA = 4
         {
         }
 
-        int indecesArrayBuffer;
+        uint indecesArrayBuffer;
 
         Camera cam = new Camera();
         float FOV = MathHelper.DegreesToRadians(50.0f);
@@ -33,10 +33,13 @@ namespace OpenGL_CS_Game
         float Angle = MathHelper.DegreesToRadians(100.0f);
         double FPS;
 
-        List<Volume> objects = new List<Volume>();
-        Dictionary<string, Texture> textures = new Dictionary<string, Texture>();
-        Dictionary<string, Material> materials = new Dictionary<string, Material>();
-        Dictionary<string, ShaderProgram> shaders = new Dictionary<string, ShaderProgram>();
+        bool UsePostEffects = true;
+
+        public static List<Volume> objects = new List<Volume>();
+        List<Volume> transparentObjects = new List<Volume>();
+        public static Dictionary<string, Texture> textures = new Dictionary<string, Texture>();
+        public static Dictionary<string, Material> materials = new Dictionary<string, Material>();
+        public static Dictionary<string, ShaderProgram> shaders = new Dictionary<string, ShaderProgram>();
 
         void LoadConfigAndResources()
         {
@@ -256,31 +259,26 @@ namespace OpenGL_CS_Game
             }
             #endregion
 
-            ObjVolume obj_Triangulated = ObjVolume.LoadFromFile(Path.Combine(MeshesPath, "Model_Triangulated.obj"));
+            ObjVolume obj_Triangulated = ObjVolume.LoadFromFile(Path.Combine(MeshesPath, "Model_Triangles.obj"));
             //obj_Triangulated.Material = materials["BrickWall"];
             obj_Triangulated.Material = materials["Refraction"]; // Reflection Refraction
 
-            //ObjVolume obj_Quads = ObjVolume.LoadFromFile(Path.Combine(MeshesPath, "Model_Quads.obj"));
-            //obj_Quads.Material = materials["TransparentRedGlass"];
+            ObjVolume obj_Quads = ObjVolume.LoadFromFile(Path.Combine(MeshesPath, "Model_Quads.obj"));
+            obj_Quads.Material = materials["Reflection"];
+            obj_Quads.Position.Y += 1;
 
-            ObjVolume obj_Keypad = ObjVolume.LoadFromFile(Path.Combine(MeshesPath, "Keypad.obj"));
-            obj_Keypad.Material = materials["Keypad"];
-            obj_Keypad.Position.Z = -10;
+            //ObjVolume obj_Keypad = ObjVolume.LoadFromFile(Path.Combine(MeshesPath, "Keypad.obj"));
+            //obj_Keypad.Material = materials["Keypad"];
+            //obj_Keypad.Position.Z = -10;
+
+            ObjVolume obj_Teapot = ObjVolume.LoadFromFile(Path.Combine(MeshesPath, "Teapot.obj"));
+            obj_Teapot.Material = materials["TransparentRedGlass"];
+            obj_Teapot.Position.Z += 2;
+            objects.Add(obj_Teapot);
 
             objects.Add(obj_Triangulated);
-            //objects.Add(obj_Quads);
-            objects.Add(obj_Keypad);
-
-            List<Volume> objectsTransparent = new List<Volume>();
-            for (int i = 0; i < objects.Count; i++)
-                if (objects[i].Material.Transparent)
-                {
-                    objectsTransparent.Add(objects[i]);
-                    objects.RemoveAt(i);
-                    i--;
-                }
-            objects.AddRange(objectsTransparent);
-            objectsTransparent = null;
+            objects.Add(obj_Quads);
+            //objects.Add(obj_Keypad);
         }
 
         void initProgram()
@@ -290,9 +288,13 @@ namespace OpenGL_CS_Game
 
             GL.GenBuffers(1, out indecesArrayBuffer);
 
+            // PostProcess Init - Create back-buffer, used for post-processing
+            if (UsePostEffects)
+                PostProcess.Init("PostProcess", Width, Height);
+
             // Включаем тест глубины
             GL.Enable(EnableCap.DepthTest);
-            GL.DepthFunc(DepthFunction.Less);
+            GL.DepthFunc(DepthFunction.Lequal);
 
             // Функция смешивания цветов для прозрачных материалов
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
@@ -324,6 +326,9 @@ namespace OpenGL_CS_Game
 
             // Настраиваем проэкцию (Угол обзора, Мин и Макс расстояния рендера)
             ProjectionMatrix = Matrix4.CreatePerspectiveFieldOfView(FOV, ClientSize.Width / (float)ClientSize.Height, zNear, zFar);
+
+            if (UsePostEffects)
+                PostProcess.Rescale(Width, Height);
         }
 
         protected override void OnKeyDown(KeyboardKeyEventArgs e)
@@ -348,7 +353,30 @@ namespace OpenGL_CS_Game
             Title = "FPS: " + FPS.ToString("0.00");
 
             GL.Viewport(0, 0, Width, Height);
+
+            // Bind FBO for PostProcess
+            if (UsePostEffects)
+                GL.BindFramebuffer(FramebufferTarget.Framebuffer, PostProcess.fbo);
+
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+            #region Сортировка прозрачных объектов
+            for (int i = 0; i < objects.Count; i++)
+                if (objects[i].Material.Transparent)
+                {
+                    transparentObjects.Add(objects[i]);
+                    objects.RemoveAt(i);
+                    i--;
+                }
+            
+            transparentObjects.Sort(delegate(Volume x, Volume y)
+            {
+                return (y.Position - cam.Position).Length.CompareTo((x.Position - cam.Position).Length);
+            });
+
+            objects.AddRange(transparentObjects);
+            transparentObjects.Clear();
+            #endregion
 
             // Отрисовываем все объекты
             foreach (Volume v in objects)
@@ -368,6 +396,11 @@ namespace OpenGL_CS_Game
                 {
                     GL.Enable(EnableCap.AlphaTest);
                     GL.Enable(EnableCap.Blend);
+
+                    GL.Enable(EnableCap.CullFace);
+                    GL.CullFace(CullFaceMode.Front);
+                    DrawObject(v);
+                    GL.CullFace(CullFaceMode.Back);
                 }
                 else
                 {
@@ -375,139 +408,151 @@ namespace OpenGL_CS_Game
                     GL.Disable(EnableCap.Blend);
                 }
 
-                // Активируем нужный TextureUnit и назначаем текстуру
-                if (v.Material.TexturesCount > 0)
-                {
-                    GL.ActiveTexture(TextureUnit.Texture0);
-                    GL.BindTexture(textures[v.Material.GetTexture(0)].TextureTarget, textures[v.Material.GetTexture(0)].TextureID);
-                    for (int i = 1; i < v.Material.TexturesCount; i++)
-                    {
-                        GL.ActiveTexture((TextureUnit)(0x84C0 + i));
-                        GL.BindTexture(textures[v.Material.GetTexture(i)].TextureTarget, textures[v.Material.GetTexture(i)].TextureID);
-                    }
-                }
+                DrawObject(v);
+            }
 
-                #region Работаем с шейдерами
-                // Подключаем шейдеры для отрисовки объекта
-                GL.LinkProgram(shaders[v.Material.ShaderName].ProgramID);
-                GL.UseProgram(shaders[v.Material.ShaderName].ProgramID);
-
-                // Передаем шейдеру вектор Light Position, если шейдер поддерживает это.
-                if (shaders[v.Material.ShaderName].GetUniform("Light.Position") != -1)
-                {
-                    Vector4 V = new Vector4(10.0f * (float)Math.Cos(Angle), 1.0f, 10.0f * (float)Math.Sin(Angle), 1.0f);
-                    Matrix4 M = cam.GetViewMatrix();
-                    Vector4 LightPos = new Vector4(
-                        M.M11 * V.X + M.M12 * V.Y + M.M13 * V.Z + M.M14 * V.W,
-                        M.M21 * V.X + M.M22 * V.Y + M.M23 * V.Z + M.M24 * V.W,
-                        M.M31 * V.X + M.M32 * V.Y + M.M33 * V.Z + M.M34 * V.W,
-                        M.M41 * V.X + M.M42 * V.Y + M.M43 * V.Z + M.M44 * V.W);
-                    GL.Uniform4(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "Light.Position"), ref LightPos);
-                }
-
-                // Передаем шейдеру вектор Light Intensity, если шейдер поддерживает это.
-                if (shaders[v.Material.ShaderName].GetUniform("Light.Intensity") != -1)
-                    GL.Uniform3(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "Light.Intensity"), 0.9f, 0.9f, 0.9f);
-
-                // Передаем шейдеру вектор Specular reflectivity, если шейдер поддерживает это.
-                if (shaders[v.Material.ShaderName].GetUniform("Material.Ks") != -1)
-                    GL.Uniform3(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "Material.Ks"), v.Material.SpecularReflectivity);
-
-                // Передаем шейдеру вектор Ambient reflectivity, если шейдер поддерживает это.
-                if (shaders[v.Material.ShaderName].GetUniform("Material.Ka") != -1)
-                    GL.Uniform3(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "Material.Ka"), v.Material.AmbientReflectivity);
-
-                // Передаем шейдеру значение Specular shininess factor, если шейдер поддерживает это.
-                if (shaders[v.Material.ShaderName].GetUniform("Material.Shininess") != -1)
-                    GL.Uniform1(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "Material.Shininess"), v.Material.SpecularShininess);
-
-                // Передаем шейдеру значение цвета материала, если шейдер поддерживает это.
-                if (shaders[v.Material.ShaderName].GetUniform("MaterialColor") != -1)
-                    GL.Uniform4(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "MaterialColor"), v.Material.Color);
-
-                // Передаем шейдеру значение ReflectFactor, если шейдер поддерживает это.
-                if (shaders[v.Material.ShaderName].GetUniform("ReflectionFactor") != -1)
-                    GL.Uniform1(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "ReflectionFactor"), v.Material.ReflectionFactor);
-
-                // Передаем шейдеру значение RefractiveIndex, если шейдер поддерживает это.
-                if (shaders[v.Material.ShaderName].GetUniform("RefractiveIndex") != -1)
-                    GL.Uniform1(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "RefractiveIndex"), v.Material.RefractiveIndex);
-
-                // Передаем шейдеру матрицу ModelMatrix, если шейдер поддерживает это.
-                if (shaders[v.Material.ShaderName].GetUniform("ModelMatrix") != -1)
-                    GL.UniformMatrix4(shaders[v.Material.ShaderName].GetUniform("ModelMatrix"), false, ref v.ModelMatrix);
-
-                // Передаем шейдеру матрицу ModelViewMatrix, если шейдер поддерживает это.
-                Matrix4 MV = cam.GetViewMatrix() * v.ModelMatrix;
-                if (shaders[v.Material.ShaderName].GetUniform("ModelViewMatrix") != -1)
-                    GL.UniformMatrix4(shaders[v.Material.ShaderName].GetUniform("ModelViewMatrix"), false, ref MV);
-
-                //// Передаем шейдеру матрицу ProjectionMatrix, если шейдер поддерживает это.
-                //if (shaders[v.Material.ShaderName].GetUniform("ProjectionMatrix") != -1)
-                //    GL.UniformMatrix4(shaders[v.Material.ShaderName].GetUniform("ProjectionMatrix"), false, ref ProjectionMatrix);
-
-                // Передаем шейдеру матрицу NormalMatrix, если шейдер поддерживает это.
-                if (shaders[v.Material.ShaderName].GetUniform("NormalMatrix") != -1)
-                {
-                    Matrix3 NM = new Matrix3(MV.Row0.Xyz, MV.Row1.Xyz, MV.Row2.Xyz);
-                    GL.UniformMatrix3(shaders[v.Material.ShaderName].GetUniform("NormalMatrix"), false, ref NM);
-                }
-
-                // Передаем шейдеру матрицу ModelViewProjection, если шейдер поддерживает это (должна быть 100% поддержка).
-                if (shaders[v.Material.ShaderName].GetUniform("MVP") != -1)
-                    GL.UniformMatrix4(shaders[v.Material.ShaderName].GetUniform("MVP"), false, ref v.ModelViewProjectionMatrix);
-
-                // Передаем шейдеру позицию камеры, если шейдер поддерживает это.
-                if (shaders[v.Material.ShaderName].GetUniform("WorldCameraPosition") != -1)
-                    GL.Uniform3(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "WorldCameraPosition"), cam.Position);
-
-                #region Передаем шейдеру VertexPosition, VertexNormal, VertexTexCoord, VertexTangent
-                // Передаем шейдеру буфер позицый вертексов, если шейдер поддерживает это (должна быть 100% поддержка).
-                if (shaders[v.Material.ShaderName].GetAttribute("VertexPosition") != -1)
-                {
-                    GL.BindBuffer(BufferTarget.ArrayBuffer, shaders[v.Material.ShaderName].GetBuffer("VertexPosition"));
-                    GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(v.GetVertices().Length * Vector3.SizeInBytes), v.GetVertices(), BufferUsageHint.StaticDraw);
-                    GL.VertexAttribPointer(shaders[v.Material.ShaderName].GetAttribute("VertexPosition"), 3, VertexAttribPointerType.Float, false, 0, 0);
-                    GL.EnableVertexAttribArray(shaders[v.Material.ShaderName].GetAttribute("VertexPosition"));
-                }
-
-                // Передаем шейдеру буфер нормалей, если шейдер поддерживает это.
-                if (shaders[v.Material.ShaderName].GetAttribute("VertexNormal") != -1)
-                {
-                    GL.BindBuffer(BufferTarget.ArrayBuffer, shaders[v.Material.ShaderName].GetBuffer("VertexNormal"));
-                    GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(v.GetNormals().Length * Vector3.SizeInBytes), v.GetNormals(), BufferUsageHint.StaticDraw);
-                    GL.VertexAttribPointer(shaders[v.Material.ShaderName].GetAttribute("VertexNormal"), 3, VertexAttribPointerType.Float, false, 0, 0);
-                    GL.EnableVertexAttribArray(shaders[v.Material.ShaderName].GetAttribute("VertexNormal"));
-                }
-
-                // Передаем шейдеру буфер текстурных координат, если шейдер поддерживает это.
-                if (shaders[v.Material.ShaderName].GetAttribute("VertexTexCoord") != -1)
-                {
-                    GL.BindBuffer(BufferTarget.ArrayBuffer, shaders[v.Material.ShaderName].GetBuffer("VertexTexCoord"));
-                    GL.BufferData<Vector2>(BufferTarget.ArrayBuffer, (IntPtr)(v.GetTextureCoords().Length * Vector2.SizeInBytes), v.GetTextureCoords(), BufferUsageHint.StaticDraw);
-                    GL.VertexAttribPointer(shaders[v.Material.ShaderName].GetAttribute("VertexTexCoord"), 2, VertexAttribPointerType.Float, false, 0, 0);
-                    GL.EnableVertexAttribArray(shaders[v.Material.ShaderName].GetAttribute("VertexTexCoord"));
-                }
-
-                // Передаем шейдеру буфер тангенсов, если шейдер поддерживает это.
-                if (shaders[v.Material.ShaderName].GetAttribute("VertexTangent") != -1)
-                {
-                    GL.BindBuffer(BufferTarget.ArrayBuffer, shaders[v.Material.ShaderName].GetBuffer("VertexTangent"));
-                    GL.BufferData<Vector4>(BufferTarget.ArrayBuffer, (IntPtr)(v.GetTangentses().Length * Vector4.SizeInBytes), v.GetTangentses(), BufferUsageHint.StaticDraw);
-                    GL.BindVertexArray(0);
-                }
-                #endregion
-                #endregion
-
-                GL.BindBuffer(BufferTarget.ElementArrayBuffer, indecesArrayBuffer);
-                GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(v.GetFaceIndeces().Length * sizeof(uint)), v.GetFaceIndeces(), BufferUsageHint.StaticDraw);
-
-                GL.BindVertexArray(shaders[v.Material.ShaderName].GetAttribute("VertexPosition"));
-                GL.DrawElements(BeginMode.Triangles, v.FacesCount, DrawElementsType.UnsignedInt, 0 * sizeof(uint));
+            //PostProcess Bind MAIN FrameBuffer(Screen) & Draw to Screen
+            if (UsePostEffects)
+            {
+                GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+                PostProcess.Draw();
             }
 
             GL.Flush();
             SwapBuffers();
+        }
+
+        void DrawObject(Volume v)
+        {
+            // Активируем нужный TextureUnit и назначаем текстуру
+            if (v.Material.TexturesCount > 0)
+            {
+                GL.ActiveTexture(TextureUnit.Texture0);
+                GL.BindTexture(textures[v.Material.GetTexture(0)].TextureTarget, textures[v.Material.GetTexture(0)].TextureID);
+                for (int i = 1; i < v.Material.TexturesCount; i++)
+                {
+                    GL.ActiveTexture((TextureUnit)(0x84C0 + i));
+                    GL.BindTexture(textures[v.Material.GetTexture(i)].TextureTarget, textures[v.Material.GetTexture(i)].TextureID);
+                }
+            }
+
+            #region Работаем с шейдерами
+            // Подключаем шейдеры для отрисовки объекта
+            GL.LinkProgram(shaders[v.Material.ShaderName].ProgramID);
+            GL.UseProgram(shaders[v.Material.ShaderName].ProgramID);
+
+            // Передаем шейдеру вектор Light Position, если шейдер поддерживает это.
+            if (shaders[v.Material.ShaderName].GetUniform("Light.Position") != -1)
+            {
+                Vector4 V = new Vector4(10.0f * (float)Math.Cos(Angle), 1.0f, 10.0f * (float)Math.Sin(Angle), 1.0f);
+                Matrix4 M = cam.GetViewMatrix();
+                Vector4 LightPos = new Vector4(
+                    M.M11 * V.X + M.M12 * V.Y + M.M13 * V.Z + M.M14 * V.W,
+                    M.M21 * V.X + M.M22 * V.Y + M.M23 * V.Z + M.M24 * V.W,
+                    M.M31 * V.X + M.M32 * V.Y + M.M33 * V.Z + M.M34 * V.W,
+                    M.M41 * V.X + M.M42 * V.Y + M.M43 * V.Z + M.M44 * V.W);
+                GL.Uniform4(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "Light.Position"), ref LightPos);
+            }
+
+            // Передаем шейдеру вектор Light Intensity, если шейдер поддерживает это.
+            if (shaders[v.Material.ShaderName].GetUniform("Light.Intensity") != -1)
+                GL.Uniform3(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "Light.Intensity"), 0.9f, 0.9f, 0.9f);
+
+            // Передаем шейдеру вектор Specular reflectivity, если шейдер поддерживает это.
+            if (shaders[v.Material.ShaderName].GetUniform("Material.Ks") != -1)
+                GL.Uniform3(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "Material.Ks"), v.Material.SpecularReflectivity);
+
+            // Передаем шейдеру вектор Ambient reflectivity, если шейдер поддерживает это.
+            if (shaders[v.Material.ShaderName].GetUniform("Material.Ka") != -1)
+                GL.Uniform3(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "Material.Ka"), v.Material.AmbientReflectivity);
+
+            // Передаем шейдеру значение Specular shininess factor, если шейдер поддерживает это.
+            if (shaders[v.Material.ShaderName].GetUniform("Material.Shininess") != -1)
+                GL.Uniform1(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "Material.Shininess"), v.Material.SpecularShininess);
+
+            // Передаем шейдеру значение цвета материала, если шейдер поддерживает это.
+            if (shaders[v.Material.ShaderName].GetUniform("MaterialColor") != -1)
+                GL.Uniform4(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "MaterialColor"), v.Material.Color);
+
+            // Передаем шейдеру значение ReflectFactor, если шейдер поддерживает это.
+            if (shaders[v.Material.ShaderName].GetUniform("ReflectionFactor") != -1)
+                GL.Uniform1(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "ReflectionFactor"), v.Material.ReflectionFactor);
+
+            // Передаем шейдеру значение RefractiveIndex, если шейдер поддерживает это.
+            if (shaders[v.Material.ShaderName].GetUniform("RefractiveIndex") != -1)
+                GL.Uniform1(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "RefractiveIndex"), v.Material.RefractiveIndex);
+
+            // Передаем шейдеру матрицу ModelMatrix, если шейдер поддерживает это.
+            if (shaders[v.Material.ShaderName].GetUniform("ModelMatrix") != -1)
+                GL.UniformMatrix4(shaders[v.Material.ShaderName].GetUniform("ModelMatrix"), false, ref v.ModelMatrix);
+
+            // Передаем шейдеру матрицу ModelViewMatrix, если шейдер поддерживает это.
+            Matrix4 MV = cam.GetViewMatrix() * v.ModelMatrix;
+            if (shaders[v.Material.ShaderName].GetUniform("ModelViewMatrix") != -1)
+                GL.UniformMatrix4(shaders[v.Material.ShaderName].GetUniform("ModelViewMatrix"), false, ref MV);
+
+            //// Передаем шейдеру матрицу ProjectionMatrix, если шейдер поддерживает это.
+            //if (shaders[v.Material.ShaderName].GetUniform("ProjectionMatrix") != -1)
+            //    GL.UniformMatrix4(shaders[v.Material.ShaderName].GetUniform("ProjectionMatrix"), false, ref ProjectionMatrix);
+
+            // Передаем шейдеру матрицу NormalMatrix, если шейдер поддерживает это.
+            if (shaders[v.Material.ShaderName].GetUniform("NormalMatrix") != -1)
+            {
+                Matrix3 NM = new Matrix3(MV.Row0.Xyz, MV.Row1.Xyz, MV.Row2.Xyz);
+                GL.UniformMatrix3(shaders[v.Material.ShaderName].GetUniform("NormalMatrix"), false, ref NM);
+            }
+
+            // Передаем шейдеру матрицу ModelViewProjection, если шейдер поддерживает это (должна быть 100% поддержка).
+            if (shaders[v.Material.ShaderName].GetUniform("MVP") != -1)
+                GL.UniformMatrix4(shaders[v.Material.ShaderName].GetUniform("MVP"), false, ref v.ModelViewProjectionMatrix);
+
+            // Передаем шейдеру позицию камеры, если шейдер поддерживает это.
+            if (shaders[v.Material.ShaderName].GetUniform("WorldCameraPosition") != -1)
+                GL.Uniform3(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "WorldCameraPosition"), cam.Position);
+
+            #region Передаем шейдеру VertexPosition, VertexNormal, VertexTexCoord, VertexTangent
+            // Передаем шейдеру буфер позицый вертексов, если шейдер поддерживает это (должна быть 100% поддержка).
+            if (shaders[v.Material.ShaderName].GetAttribute("VertexPosition") != -1)
+            {
+                GL.BindBuffer(BufferTarget.ArrayBuffer, shaders[v.Material.ShaderName].GetBuffer("VertexPosition"));
+                GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(v.GetVertices().Length * Vector3.SizeInBytes), v.GetVertices(), BufferUsageHint.StaticDraw);
+                GL.VertexAttribPointer(shaders[v.Material.ShaderName].GetAttribute("VertexPosition"), 3, VertexAttribPointerType.Float, false, 0, 0);
+                GL.EnableVertexAttribArray(shaders[v.Material.ShaderName].GetAttribute("VertexPosition"));
+            }
+
+            // Передаем шейдеру буфер нормалей, если шейдер поддерживает это.
+            if (shaders[v.Material.ShaderName].GetAttribute("VertexNormal") != -1)
+            {
+                GL.BindBuffer(BufferTarget.ArrayBuffer, shaders[v.Material.ShaderName].GetBuffer("VertexNormal"));
+                GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(v.GetNormals().Length * Vector3.SizeInBytes), v.GetNormals(), BufferUsageHint.StaticDraw);
+                GL.VertexAttribPointer(shaders[v.Material.ShaderName].GetAttribute("VertexNormal"), 3, VertexAttribPointerType.Float, false, 0, 0);
+                GL.EnableVertexAttribArray(shaders[v.Material.ShaderName].GetAttribute("VertexNormal"));
+            }
+
+            // Передаем шейдеру буфер текстурных координат, если шейдер поддерживает это.
+            if (shaders[v.Material.ShaderName].GetAttribute("VertexTexCoord") != -1)
+            {
+                GL.BindBuffer(BufferTarget.ArrayBuffer, shaders[v.Material.ShaderName].GetBuffer("VertexTexCoord"));
+                GL.BufferData<Vector2>(BufferTarget.ArrayBuffer, (IntPtr)(v.GetTextureCoords().Length * Vector2.SizeInBytes), v.GetTextureCoords(), BufferUsageHint.StaticDraw);
+                GL.VertexAttribPointer(shaders[v.Material.ShaderName].GetAttribute("VertexTexCoord"), 2, VertexAttribPointerType.Float, false, 0, 0);
+                GL.EnableVertexAttribArray(shaders[v.Material.ShaderName].GetAttribute("VertexTexCoord"));
+            }
+
+            // Передаем шейдеру буфер тангенсов, если шейдер поддерживает это.
+            if (shaders[v.Material.ShaderName].GetAttribute("VertexTangent") != -1)
+            {
+                GL.BindBuffer(BufferTarget.ArrayBuffer, shaders[v.Material.ShaderName].GetBuffer("VertexTangent"));
+                GL.BufferData<Vector4>(BufferTarget.ArrayBuffer, (IntPtr)(v.GetTangentses().Length * Vector4.SizeInBytes), v.GetTangentses(), BufferUsageHint.StaticDraw);
+                GL.BindVertexArray(0);
+            }
+            #endregion
+            #endregion
+
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, indecesArrayBuffer);
+            GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(v.GetFaceIndeces().Length * sizeof(uint)), v.GetFaceIndeces(), BufferUsageHint.StaticDraw);
+
+            GL.BindVertexArray(shaders[v.Material.ShaderName].GetAttribute("VertexPosition"));
+            GL.DrawElements(BeginMode.Triangles, v.FacesCount, DrawElementsType.UnsignedInt, 0 * sizeof(uint));
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e)

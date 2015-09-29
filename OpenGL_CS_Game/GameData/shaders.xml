@@ -29,4 +29,9 @@
 		<VertexShader>CubemapReflectRefract_VS.glsl</VertexShader>
 		<FragmentShader>CubemapReflectRefract_FS.glsl</FragmentShader>
 	</Shader>
+	<Shader>
+		<Name>PostProcess</Name>
+		<VertexShader>PostProcess_VS.glsl</VertexShader>
+		<FragmentShader>PostProcess_FS.glsl</FragmentShader>
+	</Shader>
 </Shaders>
