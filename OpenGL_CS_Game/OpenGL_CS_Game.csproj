@@ -48,6 +48,7 @@
     <Compile Include="Material.cs" />
     <Compile Include="ObjVolume.cs" />
     <Compile Include="Plain.cs" />
+    <Compile Include="Fog.cs" />
     <Compile Include="PostProcess.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -97,4 +97,9 @@
 		<AmbientReflectivity>0.1 0.1 0.1</AmbientReflectivity>
 		<SpecularShininess>1.0</SpecularShininess>
 	</Material>
+	<Material>
+		<Name>Fog_test</Name>
+		<Shader>Fog</Shader>
+		<CullFace>False</CullFace>
+	</Material>
 </Materials>
