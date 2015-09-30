@@ -45,15 +45,15 @@ void main() {
 	if(FogEnabled)
 	{
 		//float dist = abs( Position.z );
-		float dist = length( Position );
+		float dist = length(Position);
 		float fogFactor = (Fog.MaxDist - dist) /
 						(Fog.MaxDist - Fog.MinDist);
-		fogFactor = clamp( fogFactor, 0.0, 1.0 );
+		fogFactor = clamp(fogFactor, 0.0, 1.0);
 		vec3 shadeColor = ads();
-		vec3 color = mix( Fog.Color, shadeColor, fogFactor );
-	
+		//vec3 color = mix(Fog.Color, shadeColor, fogFactor);
+		vec3 color = mix(Fog.Color, vec3(0.3, 0.8, 0.1), fogFactor);
 		FragColor = vec4(color, 1.0);
 	}
 	else
-		FragColor = vec4(ads(), 1);
+		FragColor = vec4(ads(), 1.0);
 }
