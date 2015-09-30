@@ -446,8 +446,7 @@ namespace OpenGL_CS_Game
             {
                 Vector4 L = new Vector4(10.0f * (float)Math.Cos(Angle), 1.0f, 10.0f * (float)Math.Sin(Angle), 1.0f);
                 Matrix4 V = cam.GetViewMatrix();
-                Vector4 LightPos = V.Mult(L);
-                GL.Uniform4(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "Light.Position"), ref LightPos);
+                GL.Uniform4(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "Light.Position"), V.Mult(L));
             }
 
             // Передаем шейдеру вектор Light Intensity, если шейдер поддерживает это.
