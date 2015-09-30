@@ -34,4 +34,9 @@
 		<VertexShader>PostProcess_VS.glsl</VertexShader>
 		<FragmentShader>PostProcess_FS.glsl</FragmentShader>
 	</Shader>
+	<Shader>
+		<Name>Fog</Name>
+		<VertexShader>Fog_VS.glsl</VertexShader>
+		<FragmentShader>Fog_FS.glsl</FragmentShader>
+	</Shader>
 </Shaders>

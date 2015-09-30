@@ -267,9 +267,16 @@ namespace OpenGL_CS_Game
             obj_Quads.Material = materials["Reflection"];
             obj_Quads.Position.Y += 1;
 
+            Fog.Enabled = true;
             ObjVolume obj_Keypad = ObjVolume.LoadFromFile(Path.Combine(MeshesPath, "Keypad.obj"));
-            obj_Keypad.Material = materials["Keypad"];
+            obj_Keypad.Material = materials["Fog_test"];
             obj_Keypad.Position.Z = -10;
+            obj_Keypad.Scale += new Vector3(1f);
+
+            ObjVolume obj_Keypad2 = ObjVolume.LoadFromFile(Path.Combine(MeshesPath, "Keypad.obj"));
+            obj_Keypad2.Material = materials["Fog_test"];
+            obj_Keypad2.Position.Z = +10;
+            obj_Keypad2.Scale += new Vector3(1f);
 
             ObjVolume obj_Teapot = ObjVolume.LoadFromFile(Path.Combine(MeshesPath, "Teapot.obj"));
             obj_Teapot.Material = materials["TransparentRedGlass"];
@@ -279,6 +286,7 @@ namespace OpenGL_CS_Game
             objects.Add(obj_Triangulated);
             objects.Add(obj_Quads);
             objects.Add(obj_Keypad);
+            objects.Add(obj_Keypad2);
         }
 
         void initProgram()
@@ -368,7 +376,7 @@ namespace OpenGL_CS_Game
                     objects.RemoveAt(i);
                     i--;
                 }
-            
+
             transparentObjects.Sort(delegate(Volume x, Volume y)
             {
                 return (y.Position - cam.Position).Length.CompareTo((x.Position - cam.Position).Length);
@@ -442,7 +450,7 @@ namespace OpenGL_CS_Game
             GL.UseProgram(shaders[v.Material.ShaderName].ProgramID);
 
             // Передаем шейдеру вектор Light Position, если шейдер поддерживает это.
-            if (shaders[v.Material.ShaderName].GetUniform("Light.Position") != -1)
+			if (shaders[v.Material.ShaderName].GetUniform("Light.Position") != -1)
             {
                 Vector4 L = new Vector4(10.0f * (float)Math.Cos(Angle), 1.0f, 10.0f * (float)Math.Sin(Angle), 1.0f);
                 Matrix4 V = cam.GetViewMatrix();
@@ -453,6 +461,10 @@ namespace OpenGL_CS_Game
             // Передаем шейдеру вектор Light Intensity, если шейдер поддерживает это.
             if (shaders[v.Material.ShaderName].GetUniform("Light.Intensity") != -1)
                 GL.Uniform3(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "Light.Intensity"), 0.9f, 0.9f, 0.9f);
+
+            // Передаем шейдеру вектор Specular reflectivity, если шейдер поддерживает это.
+            if (shaders[v.Material.ShaderName].GetUniform("Material.Kd") != -1)
+                GL.Uniform3(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "Material.Kd"), new Vector3(0.9f, 0.5f, 0.3f));
 
             // Передаем шейдеру вектор Specular reflectivity, если шейдер поддерживает это.
             if (shaders[v.Material.ShaderName].GetUniform("Material.Ks") != -1)
@@ -505,6 +517,22 @@ namespace OpenGL_CS_Game
             // Передаем шейдеру позицию камеры, если шейдер поддерживает это.
             if (shaders[v.Material.ShaderName].GetUniform("WorldCameraPosition") != -1)
                 GL.Uniform3(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "WorldCameraPosition"), cam.Position);
+
+            /////////ТУМАН/////////////////////////
+            if (Fog.Enabled)
+            {
+                if (shaders[v.Material.ShaderName].GetUniform("FogEnabled") != -1)
+                    GL.Uniform1(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "FogEnabled"), Convert.ToInt32(Fog.Enabled));
+                if (shaders[v.Material.ShaderName].GetUniform("Fog.MaxDist") != -1)
+                    GL.Uniform1(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "Fog.MaxDist"), Fog.MaxDistance);
+                if (shaders[v.Material.ShaderName].GetUniform("Fog.MinDist") != -1)
+                    GL.Uniform1(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "Fog.MinDist"), Fog.MinDistance);
+                if (shaders[v.Material.ShaderName].GetUniform("Fog.Color") != -1)
+                    GL.Uniform3(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "Fog.Color"), Fog.Color);
+            }
+            else
+                if (shaders[v.Material.ShaderName].GetUniform("FogEnabled") != -1)
+                    GL.Uniform1(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "FogEnabled"), Convert.ToInt32(Fog.Enabled));
 
             #region Передаем шейдеру VertexPosition, VertexNormal, VertexTexCoord, VertexTangent
             // Передаем шейдеру буфер позицый вертексов, если шейдер поддерживает это (должна быть 100% поддержка).
