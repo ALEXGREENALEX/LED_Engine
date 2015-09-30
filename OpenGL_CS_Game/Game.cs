@@ -33,7 +33,7 @@ namespace OpenGL_CS_Game
         float Angle = MathHelper.DegreesToRadians(100.0f);
         double FPS;
 
-        bool UsePostEffects = true;
+        bool UsePostEffects = false;
 
         public static List<Volume> objects = new List<Volume>();
         List<Volume> transparentObjects = new List<Volume>();
@@ -267,9 +267,9 @@ namespace OpenGL_CS_Game
             obj_Quads.Material = materials["Reflection"];
             obj_Quads.Position.Y += 1;
 
-            //ObjVolume obj_Keypad = ObjVolume.LoadFromFile(Path.Combine(MeshesPath, "Keypad.obj"));
-            //obj_Keypad.Material = materials["Keypad"];
-            //obj_Keypad.Position.Z = -10;
+            ObjVolume obj_Keypad = ObjVolume.LoadFromFile(Path.Combine(MeshesPath, "Keypad.obj"));
+            obj_Keypad.Material = materials["Keypad"];
+            obj_Keypad.Position.Z = -10;
 
             ObjVolume obj_Teapot = ObjVolume.LoadFromFile(Path.Combine(MeshesPath, "Teapot.obj"));
             obj_Teapot.Material = materials["TransparentRedGlass"];
@@ -278,7 +278,7 @@ namespace OpenGL_CS_Game
 
             objects.Add(obj_Triangulated);
             objects.Add(obj_Quads);
-            //objects.Add(obj_Keypad);
+            objects.Add(obj_Keypad);
         }
 
         void initProgram()
@@ -444,13 +444,9 @@ namespace OpenGL_CS_Game
             // Передаем шейдеру вектор Light Position, если шейдер поддерживает это.
             if (shaders[v.Material.ShaderName].GetUniform("Light.Position") != -1)
             {
-                Vector4 V = new Vector4(10.0f * (float)Math.Cos(Angle), 1.0f, 10.0f * (float)Math.Sin(Angle), 1.0f);
-                Matrix4 M = cam.GetViewMatrix();
-                Vector4 LightPos = new Vector4(
-                    M.M11 * V.X + M.M12 * V.Y + M.M13 * V.Z + M.M14 * V.W,
-                    M.M21 * V.X + M.M22 * V.Y + M.M23 * V.Z + M.M24 * V.W,
-                    M.M31 * V.X + M.M32 * V.Y + M.M33 * V.Z + M.M34 * V.W,
-                    M.M41 * V.X + M.M42 * V.Y + M.M43 * V.Z + M.M44 * V.W);
+                Vector4 L = new Vector4(10.0f * (float)Math.Cos(Angle), 1.0f, 10.0f * (float)Math.Sin(Angle), 1.0f);
+                Matrix4 V = cam.GetViewMatrix();
+                Vector4 LightPos = V.Mult(L);
                 GL.Uniform4(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "Light.Position"), ref LightPos);
             }
 
