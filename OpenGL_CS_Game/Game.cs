@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -20,7 +21,11 @@ namespace OpenGL_CS_Game
         {
         }
 
+        Stopwatch StopWatch = new Stopwatch(); // Таймер для подсчета времени выполнения алгоритмов
+        bool UsePostEffects = false;
+
         uint indecesArrayBuffer;
+        int activeShader;
 
         Camera cam = new Camera();
         float FOV = MathHelper.DegreesToRadians(50.0f);
@@ -32,8 +37,6 @@ namespace OpenGL_CS_Game
         float rotSpeed = (float)Math.PI / 4.0f;
         float Angle = MathHelper.DegreesToRadians(100.0f);
         double FPS;
-
-        bool UsePostEffects = false;
 
         public static List<Volume> objects = new List<Volume>();
         List<Volume> transparentObjects = new List<Volume>();
@@ -272,15 +275,15 @@ namespace OpenGL_CS_Game
             obj_Keypad.Position = new Vector3(16f, 0f, 0f);
 
             Fog.Enabled = true;
-            int a = 10;
+            int a = 30;
             Cube[,] obj_cubes = new Cube[a, a];
             for (int i1 = 0; i1 < a; i1++)
                 for (int i2 = 0; i2 < a; i2++)
                 {
                     obj_cubes[i1, i2] = new Cube();
                     obj_cubes[i1, i2].Material = materials["Fog_test"];
-                    obj_cubes[i1, i2].Position.X = (i1 - a/2) * 4;
-                    obj_cubes[i1, i2].Position.Z = (i2 - a/2) * 4;
+                    obj_cubes[i1, i2].Position.X = (i1 - a / 2) * 4;
+                    obj_cubes[i1, i2].Position.Z = (i2 - a / 2) * 4;
                     objects.Add(obj_cubes[i1, i2]);
                 }
 
@@ -337,6 +340,8 @@ namespace OpenGL_CS_Game
         {
             base.OnResize(e);
 
+            GL.Viewport(0, 0, Width, Height);
+
             // Настраиваем проэкцию (Угол обзора, Мин и Макс расстояния рендера)
             ProjectionMatrix = Matrix4.CreatePerspectiveFieldOfView(FOV, ClientSize.Width / (float)ClientSize.Height, zNear, zFar);
 
@@ -364,8 +369,6 @@ namespace OpenGL_CS_Game
             // FPS
             FPS = 1.0 / e.Time;
             Title = "FPS: " + FPS.ToString("0.00");
-
-            GL.Viewport(0, 0, Width, Height);
 
             // Bind FBO for PostProcess
             if (UsePostEffects)
@@ -450,9 +453,12 @@ namespace OpenGL_CS_Game
             }
 
             #region Работаем с шейдерами
-            // Подключаем шейдеры для отрисовки объекта
-            GL.LinkProgram(shaders[v.Material.ShaderName].ProgramID);
-            GL.UseProgram(shaders[v.Material.ShaderName].ProgramID);
+            // Выбираем шейдеры для отрисовки объекта
+            if (activeShader != shaders[v.Material.ShaderName].ProgramID)
+            {
+                activeShader = shaders[v.Material.ShaderName].ProgramID;
+                GL.UseProgram(activeShader);
+            }
 
             // Передаем шейдеру вектор Light Position, если шейдер поддерживает это.
             if (shaders[v.Material.ShaderName].GetUniform("Light.Position") != -1)
