@@ -14,7 +14,7 @@ namespace OpenGL_CS_Game
         public virtual int VerticesCount { get; set; }
         public virtual int TextureCoordsCount { get; set; }
         public virtual int NormalsCount { get; set; }
-        public virtual int FacesCount { get; set; }
+        public virtual int IndexesCount { get; set; }
         public virtual int TangentsesCount { get; set; }
         public virtual Material Material { get; set; }
         
@@ -25,7 +25,7 @@ namespace OpenGL_CS_Game
         public abstract Vector3[] GetVertices();
         public abstract Vector2[] GetTextureCoords();
         public abstract Vector3[] GetNormals();
-        public abstract uint[] GetFaceIndeces(uint offset = 0);
+        public abstract int[] GetIndexes(int offset = 0);
         public abstract Vector4[] GetTangentses();
         public abstract void CalculateModelMatrix();
     }

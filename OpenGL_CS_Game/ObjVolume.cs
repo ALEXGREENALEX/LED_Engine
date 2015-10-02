@@ -13,7 +13,7 @@ namespace OpenGL_CS_Game
         Vector3[] normals;
         Vector2[] texturecoords;
         Vector4[] tangentses;
-        uint[] faces;
+        int[] indexes;
 
         public ObjVolume()
             : base()
@@ -23,7 +23,7 @@ namespace OpenGL_CS_Game
 
         public override int VerticesCount { get { return vertices.Length; } }
         public override int NormalsCount { get { return normals.Length; } }
-        public override int FacesCount { get { return faces.Length; } }
+        public override int IndexesCount { get { return indexes.Length; } }
         public override int TextureCoordsCount { get { return texturecoords.Length; } }
         public override int TangentsesCount { get { return tangentses.Length; } }
 
@@ -49,12 +49,12 @@ namespace OpenGL_CS_Game
         /// Получить индексы что-бы нарисовать этот объект
         /// </summary>
         /// <returns>Array of indices offset to match buffered data</returns>
-        public override uint[] GetFaceIndeces(uint offset = 0)
+        public override int[] GetIndexes(int offset = 0)
         {
-            uint[] inds = new uint[faces.Length];
+            int[] inds = new int[indexes.Length];
 
-            for (int i = 0; i < faces.Length; i++)
-                inds[i] = faces[i] + offset;
+            for (int i = 0; i < indexes.Length; i++)
+                inds[i] = indexes[i] + offset;
 
             return inds;
         }
@@ -73,32 +73,28 @@ namespace OpenGL_CS_Game
             return tangentses;
         }
 
-        private void CalcTangentses()
+        public static Vector4[] CalcTangentses(Vector3[] vertices, Vector3[] normals, Vector2[] texCoords, int[] indexes)
         {
-            Vector3[] points = GetVertices();
-            Vector3[] normals = GetNormals();
-            uint[] faces = GetFaceIndeces();
-            Vector2[] texCoords = GetTextureCoords();
-            Vector4[] Tangenses = new Vector4[points.Length];
+            Vector4[] Tangenses = new Vector4[vertices.Length];
             List<Vector3> tan1Accum = new List<Vector3>();
             List<Vector3> tan2Accum = new List<Vector3>();
 
-            for (uint i = 0; i < points.Length; i++)
+            for (uint i = 0; i < vertices.Length; i++)
             {
                 tan1Accum.Add(new Vector3(0.0f));
                 tan2Accum.Add(new Vector3(0.0f));
             }
 
             // Compute the tangent vector
-            for (int i = 0; i < faces.Length; i += 3)
+            for (int i = 0; i < indexes.Length; i += 3)
             {
-                Vector3 p1 = points[(int)faces[i]];
-                Vector3 p2 = points[(int)faces[i + 1]];
-                Vector3 p3 = points[(int)faces[i + 2]];
+                Vector3 p1 = vertices[indexes[i]];
+                Vector3 p2 = vertices[indexes[i + 1]];
+                Vector3 p3 = vertices[indexes[i + 2]];
 
-                Vector2 tc1 = texCoords[(int)faces[i]];
-                Vector2 tc2 = texCoords[(int)faces[i + 1]];
-                Vector2 tc3 = texCoords[(int)faces[i + 2]];
+                Vector2 tc1 = texCoords[indexes[i]];
+                Vector2 tc2 = texCoords[indexes[i + 1]];
+                Vector2 tc3 = texCoords[indexes[i + 2]];
 
                 Vector3 q1 = p2 - p1;
                 Vector3 q2 = p3 - p1;
@@ -116,15 +112,15 @@ namespace OpenGL_CS_Game
                     (s1 * q2.Y - s2 * q1.Y) * r,
                     (s1 * q2.Z - s2 * q1.Z) * r);
 
-                tan1Accum[(int)faces[i]] += tan1;
-                tan1Accum[(int)faces[i + 1]] += tan1;
-                tan1Accum[(int)faces[i + 2]] += tan1;
-                tan2Accum[(int)faces[i]] += tan2;
-                tan2Accum[(int)faces[i + 1]] += tan2;
-                tan2Accum[(int)faces[i + 2]] += tan2;
+                tan1Accum[indexes[i]] += tan1;
+                tan1Accum[indexes[i + 1]] += tan1;
+                tan1Accum[indexes[i + 2]] += tan1;
+                tan2Accum[indexes[i]] += tan2;
+                tan2Accum[indexes[i + 1]] += tan2;
+                tan2Accum[indexes[i + 2]] += tan2;
             }
 
-            for (int i = 0; i < points.Length; ++i)
+            for (int i = 0; i < vertices.Length; ++i)
             {
                 Vector3 n = normals[i];
                 Vector3 t1 = tan1Accum[i];
@@ -134,13 +130,18 @@ namespace OpenGL_CS_Game
                 Tangenses[i] = new Vector4(Vector3.Normalize(t1 - (Vector3.Dot(n, t1) * n)), 0.0f);
                 // Store handedness in W
                 Vector4 V_temp = Tangenses[i];
-                V_temp.W = (Vector3.Dot(Vector3.Cross(n, t1), t2) < 0.0f) ? -1.0f : 1.0f;
+                
+                if (Vector3.Dot(Vector3.Cross(n, t1), t2) < 0.0f)
+                    V_temp.W = -1.0f;
+                else
+                    V_temp.W = 1.0f;
+
                 Tangenses[i] = V_temp;
             }
 
             tan1Accum.Clear();
             tan2Accum.Clear();
-            tangentses = Tangenses;
+            return Tangenses;
         }
 
         /// <summary>
@@ -188,9 +189,9 @@ namespace OpenGL_CS_Game
             List<Vector3> VerticesResult = new List<Vector3>();
             List<Vector3> NormalsResult = new List<Vector3>();
             List<Vector2> TextureCoordsResult = new List<Vector2>();
-            List<uint> FacesV = new List<uint>();
-            List<uint> FacesT = new List<uint>();
-            List<uint> FacesN = new List<uint>();
+            List<int> FacesV = new List<int>();
+            List<int> FacesT = new List<int>();
+            List<int> FacesN = new List<int>();
 
             String FloatComa = (0.5f).ToString().Substring(1, 1);
 
@@ -267,7 +268,7 @@ namespace OpenGL_CS_Game
                     case "f":
                         try
                         {
-                            uint[,] FaceVTN = new uint[4, 3]; // VertexIndex/TextureCoordIndex/NormalIndex
+                            int[,] FaceVTN = new int[4, 3]; // VertexIndex/TextureCoordIndex/NormalIndex
 
                             if (lineparts.Length == 4 || lineparts.Length == 5) //Triangle or Quad
                             {
@@ -284,7 +285,7 @@ namespace OpenGL_CS_Game
                                         throw new Exception();
 
                                     for (int k = 0; k < 3; k++) //Add Vertex/TexCoords/Normals
-                                        FaceVTN[j, k] = uint.Parse(FaceParams[k]) - 1;
+                                        FaceVTN[j, k] = int.Parse(FaceParams[k]) - 1;
                                 }
 
                                 //Add first triangle if Triangle
@@ -321,28 +322,28 @@ namespace OpenGL_CS_Game
 
             for (int i = 0; i < FacesV.Count; i += 3)
             {
-                VerticesResult.Add(Vertices[(int)FacesV[i]]);
-                VerticesResult.Add(Vertices[(int)FacesV[i + 1]]);
-                VerticesResult.Add(Vertices[(int)FacesV[i + 2]]);
+                VerticesResult.Add(Vertices[FacesV[i]]);
+                VerticesResult.Add(Vertices[FacesV[i + 1]]);
+                VerticesResult.Add(Vertices[FacesV[i + 2]]);
 
-                TextureCoordsResult.Add(TextureCoords[(int)FacesT[i]]);
-                TextureCoordsResult.Add(TextureCoords[(int)FacesT[i + 1]]);
-                TextureCoordsResult.Add(TextureCoords[(int)FacesT[i + 2]]);
+                TextureCoordsResult.Add(TextureCoords[FacesT[i]]);
+                TextureCoordsResult.Add(TextureCoords[FacesT[i + 1]]);
+                TextureCoordsResult.Add(TextureCoords[FacesT[i + 2]]);
 
-                NormalsResult.Add(Normals[(int)FacesN[i]]);
-                NormalsResult.Add(Normals[(int)FacesN[i + 1]]);
-                NormalsResult.Add(Normals[(int)FacesN[i + 2]]);
+                NormalsResult.Add(Normals[FacesN[i]]);
+                NormalsResult.Add(Normals[FacesN[i + 1]]);
+                NormalsResult.Add(Normals[FacesN[i + 2]]);
 
-                FacesV[i] = (uint)i;
-                FacesV[i + 1] = (uint)i + 1;
-                FacesV[i + 2] = (uint)i + 2;
+                FacesV[i] = i;
+                FacesV[i + 1] = i + 1;
+                FacesV[i + 2] = i + 2;
             }
 
             vol.vertices = VerticesResult.ToArray();
             vol.texturecoords = TextureCoordsResult.ToArray();
             vol.normals = NormalsResult.ToArray();
-            vol.faces = FacesV.ToArray();
-            vol.CalcTangentses();
+            vol.indexes = FacesV.ToArray();
+            vol.tangentses = CalcTangentses(vol.vertices, vol.normals, vol.texturecoords, vol.indexes);
 
             Vertices = null;
             TextureCoords = null;

@@ -11,7 +11,7 @@ namespace OpenGL_CS_Game
         {
             VerticesCount = 4;
             NormalsCount = 4;
-            FacesCount = 6;
+            IndexesCount = 6;
             TextureCoordsCount = 4;
             TangentsesCount = 4;
 
@@ -39,9 +39,9 @@ namespace OpenGL_CS_Game
             };
         }
 
-        public override uint[] GetFaceIndeces(uint offset = 0)
+        public override int[] GetIndexes(int offset = 0)
         {
-            uint[] inds = new uint[] { 0, 1, 2, 0, 2, 3 };
+            int[] inds = new int[] { 0, 1, 2, 0, 2, 3 };
 
             if (offset != 0)
                 for (int i = 0; i < inds.Length; i++)
