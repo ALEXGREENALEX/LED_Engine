@@ -186,9 +186,6 @@ namespace OpenGL_CS_Game
             List<Vector3> Vertices = new List<Vector3>();
             List<Vector3> Normals = new List<Vector3>();
             List<Vector2> TextureCoords = new List<Vector2>();
-            List<Vector3> VerticesResult = new List<Vector3>();
-            List<Vector3> NormalsResult = new List<Vector3>();
-            List<Vector2> TextureCoordsResult = new List<Vector2>();
             List<int> FacesV = new List<int>();
             List<int> FacesT = new List<int>();
             List<int> FacesN = new List<int>();
@@ -319,38 +316,24 @@ namespace OpenGL_CS_Game
 
             // Создаем ObjVolume
             ObjVolume vol = new ObjVolume();
+            vol.vertices = new Vector3[FacesV.Count];
+            vol.texturecoords = new Vector2[FacesV.Count];
+            vol.normals = new Vector3[FacesV.Count];
+            vol.indexes = new int[FacesV.Count];
 
-            for (int i = 0; i < FacesV.Count; i += 3)
+            for (int i = 0; i < FacesV.Count; i++)
             {
-                VerticesResult.Add(Vertices[FacesV[i]]);
-                VerticesResult.Add(Vertices[FacesV[i + 1]]);
-                VerticesResult.Add(Vertices[FacesV[i + 2]]);
-
-                TextureCoordsResult.Add(TextureCoords[FacesT[i]]);
-                TextureCoordsResult.Add(TextureCoords[FacesT[i + 1]]);
-                TextureCoordsResult.Add(TextureCoords[FacesT[i + 2]]);
-
-                NormalsResult.Add(Normals[FacesN[i]]);
-                NormalsResult.Add(Normals[FacesN[i + 1]]);
-                NormalsResult.Add(Normals[FacesN[i + 2]]);
-
-                FacesV[i] = i;
-                FacesV[i + 1] = i + 1;
-                FacesV[i + 2] = i + 2;
+                vol.vertices[i] = Vertices[FacesV[i]];
+                vol.texturecoords[i] = TextureCoords[FacesT[i]];
+                vol.normals[i] = Normals[FacesN[i]];
+                vol.indexes[i] = i;
             }
 
-            vol.vertices = VerticesResult.ToArray();
-            vol.texturecoords = TextureCoordsResult.ToArray();
-            vol.normals = NormalsResult.ToArray();
-            vol.indexes = FacesV.ToArray();
             vol.tangentses = CalcTangentses(vol.vertices, vol.normals, vol.texturecoords, vol.indexes);
 
             Vertices = null;
             TextureCoords = null;
             Normals = null;
-            VerticesResult = null;
-            TextureCoordsResult = null;
-            NormalsResult = null;
             FacesV = null;
             FacesT = null;
             FacesN = null;

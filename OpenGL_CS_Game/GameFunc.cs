@@ -19,8 +19,8 @@ namespace OpenGL_CS_Game
         Stopwatch StopWatch = new Stopwatch(); // Таймер для подсчета времени выполнения алгоритмов
         bool UsePostEffects = false;
 
-        uint indexesArrayBuffer;
-        int activeShader;
+        uint IndexBufferId;
+        int ActiveShader;
 
         Camera cam = new Camera();
         float FOV = MathHelper.DegreesToRadians(50.0f);
@@ -297,7 +297,7 @@ namespace OpenGL_CS_Game
             // Загружаем конфигурацию и ресурсы
             LoadConfigAndResources();
 
-            GL.GenBuffers(1, out indexesArrayBuffer);
+            GL.GenBuffers(1, out IndexBufferId);
 
             // PostProcess Init - Create back-buffer, used for post-processing
             if (UsePostEffects)
@@ -339,10 +339,10 @@ namespace OpenGL_CS_Game
 
             #region Работаем с шейдерами
             // Выбираем шейдеры для отрисовки объекта
-            if (activeShader != shaders[v.Material.ShaderName].ProgramID)
+            if (ActiveShader != shaders[v.Material.ShaderName].ProgramID)
             {
-                activeShader = shaders[v.Material.ShaderName].ProgramID;
-                GL.UseProgram(activeShader);
+                ActiveShader = shaders[v.Material.ShaderName].ProgramID;
+                GL.UseProgram(ActiveShader);
             }
 
             // Передаем шейдеру вектор Light Position, если шейдер поддерживает это.
@@ -467,7 +467,7 @@ namespace OpenGL_CS_Game
             #endregion
             #endregion
 
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, indexesArrayBuffer);
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, IndexBufferId);
             GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(v.GetIndexes().Length * sizeof(int)), v.GetIndexes(), BufferUsageHint.StaticDraw);
 
             GL.BindVertexArray(shaders[v.Material.ShaderName].GetAttribute("VertexPosition"));
