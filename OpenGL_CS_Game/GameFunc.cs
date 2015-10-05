@@ -17,7 +17,7 @@ namespace OpenGL_CS_Game
     partial class Game : GameWindow
     {
         Stopwatch StopWatch = new Stopwatch(); // Таймер для подсчета времени выполнения алгоритмов
-        bool UsePostEffects = false;
+        bool UsePostEffects = true;
 
         uint IndexBufferId;
         int ActiveShader;
@@ -80,6 +80,14 @@ namespace OpenGL_CS_Game
                 shaders.Add(xmlNode.SelectSingleNode("Name").InnerText, new ShaderProgram(
                     Path.Combine(ShadersPath, xmlNode.SelectSingleNode("VertexShader").InnerText),
                     Path.Combine(ShadersPath, xmlNode.SelectSingleNode("FragmentShader").InnerText), true));
+            }
+
+            // Debug для шейдеров
+            foreach (var key in shaders.Keys)
+            {
+                string InfoLog = GL.GetProgramInfoLog(shaders[key].ProgramID);
+                if (InfoLog != String.Empty)
+                    MessageBox.Show(InfoLog, "Shader Program Error: " + key);
             }
             #endregion
 
@@ -272,7 +280,7 @@ namespace OpenGL_CS_Game
             obj_Keypad.Position = new Vector3(16f, 0f, 0f);
 
             Fog.Enabled = true;
-            int a = 20;
+            int a = 26;
             Cube[,] obj_cubes = new Cube[a, a];
             for (int i1 = 0; i1 < a; i1++)
                 for (int i2 = 0; i2 < a; i2++)
@@ -311,7 +319,7 @@ namespace OpenGL_CS_Game
 
             // PostProcess Init - Create back-buffer, used for post-processing
             if (UsePostEffects)
-                PostProcess.Init("PostProcessSepia", Width, Height);
+                PostProcess.Init("PostProcessFXAA", Width, Height);
 
             // Включаем тест глубины
             GL.Enable(EnableCap.DepthTest);

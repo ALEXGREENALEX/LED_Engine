@@ -26,6 +26,7 @@ namespace OpenGL_CS_Game
             base.OnLoad(e);
 
             initProgram();
+            CursorVisible = false;
             GL.ClearColor(Color.CornflowerBlue);
         }
 
