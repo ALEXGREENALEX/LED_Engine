@@ -36,7 +36,7 @@ namespace OpenGL_CS_Game
             GL.Viewport(0, 0, Width, Height);
 
             // Настраиваем проэкцию (Угол обзора, Мин и Макс расстояния рендера)
-            ProjectionMatrix = Matrix4.CreatePerspectiveFieldOfView(FOV, ClientSize.Width / (float)ClientSize.Height, zNear, zFar);
+            MainCamera.SetProjectionMatrix(ProjectionTypes.Perspective, (float)ClientSize.Width, (float)ClientSize.Height, zNear, zFar, FOV);
 
             if (UsePostEffects)
                 PostProcess.Rescale(Width, Height);
@@ -46,127 +46,149 @@ namespace OpenGL_CS_Game
         {
             base.OnKeyDown(e);
 
-            if (e.Key == Key.Escape)
-                Exit();
-            else if (e.Alt && e.Key == Key.Enter)
-                if (this.WindowState == WindowState.Fullscreen)
-                    this.WindowState = WindowState.Normal;
-                else
-                    this.WindowState = WindowState.Fullscreen;
+            if (this.Focused)
+            {
+                if (e.Key == Key.Escape)
+                    Exit();
+                else if (e.Alt && e.Key == Key.Enter)
+                    if (this.WindowState == WindowState.Fullscreen)
+                        this.WindowState = WindowState.Normal;
+                    else
+                        this.WindowState = WindowState.Fullscreen;
+            }
+        }
+
+        protected override void OnFocusedChanged(EventArgs e)
+        {
+            base.OnFocusedChanged(e);
+
+            if (Focused)
+                ResetCursor();
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             base.OnRenderFrame(e);
 
-            // FPS
-            FPS = 1.0 / e.Time;
-            Title = "FPS: " + FPS.ToString("0.00");
-
-            // Bind FBO for PostProcess
-            if (UsePostEffects)
-                GL.BindFramebuffer(FramebufferTarget.Framebuffer, PostProcess.fbo);
-
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
-            #region Сортировка прозрачных объектов
-            for (int i = 0; i < objects.Count; i++)
-                if (objects[i].Material.Transparent)
-                {
-                    transparentObjects.Add(objects[i]);
-                    objects.RemoveAt(i);
-                    i--;
-                }
-
-            transparentObjects.Sort(delegate(Volume x, Volume y)
+            if (Focused)
             {
-                return (y.Position - cam.Position).Length.CompareTo((x.Position - cam.Position).Length);
-            });
+                // FPS
+                FPS = 1.0 / e.Time;
+                Title = "FPS: " + FPS.ToString("0.00");
 
-            objects.AddRange(transparentObjects);
-            transparentObjects.Clear();
-            #endregion
+                // Bind FBO for PostProcess
+                if (UsePostEffects)
+                    GL.BindFramebuffer(FramebufferTarget.Framebuffer, PostProcess.fbo);
 
-            // Отрисовываем все объекты
-            foreach (Volume v in objects)
-            {
-                v.CalculateModelMatrix();
-                v.ViewProjectionMatrix = cam.GetViewMatrix() * ProjectionMatrix;
-                v.ModelViewProjectionMatrix = v.ModelMatrix * v.ViewProjectionMatrix;
+                GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-                // Отрисовка только тех сторон, что повернуты к камере
-                if (v.Material.CullFace)
-                    GL.Enable(EnableCap.CullFace);
-                else
-                    GL.Disable(EnableCap.CullFace);
+                #region Сортировка прозрачных объектов
+                for (int i = 0; i < objects.Count; i++)
+                    if (objects[i].Material.Transparent)
+                    {
+                        transparentObjects.Add(objects[i]);
+                        objects.RemoveAt(i);
+                        i--;
+                    }
 
-                // Вкл. прозрачность только для прозрачных объектов
-                if (v.Material.Transparent)
+                transparentObjects.Sort(delegate(Volume x, Volume y)
                 {
-                    GL.Enable(EnableCap.AlphaTest);
-                    GL.Enable(EnableCap.Blend);
+                    return (y.Position - MainCamera.Position).Length.CompareTo((x.Position - MainCamera.Position).Length);
+                });
 
-                    GL.Enable(EnableCap.CullFace);
-                    GL.CullFace(CullFaceMode.Front);
+                objects.AddRange(transparentObjects);
+                transparentObjects.Clear();
+                #endregion
+
+                // Отрисовываем все объекты
+                foreach (Volume v in objects)
+                {
+                    v.CalculateModelMatrix();
+                    v.ViewProjectionMatrix = MainCamera.GetViewMatrix() * MainCamera.GetProjectionMatrix();
+                    v.ModelViewProjectionMatrix = v.ModelMatrix * v.ViewProjectionMatrix;
+
+                    // Отрисовка только тех сторон, что повернуты к камере
+                    if (v.Material.CullFace)
+                        GL.Enable(EnableCap.CullFace);
+                    else
+                        GL.Disable(EnableCap.CullFace);
+
+                    // Вкл. прозрачность только для прозрачных объектов
+                    if (v.Material.Transparent)
+                    {
+                        GL.Enable(EnableCap.AlphaTest);
+                        GL.Enable(EnableCap.Blend);
+
+                        GL.Enable(EnableCap.CullFace);
+                        GL.CullFace(CullFaceMode.Front);
+                        DrawObject(v);
+                        GL.CullFace(CullFaceMode.Back);
+                    }
+                    else
+                    {
+                        GL.Disable(EnableCap.AlphaTest);
+                        GL.Disable(EnableCap.Blend);
+                    }
+
                     DrawObject(v);
-                    GL.CullFace(CullFaceMode.Back);
                 }
-                else
+
+                //PostProcess Bind MAIN FrameBuffer(Screen) & Draw to Screen
+                if (UsePostEffects)
                 {
-                    GL.Disable(EnableCap.AlphaTest);
-                    GL.Disable(EnableCap.Blend);
+                    GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+                    PostProcess.Draw();
                 }
 
-                DrawObject(v);
+                GL.Flush();
+                SwapBuffers();
             }
-
-            //PostProcess Bind MAIN FrameBuffer(Screen) & Draw to Screen
-            if (UsePostEffects)
-            {
-                GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
-                PostProcess.Draw();
-            }
-
-            GL.Flush();
-            SwapBuffers();
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
             base.OnUpdateFrame(e);
 
-            // Проверяем нажатия клавиш каждый кадр, а не по прерыванию!
-            KeyboardState KbdState = OpenTK.Input.Keyboard.GetState();
-            if (KbdState.IsKeyDown(Key.W))
-                cam.Move(0f, 0.01f, 0f);
-            if (KbdState.IsKeyDown(Key.A))
-                cam.Move(-0.01f, 0f, 0f);
-            if (KbdState.IsKeyDown(Key.S))
-                cam.Move(0f, -0.01f, 0f);
-            if (KbdState.IsKeyDown(Key.D))
-                cam.Move(0.01f, 0f, 0f);
-            if (KbdState.IsKeyDown(Key.E))
-                cam.Move(0f, 0f, 0.01f);
-            if (KbdState.IsKeyDown(Key.Q))
-                cam.Move(0f, 0f, -0.01f);
+            if (Focused)
+            {
+                Vector2 delta = LastMousePos - new Vector2(OpenTK.Input.Mouse.GetState().X, OpenTK.Input.Mouse.GetState().Y);
+                LastMousePos += delta;
+                MainCamera.AddRotation(delta.X, delta.Y);
+                ResetCursor();
 
-            float camSens = 2.0f;
-            if (KbdState.IsKeyDown(Key.Left))
-                cam.AddRotation(camSens, 0.0f);
-            if (KbdState.IsKeyDown(Key.Right))
-                cam.AddRotation(-camSens, 0.0f);
-            if (KbdState.IsKeyDown(Key.Up))
-                cam.AddRotation(0.0f, camSens);
-            if (KbdState.IsKeyDown(Key.Down))
-                cam.AddRotation(0.0f, -camSens);
+                // Проверяем нажатия клавиш каждый кадр, а не по прерыванию!
+                KeyboardState KbdState = OpenTK.Input.Keyboard.GetState();
+                if (KbdState.IsKeyDown(Key.W))
+                    MainCamera.Move(0f, 0.01f, 0f);
+                if (KbdState.IsKeyDown(Key.A))
+                    MainCamera.Move(-0.01f, 0f, 0f);
+                if (KbdState.IsKeyDown(Key.S))
+                    MainCamera.Move(0f, -0.01f, 0f);
+                if (KbdState.IsKeyDown(Key.D))
+                    MainCamera.Move(0.01f, 0f, 0f);
+                if (KbdState.IsKeyDown(Key.E))
+                    MainCamera.Move(0f, 0f, 0.01f);
+                if (KbdState.IsKeyDown(Key.Q))
+                    MainCamera.Move(0f, 0f, -0.01f);
 
-            // Обновляем позиции объектов
-            time += (float)e.Time;
-            objects[0].Rotation += new Vector3(0, -0.01f, 0);
+                float camSens = 2.0f;
+                if (KbdState.IsKeyDown(Key.Left))
+                    MainCamera.AddRotation(camSens, 0.0f);
+                if (KbdState.IsKeyDown(Key.Right))
+                    MainCamera.AddRotation(-camSens, 0.0f);
+                if (KbdState.IsKeyDown(Key.Up))
+                    MainCamera.AddRotation(0.0f, camSens);
+                if (KbdState.IsKeyDown(Key.Down))
+                    MainCamera.AddRotation(0.0f, -camSens);
 
-            Angle += rotSpeed * (float)e.Time;
-            if (Angle > MathHelper.TwoPi)
-                Angle -= MathHelper.TwoPi;
+                // Обновляем позиции объектов
+                time += (float)e.Time;
+                objects[0].Rotation += new Vector3(0, -0.01f, 0);
+
+                Angle += rotSpeed * (float)e.Time;
+                if (Angle > MathHelper.TwoPi)
+                    Angle -= MathHelper.TwoPi;
+            }
         }
     }
 }

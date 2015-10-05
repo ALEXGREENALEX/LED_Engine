@@ -85,7 +85,7 @@
 		<Texture>brick-wall_N</Texture>
 		<CullFace>False</CullFace>
 		<SpecularReflectivity>0.2 0.2 0.2</SpecularReflectivity>
-		<AmbientReflectivity>0.1 0.1 0.1</AmbientReflectivity>
+		<AmbientReflectivity>0.05 0.05 0.05</AmbientReflectivity>
 		<SpecularShininess>1.0</SpecularShininess>
 	</Material>
 	<Material>

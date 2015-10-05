@@ -8,32 +8,36 @@ namespace OpenGL_CS_Game
 {
     static public class PostProcess
     {
-        public static uint fbo, fbo_texture, rbo_depth, vbo_fbo_vertices;
+        public static int fbo, fbo_texture, rbo_depth, vbo_fbo_vertices;
         static string shaderName;
+        static int ScreenWidth, ScreenHeight;
 
         public static void Init(string ShaderName, int ScrWidth, int ScrHeight)
         {
             shaderName = ShaderName;
+            ScreenWidth = ScrWidth;
+            ScreenHeight = ScrHeight;
 
             /* Texture */
             GL.ActiveTexture(TextureUnit.Texture0);
-            GL.GenTextures(1, out PostProcess.fbo_texture);
+            fbo_texture = GL.GenTexture();
             GL.BindTexture(TextureTarget.Texture2D, fbo_texture);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, ScrWidth, ScrHeight, 0, OpenTK.Graphics.OpenGL.PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, ScreenWidth, ScreenHeight, 0,
+                OpenTK.Graphics.OpenGL.PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
             GL.BindTexture(TextureTarget.Texture2D, 0);
 
             /* Depth buffer */
-            GL.GenRenderbuffers(1, out rbo_depth);
+            rbo_depth = GL.GenRenderbuffer();
             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, rbo_depth);
-            GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.DepthComponent16, ScrWidth, ScrHeight);
+            GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.DepthComponent16, ScreenWidth, ScreenHeight);
             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, 0);
 
             /* Framebuffer to link everything together */
-            GL.GenFramebuffers(1, out fbo);
+            fbo = GL.GenFramebuffer();
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, fbo);
             GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, fbo_texture, 0);
             GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, rbo_depth);
@@ -51,7 +55,7 @@ namespace OpenGL_CS_Game
                  1f,  1f
             };
 
-            GL.GenBuffers(1, out vbo_fbo_vertices);
+            vbo_fbo_vertices = GL.GenBuffer();
             GL.BindBuffer(BufferTarget.ArrayBuffer, vbo_fbo_vertices);
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(fbo_vertices.Length * sizeof(float)), fbo_vertices, BufferUsageHint.StaticDraw);
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
@@ -69,6 +73,12 @@ namespace OpenGL_CS_Game
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             GL.UseProgram(Game.shaders[shaderName].ProgramID);
+
+            // Передаем параметры шейдерам пост процессов
+            if (Game.shaders[shaderName].GetUniform("texCoordOffset") != -1)
+                GL.Uniform2(GL.GetUniformLocation(Game.shaders[shaderName].ProgramID, "texCoordOffset"),
+                    new Vector2(1f / (float)ScreenWidth, 1f / (float)ScreenWidth));
+
             GL.BindTexture(TextureTarget.Texture2D, fbo_texture);
             GL.Uniform1(Game.shaders[shaderName].GetAttribute("fbo_texture"), 0);
             GL.EnableVertexAttribArray(Game.shaders[shaderName].GetAttribute("v_coord"));
@@ -81,22 +91,25 @@ namespace OpenGL_CS_Game
 
         public static void Rescale(int ScrWidth, int ScrHeight)
         {
-            // Rescale FBO and RBO as well
+            ScreenWidth = ScrWidth;
+            ScreenHeight = ScrHeight;
+
             GL.BindTexture(TextureTarget.Texture2D, fbo_texture);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, ScrWidth, ScrHeight, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, ScreenWidth, ScreenHeight, 0,
+                PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
             GL.BindTexture(TextureTarget.Texture2D, 0);
 
             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, rbo_depth);
-            GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.DepthComponent16, ScrWidth, ScrHeight);
+            GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.DepthComponent16, ScreenWidth, ScreenHeight);
             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, 0);
         }
 
         public static void FreeResources()
         {
-            GL.DeleteBuffers(1, ref vbo_fbo_vertices);
-            GL.DeleteRenderbuffers(1, ref rbo_depth);
-            GL.DeleteTextures(1, ref fbo_texture);
-            GL.DeleteFramebuffers(1,  ref fbo);
+            GL.DeleteBuffer(vbo_fbo_vertices);
+            GL.DeleteRenderbuffer(rbo_depth);
+            GL.DeleteTexture(fbo_texture);
+            GL.DeleteFramebuffer(fbo);
         }
     }
 }

@@ -30,9 +30,14 @@
 		<FragmentShader>CubemapReflectRefract_FS.glsl</FragmentShader>
 	</Shader>
 	<Shader>
-		<Name>PostProcess</Name>
+		<Name>PostProcessSepia</Name>
 		<VertexShader>PostProcess_VS.glsl</VertexShader>
-		<FragmentShader>PostProcess_FS.glsl</FragmentShader>
+		<FragmentShader>PostProcessSepia_FS.glsl</FragmentShader>
+	</Shader>
+	<Shader>
+		<Name>PostProcessFXAA</Name>
+		<VertexShader>PostProcess_VS.glsl</VertexShader>
+		<FragmentShader>PostProcessFXAA_FS.glsl</FragmentShader>
 	</Shader>
 	<Shader>
 		<Name>Fog</Name>

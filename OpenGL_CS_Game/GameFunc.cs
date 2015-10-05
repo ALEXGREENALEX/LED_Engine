@@ -22,11 +22,12 @@ namespace OpenGL_CS_Game
         uint IndexBufferId;
         int ActiveShader;
 
-        Camera cam = new Camera();
-        float FOV = MathHelper.DegreesToRadians(50.0f);
-        float zNear = 0.3f;
-        float zFar = 10000.0f;
-        Matrix4 ProjectionMatrix;
+        public static Camera MainCamera = new Camera();
+        public static float FOV = 50.0f;
+        public static float zNear = 0.3f;
+        public static float zFar = 10000.0f;
+
+        Vector2 LastMousePos;
 
         float time = 0.0f;
         float rotSpeed = (float)Math.PI / 4.0f;
@@ -260,10 +261,11 @@ namespace OpenGL_CS_Game
             ObjVolume obj_Triangulated = ObjVolume.LoadFromFile(Path.Combine(MeshesPath, "Model_Triangles.obj"));
             //obj_Triangulated.Material = materials["BrickWall"];
             obj_Triangulated.Material = materials["Refraction"]; // Reflection Refraction
+            obj_Triangulated.Position.Y += 1;
 
             ObjVolume obj_Quads = ObjVolume.LoadFromFile(Path.Combine(MeshesPath, "Model_Quads.obj"));
             obj_Quads.Material = materials["Reflection"];
-            obj_Quads.Position.Y += 1;
+            obj_Quads.Position.Y += 2;
 
             ObjVolume obj_Keypad = ObjVolume.LoadFromFile(Path.Combine(MeshesPath, "Keypad.obj"));
             obj_Keypad.Material = materials["Keypad"];
@@ -287,6 +289,11 @@ namespace OpenGL_CS_Game
             obj_Teapot.Position.Z += 2;
             objects.Add(obj_Teapot);
 
+            ObjVolume obj_Teapot2 = ObjVolume.LoadFromFile(Path.Combine(MeshesPath, "Teapot.obj"));
+            obj_Teapot2.Material = materials["BrickWall"];
+            obj_Teapot2.Position.Z -= 2;
+            objects.Add(obj_Teapot2);
+
             objects.Add(obj_Triangulated);
             objects.Add(obj_Quads);
             objects.Add(obj_Keypad);
@@ -297,11 +304,14 @@ namespace OpenGL_CS_Game
             // Загружаем конфигурацию и ресурсы
             LoadConfigAndResources();
 
+            // Настраиваем проекцию камеры
+            MainCamera.SetProjectionMatrix(ProjectionTypes.Perspective, (float)ClientSize.Width, (float)ClientSize.Height, zNear, zFar, FOV);
+
             GL.GenBuffers(1, out IndexBufferId);
 
             // PostProcess Init - Create back-buffer, used for post-processing
             if (UsePostEffects)
-                PostProcess.Init("PostProcess", Width, Height);
+                PostProcess.Init("PostProcessSepia", Width, Height);
 
             // Включаем тест глубины
             GL.Enable(EnableCap.DepthTest);
@@ -320,7 +330,13 @@ namespace OpenGL_CS_Game
             //objects.Add(plain);
 
             // Отдаляем камеру от начала координат
-            //cam.Position = new Vector3(0.0f, 0.0f, 1.5f);
+            MainCamera.Position = new Vector3(0.0f, 2.0f, 0.0f);
+        }
+
+        void ResetCursor()
+        {
+            OpenTK.Input.Mouse.SetPosition(Bounds.Left + Bounds.Width / 2, Bounds.Top + Bounds.Height / 2);
+            LastMousePos = new Vector2(OpenTK.Input.Mouse.GetState().X, OpenTK.Input.Mouse.GetState().Y);
         }
 
         void DrawObject(Volume v)
@@ -349,7 +365,7 @@ namespace OpenGL_CS_Game
             if (shaders[v.Material.ShaderName].GetUniform("Light.Position") != -1)
             {
                 Vector4 L = new Vector4(10.0f * (float)Math.Cos(Angle), 1.0f, 10.0f * (float)Math.Sin(Angle), 1.0f);
-                Matrix4 V = cam.GetViewMatrix();
+                Matrix4 V = MainCamera.GetViewMatrix();
                 GL.Uniform4(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "Light.Position"), V.Mult(L));
             }
 
@@ -390,7 +406,7 @@ namespace OpenGL_CS_Game
                 GL.UniformMatrix4(shaders[v.Material.ShaderName].GetUniform("ModelMatrix"), false, ref v.ModelMatrix);
 
             // Передаем шейдеру матрицу ModelViewMatrix, если шейдер поддерживает это.
-            Matrix4 MV = cam.GetViewMatrix() * v.ModelMatrix;
+            Matrix4 MV = MainCamera.GetViewMatrix() * v.ModelMatrix;
             if (shaders[v.Material.ShaderName].GetUniform("ModelViewMatrix") != -1)
                 GL.UniformMatrix4(shaders[v.Material.ShaderName].GetUniform("ModelViewMatrix"), false, ref MV);
 
@@ -411,7 +427,7 @@ namespace OpenGL_CS_Game
 
             // Передаем шейдеру позицию камеры, если шейдер поддерживает это.
             if (shaders[v.Material.ShaderName].GetUniform("WorldCameraPosition") != -1)
-                GL.Uniform3(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "WorldCameraPosition"), cam.Position);
+                GL.Uniform3(GL.GetUniformLocation(shaders[v.Material.ShaderName].ProgramID, "WorldCameraPosition"), MainCamera.Position);
 
             /////////ТУМАН/////////////////////////
             if (Fog.Enabled)
