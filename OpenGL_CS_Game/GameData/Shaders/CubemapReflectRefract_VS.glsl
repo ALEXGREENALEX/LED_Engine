@@ -6,6 +6,9 @@ layout (location = 1) in vec3 VertexNormal;
 out vec3 ReflectDir;
 out vec3 RefractDir;
 
+//Fog
+out vec3 Position;
+
 uniform float RefractiveIndex;  // Index of refraction
 
 uniform vec3 WorldCameraPosition;
@@ -20,6 +23,9 @@ void main()
 
     ReflectDir = reflect(-worldView, worldNorm);
     RefractDir = refract(-worldView, worldNorm, RefractiveIndex);
+	
+	//Fog
+    Position = vec3(MVP * vec4(VertexPosition, 1.0));
 	
     gl_Position = MVP * vec4(VertexPosition, 1.0);
 }
