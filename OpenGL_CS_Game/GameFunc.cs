@@ -270,13 +270,13 @@ namespace OpenGL_CS_Game
             obj_Keypad.Position = new Vector3(16f, 0f, 0f);
 
             Fog.Enabled = true;
-            int a = 30;
+            int a = 20;
             Cube[,] obj_cubes = new Cube[a, a];
             for (int i1 = 0; i1 < a; i1++)
                 for (int i2 = 0; i2 < a; i2++)
                 {
                     obj_cubes[i1, i2] = new Cube();
-                    obj_cubes[i1, i2].Material = materials["Fog_test"];
+                    obj_cubes[i1, i2].Material = materials["Refraction"];
                     obj_cubes[i1, i2].Position.X = (i1 - a / 2) * 4;
                     obj_cubes[i1, i2].Position.Z = (i2 - a / 2) * 4;
                     objects.Add(obj_cubes[i1, i2]);
