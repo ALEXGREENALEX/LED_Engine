@@ -9,7 +9,6 @@ namespace OpenGL_CS_Game
 {
     class ObjVolume : Volume
     {
-        public static float UnitsScale = 1.0f; // Система измерений
         Vector3[] vertices;
         Vector3[] normals;
         Vector2[] texturecoords;
@@ -209,9 +208,9 @@ namespace OpenGL_CS_Game
                         {
                             if (lineparts.Length >= 4)
                             {
-                                float x = float.Parse(lineparts[1]) * UnitsScale;
-                                float y = float.Parse(lineparts[2]) * UnitsScale;
-                                float z = float.Parse(lineparts[3]) * UnitsScale;
+                                float x = float.Parse(lineparts[1]) * Game.UnitsScale;
+                                float y = float.Parse(lineparts[2]) * Game.UnitsScale;
+                                float z = float.Parse(lineparts[3]) * Game.UnitsScale;
                                 Vertices.Add(new Vector3(x, y, z));
                                 break;
                             }

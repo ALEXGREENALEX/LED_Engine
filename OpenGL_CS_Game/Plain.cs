@@ -6,6 +6,8 @@ namespace OpenGL_CS_Game
 {
     class Plain : Volume
     {
+        float HalfSideLength = Game.UnitsScale * 50.0f;
+
         public Plain()
             : base()
         {
@@ -18,13 +20,27 @@ namespace OpenGL_CS_Game
             Material = new Material();
         }
 
+        public Plain(float SideLength)
+            : base()
+        {
+            HalfSideLength = SideLength / 2.0f * Game.UnitsScale;
+
+            VerticesCount = 4;
+            NormalsCount = 4;
+            IndexesCount = 6;
+            TextureCoordsCount = 4;
+            TangentsesCount = 4;
+
+            Material = new Material();
+        }
+
         public override Vector3[] GetVertices()
         {
             return new Vector3[] {
-                new Vector3(-0.5f, 0.0f, -0.5f), 
-                new Vector3(-0.5f, 0.0f, 0.5f),
-                new Vector3(0.5f, 0.0f, 0.5f),
-                new Vector3(0.5f, 0.0f, -0.5f)
+                new Vector3(-HalfSideLength,  HalfSideLength, -HalfSideLength),
+                new Vector3(-HalfSideLength,  HalfSideLength,  HalfSideLength),
+                new Vector3( HalfSideLength,  HalfSideLength,  HalfSideLength),
+                new Vector3( HalfSideLength,  HalfSideLength, -HalfSideLength)
             };
         }
 

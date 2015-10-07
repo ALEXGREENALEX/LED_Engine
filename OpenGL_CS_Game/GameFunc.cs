@@ -29,6 +29,8 @@ namespace OpenGL_CS_Game
         public static float zNear = 0.1f;
         public static float zFar = 10000.0f;
 
+        public static float UnitsScale = 1.0f; // Система измерений
+
         Vector2 LastMousePos;
 
         float time = 0.0f;
@@ -368,7 +370,7 @@ namespace OpenGL_CS_Game
         void initProgram()
         {
             // Устанавливаем систему измерений (1 юнит = 100 см)
-            ObjVolume.UnitsScale = 0.01f;
+            UnitsScale = 0.01f;
             // Загружаем конфигурацию и ресурсы
             LoadConfigAndResources();
 

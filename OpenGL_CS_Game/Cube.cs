@@ -6,6 +6,9 @@ namespace OpenGL_CS_Game
 {
     class Cube : Volume
     {
+        Vector4[] tangenses;
+        float HalfSideLength = Game.UnitsScale * 50.0f;
+
         public Cube()
             : base()
         {
@@ -22,7 +25,7 @@ namespace OpenGL_CS_Game
         public Cube(float SideLength)
             : base()
         {
-            HalfSideLength = SideLength / 2.0f;
+            HalfSideLength = SideLength / 2.0f * Game.UnitsScale;
 
             VerticesCount = 24;
             NormalsCount = 24;
@@ -33,9 +36,6 @@ namespace OpenGL_CS_Game
             tangenses = ObjVolume.CalcTangentses(GetVertices(), GetNormals(), GetTextureCoords(), GetIndexes());
             Material = new Material();
         }
-
-        Vector4[] tangenses;
-        float HalfSideLength = 0.5f;
         
         public override Vector3[] GetVertices()
         {
