@@ -21,13 +21,13 @@ namespace OpenGL_CS_Game
         bool UsePostEffects = true;
         Stopwatch StopWatch = new Stopwatch(); // Таймер для подсчета времени выполнения алгоритмов
 
-        uint IndexBufferId;
+        int IndexBufferId;
         int ActiveShader;
 
         public static Camera MainCamera = new Camera();
         public static float FOV = 70.0f;
-        public static float zNear = 0.3f;
-        public static float zFar = 1000000.0f;
+        public static float zNear = 0.1f;
+        public static float zFar = 10000.0f;
 
         Vector2 LastMousePos;
 
@@ -321,17 +321,17 @@ namespace OpenGL_CS_Game
             ObjVolume Pipe_X_1 = ObjVolume.LoadFromFile(Path.Combine(MeshesPaths[1], "Pipe_X.obj"));
             //Pipe_X_1.Material = materials["BrickWall"];
             Pipe_X_1.Material = Materials["Refraction"]; // Reflection Refraction
-            Pipe_X_1.Position.Y += 100;
+            Pipe_X_1.Position.Y += 1;
             Objects.Add(Pipe_X_1);
 
             ObjVolume Pipe_X_2 = ObjVolume.LoadFromFile(Path.Combine(MeshesPaths[1], "Pipe_X.obj"));
             Pipe_X_2.Material = Materials["Reflection"];
-            Pipe_X_2.Position.Y += 200;
+            Pipe_X_2.Position.Y += 2;
             Objects.Add(Pipe_X_2);
 
             ObjVolume obj_Keypad = ObjVolume.LoadFromFile(Path.Combine(MeshesPaths[1], "Keypad.obj"));
             obj_Keypad.Material = Materials["Keypad"];
-            obj_Keypad.Position = new Vector3(160f, 0f, 0f);
+            obj_Keypad.Position = new Vector3(1.6f, 0f, 0f);
             obj_Keypad.Scale = new Vector3(10f, 10f, 10f);
             Objects.Add(obj_Keypad);
 
@@ -342,21 +342,21 @@ namespace OpenGL_CS_Game
                 for (int i2 = 0; i2 < a; i2++)
                 {
                     prefab1.Objects[i1 * a + i2] = new Cube();
-                    prefab1.Objects[i1 * a + i2].Material = Materials["BrickWall"];
-                    prefab1.Objects[i1 * a + i2].Position.X = (i1 - a / 2) * 400;
-                    prefab1.Objects[i1 * a + i2].Position.Z = (i2 - a / 2) * 400;
+                    prefab1.Objects[i1 * a + i2].Material = Materials["Refraction"];
+                    prefab1.Objects[i1 * a + i2].Position.X = (i1 - a / 2) * 4;
+                    prefab1.Objects[i1 * a + i2].Position.Z = (i2 - a / 2) * 4;
                 }
             Prefabs.Add(prefab1);
 
             ObjVolume obj_Teapot = ObjVolume.LoadFromFile(Path.Combine(MeshesPaths[0], "Teapot.obj"));
             obj_Teapot.Material = Materials["TransparentRedGlass"];
-            obj_Teapot.Position.Z += 200;
+            obj_Teapot.Position.Z += 2;
             obj_Teapot.Scale = new Vector3(3f, 3f, 3f);
             Objects.Add(obj_Teapot);
 
             ObjVolume obj_Teapot2 = ObjVolume.LoadFromFile(Path.Combine(MeshesPaths[0], "Teapot.obj"));
             obj_Teapot2.Material = Materials["BrickWall"];
-            obj_Teapot2.Position.Z -= 200;
+            obj_Teapot2.Position.Z -= 2;
             obj_Teapot2.Scale = new Vector3(3f, 3f, 3f);
             Objects.Add(obj_Teapot2);
 
@@ -367,14 +367,16 @@ namespace OpenGL_CS_Game
 
         void initProgram()
         {
+            // Устанавливаем систему измерений (1 юнит = 100 см)
+            ObjVolume.UnitsScale = 0.01f;
             // Загружаем конфигурацию и ресурсы
             LoadConfigAndResources();
 
             // Настраиваем проекцию камеры
             MainCamera.SetProjectionMatrix(ProjectionTypes.Perspective, (float)ClientSize.Width, (float)ClientSize.Height, zNear, zFar, FOV);
-            MainCamera.MoveSpeed = 10f;
+            MainCamera.MoveSpeed = 0.1f;
 
-            GL.GenBuffers(1, out IndexBufferId);
+            IndexBufferId = GL.GenBuffer();
 
             // PostProcess Init - Create back-buffer, used for post-processing
             if (UsePostEffects)
@@ -397,7 +399,7 @@ namespace OpenGL_CS_Game
             //objects.Add(plain);
 
             // Отдаляем камеру от начала координат
-            MainCamera.Position = new Vector3(0.0f, 200.0f, 0.0f);
+            MainCamera.Position = new Vector3(0.0f, 2.0f, 0.0f);
         }
 
         void ResetCursor()
@@ -431,9 +433,9 @@ namespace OpenGL_CS_Game
             // Передаем шейдеру вектор Light Position, если шейдер поддерживает это.
             if (Shaders[v.Material.ShaderName].GetUniform("Light.Position") != -1)
             {
-                Vector4 L = new Vector4(1000.0f * (float)Math.Cos(Angle), 0.0f, 1000.0f * (float)Math.Sin(Angle), 1.0f);
+                Vector4 L = new Vector4(10.0f * (float)Math.Cos(Angle), 0.0f, 10.0f * (float)Math.Sin(Angle), 1.0f);
                 Matrix4 V = MainCamera.GetViewMatrix();
-                DebugObjects[0].Position = L.Xyz;
+                //DebugObjects[0].Position = L.Mult(V).Xyz;
                 GL.Uniform4(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "Light.Position"), L.Mult(V));
             }
 
@@ -497,11 +499,12 @@ namespace OpenGL_CS_Game
             if (Shaders[v.Material.ShaderName].GetUniform("WorldCameraPosition") != -1)
                 GL.Uniform3(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "WorldCameraPosition"), MainCamera.Position);
 
-            /////////ТУМАН/////////////////////////
+            #region Туман
+            if (Shaders[v.Material.ShaderName].GetUniform("FogEnabled") != -1)
+                GL.Uniform1(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "FogEnabled"), Convert.ToInt32(Fog.Enabled));
+
             if (Fog.Enabled)
             {
-                if (Shaders[v.Material.ShaderName].GetUniform("FogEnabled") != -1)
-                    GL.Uniform1(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "FogEnabled"), Convert.ToInt32(Fog.Enabled));
                 if (Shaders[v.Material.ShaderName].GetUniform("Fog.MaxDist") != -1)
                     GL.Uniform1(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "Fog.MaxDist"), Fog.MaxDistance);
                 if (Shaders[v.Material.ShaderName].GetUniform("Fog.MinDist") != -1)
@@ -509,9 +512,7 @@ namespace OpenGL_CS_Game
                 if (Shaders[v.Material.ShaderName].GetUniform("Fog.Color") != -1)
                     GL.Uniform3(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "Fog.Color"), Fog.Color);
             }
-            else
-                if (Shaders[v.Material.ShaderName].GetUniform("FogEnabled") != -1)
-                    GL.Uniform1(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "FogEnabled"), Convert.ToInt32(Fog.Enabled));
+            #endregion
 
             #region Передаем шейдеру VertexPosition, VertexNormal, VertexTexCoord, VertexTangent
             // Передаем шейдеру буфер позицый вертексов, если шейдер поддерживает это (должна быть 100% поддержка).

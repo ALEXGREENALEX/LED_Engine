@@ -86,7 +86,7 @@ namespace OpenGL_CS_Game
 
                 GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-                // Copy All Objects to DrawObjects
+                // Copy All Objects to DrawableObjects
                 DrawableObjects.Clear();
                 DrawableObjects.AddRange(Objects);
                 foreach (var pref in Prefabs)
