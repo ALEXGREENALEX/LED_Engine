@@ -32,19 +32,15 @@ TextureMinFilter:
 
 <Textures>
 	<Texture>
-		<Name>brick-wall</Name>
-		<File>brick-wall.jpg</File>
+		<Name></Name>
+		<File>checker.bmp</File>
+		<TextureMagFilter>Nearest</TextureMagFilter>
+		<TextureMinFilter>Nearest</TextureMinFilter>
 	</Texture>
 	<Texture>
-		<Name>brick-wall_N</Name>
-		<File>brick-wall_N.jpg</File>
-	</Texture>
-	<Texture>
-		<Name>Keypad</Name>
-		<File>Keypad.png</File>
-	</Texture>
-	<Texture>
-		<Name>Keypad_N</Name>
-		<File>Keypad_N.png</File>
+		<Name>DebugLight</Name>
+		<File>DebugLight.png</File>
+		<TextureMagFilter>Linear</TextureMagFilter>
+		<TextureMinFilter>Linear</TextureMinFilter>
 	</Texture>
 </Textures>

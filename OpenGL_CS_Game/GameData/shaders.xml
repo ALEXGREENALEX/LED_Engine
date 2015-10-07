@@ -5,24 +5,9 @@
 
 <Shaders>
 	<Shader>
-		<Name></Name>
-		<VertexShader>Default_VS.glsl</VertexShader>
-		<FragmentShader>Default_FS.glsl</FragmentShader>
-	</Shader>
-	<Shader>
-		<Name>DefaultTexture</Name>
-		<VertexShader>DefaultTexture_VS.glsl</VertexShader>
-		<FragmentShader>DefaultTexture_FS.glsl</FragmentShader>
-	</Shader>
-	<Shader>
 		<Name>PhongNormalMap</Name>
 		<VertexShader>PhongNormalMap_VS.glsl</VertexShader>
 		<FragmentShader>PhongNormalMap_FS.glsl</FragmentShader>
-	</Shader>
-	<Shader>
-		<Name>CubemapSky</Name>
-		<VertexShader>CubemapSky_VS.glsl</VertexShader>
-		<FragmentShader>CubemapSky_FS.glsl</FragmentShader>
 	</Shader>
 	<Shader>
 		<Name>ReflectRefract</Name>

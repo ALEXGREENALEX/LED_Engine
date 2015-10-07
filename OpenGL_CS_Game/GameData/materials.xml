@@ -29,27 +29,10 @@
 
 <Materials>
 	<Material>
-		<Name></Name>
-		<Shader></Shader>
-		<CullFace>False</CullFace>
-	</Material>
-	<Material>
-		<Name>Checker</Name>
-		<Shader>DefaultTexture</Shader>
-		<Texture></Texture>
-		<CullFace>False</CullFace>
-	</Material>
-	<Material>
 		<Name>TransparentRedGlass</Name>
 		<Shader></Shader>
 		<Color>1.0 0.0 0.0 0.5</Color>
 		<Transparent>True</Transparent>
-	</Material>
-	<Material>
-		<Name>SkyCubemap_Test</Name>
-		<Shader>CubemapSky</Shader>
-		<CubemapTexture>SkyCubemap_Test</CubemapTexture>
-		<CullFace>False</CullFace>
 	</Material>
 	<Material>
 		<Name>SkyCubemap_Storforsen</Name>

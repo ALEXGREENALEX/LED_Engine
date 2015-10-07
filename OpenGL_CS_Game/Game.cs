@@ -74,8 +74,11 @@ namespace OpenGL_CS_Game
             if (Focused)
             {
                 // FPS
-                FPS = 1.0 / e.Time;
-                Title = "FPS: " + FPS.ToString("0.00");
+                if (ShowFPS)
+                {
+                    FPS = 1.0 / e.Time;
+                    Title = "FPS: " + FPS.ToString("0.00");
+                }
 
                 // Bind FBO for PostProcess
                 if (UsePostEffects)
@@ -83,26 +86,34 @@ namespace OpenGL_CS_Game
 
                 GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
+                // Copy All Objects to DrawObjects
+                DrawableObjects.Clear();
+                DrawableObjects.AddRange(Objects);
+                foreach (var pref in Prefabs)
+                    DrawableObjects.AddRange(pref.Objects);
+                if (Debug)
+                    DrawableObjects.AddRange(DebugObjects);
+
                 #region Сортировка прозрачных объектов
-                for (int i = 0; i < objects.Count; i++)
-                    if (objects[i].Material.Transparent)
+                for (int i = 0; i < DrawableObjects.Count; i++)
+                    if (DrawableObjects[i].Material.Transparent)
                     {
-                        transparentObjects.Add(objects[i]);
-                        objects.RemoveAt(i);
+                        TransparentObjects.Add(DrawableObjects[i]);
+                        DrawableObjects.RemoveAt(i);
                         i--;
                     }
 
-                transparentObjects.Sort(delegate(Volume x, Volume y)
+                TransparentObjects.Sort(delegate(Volume x, Volume y)
                 {
                     return (y.Position - MainCamera.Position).Length.CompareTo((x.Position - MainCamera.Position).Length);
                 });
 
-                objects.AddRange(transparentObjects);
-                transparentObjects.Clear();
+                DrawableObjects.AddRange(TransparentObjects);
+                TransparentObjects.Clear();
                 #endregion
 
                 // Отрисовываем все объекты
-                foreach (Volume v in objects)
+                foreach (Volume v in DrawableObjects)
                 {
                     v.CalculateModelMatrix();
                     v.ViewProjectionMatrix = MainCamera.GetViewMatrix() * MainCamera.GetProjectionMatrix();
@@ -160,17 +171,17 @@ namespace OpenGL_CS_Game
                 // Проверяем нажатия клавиш каждый кадр, а не по прерыванию!
                 KeyboardState KbdState = OpenTK.Input.Keyboard.GetState();
                 if (KbdState.IsKeyDown(Key.W))
-                    MainCamera.Move(0f, 0.01f, 0f);
+                    MainCamera.Move(0f, 1.0f, 0f);
                 if (KbdState.IsKeyDown(Key.A))
-                    MainCamera.Move(-0.01f, 0f, 0f);
+                    MainCamera.Move(-1.0f, 0f, 0f);
                 if (KbdState.IsKeyDown(Key.S))
-                    MainCamera.Move(0f, -0.01f, 0f);
+                    MainCamera.Move(0f, -1.0f, 0f);
                 if (KbdState.IsKeyDown(Key.D))
-                    MainCamera.Move(0.01f, 0f, 0f);
+                    MainCamera.Move(1.0f, 0f, 0f);
                 if (KbdState.IsKeyDown(Key.E))
-                    MainCamera.Move(0f, 0f, 0.01f);
+                    MainCamera.Move(0f, 0f, 1.0f);
                 if (KbdState.IsKeyDown(Key.Q))
-                    MainCamera.Move(0f, 0f, -0.01f);
+                    MainCamera.Move(0f, 0f, -1.0f);
 
                 float camSens = 2.0f;
                 if (KbdState.IsKeyDown(Key.Left))
@@ -184,7 +195,8 @@ namespace OpenGL_CS_Game
 
                 // Обновляем позиции объектов
                 time += (float)e.Time;
-                objects[0].Rotation += new Vector3(0, -0.01f, 0);
+                //objects[0].Rotation += new Vector3(0, -0.01f, 0);
+                //Prefabs[0].Rotation = new Vector3(0.4f * (float)e.Time, 0.0f, 0.0f);
 
                 Angle += rotSpeed * (float)e.Time;
                 if (Angle > MathHelper.TwoPi)

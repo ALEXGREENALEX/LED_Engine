@@ -85,19 +85,19 @@ namespace OpenGL_CS_Game
             return texID;
         }
 
-        public static int LoadCubeMap(Bitmap[] CubeMapTextures)
+        public static int LoadCubemap(Bitmap[] CubemapTextures)
         {
-            if (CubeMapTextures.Length == 6)
+            if (CubemapTextures.Length == 6)
             {
                 // Изменяем, отображаем и вращаем текстуры
-                for (int i = 0; i < CubeMapTextures.Length; i++)
+                for (int i = 0; i < CubemapTextures.Length; i++)
                 {
                     if (i < 2 || i > 3)
-                        CubeMapTextures[i].RotateFlip(RotateFlipType.RotateNoneFlipX);
+                        CubemapTextures[i].RotateFlip(RotateFlipType.RotateNoneFlipX);
                     if (i == 2 || i == 3)
-                        CubeMapTextures[i].RotateFlip(RotateFlipType.Rotate270FlipY);
+                        CubemapTextures[i].RotateFlip(RotateFlipType.Rotate270FlipY);
                     if (i == 2)
-                        CubeMapTextures[i].RotateFlip(RotateFlipType.Rotate180FlipNone);
+                        CubemapTextures[i].RotateFlip(RotateFlipType.Rotate180FlipNone);
                 }
 
                 int texID = GL.GenTexture();
@@ -113,16 +113,16 @@ namespace OpenGL_CS_Game
 
                 // Allocate storage
                 GL.TexStorage2D(TextureTarget2d.TextureCubeMap, 1, SizedInternalFormat.Rgba8,
-                    CubeMapTextures[0].Width, CubeMapTextures[0].Height);
+                    CubemapTextures[0].Width, CubemapTextures[0].Height);
 
                 BitmapData data;
                 // Загружаем все текстуры граней
-                for (int i = 0; i < CubeMapTextures.Length; i++)
+                for (int i = 0; i < CubemapTextures.Length; i++)
                 {
-                    data = CubeMapTextures[i].LockBits(new System.Drawing.Rectangle(0, 0, CubeMapTextures[i].Width,
-                        CubeMapTextures[i].Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                    data = CubemapTextures[i].LockBits(new System.Drawing.Rectangle(0, 0, CubemapTextures[i].Width,
+                        CubemapTextures[i].Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                     GL.TexSubImage2D(targets[5 - i], 0, 0, 0, data.Width, data.Height, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
-                    CubeMapTextures[i].UnlockBits(data);
+                    CubemapTextures[i].UnlockBits(data);
                 }
 
                 GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
@@ -131,7 +131,7 @@ namespace OpenGL_CS_Game
                 GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
                 GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapR, (int)TextureWrapMode.ClampToEdge);
 
-                //GL.GenerateMipmap(GenerateMipmapTarget.TextureCubeMap);
+                //GL.GenerateMipmap(GenerateMipmapTarget.TextureCubemap);
                 return texID;
             }
             else

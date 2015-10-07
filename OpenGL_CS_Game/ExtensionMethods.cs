@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
+using System.Xml;
 using OpenTK;
 
 namespace OpenTK
@@ -68,5 +68,27 @@ namespace OpenTK
             result.W = Matrix.M14 * Vector.X + Matrix.M24 * Vector.Y + Matrix.M34 * Vector.Z + Matrix.M44 * Vector.W;
             return result;
         }
+
+        //public static XmlNodeList Append(this XmlNodeList ListBase, XmlNodeList List)
+        //{
+        //    XmlDocument doc = new XmlDocument();
+        //    doc.LoadXml(@"<MyXml></MyXml>");
+
+        //    XmlDocumentFragment xfrag = doc.CreateDocumentFragment();
+
+        //    for (int i = 0; i < ListBase.Count; i++)
+        //    {
+        //        xfrag.InnerXml = ListBase.Item(i).ParentNode.InnerXml;
+        //        doc.DocumentElement.AppendChild(xfrag);
+        //    }
+
+        //    for (int i = 0; i < List.Count; i++)
+        //    {
+        //        xfrag.InnerXml = List.Item(i).ParentNode.InnerXml;
+        //        doc.DocumentElement.AppendChild(xfrag);
+        //    }
+
+        //    return doc.DocumentElement.ChildNodes;
+        //}
     }
 }

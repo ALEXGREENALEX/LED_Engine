@@ -35,7 +35,7 @@ namespace OpenGL_CS_Game
         }
 
         Vector4[] tangenses;
-        float HalfSideLength = 0.5f;
+        float HalfSideLength = 50.0f;
 
         public override Vector3[] GetVertices()
         {

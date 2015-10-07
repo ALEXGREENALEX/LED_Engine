@@ -1,0 +1,54 @@
+﻿<!--Список материалов и их свойств
+	Name
+		string
+	Shader
+		string
+	Color
+		Vector4 RGBA;
+		Если не указать или оставить пустым - Случайній цвет;
+	Texture
+		string;
+		Колличество от 0 до 32
+	CullFace
+		bool
+		Не работает для Transparent=true - в прозрачном материале всегда
+		рендндерится задняя, а потом передняя стороні граней!
+	Transparent
+		bool
+	SpecularReflectivity
+		Vector3
+	AmbientReflectivity
+		Vector3
+	SpecularShininess
+		float
+	ReflectionFactor
+		float
+	RefractiveIndex
+		float
+-->
+
+<Materials>
+	<Material>
+		<Name></Name>
+		<Shader></Shader>
+		<CullFace>False</CullFace>
+	</Material>
+	<Material>
+		<Name>Checker</Name>
+		<Shader>DefaultTexture</Shader>
+		<Texture></Texture>
+		<CullFace>False</CullFace>
+	</Material>
+	<Material>
+		<Name>DebugLight</Name>
+		<Shader>DefaultTexture</Shader>
+		<Texture>DebugLight</Texture>
+		<CullFace>False</CullFace>
+	</Material>
+	<Material>
+		<Name>SkyCubemap_Default</Name>
+		<Shader>CubemapSky</Shader>
+		<CubemapTexture>SkyCubemap_Default</CubemapTexture>
+		<CullFace>False</CullFace>
+	</Material>
+</Materials>

@@ -2,16 +2,31 @@
 
 <Config>
 	<Title>OpenGL(OpenTK) C# Game</Title>
+	<Debug>true</Debug>
+	<ShowFPS>true</ShowFPS>
+	<UsePostEffects>true</UsePostEffects>
 	<Paths>
 		<GameData>GameData</GameData>
+		<EngineContent>Engine</EngineContent>
+		<EngineMeshes>Meshes</EngineMeshes>
+		<EngineShaders>Shaders</EngineShaders>
+		<EngineTextures>Textures</EngineTextures>
+		<EngineCubemapTextures>Cubemaps</EngineCubemapTextures>
+		
 		<Meshes>Meshes</Meshes>
 		<Shaders>Shaders</Shaders>
 		<Textures>Textures</Textures>
-		<CubeMapTextures>Cubemaps</CubeMapTextures>
+		<CubemapTextures>Cubemaps</CubemapTextures>
 	</Paths>
+	<EngineConfigFiles>
+		<Textures>Textures.xml</Textures>
+		<CubemapTextures>Cubemaps.xml</CubemapTextures>
+		<Materials>Materials.xml</Materials>
+		<Shaders>Shaders.xml</Shaders>
+	</EngineConfigFiles>
 	<ConfigFiles>
 		<Textures>Textures.xml</Textures>
-		<CubeMapTextures>Cubemaps.xml</CubeMapTextures>
+		<CubemapTextures>Cubemaps.xml</CubemapTextures>
 		<Materials>Materials.xml</Materials>
 		<Shaders>Shaders.xml</Shaders>
 	</ConfigFiles>

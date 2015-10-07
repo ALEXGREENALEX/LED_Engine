@@ -72,21 +72,21 @@ namespace OpenGL_CS_Game
             GL.ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            GL.UseProgram(Game.shaders[shaderName].ProgramID);
+            GL.UseProgram(Game.Shaders[shaderName].ProgramID);
 
             // Передаем параметры шейдерам пост процессов
-            if (Game.shaders[shaderName].GetUniform("texCoordOffset") != -1)
-                GL.Uniform2(GL.GetUniformLocation(Game.shaders[shaderName].ProgramID, "texCoordOffset"),
+            if (Game.Shaders[shaderName].GetUniform("texCoordOffset") != -1)
+                GL.Uniform2(GL.GetUniformLocation(Game.Shaders[shaderName].ProgramID, "texCoordOffset"),
                     new Vector2(1f / (float)ScreenWidth, 1f / (float)ScreenWidth));
 
             GL.BindTexture(TextureTarget.Texture2D, fbo_texture);
-            GL.Uniform1(Game.shaders[shaderName].GetAttribute("fbo_texture"), 0);
-            GL.EnableVertexAttribArray(Game.shaders[shaderName].GetAttribute("v_coord"));
+            GL.Uniform1(Game.Shaders[shaderName].GetAttribute("fbo_texture"), 0);
+            GL.EnableVertexAttribArray(Game.Shaders[shaderName].GetAttribute("v_coord"));
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, vbo_fbo_vertices);
-            GL.VertexAttribPointer(Game.shaders[shaderName].GetAttribute("v_coord"), 2, VertexAttribPointerType.Float, false, 0, 0);
+            GL.VertexAttribPointer(Game.Shaders[shaderName].GetAttribute("v_coord"), 2, VertexAttribPointerType.Float, false, 0, 0);
             GL.DrawArrays(PrimitiveType.TriangleStrip, 0, 4);
-            GL.DisableVertexAttribArray(Game.shaders[shaderName].GetAttribute("v_coord"));
+            GL.DisableVertexAttribArray(Game.Shaders[shaderName].GetAttribute("v_coord"));
         }
 
         public static void Rescale(int ScrWidth, int ScrHeight)

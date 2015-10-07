@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 using System.Text;
 using System.IO;
 using OpenTK.Graphics.OpenGL;
@@ -91,16 +92,23 @@ namespace OpenGL_CS_Game
 
         public void LoadShaderFromFile(String filename, ShaderType type)
         {
-            using (StreamReader sr = new StreamReader(filename))
+            try
             {
-                if (type == ShaderType.VertexShader)
+                using (StreamReader sr = new StreamReader(filename))
                 {
-                    loadShader(sr.ReadToEnd(), type, out VShaderID);
+                    if (type == ShaderType.VertexShader)
+                    {
+                        loadShader(sr.ReadToEnd(), type, out VShaderID);
+                    }
+                    else if (type == ShaderType.FragmentShader)
+                    {
+                        loadShader(sr.ReadToEnd(), type, out FShaderID);
+                    }
                 }
-                else if (type == ShaderType.FragmentShader)
-                {
-                    loadShader(sr.ReadToEnd(), type, out FShaderID);
-                }
+            }
+            catch
+            {
+                MessageBox.Show("\"LoadShaderFromFile\" Error!\n\n" + filename);
             }
         }
 

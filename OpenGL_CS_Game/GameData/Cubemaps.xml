@@ -1,4 +1,4 @@
-﻿<!--Список всех CubeMapTextures
+﻿<!--Список всех CubemapTextures
 	SubDir - Подпапка, для удобства, если нужно.
 	Texture[6] = {X+, X-, Y+, Y-, Z+, Z-}
 	SideSize - Сторона текстуры
@@ -6,19 +6,8 @@
 		Это ускоряет загрузку, но замедляет рендер при больших текстурах.
 -->
 
-<CubeMapTextures>
-	<CubeMapTexture>
-		<Name>SkyCubemap_Test</Name>
-		<SubDir>Test</SubDir>
-		<Texture>posx.jpg</Texture>
-		<Texture>negx.jpg</Texture>
-		<Texture>posy.jpg</Texture>
-		<Texture>negy.jpg</Texture>
-		<Texture>posz.jpg</Texture>
-		<Texture>negz.jpg</Texture>
-		<SideSize></SideSize>
-	</CubeMapTexture>
-	<CubeMapTexture>
+<CubemapTextures>
+	<CubemapTexture>
 		<Name>SkyCubemap_Storforsen</Name>
 		<SubDir>Storforsen</SubDir>
 		<Texture>posx.jpg</Texture>
@@ -28,8 +17,8 @@
 		<Texture>posz.jpg</Texture>
 		<Texture>negz.jpg</Texture>
 		<SideSize></SideSize>
-	</CubeMapTexture>
-	<CubeMapTexture>
+	</CubemapTexture>
+	<CubemapTexture>
 		<Name>SkyCubemap_Yokohama3</Name>
 		<SubDir>Yokohama3</SubDir>
 		<Texture>posx.jpg</Texture>
@@ -39,9 +28,9 @@
 		<Texture>posz.jpg</Texture>
 		<Texture>negz.jpg</Texture>
 		<SideSize></SideSize>
-	</CubeMapTexture>
-	<!--Далее идут CubeMaps для отражений-->
-	<CubeMapTexture>
+	</CubemapTexture>
+	<!--Далее идут Cubemaps для отражений-->
+	<CubemapTexture>
 		<Name>Cubemap_Storforsen</Name>
 		<SubDir>Storforsen</SubDir>
 		<Texture>posx.jpg</Texture>
@@ -51,5 +40,5 @@
 		<Texture>posz.jpg</Texture>
 		<Texture>negz.jpg</Texture>
 		<SideSize>256</SideSize>
-	</CubeMapTexture>
-</CubeMapTextures>
+	</CubemapTexture>
+</CubemapTextures>
