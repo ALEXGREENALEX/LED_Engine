@@ -54,7 +54,6 @@ namespace OpenGL_CS_Game
                 {
                     Objects[i].Rotation += rotation;
                     // Лажа с поворотом, нужно доделать
-                    //Objects[i].Position = (Objects[i].Position - position) + position;
                 }
             }
         }

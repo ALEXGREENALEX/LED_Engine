@@ -25,7 +25,7 @@ namespace OpenGL_CS_Game
         int ActiveShader;
 
         public static Camera MainCamera = new Camera();
-        public static float FOV = 70.0f;
+        public static float FOV = 50.0f;
         public static float zNear = 0.1f;
         public static float zFar = 10000.0f;
 
@@ -344,7 +344,7 @@ namespace OpenGL_CS_Game
                 for (int i2 = 0; i2 < a; i2++)
                 {
                     prefab1.Objects[i1 * a + i2] = new Cube();
-                    prefab1.Objects[i1 * a + i2].Material = Materials["Refraction"];
+                    prefab1.Objects[i1 * a + i2].Material = Materials["BrickWall"]; //Refraction
                     prefab1.Objects[i1 * a + i2].Position.X = (i1 - a / 2) * 4;
                     prefab1.Objects[i1 * a + i2].Position.Z = (i2 - a / 2) * 4;
                 }
@@ -432,20 +432,30 @@ namespace OpenGL_CS_Game
                 GL.UseProgram(ActiveShader);
             }
 
+            // Передаем шейдеру вектор LightPosition, если шейдер поддерживает это.
+            if (Shaders[v.Material.ShaderName].GetUniform("LightPosition") != -1)
+            {
+                Vector3 LightPosition = new Vector3(1.0f * (float)Math.Cos(Angle), 0.0f, 1.0f * (float)Math.Sin(Angle));
+                DebugObjects[0].Position = LightPosition;
+                GL.Uniform3(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "LightPosition"), LightPosition);
+            }
+
             // Передаем шейдеру вектор Light Position, если шейдер поддерживает это.
             if (Shaders[v.Material.ShaderName].GetUniform("Light.Position") != -1)
             {
-                Vector4 L = new Vector4(10.0f * (float)Math.Cos(Angle), 0.0f, 10.0f * (float)Math.Sin(Angle), 1.0f);
-                Matrix4 V = MainCamera.GetViewMatrix();
-                //DebugObjects[0].Position = L.Mult(V).Xyz;
-                GL.Uniform4(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "Light.Position"), L.Mult(V));
+                Vector4 LightVector = new Vector4(10.0f * (float)Math.Cos(Angle), 0.0f, 10.0f * (float)Math.Sin(Angle), 1.0f);
+                Matrix4 ViewMartix = MainCamera.GetViewMatrix();
+                Vector4 LightResust = LightVector.Mult(ViewMartix);
+                //Vector4 LightResust = ViewMartix.Mult(LightVector);
+                DebugObjects[0].Position = LightResust.Xyz;
+                GL.Uniform4(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "Light.Position"), LightResust);
             }
 
             // Передаем шейдеру вектор Light Intensity, если шейдер поддерживает это.
             if (Shaders[v.Material.ShaderName].GetUniform("Light.Intensity") != -1)
                 GL.Uniform3(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "Light.Intensity"), 0.9f, 0.9f, 0.9f);
 
-            // Передаем шейдеру вектор Specular reflectivity, если шейдер поддерживает это.
+            // Передаем шейдеру вектор Diffuse reflectivity, если шейдер поддерживает это.
             if (Shaders[v.Material.ShaderName].GetUniform("Material.Kd") != -1)
                 GL.Uniform3(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "Material.Kd"), new Vector3(0.9f, 0.5f, 0.3f));
 
@@ -477,19 +487,30 @@ namespace OpenGL_CS_Game
             if (Shaders[v.Material.ShaderName].GetUniform("ModelMatrix") != -1)
                 GL.UniformMatrix4(Shaders[v.Material.ShaderName].GetUniform("ModelMatrix"), false, ref v.ModelMatrix);
 
+            //// Передаем шейдеру матрицу ViewMatrix, если шейдер поддерживает это.
+            //if (Shaders[v.Material.ShaderName].GetUniform("ViewMatrix") != -1)
+            //{
+            //    Matrix4 V = MainCamera.GetViewMatrix();
+            //    GL.UniformMatrix4(Shaders[v.Material.ShaderName].GetUniform("ViewMatrix"), false, ref V);
+            //}
+
+            //// Передаем шейдеру матрицу ProjectionMatrix, если шейдер поддерживает это.
+            //if (Shaders[v.Material.ShaderName].GetUniform("ProjectionMatrix") != -1)
+            //{
+            //    Matrix4 P = MainCamera.GetProjectionMatrix();
+            //    GL.UniformMatrix4(Shaders[v.Material.ShaderName].GetUniform("ProjectionMatrix"), false, ref P);
+            //}
+
             // Передаем шейдеру матрицу ModelViewMatrix, если шейдер поддерживает это.
-            Matrix4 MV = MainCamera.GetViewMatrix() * v.ModelMatrix;
+            Matrix4 MV = v.ModelMatrix * MainCamera.GetViewMatrix();
+            //MV.Transpose();
             if (Shaders[v.Material.ShaderName].GetUniform("ModelViewMatrix") != -1)
                 GL.UniformMatrix4(Shaders[v.Material.ShaderName].GetUniform("ModelViewMatrix"), false, ref MV);
 
-            //// Передаем шейдеру матрицу ProjectionMatrix, если шейдер поддерживает это.
-            //if (shaders[v.Material.ShaderName].GetUniform("ProjectionMatrix") != -1)
-            //    GL.UniformMatrix4(shaders[v.Material.ShaderName].GetUniform("ProjectionMatrix"), false, ref ProjectionMatrix);
-
-            // Передаем шейдеру матрицу NormalMatrix, если шейдер поддерживает это.
+            // Передаем шейдеру матрицу NormalMatrix (MV3x3), если шейдер поддерживает это.
             if (Shaders[v.Material.ShaderName].GetUniform("NormalMatrix") != -1)
             {
-                Matrix3 NM = new Matrix3(MV.Row0.Xyz, MV.Row1.Xyz, MV.Row2.Xyz);
+                Matrix3 NM = new Matrix3(MV);
                 GL.UniformMatrix3(Shaders[v.Material.ShaderName].GetUniform("NormalMatrix"), false, ref NM);
             }
 
@@ -521,7 +542,7 @@ namespace OpenGL_CS_Game
             if (Shaders[v.Material.ShaderName].GetAttribute("VertexPosition") != -1)
             {
                 GL.BindBuffer(BufferTarget.ArrayBuffer, Shaders[v.Material.ShaderName].GetBuffer("VertexPosition"));
-                GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(v.GetVertices().Length * Vector3.SizeInBytes), v.GetVertices(), BufferUsageHint.StaticDraw);
+                GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(v.VerticesCount * Vector3.SizeInBytes), v.GetVertices(), BufferUsageHint.StaticDraw);
                 GL.VertexAttribPointer(Shaders[v.Material.ShaderName].GetAttribute("VertexPosition"), 3, VertexAttribPointerType.Float, false, 0, 0);
                 GL.EnableVertexAttribArray(Shaders[v.Material.ShaderName].GetAttribute("VertexPosition"));
             }
@@ -530,7 +551,7 @@ namespace OpenGL_CS_Game
             if (Shaders[v.Material.ShaderName].GetAttribute("VertexNormal") != -1)
             {
                 GL.BindBuffer(BufferTarget.ArrayBuffer, Shaders[v.Material.ShaderName].GetBuffer("VertexNormal"));
-                GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(v.GetNormals().Length * Vector3.SizeInBytes), v.GetNormals(), BufferUsageHint.StaticDraw);
+                GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(v.NormalsCount * Vector3.SizeInBytes), v.GetNormals(), BufferUsageHint.StaticDraw);
                 GL.VertexAttribPointer(Shaders[v.Material.ShaderName].GetAttribute("VertexNormal"), 3, VertexAttribPointerType.Float, false, 0, 0);
                 GL.EnableVertexAttribArray(Shaders[v.Material.ShaderName].GetAttribute("VertexNormal"));
             }
@@ -539,7 +560,7 @@ namespace OpenGL_CS_Game
             if (Shaders[v.Material.ShaderName].GetAttribute("VertexTexCoord") != -1)
             {
                 GL.BindBuffer(BufferTarget.ArrayBuffer, Shaders[v.Material.ShaderName].GetBuffer("VertexTexCoord"));
-                GL.BufferData<Vector2>(BufferTarget.ArrayBuffer, (IntPtr)(v.GetTextureCoords().Length * Vector2.SizeInBytes), v.GetTextureCoords(), BufferUsageHint.StaticDraw);
+                GL.BufferData<Vector2>(BufferTarget.ArrayBuffer, (IntPtr)(v.UVsCount * Vector2.SizeInBytes), v.GetUVs(), BufferUsageHint.StaticDraw);
                 GL.VertexAttribPointer(Shaders[v.Material.ShaderName].GetAttribute("VertexTexCoord"), 2, VertexAttribPointerType.Float, false, 0, 0);
                 GL.EnableVertexAttribArray(Shaders[v.Material.ShaderName].GetAttribute("VertexTexCoord"));
             }
@@ -548,17 +569,19 @@ namespace OpenGL_CS_Game
             if (Shaders[v.Material.ShaderName].GetAttribute("VertexTangent") != -1)
             {
                 GL.BindBuffer(BufferTarget.ArrayBuffer, Shaders[v.Material.ShaderName].GetBuffer("VertexTangent"));
-                GL.BufferData<Vector4>(BufferTarget.ArrayBuffer, (IntPtr)(v.GetTangentses().Length * Vector4.SizeInBytes), v.GetTangentses(), BufferUsageHint.StaticDraw);
-                GL.BindVertexArray(0);
+                GL.BufferData<Vector4>(BufferTarget.ArrayBuffer, (IntPtr)(v.TangentsCount * Vector4.SizeInBytes), v.GetTangents(), BufferUsageHint.StaticDraw);
+
+                GL.VertexAttribPointer(Shaders[v.Material.ShaderName].GetAttribute("VertexTangent"), 4, VertexAttribPointerType.Float, false, 0, 0);
+                GL.EnableVertexAttribArray(Shaders[v.Material.ShaderName].GetAttribute("VertexTangent"));
             }
             #endregion
             #endregion
 
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, IndexBufferId);
-            GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(v.GetIndexes().Length * sizeof(int)), v.GetIndexes(), BufferUsageHint.StaticDraw);
+            GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(v.IndecesCount * sizeof(int)), v.GetIndeces(), BufferUsageHint.StaticDraw);
 
             GL.BindVertexArray(Shaders[v.Material.ShaderName].GetAttribute("VertexPosition"));
-            GL.DrawElements(BeginMode.Triangles, v.IndexesCount, DrawElementsType.UnsignedInt, 0);
+            GL.DrawElements(BeginMode.Triangles, v.IndecesCount, DrawElementsType.UnsignedInt, 0);
         }
     }
 }

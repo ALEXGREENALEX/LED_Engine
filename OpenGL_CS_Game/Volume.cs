@@ -12,10 +12,10 @@ namespace OpenGL_CS_Game
         public Vector3 Scale = Vector3.One;
 
         public virtual int VerticesCount { get; set; }
-        public virtual int TextureCoordsCount { get; set; }
+        public virtual int UVsCount { get; set; }
         public virtual int NormalsCount { get; set; }
-        public virtual int IndexesCount { get; set; }
-        public virtual int TangentsesCount { get; set; }
+        public virtual int IndecesCount { get; set; }
+        public virtual int TangentsCount { get; set; }
         public virtual Material Material { get; set; }
         
         public Matrix4 ModelMatrix = Matrix4.Identity;
@@ -23,10 +23,10 @@ namespace OpenGL_CS_Game
         public Matrix4 ModelViewProjectionMatrix = Matrix4.Identity;
 
         public abstract Vector3[] GetVertices();
-        public abstract Vector2[] GetTextureCoords();
+        public abstract Vector2[] GetUVs();
         public abstract Vector3[] GetNormals();
-        public abstract int[] GetIndexes(int offset = 0);
-        public abstract Vector4[] GetTangentses();
+        public abstract int[] GetIndeces(int offset = 0);
+        public abstract Vector4[] GetTangents();
         public abstract void CalculateModelMatrix();
     }
 }

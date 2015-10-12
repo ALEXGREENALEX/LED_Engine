@@ -16,9 +16,9 @@ namespace OpenTK
         public static Vector3 Mult(this Vector3 Vector, Matrix3 Matrix)
         {
             Vector3 result = new Vector3();
-            result.X = Vector.X * Matrix.M11 + Vector.Y * Matrix.M12 + Vector.Z * Matrix.M13;
-            result.Y = Vector.X * Matrix.M21 + Vector.Y * Matrix.M22 + Vector.Z * Matrix.M23;
-            result.Z = Vector.X * Matrix.M31 + Vector.Y * Matrix.M32 + Vector.Z * Matrix.M33;
+            result.X = Vector.X * Matrix.M11 + Vector.Y * Matrix.M21 + Vector.Z * Matrix.M31;
+            result.Y = Vector.X * Matrix.M12 + Vector.Y * Matrix.M22 + Vector.Z * Matrix.M32;
+            result.Z = Vector.X * Matrix.M13 + Vector.Y * Matrix.M23 + Vector.Z * Matrix.M33;
             return result;
         }
 
@@ -31,9 +31,9 @@ namespace OpenTK
         public static Vector3 Mult(this Matrix3 Matrix, Vector3 Vector)
         {
             Vector3 result = new Vector3();
-            result.X = Matrix.M11 * Vector.X + Matrix.M21 * Vector.Y + Matrix.M31 * Vector.Z;
-            result.Y = Matrix.M12 * Vector.X + Matrix.M22 * Vector.Y + Matrix.M32 * Vector.Z;
-            result.Z = Matrix.M13 * Vector.X + Matrix.M23 * Vector.Y + Matrix.M33 * Vector.Z;
+            result.X = Matrix.M11 * Vector.X + Matrix.M12 * Vector.Y + Matrix.M13 * Vector.Z;
+            result.Y = Matrix.M21 * Vector.X + Matrix.M22 * Vector.Y + Matrix.M23 * Vector.Z;
+            result.Z = Matrix.M31 * Vector.X + Matrix.M32 * Vector.Y + Matrix.M33 * Vector.Z;
             return result;
         }
 
@@ -46,10 +46,10 @@ namespace OpenTK
         public static Vector4 Mult(this Vector4 Vector, Matrix4 Matrix)
         {
             Vector4 result = new Vector4();
-            result.X = Vector.X * Matrix.M11 + Vector.Y * Matrix.M12 + Vector.Z * Matrix.M13 + Vector.W * Matrix.M14;
-            result.Y = Vector.X * Matrix.M21 + Vector.Y * Matrix.M22 + Vector.Z * Matrix.M23 + Vector.W * Matrix.M24;
-            result.Z = Vector.X * Matrix.M31 + Vector.Y * Matrix.M32 + Vector.Z * Matrix.M33 + Vector.W * Matrix.M34;
-            result.W = Vector.X * Matrix.M41 + Vector.Y * Matrix.M42 + Vector.Z * Matrix.M43 + Vector.W * Matrix.M44;
+            result.X = Vector.X * Matrix.M11 + Vector.Y * Matrix.M21 + Vector.Z * Matrix.M31 + Vector.W * Matrix.M41;
+            result.Y = Vector.X * Matrix.M12 + Vector.Y * Matrix.M22 + Vector.Z * Matrix.M32 + Vector.W * Matrix.M42;
+            result.Z = Vector.X * Matrix.M13 + Vector.Y * Matrix.M23 + Vector.Z * Matrix.M33 + Vector.W * Matrix.M43;
+            result.W = Vector.X * Matrix.M14 + Vector.Y * Matrix.M24 + Vector.Z * Matrix.M34 + Vector.W * Matrix.M44;
             return result;
         }
 
@@ -62,10 +62,10 @@ namespace OpenTK
         public static Vector4 Mult(this Matrix4 Matrix, Vector4 Vector)
         {
             Vector4 result = new Vector4();
-            result.X = Matrix.M11 * Vector.X + Matrix.M21 * Vector.Y + Matrix.M31 * Vector.Z + Matrix.M41 * Vector.W;
-            result.Y = Matrix.M12 * Vector.X + Matrix.M22 * Vector.Y + Matrix.M32 * Vector.Z + Matrix.M42 * Vector.W;
-            result.Z = Matrix.M13 * Vector.X + Matrix.M23 * Vector.Y + Matrix.M33 * Vector.Z + Matrix.M43 * Vector.W;
-            result.W = Matrix.M14 * Vector.X + Matrix.M24 * Vector.Y + Matrix.M34 * Vector.Z + Matrix.M44 * Vector.W;
+            result.X = Matrix.M11 * Vector.X + Matrix.M12 * Vector.Y + Matrix.M13 * Vector.Z + Matrix.M14 * Vector.W;
+            result.Y = Matrix.M21 * Vector.X + Matrix.M22 * Vector.Y + Matrix.M23 * Vector.Z + Matrix.M24 * Vector.W;
+            result.Z = Matrix.M31 * Vector.X + Matrix.M32 * Vector.Y + Matrix.M33 * Vector.Z + Matrix.M34 * Vector.W;
+            result.W = Matrix.M41 * Vector.X + Matrix.M42 * Vector.Y + Matrix.M43 * Vector.Z + Matrix.M44 * Vector.W;
             return result;
         }
 

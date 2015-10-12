@@ -6,6 +6,7 @@ namespace OpenGL_CS_Game
 {
     class Plain : Volume
     {
+        Vector4[] tangents;
         float HalfSideLength = Game.UnitsScale * 50.0f;
 
         public Plain()
@@ -13,10 +14,11 @@ namespace OpenGL_CS_Game
         {
             VerticesCount = 4;
             NormalsCount = 4;
-            IndexesCount = 6;
-            TextureCoordsCount = 4;
-            TangentsesCount = 4;
+            IndecesCount = 6;
+            UVsCount = 4;
+            TangentsCount = 4;
 
+            ObjVolume.ComputeTangentBasis(GetVertices(), GetNormals(), GetUVs(), out tangents);
             Material = new Material();
         }
 
@@ -27,10 +29,11 @@ namespace OpenGL_CS_Game
 
             VerticesCount = 4;
             NormalsCount = 4;
-            IndexesCount = 6;
-            TextureCoordsCount = 4;
-            TangentsesCount = 4;
+            IndecesCount = 6;
+            UVsCount = 4;
+            TangentsCount = 4;
 
+            ObjVolume.ComputeTangentBasis(GetVertices(), GetNormals(), GetUVs(), out tangents);
             Material = new Material();
         }
 
@@ -51,11 +54,10 @@ namespace OpenGL_CS_Game
                 new Vector3(0.0f, -1.0f, 0.0f),
                 new Vector3(0.0f, -1.0f, 0.0f),
                 new Vector3(0.0f, -1.0f, 0.0f),
-
             };
         }
 
-        public override int[] GetIndexes(int offset = 0)
+        public override int[] GetIndeces(int offset = 0)
         {
             int[] inds = new int[] { 0, 1, 2, 0, 2, 3 };
 
@@ -66,7 +68,7 @@ namespace OpenGL_CS_Game
             return inds;
         }
 
-        public override Vector2[] GetTextureCoords()
+        public override Vector2[] GetUVs()
         {
             return new Vector2[] {
                 new Vector2(0.0f, 1.0f),
@@ -76,14 +78,9 @@ namespace OpenGL_CS_Game
             };
         }
 
-        public override Vector4[] GetTangentses()
+        public override Vector4[] GetTangents()
         {
-            return new Vector4[] {
-                new Vector4(1.0f, 0.0f, 0.0f, -1.0f),
-                new Vector4(1.0f, 0.0f, 0.0f, -1.0f),
-                new Vector4(1.0f, 0.0f, 0.0f, -1.0f),
-                new Vector4(1.0f, 0.0f, 0.0f, -1.0f)
-            };
+            return tangents;
         }
 
         public override void CalculateModelMatrix()
