@@ -33,7 +33,7 @@ namespace OpenGL_CS_Game
             /* Depth buffer */
             rbo_depth = GL.GenRenderbuffer();
             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, rbo_depth);
-            GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.DepthComponent16, ScreenWidth, ScreenHeight);
+            GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.DepthComponent, ScreenWidth, ScreenHeight);
             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, 0);
 
             /* Framebuffer to link everything together */
@@ -75,9 +75,9 @@ namespace OpenGL_CS_Game
             GL.UseProgram(Game.Shaders[shaderName].ProgramID);
 
             // Передаем параметры шейдерам пост процессов
-            if (Game.Shaders[shaderName].GetUniform("texCoordOffset") != -1)
-                GL.Uniform2(GL.GetUniformLocation(Game.Shaders[shaderName].ProgramID, "texCoordOffset"),
-                    new Vector2(1f / (float)ScreenWidth, 1f / (float)ScreenWidth));
+            if (Game.Shaders[shaderName].GetUniform("ScreenSize") != -1)
+                GL.Uniform2(GL.GetUniformLocation(Game.Shaders[shaderName].ProgramID, "ScreenSize"),
+                    new Vector2((float)ScreenWidth, (float)ScreenWidth));
 
             GL.BindTexture(TextureTarget.Texture2D, fbo_texture);
             GL.Uniform1(Game.Shaders[shaderName].GetAttribute("fbo_texture"), 0);
@@ -102,11 +102,11 @@ namespace OpenGL_CS_Game
             GL.BindTexture(TextureTarget.Texture2D, 0);
 
             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, rbo_depth);
-            GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.DepthComponent16, ScreenWidth, ScreenHeight);
+            GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.DepthComponent, ScreenWidth, ScreenHeight);
             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, 0);
         }
 
-        public static void FreeResources()
+        public static void Free()
         {
             GL.DeleteBuffer(vbo_fbo_vertices);
             GL.DeleteRenderbuffer(rbo_depth);

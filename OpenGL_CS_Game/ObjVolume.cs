@@ -4,21 +4,57 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using OpenTK;
+using OpenTK.Graphics.OpenGL;
 
 namespace OpenGL_CS_Game
 {
     class ObjVolume : Volume
     {
+        int indexBufferID, vertexBufferID, normalBufferID, uvBufferID, tangentBufferID;
         int[] indeces;
-        Vector2[] uvs;
         Vector3[] vertices, normals;
+        Vector2[] uvs;
         Vector4[] tangents;
 
         public ObjVolume()
             : base()
         {
             Material = new Material();
+
+            GenBuffers();
         }
+
+        public override void GenBuffers()
+        {
+            FreeBuffers();
+
+            indexBufferID = GL.GenBuffer();
+            vertexBufferID = GL.GenBuffer();
+            normalBufferID = GL.GenBuffer();
+            uvBufferID = GL.GenBuffer();
+            tangentBufferID = GL.GenBuffer();
+        }
+
+        public override void FreeBuffers()
+        {
+            GL.DeleteBuffer(indexBufferID);
+            GL.DeleteBuffer(vertexBufferID);
+            GL.DeleteBuffer(normalBufferID);
+            GL.DeleteBuffer(uvBufferID);
+            GL.DeleteBuffer(tangentBufferID);
+
+            indexBufferID = 0;
+            vertexBufferID = 0;
+            normalBufferID = 0;
+            uvBufferID = 0;
+            tangentBufferID = 0;
+        }
+
+        public override int IndexBufferID { get { return vertexBufferID; } }
+        public override int VertexBufferID { get { return indexBufferID; } }
+        public override int NormalBufferID { get { return normalBufferID; } }
+        public override int UVBufferID { get { return uvBufferID; } }
+        public override int TangentBufferID { get { return tangentBufferID; } }
 
         public override int VerticesCount { get { return vertices.Length; } }
         public override int NormalsCount { get { return normals.Length; } }
@@ -26,28 +62,16 @@ namespace OpenGL_CS_Game
         public override int UVsCount { get { return uvs.Length; } }
         public override int TangentsCount { get { return tangents.Length; } }
 
-        /// <summary>
-        /// Получить вершины этого объекта
-        /// </summary>
-        /// <returns></returns>
         public override Vector3[] GetVertices()
         {
             return vertices;
         }
 
-        /// <summary>
-        /// Получить нормали этого объекта
-        /// </summary>
-        /// <returns></returns>
         public override Vector3[] GetNormals()
         {
             return normals;
         }
 
-        /// <summary>
-        /// Получить индексы что-бы нарисовать этот объект
-        /// </summary>
-        /// <returns>Array of indices offset to match buffered data</returns>
         public override int[] GetIndeces(int offset = 0)
         {
             int[] inds = new int[indeces.Length];
@@ -58,10 +82,6 @@ namespace OpenGL_CS_Game
             return inds;
         }
 
-        /// <summary>
-        /// Получить текстурные координаты
-        /// </summary>
-        /// <returns></returns>
         public override Vector2[] GetUVs()
         {
             return uvs;
@@ -130,19 +150,11 @@ namespace OpenGL_CS_Game
             tan2Accum = null;
         }
 
-        /// <summary>
-        /// Рассчитывает матрицу модели из трансформаций
-        /// </summary>
         public override void CalculateModelMatrix()
         {
             ModelMatrix = Matrix4.CreateScale(Scale) * Matrix4.CreateRotationX(Rotation.X) * Matrix4.CreateRotationY(Rotation.Y) * Matrix4.CreateRotationZ(Rotation.Z) * Matrix4.CreateTranslation(Position);
         }
 
-        /// <summary>
-        /// Загрузить модель из файла
-        /// </summary>
-        /// <param name="filename">Имя файла</param>
-        /// <returns>ObjVolume загружаемой моджели</returns>
         public static ObjVolume LoadFromFile(string filename)
         {
             ObjVolume obj = new ObjVolume();
@@ -317,6 +329,9 @@ namespace OpenGL_CS_Game
 
             ComputeTangentBasis(vol.vertices, vol.normals, vol.uvs, out vol.tangents);
 
+            BindBuffer_BufferData(vol);
+
+            //Cleanup
             Vertices = null;
             UVs = null;
             Normals = null;
@@ -324,6 +339,26 @@ namespace OpenGL_CS_Game
             FacesT = null;
             FacesN = null;
             return vol;
+        }
+
+        public static void BindBuffer_BufferData(Volume vol)
+        {
+            GL.BindBuffer(BufferTarget.ArrayBuffer, vol.IndexBufferID);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(vol.IndecesCount * sizeof(int)), vol.GetIndeces(), BufferUsageHint.StaticDraw);
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, vol.VertexBufferID);
+            GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(vol.VerticesCount * Vector3.SizeInBytes), vol.GetVertices(), BufferUsageHint.StaticDraw);
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, vol.NormalBufferID);
+            GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(vol.NormalsCount * Vector3.SizeInBytes), vol.GetNormals(), BufferUsageHint.StaticDraw);
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, vol.UVBufferID);
+            GL.BufferData<Vector2>(BufferTarget.ArrayBuffer, (IntPtr)(vol.UVsCount * Vector2.SizeInBytes), vol.GetUVs(), BufferUsageHint.StaticDraw);
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, vol.TangentBufferID);
+            GL.BufferData<Vector4>(BufferTarget.ArrayBuffer, (IntPtr)(vol.TangentsCount * Vector4.SizeInBytes), vol.GetTangents(), BufferUsageHint.StaticDraw);
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
         }
     }
 }

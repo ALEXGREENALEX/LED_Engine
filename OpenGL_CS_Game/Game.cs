@@ -195,8 +195,8 @@ namespace OpenGL_CS_Game
 
                 // Обновляем позиции объектов
                 time += (float)e.Time;
-                //objects[0].Rotation += new Vector3(0, -0.01f, 0);
-                //Prefabs[0].Rotation = new Vector3(0.4f * (float)e.Time, 0.0f, 0.0f);
+
+                SkyCube.Position = MainCamera.Position;
 
                 Angle += rotSpeed * (float)e.Time;
                 if (Angle > MathHelper.TwoPi)

@@ -1,5 +1,6 @@
-attribute vec2 v_coord;
-varying vec2 f_texcoord;
+#version 330
+in vec2 v_coord;
+out vec2 f_texcoord;
 
 void main(void)
 {

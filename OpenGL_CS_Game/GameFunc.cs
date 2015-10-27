@@ -21,15 +21,16 @@ namespace OpenGL_CS_Game
         bool UsePostEffects = true;
         Stopwatch StopWatch = new Stopwatch(); // Таймер для подсчета времени выполнения алгоритмов
 
-        int IndexBufferId;
         int ActiveShader;
 
+        public static float UnitsScale = 1.0f; // Система измерений (это значение по умолчанию, 1 unit = 1 см)
+        
         public static Camera MainCamera = new Camera();
+        public static Cube SkyCube = null;
         public static float FOV = 50.0f;
         public static float zNear = 0.1f;
-        public static float zFar = 10000.0f;
+        public static float zFar = 100000.0f;
 
-        public static float UnitsScale = 1.0f; // Система измерений 1 unit = 1 см
 
         Vector2 LastMousePos;
 
@@ -338,7 +339,7 @@ namespace OpenGL_CS_Game
             Objects.Add(obj_Keypad);
 
             Fog.Enabled = true;
-            int a = 24;
+            int a = 33;
             Prefab prefab1 = new Prefab(new Cube[a * a]);
             for (int i1 = 0; i1 < a; i1++)
                 for (int i2 = 0; i2 < a; i2++)
@@ -369,7 +370,7 @@ namespace OpenGL_CS_Game
 
         void initProgram()
         {
-            // Устанавливаем систему измерений (1 юнит = 100 см)
+            // Устанавливаем систему измерений (1 unit = 100 см)
             UnitsScale = 0.01f;
             // Загружаем конфигурацию и ресурсы
             LoadConfigAndResources();
@@ -378,11 +379,9 @@ namespace OpenGL_CS_Game
             MainCamera.SetProjectionMatrix(ProjectionTypes.Perspective, (float)ClientSize.Width, (float)ClientSize.Height, zNear, zFar, FOV);
             MainCamera.MoveSpeed = 0.1f;
 
-            IndexBufferId = GL.GenBuffer();
-
             // PostProcess Init - Create back-buffer, used for post-processing
             if (UsePostEffects)
-                PostProcess.Init("PostProcessFXAA", Width, Height);
+                PostProcess.Init("PostProcess", Width, Height);
 
             // Включаем тест глубины
             GL.Enable(EnableCap.DepthTest);
@@ -393,12 +392,13 @@ namespace OpenGL_CS_Game
             //GL.BlendFuncSeparate(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha, BlendingFactorSrc.One, BlendingFactorDest.One);
 
             // Создаем примитивы
-            Cube cube = new Cube(zFar, true);
-            cube.Material = Materials["SkyCubemap_Storforsen"];
-            Objects.Add(cube);
+            SkyCube = new Cube(zFar, true);
+            SkyCube.Material = Materials["SkyCubemap_Storforsen"];
+            Objects.Add(SkyCube);
 
-            //Plain plain = new Plain();
-            //objects.Add(plain);
+            Plain plain = new Plain(100f);
+            plain.Position.Y = -0.5f;
+            Objects.Add(plain);
 
             // Отдаляем камеру от начала координат
             MainCamera.Position = new Vector3(0.0f, 2.0f, 0.0f);
@@ -536,61 +536,45 @@ namespace OpenGL_CS_Game
                     GL.Uniform3(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "Fog.Color"), Fog.Color);
             }
             #endregion
+            #endregion
 
             #region Передаем шейдеру VertexPosition, VertexNormal, VertexTexCoord, VertexTangent
+            Shaders[v.Material.ShaderName].EnableVertexAttribArrays();
+
             // Передаем шейдеру буфер позицый вертексов, если шейдер поддерживает это (должна быть 100% поддержка).
             if (Shaders[v.Material.ShaderName].GetAttribute("VertexPosition") != -1)
             {
-                GL.BindBuffer(BufferTarget.ArrayBuffer, Shaders[v.Material.ShaderName].GetBuffer("VertexPosition"));
-                GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(v.VerticesCount * Vector3.SizeInBytes), v.GetVertices(), BufferUsageHint.StaticDraw);
+                GL.BindBuffer(BufferTarget.ArrayBuffer, v.VertexBufferID);
                 GL.VertexAttribPointer(Shaders[v.Material.ShaderName].GetAttribute("VertexPosition"), 3, VertexAttribPointerType.Float, false, 0, 0);
-                GL.EnableVertexAttribArray(Shaders[v.Material.ShaderName].GetAttribute("VertexPosition"));
             }
 
             // Передаем шейдеру буфер нормалей, если шейдер поддерживает это.
             if (Shaders[v.Material.ShaderName].GetAttribute("VertexNormal") != -1)
             {
-                GL.BindBuffer(BufferTarget.ArrayBuffer, Shaders[v.Material.ShaderName].GetBuffer("VertexNormal"));
-                GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(v.NormalsCount * Vector3.SizeInBytes), v.GetNormals(), BufferUsageHint.StaticDraw);
+                GL.BindBuffer(BufferTarget.ArrayBuffer, v.NormalBufferID);
                 GL.VertexAttribPointer(Shaders[v.Material.ShaderName].GetAttribute("VertexNormal"), 3, VertexAttribPointerType.Float, false, 0, 0);
-                GL.EnableVertexAttribArray(Shaders[v.Material.ShaderName].GetAttribute("VertexNormal"));
             }
 
             // Передаем шейдеру буфер текстурных координат, если шейдер поддерживает это.
             if (Shaders[v.Material.ShaderName].GetAttribute("VertexTexCoord") != -1)
             {
-                GL.BindBuffer(BufferTarget.ArrayBuffer, Shaders[v.Material.ShaderName].GetBuffer("VertexTexCoord"));
-                GL.BufferData<Vector2>(BufferTarget.ArrayBuffer, (IntPtr)(v.UVsCount * Vector2.SizeInBytes), v.GetUVs(), BufferUsageHint.StaticDraw);
+                GL.BindBuffer(BufferTarget.ArrayBuffer, v.UVBufferID);
                 GL.VertexAttribPointer(Shaders[v.Material.ShaderName].GetAttribute("VertexTexCoord"), 2, VertexAttribPointerType.Float, false, 0, 0);
-                GL.EnableVertexAttribArray(Shaders[v.Material.ShaderName].GetAttribute("VertexTexCoord"));
             }
 
             // Передаем шейдеру буфер тангенсов, если шейдер поддерживает это.
             if (Shaders[v.Material.ShaderName].GetAttribute("VertexTangent") != -1)
             {
-                GL.BindBuffer(BufferTarget.ArrayBuffer, Shaders[v.Material.ShaderName].GetBuffer("VertexTangent"));
-                GL.BufferData<Vector4>(BufferTarget.ArrayBuffer, (IntPtr)(v.TangentsCount * Vector4.SizeInBytes), v.GetTangents(), BufferUsageHint.StaticDraw);
-
+                GL.BindBuffer(BufferTarget.ArrayBuffer, v.TangentBufferID);
                 GL.VertexAttribPointer(Shaders[v.Material.ShaderName].GetAttribute("VertexTangent"), 4, VertexAttribPointerType.Float, false, 0, 0);
-                GL.EnableVertexAttribArray(Shaders[v.Material.ShaderName].GetAttribute("VertexTangent"));
             }
             #endregion
-            #endregion
 
-            //GL.BindBuffer(BufferTarget.ElementArrayBuffer, IndexBufferId);
-            //GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(v.IndecesCount * sizeof(int)), v.GetIndeces(), BufferUsageHint.StaticDraw);
-            //GL.BindVertexArray(Shaders[v.Material.ShaderName].GetAttribute("VertexPosition"));
-            //GL.DrawElements(PrimitiveType.Triangles, v.IndecesCount, DrawElementsType.UnsignedInt, 0);
-
-            GL.BindBuffer(BufferTarget.ArrayBuffer, IndexBufferId);
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(v.IndecesCount * sizeof(int)), v.GetIndeces(), BufferUsageHint.StaticDraw);
-            GL.VertexAttribPointer(Shaders[v.Material.ShaderName].GetAttribute("VertexPosition"), v.IndecesCount, VertexAttribPointerType.Float, false, 0, 0);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, v.IndexBufferID);
             GL.DrawArrays(PrimitiveType.Triangles, 0, v.IndecesCount);
 
-            //GL.DisableVertexAttribArray(Shaders[v.Material.ShaderName].GetAttribute("VertexPosition"));
-            //GL.DisableVertexAttribArray(Shaders[v.Material.ShaderName].GetAttribute("VertexNormal"));
-            //GL.DisableVertexAttribArray(Shaders[v.Material.ShaderName].GetAttribute("VertexTexCoord"));
-            //GL.DisableVertexAttribArray(Shaders[v.Material.ShaderName].GetAttribute("VertexTangent"));
+            // If you're using VAOs, then you should not disable attribute arrays, as they are encapsulated in the VAO.
+            //Shaders[v.Material.ShaderName].DisableVertexAttribArrays();
         }
     }
 }

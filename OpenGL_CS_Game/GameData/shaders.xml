@@ -14,14 +14,10 @@
 		<VertexShader>CubemapReflectRefract_VS.glsl</VertexShader>
 		<FragmentShader>CubemapReflectRefract_FS.glsl</FragmentShader>
 	</Shader>
+	<!--Postprocess-->
 	<Shader>
-		<Name>PostProcessSepia</Name>
+		<Name>PostProcess</Name>
 		<VertexShader>PostProcess_VS.glsl</VertexShader>
-		<FragmentShader>PostProcessSepia_FS.glsl</FragmentShader>
-	</Shader>
-	<Shader>
-		<Name>PostProcessFXAA</Name>
-		<VertexShader>PostProcess_VS.glsl</VertexShader>
-		<FragmentShader>PostProcessFXAA_FS.glsl</FragmentShader>
+		<FragmentShader>PostProcess_FS.glsl</FragmentShader>
 	</Shader>
 </Shaders>

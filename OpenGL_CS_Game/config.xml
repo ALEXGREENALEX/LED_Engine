@@ -4,9 +4,10 @@
 	<Title>OpenGL(OpenTK) C# Game</Title>
 	<Debug>true</Debug>
 	<ShowFPS>true</ShowFPS>
-	<UsePostEffects>true</UsePostEffects>
+	<UsePostEffects>false</UsePostEffects>
 	<Paths>
 		<GameData>GameData</GameData>
+		
 		<EngineContent>Engine</EngineContent>
 		<EngineMeshes>Meshes</EngineMeshes>
 		<EngineShaders>Shaders</EngineShaders>

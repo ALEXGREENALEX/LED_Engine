@@ -75,7 +75,6 @@ namespace OpenGL_CS_Game
             GL.ShaderSource(address, code);
             GL.CompileShader(address);
             GL.AttachShader(ProgramID, address);
-            Console.WriteLine(GL.GetShaderInfoLog(address));
         }
 
         public void LoadShaderFromString(String code, ShaderType type)
