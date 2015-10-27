@@ -29,7 +29,7 @@ namespace OpenGL_CS_Game
         public static float zNear = 0.1f;
         public static float zFar = 10000.0f;
 
-        public static float UnitsScale = 1.0f; // Система измерений
+        public static float UnitsScale = 1.0f; // Система измерений 1 unit = 1 см
 
         Vector2 LastMousePos;
 
@@ -393,7 +393,7 @@ namespace OpenGL_CS_Game
             //GL.BlendFuncSeparate(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha, BlendingFactorSrc.One, BlendingFactorDest.One);
 
             // Создаем примитивы
-            Cube cube = new Cube(zFar);
+            Cube cube = new Cube(zFar, true);
             cube.Material = Materials["SkyCubemap_Storforsen"];
             Objects.Add(cube);
 
@@ -577,11 +577,20 @@ namespace OpenGL_CS_Game
             #endregion
             #endregion
 
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, IndexBufferId);
-            GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(v.IndecesCount * sizeof(int)), v.GetIndeces(), BufferUsageHint.StaticDraw);
+            //GL.BindBuffer(BufferTarget.ElementArrayBuffer, IndexBufferId);
+            //GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(v.IndecesCount * sizeof(int)), v.GetIndeces(), BufferUsageHint.StaticDraw);
+            //GL.BindVertexArray(Shaders[v.Material.ShaderName].GetAttribute("VertexPosition"));
+            //GL.DrawElements(PrimitiveType.Triangles, v.IndecesCount, DrawElementsType.UnsignedInt, 0);
 
-            GL.BindVertexArray(Shaders[v.Material.ShaderName].GetAttribute("VertexPosition"));
-            GL.DrawElements(BeginMode.Triangles, v.IndecesCount, DrawElementsType.UnsignedInt, 0);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, IndexBufferId);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(v.IndecesCount * sizeof(int)), v.GetIndeces(), BufferUsageHint.StaticDraw);
+            GL.VertexAttribPointer(Shaders[v.Material.ShaderName].GetAttribute("VertexPosition"), v.IndecesCount, VertexAttribPointerType.Float, false, 0, 0);
+            GL.DrawArrays(PrimitiveType.Triangles, 0, v.IndecesCount);
+
+            //GL.DisableVertexAttribArray(Shaders[v.Material.ShaderName].GetAttribute("VertexPosition"));
+            //GL.DisableVertexAttribArray(Shaders[v.Material.ShaderName].GetAttribute("VertexNormal"));
+            //GL.DisableVertexAttribArray(Shaders[v.Material.ShaderName].GetAttribute("VertexTexCoord"));
+            //GL.DisableVertexAttribArray(Shaders[v.Material.ShaderName].GetAttribute("VertexTangent"));
         }
     }
 }

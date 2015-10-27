@@ -81,12 +81,14 @@ namespace OpenGL_CS_Game
 
             GL.BindTexture(TextureTarget.Texture2D, fbo_texture);
             GL.Uniform1(Game.Shaders[shaderName].GetAttribute("fbo_texture"), 0);
+            
             GL.EnableVertexAttribArray(Game.Shaders[shaderName].GetAttribute("v_coord"));
-
+            
             GL.BindBuffer(BufferTarget.ArrayBuffer, vbo_fbo_vertices);
             GL.VertexAttribPointer(Game.Shaders[shaderName].GetAttribute("v_coord"), 2, VertexAttribPointerType.Float, false, 0, 0);
             GL.DrawArrays(PrimitiveType.TriangleStrip, 0, 4);
-            GL.DisableVertexAttribArray(Game.Shaders[shaderName].GetAttribute("v_coord"));
+            
+            //GL.DisableVertexAttribArray(Game.Shaders[shaderName].GetAttribute("v_coord"));
         }
 
         public static void Rescale(int ScrWidth, int ScrHeight)

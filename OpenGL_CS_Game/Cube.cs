@@ -7,123 +7,223 @@ namespace OpenGL_CS_Game
     class Cube : Volume
     {
         Vector4[] tangents;
-        float HalfSideLength = Game.UnitsScale * 50.0f;
+        float HalfSideLength = Game.UnitsScale * 50.0f; // По умолчанию куб со сторонами 100 см.
+        bool Flipped = false;
 
-        public Cube()
+        public Cube(bool FlipPolygons = false)
             : base()
         {
-            VerticesCount = 24;
-            NormalsCount = 24;
+            Flipped = FlipPolygons;
+            VerticesCount = 36;
+            NormalsCount = 36;
             IndecesCount = 36;
-            UVsCount = 24;
-            TangentsCount = 24;
+            UVsCount = 36;
+            TangentsCount = 36;
 
             ObjVolume.ComputeTangentBasis(GetVertices(), GetNormals(), GetUVs(), out tangents);
             Material = new Material();
         }
 
-        public Cube(float SideLength)
+        public Cube(float SideLength, bool FlipPolygons = false)
             : base()
         {
             HalfSideLength = SideLength / 2.0f * Game.UnitsScale;
+            Flipped = FlipPolygons;
 
-            VerticesCount = 24;
-            NormalsCount = 24;
+            VerticesCount = 36;
+            NormalsCount = 36;
             IndecesCount = 36;
-            UVsCount = 24;
-            TangentsCount = 24;
+            UVsCount = 36;
+            TangentsCount = 36;
 
             ObjVolume.ComputeTangentBasis(GetVertices(), GetNormals(), GetUVs(), out tangents);
             Material = new Material();
         }
-        
+
         public override Vector3[] GetVertices()
         {
-            return new Vector3[] {
-                // Front
-                new Vector3(-HalfSideLength, -HalfSideLength,  HalfSideLength),
-                new Vector3( HalfSideLength, -HalfSideLength,  HalfSideLength),
-                new Vector3( HalfSideLength,  HalfSideLength,  HalfSideLength),
-                new Vector3(-HalfSideLength,  HalfSideLength,  HalfSideLength),
+            if (Flipped)
+                return new Vector3[] {
+                    new Vector3(-HalfSideLength, -HalfSideLength,  HalfSideLength),
+                    new Vector3( HalfSideLength, -HalfSideLength,  HalfSideLength),
+                    new Vector3( HalfSideLength, -HalfSideLength, -HalfSideLength),
+                    new Vector3( HalfSideLength, -HalfSideLength, -HalfSideLength),
+                    new Vector3(-HalfSideLength, -HalfSideLength, -HalfSideLength),
+                    new Vector3(-HalfSideLength, -HalfSideLength,  HalfSideLength),
+                    new Vector3(-HalfSideLength,  HalfSideLength,  HalfSideLength),
+                    new Vector3(-HalfSideLength,  HalfSideLength, -HalfSideLength),
+                    new Vector3( HalfSideLength,  HalfSideLength, -HalfSideLength),
+                    new Vector3( HalfSideLength,  HalfSideLength, -HalfSideLength),
+                    new Vector3( HalfSideLength,  HalfSideLength,  HalfSideLength),
+                    new Vector3(-HalfSideLength,  HalfSideLength,  HalfSideLength),
+                    new Vector3(-HalfSideLength, -HalfSideLength,  HalfSideLength),
+                    new Vector3(-HalfSideLength,  HalfSideLength,  HalfSideLength),
+                    new Vector3( HalfSideLength,  HalfSideLength,  HalfSideLength),
+                    new Vector3( HalfSideLength,  HalfSideLength,  HalfSideLength),
+                    new Vector3( HalfSideLength, -HalfSideLength,  HalfSideLength),
+                    new Vector3(-HalfSideLength, -HalfSideLength,  HalfSideLength),
+                    new Vector3( HalfSideLength, -HalfSideLength,  HalfSideLength),
+                    new Vector3( HalfSideLength,  HalfSideLength,  HalfSideLength),
+                    new Vector3( HalfSideLength,  HalfSideLength, -HalfSideLength),
+                    new Vector3( HalfSideLength,  HalfSideLength, -HalfSideLength),
+                    new Vector3( HalfSideLength, -HalfSideLength, -HalfSideLength),
+                    new Vector3( HalfSideLength, -HalfSideLength,  HalfSideLength),
+                    new Vector3( HalfSideLength, -HalfSideLength, -HalfSideLength),
+                    new Vector3( HalfSideLength,  HalfSideLength, -HalfSideLength),
+                    new Vector3(-HalfSideLength,  HalfSideLength, -HalfSideLength),
+                    new Vector3(-HalfSideLength,  HalfSideLength, -HalfSideLength),
+                    new Vector3(-HalfSideLength, -HalfSideLength, -HalfSideLength),
+                    new Vector3( HalfSideLength, -HalfSideLength, -HalfSideLength),
+                    new Vector3(-HalfSideLength, -HalfSideLength, -HalfSideLength),
+                    new Vector3(-HalfSideLength,  HalfSideLength, -HalfSideLength),
+                    new Vector3(-HalfSideLength,  HalfSideLength,  HalfSideLength),
+                    new Vector3(-HalfSideLength,  HalfSideLength,  HalfSideLength),
+                    new Vector3(-HalfSideLength, -HalfSideLength,  HalfSideLength),
+                    new Vector3(-HalfSideLength, -HalfSideLength, -HalfSideLength) };
+            else
+                return new Vector3[] {
+                    new Vector3(-HalfSideLength, -HalfSideLength,  HalfSideLength),
+                    new Vector3(-HalfSideLength, -HalfSideLength, -HalfSideLength),
+                    new Vector3( HalfSideLength, -HalfSideLength, -HalfSideLength),
+                    new Vector3( HalfSideLength, -HalfSideLength, -HalfSideLength),
+                    new Vector3( HalfSideLength, -HalfSideLength,  HalfSideLength),
+                    new Vector3(-HalfSideLength, -HalfSideLength,  HalfSideLength),
 
-                // Right
-                new Vector3( HalfSideLength, -HalfSideLength,  HalfSideLength),
-                new Vector3( HalfSideLength, -HalfSideLength, -HalfSideLength),
-                new Vector3( HalfSideLength,  HalfSideLength, -HalfSideLength),
-                new Vector3( HalfSideLength,  HalfSideLength,  HalfSideLength),
+                    new Vector3(-HalfSideLength,  HalfSideLength,  HalfSideLength),
+                    new Vector3( HalfSideLength,  HalfSideLength,  HalfSideLength),
+                    new Vector3( HalfSideLength,  HalfSideLength, -HalfSideLength),
+                    new Vector3( HalfSideLength,  HalfSideLength, -HalfSideLength),
+                    new Vector3(-HalfSideLength,  HalfSideLength, -HalfSideLength),
+                    new Vector3(-HalfSideLength,  HalfSideLength,  HalfSideLength),
 
-                // Back
-                new Vector3(-HalfSideLength, -HalfSideLength, -HalfSideLength),
-                new Vector3(-HalfSideLength,  HalfSideLength, -HalfSideLength),
-                new Vector3( HalfSideLength,  HalfSideLength, -HalfSideLength),
-                new Vector3( HalfSideLength, -HalfSideLength, -HalfSideLength),
+                    new Vector3(-HalfSideLength, -HalfSideLength,  HalfSideLength),
+                    new Vector3( HalfSideLength, -HalfSideLength,  HalfSideLength),
+                    new Vector3( HalfSideLength,  HalfSideLength,  HalfSideLength),
+                    new Vector3( HalfSideLength,  HalfSideLength,  HalfSideLength),
+                    new Vector3(-HalfSideLength,  HalfSideLength,  HalfSideLength),
+                    new Vector3(-HalfSideLength, -HalfSideLength,  HalfSideLength),
 
-                // Left
-                new Vector3(-HalfSideLength, -HalfSideLength,  HalfSideLength),
-                new Vector3(-HalfSideLength,  HalfSideLength,  HalfSideLength),
-                new Vector3(-HalfSideLength,  HalfSideLength, -HalfSideLength),
-                new Vector3(-HalfSideLength, -HalfSideLength, -HalfSideLength),
+                    new Vector3( HalfSideLength, -HalfSideLength,  HalfSideLength),
+                    new Vector3( HalfSideLength, -HalfSideLength, -HalfSideLength),
+                    new Vector3( HalfSideLength,  HalfSideLength, -HalfSideLength),
+                    new Vector3( HalfSideLength,  HalfSideLength, -HalfSideLength),
+                    new Vector3( HalfSideLength,  HalfSideLength,  HalfSideLength),
+                    new Vector3( HalfSideLength, -HalfSideLength,  HalfSideLength),
 
-                // Bottom
-                new Vector3(-HalfSideLength, -HalfSideLength,  HalfSideLength), 
-                new Vector3(-HalfSideLength, -HalfSideLength, -HalfSideLength), 
-                new Vector3( HalfSideLength, -HalfSideLength, -HalfSideLength),
-                new Vector3( HalfSideLength, -HalfSideLength,  HalfSideLength),
+                    new Vector3( HalfSideLength, -HalfSideLength, -HalfSideLength),
+                    new Vector3(-HalfSideLength, -HalfSideLength, -HalfSideLength),
+                    new Vector3(-HalfSideLength,  HalfSideLength, -HalfSideLength),
+                    new Vector3(-HalfSideLength,  HalfSideLength, -HalfSideLength),
+                    new Vector3( HalfSideLength,  HalfSideLength, -HalfSideLength),
+                    new Vector3( HalfSideLength, -HalfSideLength, -HalfSideLength),
 
-                // Top
-                new Vector3(-HalfSideLength,  HalfSideLength,  HalfSideLength), 
-                new Vector3( HalfSideLength,  HalfSideLength,  HalfSideLength),
-                new Vector3( HalfSideLength,  HalfSideLength, -HalfSideLength),
-                new Vector3(-HalfSideLength,  HalfSideLength, -HalfSideLength)
-            };
+                    new Vector3(-HalfSideLength, -HalfSideLength, -HalfSideLength),
+                    new Vector3(-HalfSideLength, -HalfSideLength,  HalfSideLength),
+                    new Vector3(-HalfSideLength,  HalfSideLength,  HalfSideLength),
+                    new Vector3(-HalfSideLength,  HalfSideLength,  HalfSideLength),
+                    new Vector3(-HalfSideLength,  HalfSideLength, -HalfSideLength),
+                    new Vector3(-HalfSideLength, -HalfSideLength, -HalfSideLength) };
         }
 
         public override Vector3[] GetNormals()
         {
-            return new Vector3[] {
-                new Vector3(0.0f, 0.0f, 1.0f),
-                new Vector3(0.0f, 0.0f, 1.0f),
-                new Vector3(0.0f, 0.0f, 1.0f),
-                new Vector3(0.0f, 0.0f, 1.0f),
+            if (Flipped)
+                return new Vector3[] {
+                    new Vector3( 0,  1,  0),
+                    new Vector3( 0,  1,  0),
+                    new Vector3( 0,  1,  0),
+                    new Vector3( 0,  1,  0),
+                    new Vector3( 0,  1,  0),
+                    new Vector3( 0,  1,  0),
 
-                new Vector3(1.0f, 0.0f, 0.0f),
-                new Vector3(1.0f, 0.0f, 0.0f),
-                new Vector3(1.0f, 0.0f, 0.0f),
-                new Vector3(1.0f, 0.0f, 0.0f),
+                    new Vector3( 0, -1,  0),
+                    new Vector3( 0, -1,  0),
+                    new Vector3( 0, -1,  0),
+                    new Vector3( 0, -1,  0),
+                    new Vector3( 0, -1,  0),
+                    new Vector3( 0, -1,  0),
 
-                new Vector3(0.0f, 0.0f, -1.0f),
-                new Vector3(0.0f, 0.0f, -1.0f),
-                new Vector3(0.0f, 0.0f, -1.0f),
-                new Vector3(0.0f, 0.0f, -1.0f),
+                    new Vector3( 0,  0, -1),
+                    new Vector3( 0,  0, -1),
+                    new Vector3( 0,  0, -1),
+                    new Vector3( 0,  0, -1),
+                    new Vector3( 0,  0, -1),
+                    new Vector3( 0,  0, -1),
 
-                new Vector3(-1.0f, 0.0f, 0.0f),
-                new Vector3(-1.0f, 0.0f, 0.0f),
-                new Vector3(-1.0f, 0.0f, 0.0f),
-                new Vector3(-1.0f, 0.0f, 0.0f),
+                    new Vector3(-1,  0,  0),
+                    new Vector3(-1,  0,  0),
+                    new Vector3(-1,  0,  0),
+                    new Vector3(-1,  0,  0),
+                    new Vector3(-1,  0,  0),
+                    new Vector3(-1,  0,  0),
 
-                new Vector3(0.0f, -1.0f, 0.0f),
-                new Vector3(0.0f, -1.0f, 0.0f),
-                new Vector3(0.0f, -1.0f, 0.0f),
-                new Vector3(0.0f, -1.0f, 0.0f),
+                    new Vector3( 0,  0,  1),
+                    new Vector3( 0,  0,  1),
+                    new Vector3( 0,  0,  1),
+                    new Vector3( 0,  0,  1),
+                    new Vector3( 0,  0,  1),
+                    new Vector3( 0,  0,  1),
 
-                new Vector3(0.0f, 1.0f, 0.0f),
-                new Vector3(0.0f, 1.0f, 0.0f),
-                new Vector3(0.0f, 1.0f, 0.0f),
-                new Vector3(0.0f, 1.0f, 0.0f),
+                    new Vector3( 1,  0,  0),
+                    new Vector3( 1,  0,  0),
+                    new Vector3( 1,  0,  0),
+                    new Vector3( 1,  0,  0),
+                    new Vector3( 1,  0,  0),
+                    new Vector3( 1,  0,  0) };
+            else
+                return new Vector3[] {
+                    new Vector3( 0, -1,  0),
+                    new Vector3( 0, -1,  0),
+                    new Vector3( 0, -1,  0),
+                    new Vector3( 0, -1,  0),
+                    new Vector3( 0, -1,  0),
+                    new Vector3( 0, -1,  0),
 
-            };
+                    new Vector3( 0,  1,  0),
+                    new Vector3( 0,  1,  0),
+                    new Vector3( 0,  1,  0),
+                    new Vector3( 0,  1,  0),
+                    new Vector3( 0,  1,  0),
+                    new Vector3( 0,  1,  0),
+
+                    new Vector3( 0,  0,  1),
+                    new Vector3( 0,  0,  1),
+                    new Vector3( 0,  0,  1),
+                    new Vector3( 0,  0,  1),
+                    new Vector3( 0,  0,  1),
+                    new Vector3( 0,  0,  1),
+
+                    new Vector3( 1,  0,  0),
+                    new Vector3( 1,  0,  0),
+                    new Vector3( 1,  0,  0),
+                    new Vector3( 1,  0,  0),
+                    new Vector3( 1,  0,  0),
+                    new Vector3( 1,  0,  0),
+
+                    new Vector3( 0,  0, -1),
+                    new Vector3( 0,  0, -1),
+                    new Vector3( 0,  0, -1),
+                    new Vector3( 0,  0, -1),
+                    new Vector3( 0,  0, -1),
+                    new Vector3( 0,  0, -1),
+
+                    new Vector3(-1,  0,  0),
+                    new Vector3(-1,  0,  0),
+                    new Vector3(-1,  0,  0),
+                    new Vector3(-1,  0,  0),
+                    new Vector3(-1,  0,  0),
+                    new Vector3(-1,  0,  0) };
         }
 
         public override int[] GetIndeces(int offset = 0)
         {
             int[] inds = new int[] {
-                0,1,2,0,2,3,
-                4,5,6,4,6,7,
-                8,9,10,8,10,11,
-                12,13,14,12,14,15,
-                16,17,18,16,18,19,
-                20,21,22,20,22,23
-            };
+                0, 1, 2, 3, 4, 5,
+                6, 7, 8, 9, 10, 11,
+                12, 13, 14, 15, 16, 17,
+                18, 19, 20, 21, 22, 23,
+                24, 25, 26, 27, 28, 29,
+                30, 31, 32, 33, 34, 35 };
 
             if (offset != 0)
                 for (int i = 0; i < inds.Length; i++)
@@ -134,37 +234,82 @@ namespace OpenGL_CS_Game
 
         public override Vector2[] GetUVs()
         {
-            return new Vector2[] {
-                new Vector2(0.0f, 0.0f),
-                new Vector2(0.0f, 1.0f),
-                new Vector2(1.0f, 1.0f),
-                new Vector2(1.0f, 0.0f),
- 
-                new Vector2(0.0f, 0.0f),
-                new Vector2(0.0f, 1.0f),
-                new Vector2(1.0f, 1.0f),
-                new Vector2(1.0f, 0.0f),
- 
-                new Vector2(0.0f, 0.0f),
-                new Vector2(0.0f, 1.0f),
-                new Vector2(1.0f, 1.0f),
-                new Vector2(1.0f, 0.0f),
- 
-                new Vector2(0.0f, 0.0f),
-                new Vector2(0.0f, 1.0f),
-                new Vector2(1.0f, 1.0f),
-                new Vector2(1.0f, 0.0f),
- 
-                new Vector2(0.0f, 0.0f),
-                new Vector2(0.0f, 1.0f),
-                new Vector2(1.0f, 1.0f),
-                new Vector2(1.0f, 0.0f),
- 
-                new Vector2(0.0f, 0.0f),
-                new Vector2(0.0f, 1.0f),
-                new Vector2(1.0f, 1.0f),
-                new Vector2(1.0f, 0.0f)
-            };
+            if (Flipped)
+                return new Vector2[] {
+                    new Vector2(1, 0),
+                    new Vector2(0, 0),
+                    new Vector2(0, 1),
+                    new Vector2(0, 1),
+                    new Vector2(1, 1),
+                    new Vector2(1, 0),
+                    new Vector2(0, 0),
+                    new Vector2(0, 1),
+                    new Vector2(1, 1),
+                    new Vector2(1, 1),
+                    new Vector2(1, 0),
+                    new Vector2(0, 0),
+                    new Vector2(0, 0),
+                    new Vector2(0, 1),
+                    new Vector2(1, 1),
+                    new Vector2(1, 1),
+                    new Vector2(1, 0),
+                    new Vector2(0, 0),
+                    new Vector2(0, 0),
+                    new Vector2(0, 1),
+                    new Vector2(1, 1),
+                    new Vector2(1, 1),
+                    new Vector2(1, 0),
+                    new Vector2(0, 0),
+                    new Vector2(0, 0),
+                    new Vector2(0, 1),
+                    new Vector2(1, 1),
+                    new Vector2(1, 1),
+                    new Vector2(1, 0),
+                    new Vector2(0, 0),
+                    new Vector2(0, 0),
+                    new Vector2(0, 1),
+                    new Vector2(1, 1),
+                    new Vector2(1, 1),
+                    new Vector2(1, 0),
+                    new Vector2(0, 0) };
+            else
+                return new Vector2[] {
+                    new Vector2(1, 0),
+                    new Vector2(1, 1),
+                    new Vector2(0, 1),
+                    new Vector2(0, 1),
+                    new Vector2(0, 0),
+                    new Vector2(1, 0),
+                    new Vector2(0, 0),
+                    new Vector2(1, 0),
+                    new Vector2(1, 1),
+                    new Vector2(1, 1),
+                    new Vector2(0, 1),
+                    new Vector2(0, 0),
+                    new Vector2(0, 0),
+                    new Vector2(1, 0),
+                    new Vector2(1, 1),
+                    new Vector2(1, 1),
+                    new Vector2(0, 1),
+                    new Vector2(0, 0),
+                    new Vector2(0, 0),
+                    new Vector2(1, 0),
+                    new Vector2(1, 1),
+                    new Vector2(1, 1),
+                    new Vector2(0, 1),
+                    new Vector2(0, 0),
+                    new Vector2(0, 0),
+                    new Vector2(1, 0),
+                    new Vector2(1, 1),
+                    new Vector2(1, 1),
+                    new Vector2(0, 1),
+                    new Vector2(0, 0),
+                    new Vector2(0, 0),
+                    new Vector2(1, 0),
+                    new Vector2(1, 1),
+                    new Vector2(1, 1),
+                    new Vector2(0, 1),
+                    new Vector2(0, 0) };
         }
 
         public override Vector4[] GetTangents()

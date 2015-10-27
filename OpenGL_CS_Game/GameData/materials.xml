@@ -38,13 +38,13 @@
 		<Name>SkyCubemap_Storforsen</Name>
 		<Shader>CubemapSky</Shader>
 		<CubemapTexture>SkyCubemap_Storforsen</CubemapTexture>
-		<CullFace>False</CullFace>
+		<CullFace>True</CullFace>
 	</Material>
 	<Material>
 		<Name>SkyCubemap_Yokohama3</Name>
 		<Shader>CubemapSky</Shader>
 		<CubemapTexture>SkyCubemap_Yokohama3</CubemapTexture>
-		<CullFace>False</CullFace>
+		<CullFace>True</CullFace>
 	</Material>
 	<Material>
 		<Name>Reflection</Name>
