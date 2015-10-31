@@ -343,9 +343,6 @@ namespace OpenGL_CS_Game
 
         public static void BindBuffer_BufferData(Volume vol)
         {
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vol.IndexBufferID);
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(vol.IndecesCount * sizeof(int)), vol.GetIndeces(), BufferUsageHint.StaticDraw);
-
             GL.BindBuffer(BufferTarget.ArrayBuffer, vol.VertexBufferID);
             GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(vol.VerticesCount * Vector3.SizeInBytes), vol.GetVertices(), BufferUsageHint.StaticDraw);
 
@@ -359,6 +356,11 @@ namespace OpenGL_CS_Game
             GL.BufferData<Vector4>(BufferTarget.ArrayBuffer, (IntPtr)(vol.TangentsCount * Vector4.SizeInBytes), vol.GetTangents(), BufferUsageHint.StaticDraw);
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, vol.IndexBufferID);
+            GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(vol.IndecesCount * sizeof(int)), vol.GetIndeces(), BufferUsageHint.StaticDraw);
+
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
         }
     }
 }

@@ -570,8 +570,8 @@ namespace OpenGL_CS_Game
             }
             #endregion
 
-            GL.BindBuffer(BufferTarget.ArrayBuffer, v.IndexBufferID);
-            GL.DrawArrays(PrimitiveType.Triangles, 0, v.IndecesCount);
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, v.IndexBufferID);
+            GL.DrawElements(PrimitiveType.Triangles, v.IndecesCount, DrawElementsType.UnsignedInt, 0);
 
             // If you're using VAOs, then you should not disable attribute arrays, as they are encapsulated in the VAO.
             //Shaders[v.Material.ShaderName].DisableVertexAttribArrays();
