@@ -10,6 +10,16 @@
 		<FragmentShader>PhongNormalMap_FS.glsl</FragmentShader>
 	</Shader>
 	<Shader>
+		<Name>ReliefParallaxMap</Name>
+		<VertexShader>ReliefParallaxMap_VS.glsl</VertexShader>
+		<FragmentShader>ReliefParallaxMap_FS.glsl</FragmentShader>
+	</Shader>
+	<Shader>
+		<Name>Light</Name>
+		<VertexShader>Light_VS.glsl</VertexShader>
+		<FragmentShader>Light_FS.glsl</FragmentShader>
+	</Shader>
+	<Shader>
 		<Name>ReflectRefract</Name>
 		<VertexShader>CubemapReflectRefract_VS.glsl</VertexShader>
 		<FragmentShader>CubemapReflectRefract_FS.glsl</FragmentShader>

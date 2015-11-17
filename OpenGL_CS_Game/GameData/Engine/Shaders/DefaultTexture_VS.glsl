@@ -1,6 +1,6 @@
 #version 330
 
-in  vec3 VertexPosition;
+in vec3 VertexPosition;
 in vec2 VertexTexCoord;
 out vec2 f_texcoord;
 

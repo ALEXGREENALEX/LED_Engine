@@ -24,13 +24,12 @@ namespace OpenGL_CS_Game
         int ActiveShader;
 
         public static float UnitsScale = 1.0f; // Система измерений (это значение по умолчанию, 1 unit = 1 см)
-        
+
         public static Camera MainCamera = new Camera();
         public static Cube SkyCube = null;
         public static float FOV = 50.0f;
         public static float zNear = 0.1f;
         public static float zFar = 100000.0f;
-
 
         Vector2 LastMousePos;
 
@@ -55,10 +54,28 @@ namespace OpenGL_CS_Game
 
             XmlDocument XML = new XmlDocument();
             XML.Load(Path.Combine(StartupPath, "Config.xml"));
+
+            #region LoadPerfomanceSettings
             Title = XML.DocumentElement.SelectSingleNode("Title").InnerText;
             Debug = Convert.ToBoolean(XML.DocumentElement.SelectSingleNode("Debug").InnerText);
             ShowFPS = Convert.ToBoolean(XML.DocumentElement.SelectSingleNode("ShowFPS").InnerText);
             UsePostEffects = Convert.ToBoolean(XML.DocumentElement.SelectSingleNode("UsePostEffects").InnerText);
+
+            // VSync
+            string VSyncStr = XML.DocumentElement.SelectSingleNode("VSyncEnable").InnerText;
+            switch (VSyncStr.ToLower())
+            {
+                case "adaptive":
+                    VSync = VSyncMode.Adaptive;
+                    break;
+                case "false":
+                    VSync = VSyncMode.Off;
+                    break;
+                case "true":
+                    VSync = VSyncMode.On;
+                    break;
+            }
+            #endregion
 
             #region Определяем пути
             XmlNode NodePath = XML.DocumentElement.SelectSingleNode("Paths");
@@ -339,13 +356,14 @@ namespace OpenGL_CS_Game
             Objects.Add(obj_Keypad);
 
             Fog.Enabled = true;
-            int a = 33;
-            Prefab prefab1 = new Prefab(new Cube[a * a]);
+            int a = 14;
+            Prefab prefab1 = new Prefab(new ObjVolume[a * a]);
             for (int i1 = 0; i1 < a; i1++)
                 for (int i2 = 0; i2 < a; i2++)
                 {
-                    prefab1.Objects[i1 * a + i2] = new Cube();
-                    prefab1.Objects[i1 * a + i2].Material = Materials["BrickWall"]; //Refraction
+                    prefab1.Objects[i1 * a + i2] = ObjVolume.LoadFromFile(Path.Combine(MeshesPaths[1], "Keypad.obj"));
+                    prefab1.Objects[i1 * a + i2].Material = Materials["Light"]; //ReliefParallaxTest
+                    prefab1.Objects[i1 * a + i2].Scale = new Vector3(9.0f, 9.0f, 9.0f);
                     prefab1.Objects[i1 * a + i2].Position.X = (i1 - a / 2) * 4;
                     prefab1.Objects[i1 * a + i2].Position.Z = (i2 - a / 2) * 4;
                 }
@@ -363,9 +381,19 @@ namespace OpenGL_CS_Game
             obj_Teapot2.Scale = new Vector3(3f, 3f, 3f);
             Objects.Add(obj_Teapot2);
 
-            ObjVolume DebugLight = ObjVolume.LoadFromFile(Path.Combine(MeshesPaths[0], "DebugLight.obj"));
-            DebugLight.Material = Materials["DebugLight"];
-            DebugObjects.Add(DebugLight);
+            ObjVolume obj_Teapot3 = ObjVolume.LoadFromFile(Path.Combine(MeshesPaths[0], "Teapot.obj"));
+            obj_Teapot3.Material = Materials["ReliefParallaxTest"];
+            obj_Teapot3.Position.Z -= 3;
+            obj_Teapot3.Scale = new Vector3(3f, 3f, 3f);
+            Objects.Add(obj_Teapot3);
+
+            ObjVolume[] DebugLight = new ObjVolume[2];
+            for (int i = 0; i < DebugLight.Length; i++)
+            {
+                DebugLight[i] = ObjVolume.LoadFromFile(Path.Combine(MeshesPaths[0], "DebugLight.obj"));
+                DebugLight[i].Material = Materials["DebugLight"];
+            }
+            DebugObjects.AddRange(DebugLight);
         }
 
         void initProgram()
@@ -390,6 +418,14 @@ namespace OpenGL_CS_Game
             // Функция смешивания цветов для прозрачных материалов
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
             //GL.BlendFuncSeparate(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha, BlendingFactorSrc.One, BlendingFactorDest.One);
+
+            if (Debug)
+            {
+                GL.Disable(EnableCap.Dither);
+                GL.FrontFace(FrontFaceDirection.Ccw);
+                GL.PolygonMode(MaterialFace.Front, PolygonMode.Fill);
+                GL.PolygonMode(MaterialFace.Back, PolygonMode.Line);
+            }
 
             // Создаем примитивы
             SkyCube = new Cube(zFar, true);
@@ -436,19 +472,30 @@ namespace OpenGL_CS_Game
             if (Shaders[v.Material.ShaderName].GetUniform("LightPosition") != -1)
             {
                 Vector3 LightPosition = new Vector3(1.0f * (float)Math.Cos(Angle), 0.0f, 1.0f * (float)Math.Sin(Angle));
-                DebugObjects[0].Position = LightPosition;
+                DebugObjects[1].Position = LightPosition;
                 GL.Uniform3(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "LightPosition"), LightPosition);
             }
 
+            // Передаем шейдеру вектор Light Diffuse Color, если шейдер поддерживает это.
+            if (Shaders[v.Material.ShaderName].GetUniform("LightDiffuseColor") != -1)
+                GL.Uniform3(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "LightDiffuseColor"), 0.5f, 0.5f, 0.5f);
+
+            // Передаем шейдеру вектор Light Specular Color, если шейдер поддерживает это.
+            if (Shaders[v.Material.ShaderName].GetUniform("LightSpecularColor") != -1)
+                GL.Uniform3(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "LightSpecularColor"), 1.0f, 1.0f, 1.0f);
+
+            // Передаем шейдеру вектор Material Scale Bias Shininess, если шейдер поддерживает это. (0.07, 0, 38 for Metal; 0.04, 0, 92 for Rock)
+            if (Shaders[v.Material.ShaderName].GetUniform("ScaleBiasShininess") != -1)
+                GL.Uniform3(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "ScaleBiasShininess"), 0.04f, 0.0f, 92.0f);
+
             // Передаем шейдеру вектор Light Position, если шейдер поддерживает это.
-            if (Shaders[v.Material.ShaderName].GetUniform("Light.Position") != -1)
+            if (Shaders[v.Material.ShaderName].GetUniform("lightPosition") != -1) //Light.Position
             {
                 Vector4 LightVector = new Vector4(10.0f * (float)Math.Cos(Angle), 0.0f, 10.0f * (float)Math.Sin(Angle), 1.0f);
                 Matrix4 ViewMartix = MainCamera.GetViewMatrix();
                 Vector4 LightResust = LightVector.Mult(ViewMartix);
-                //Vector4 LightResust = ViewMartix.Mult(LightVector);
-                DebugObjects[0].Position = LightResust.Xyz;
-                GL.Uniform4(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "Light.Position"), LightResust);
+                DebugObjects[0].Position = LightVector.Xyz;
+                GL.Uniform4(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "lightPosition"), LightResust);
             }
 
             // Передаем шейдеру вектор Light Intensity, если шейдер поддерживает это.
@@ -457,7 +504,7 @@ namespace OpenGL_CS_Game
 
             // Передаем шейдеру вектор Diffuse reflectivity, если шейдер поддерживает это.
             if (Shaders[v.Material.ShaderName].GetUniform("Material.Kd") != -1)
-                GL.Uniform3(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "Material.Kd"), new Vector3(0.9f, 0.5f, 0.3f));
+                GL.Uniform3(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "Material.Kd"), 0.9f, 0.5f, 0.3f);
 
             // Передаем шейдеру вектор Specular reflectivity, если шейдер поддерживает это.
             if (Shaders[v.Material.ShaderName].GetUniform("Material.Ks") != -1)
@@ -487,30 +534,29 @@ namespace OpenGL_CS_Game
             if (Shaders[v.Material.ShaderName].GetUniform("ModelMatrix") != -1)
                 GL.UniformMatrix4(Shaders[v.Material.ShaderName].GetUniform("ModelMatrix"), false, ref v.ModelMatrix);
 
-            //// Передаем шейдеру матрицу ViewMatrix, если шейдер поддерживает это.
-            //if (Shaders[v.Material.ShaderName].GetUniform("ViewMatrix") != -1)
-            //{
-            //    Matrix4 V = MainCamera.GetViewMatrix();
-            //    GL.UniformMatrix4(Shaders[v.Material.ShaderName].GetUniform("ViewMatrix"), false, ref V);
-            //}
+            // Передаем шейдеру матрицу ViewMatrix, если шейдер поддерживает это.
+            if (Shaders[v.Material.ShaderName].GetUniform("ViewMatrix") != -1)
+            {
+                Matrix4 V = MainCamera.GetViewMatrix();
+                GL.UniformMatrix4(Shaders[v.Material.ShaderName].GetUniform("ViewMatrix"), false, ref V);
+            }
 
-            //// Передаем шейдеру матрицу ProjectionMatrix, если шейдер поддерживает это.
-            //if (Shaders[v.Material.ShaderName].GetUniform("ProjectionMatrix") != -1)
-            //{
-            //    Matrix4 P = MainCamera.GetProjectionMatrix();
-            //    GL.UniformMatrix4(Shaders[v.Material.ShaderName].GetUniform("ProjectionMatrix"), false, ref P);
-            //}
+            // Передаем шейдеру матрицу ProjectionMatrix, если шейдер поддерживает это.
+            if (Shaders[v.Material.ShaderName].GetUniform("ProjectionMatrix") != -1)
+            {
+                Matrix4 P = MainCamera.GetProjectionMatrix();
+                GL.UniformMatrix4(Shaders[v.Material.ShaderName].GetUniform("ProjectionMatrix"), false, ref P);
+            }
 
             // Передаем шейдеру матрицу ModelViewMatrix, если шейдер поддерживает это.
-            Matrix4 MV = v.ModelMatrix * MainCamera.GetViewMatrix();
-            //MV.Transpose();
             if (Shaders[v.Material.ShaderName].GetUniform("ModelViewMatrix") != -1)
-                GL.UniformMatrix4(Shaders[v.Material.ShaderName].GetUniform("ModelViewMatrix"), false, ref MV);
+                GL.UniformMatrix4(Shaders[v.Material.ShaderName].GetUniform("ModelViewMatrix"), false, ref v.ModelViewMatrix);
 
-            // Передаем шейдеру матрицу NormalMatrix (MV3x3), если шейдер поддерживает это.
+            // Передаем шейдеру матрицу NormalMatrix, если шейдер поддерживает это.
             if (Shaders[v.Material.ShaderName].GetUniform("NormalMatrix") != -1)
             {
-                Matrix3 NM = new Matrix3(MV);
+                var NM = new Matrix3(v.ModelViewMatrix).Inverted();
+                NM.Transpose();
                 GL.UniformMatrix3(Shaders[v.Material.ShaderName].GetUniform("NormalMatrix"), false, ref NM);
             }
 
@@ -519,8 +565,8 @@ namespace OpenGL_CS_Game
                 GL.UniformMatrix4(Shaders[v.Material.ShaderName].GetUniform("MVP"), false, ref v.ModelViewProjectionMatrix);
 
             // Передаем шейдеру позицию камеры, если шейдер поддерживает это.
-            if (Shaders[v.Material.ShaderName].GetUniform("WorldCameraPosition") != -1)
-                GL.Uniform3(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "WorldCameraPosition"), MainCamera.Position);
+            if (Shaders[v.Material.ShaderName].GetUniform("CameraPosition") != -1)
+                GL.Uniform3(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "CameraPosition"), MainCamera.Position);
 
             #region Туман
             if (Shaders[v.Material.ShaderName].GetUniform("FogEnabled") != -1)

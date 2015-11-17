@@ -26,7 +26,7 @@ namespace OpenGL_CS_Game
         public virtual Material Material { get; set; }
         
         public Matrix4 ModelMatrix = Matrix4.Identity;
-        public Matrix4 ViewProjectionMatrix = Matrix4.Identity;
+        public Matrix4 ModelViewMatrix = Matrix4.Identity;
         public Matrix4 ModelViewProjectionMatrix = Matrix4.Identity;
 
         public abstract void FreeBuffers();

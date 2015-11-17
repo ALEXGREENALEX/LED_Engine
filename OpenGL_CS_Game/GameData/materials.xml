@@ -72,6 +72,20 @@
 		<SpecularShininess>1.0</SpecularShininess>
 	</Material>
 	<Material>
+		<Name>ReliefParallaxTest</Name>
+		<Shader>ReliefParallaxMap</Shader>
+		<Texture>ReliefParallaxTest_D</Texture>
+		<Texture>ReliefParallaxTest_H</Texture>
+		<Texture>ReliefParallaxTest_N</Texture>
+		<Texture>ReliefParallaxTest_S</Texture>
+		<CullFace>False</CullFace>
+	</Material>
+	<Material>
+		<Name>Light</Name>
+		<Shader>Light</Shader>
+		<CullFace>True</CullFace>
+	</Material>
+	<Material>
 		<Name>Keypad</Name>
 		<Shader>PhongNormalMap</Shader>
 		<Texture>Keypad</Texture>

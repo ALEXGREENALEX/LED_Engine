@@ -47,4 +47,22 @@ TextureMinFilter:
 		<Name>Keypad_N</Name>
 		<File>Keypad_N.png</File>
 	</Texture>
+	
+	<!--Relief Parallax Test-->
+	<Texture>
+		<Name>ReliefParallaxTest_D</Name>
+		<File>ReliefParallaxTest\ReliefParallaxTest_D.png</File>
+	</Texture>
+	<Texture>
+		<Name>ReliefParallaxTest_H</Name>
+		<File>ReliefParallaxTest\ReliefParallaxTest_H.png</File>
+	</Texture>
+	<Texture>
+		<Name>ReliefParallaxTest_N</Name>
+		<File>ReliefParallaxTest\ReliefParallaxTest_N.png</File>
+	</Texture>
+	<Texture>
+		<Name>ReliefParallaxTest_S</Name>
+		<File>ReliefParallaxTest\ReliefParallaxTest_S.png</File>
+	</Texture>
 </Textures>

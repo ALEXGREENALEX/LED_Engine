@@ -2,12 +2,12 @@
 
 layout (location = 0) in vec3 VertexPosition;
 
-out vec3 ReflectDir;
+smooth out vec3 CubemapTexCoords;
 
 uniform mat4 MVP;
 
 void main()
 {
-    ReflectDir = VertexPosition;
+    CubemapTexCoords = VertexPosition;
     gl_Position = MVP * vec4(VertexPosition,1.0);
 }

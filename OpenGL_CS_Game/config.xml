@@ -5,6 +5,7 @@
 	<Debug>true</Debug>
 	<ShowFPS>true</ShowFPS>
 	<UsePostEffects>false</UsePostEffects>
+	<VSyncEnable>false</VSyncEnable>
 	<Paths>
 		<GameData>GameData</GameData>
 		

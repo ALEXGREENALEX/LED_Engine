@@ -116,8 +116,8 @@ namespace OpenGL_CS_Game
                 foreach (Volume v in DrawableObjects)
                 {
                     v.CalculateModelMatrix();
-                    v.ViewProjectionMatrix = MainCamera.GetViewMatrix() * MainCamera.GetProjectionMatrix();
-                    v.ModelViewProjectionMatrix = v.ModelMatrix * v.ViewProjectionMatrix;
+                    v.ModelViewMatrix = v.ModelMatrix * MainCamera.GetViewMatrix();
+                    v.ModelViewProjectionMatrix = v.ModelViewMatrix * MainCamera.GetProjectionMatrix();
 
                     // Отрисовка только тех сторон, что повернуты к камере
                     if (v.Material.CullFace)
