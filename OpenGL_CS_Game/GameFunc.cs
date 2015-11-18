@@ -499,24 +499,24 @@ namespace OpenGL_CS_Game
             }
 
             // Передаем шейдеру вектор Light Intensity, если шейдер поддерживает это.
-            if (Shaders[v.Material.ShaderName].GetUniform("Light.Intensity") != -1)
-                GL.Uniform3(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "Light.Intensity"), 0.9f, 0.9f, 0.9f);
+            if (Shaders[v.Material.ShaderName].GetUniform("LightIntensity") != -1)
+                GL.Uniform3(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "LightIntensity"), 0.9f, 0.9f, 0.9f);
 
             // Передаем шейдеру вектор Diffuse reflectivity, если шейдер поддерживает это.
-            if (Shaders[v.Material.ShaderName].GetUniform("Material.Kd") != -1)
-                GL.Uniform3(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "Material.Kd"), 0.9f, 0.5f, 0.3f);
+            if (Shaders[v.Material.ShaderName].GetUniform("MaterialKd") != -1)
+                GL.Uniform3(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "MaterialKd"), 0.9f, 0.5f, 0.3f);
 
             // Передаем шейдеру вектор Specular reflectivity, если шейдер поддерживает это.
-            if (Shaders[v.Material.ShaderName].GetUniform("Material.Ks") != -1)
-                GL.Uniform3(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "Material.Ks"), v.Material.SpecularReflectivity);
+            if (Shaders[v.Material.ShaderName].GetUniform("MaterialKs") != -1)
+                GL.Uniform3(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "MaterialKs"), v.Material.SpecularReflectivity);
 
             // Передаем шейдеру вектор Ambient reflectivity, если шейдер поддерживает это.
-            if (Shaders[v.Material.ShaderName].GetUniform("Material.Ka") != -1)
-                GL.Uniform3(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "Material.Ka"), v.Material.AmbientReflectivity);
+            if (Shaders[v.Material.ShaderName].GetUniform("MaterialKa") != -1)
+                GL.Uniform3(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "MaterialKa"), v.Material.AmbientReflectivity);
 
             // Передаем шейдеру значение Specular shininess factor, если шейдер поддерживает это.
-            if (Shaders[v.Material.ShaderName].GetUniform("Material.Shininess") != -1)
-                GL.Uniform1(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "Material.Shininess"), v.Material.SpecularShininess);
+            if (Shaders[v.Material.ShaderName].GetUniform("MaterialShininess") != -1)
+                GL.Uniform1(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "MaterialShininess"), v.Material.SpecularShininess);
 
             // Передаем шейдеру значение цвета материала, если шейдер поддерживает это.
             if (Shaders[v.Material.ShaderName].GetUniform("MaterialColor") != -1)
@@ -530,6 +530,7 @@ namespace OpenGL_CS_Game
             if (Shaders[v.Material.ShaderName].GetUniform("RefractiveIndex") != -1)
                 GL.Uniform1(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "RefractiveIndex"), v.Material.RefractiveIndex);
 
+            #region Камера и матрицы
             // Передаем шейдеру матрицу ModelMatrix, если шейдер поддерживает это.
             if (Shaders[v.Material.ShaderName].GetUniform("ModelMatrix") != -1)
                 GL.UniformMatrix4(Shaders[v.Material.ShaderName].GetUniform("ModelMatrix"), false, ref v.ModelMatrix);
@@ -567,6 +568,7 @@ namespace OpenGL_CS_Game
             // Передаем шейдеру позицию камеры, если шейдер поддерживает это.
             if (Shaders[v.Material.ShaderName].GetUniform("CameraPosition") != -1)
                 GL.Uniform3(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "CameraPosition"), MainCamera.Position);
+            #endregion
 
             #region Туман
             if (Shaders[v.Material.ShaderName].GetUniform("FogEnabled") != -1)
@@ -574,12 +576,12 @@ namespace OpenGL_CS_Game
 
             if (Fog.Enabled)
             {
-                if (Shaders[v.Material.ShaderName].GetUniform("Fog.MaxDist") != -1)
-                    GL.Uniform1(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "Fog.MaxDist"), Fog.MaxDistance);
-                if (Shaders[v.Material.ShaderName].GetUniform("Fog.MinDist") != -1)
-                    GL.Uniform1(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "Fog.MinDist"), Fog.MinDistance);
-                if (Shaders[v.Material.ShaderName].GetUniform("Fog.Color") != -1)
-                    GL.Uniform3(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "Fog.Color"), Fog.Color);
+                if (Shaders[v.Material.ShaderName].GetUniform("FogMaxDist") != -1)
+                    GL.Uniform1(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "FogMaxDist"), Fog.MaxDistance);
+                if (Shaders[v.Material.ShaderName].GetUniform("FogMinDist") != -1)
+                    GL.Uniform1(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "FogMinDist"), Fog.MinDistance);
+                if (Shaders[v.Material.ShaderName].GetUniform("FogColor") != -1)
+                    GL.Uniform3(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "FogColor"), Fog.Color);
             }
             #endregion
             #endregion

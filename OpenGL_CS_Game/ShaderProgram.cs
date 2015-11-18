@@ -75,6 +75,7 @@ namespace OpenGL_CS_Game
             GL.ShaderSource(address, code);
             GL.CompileShader(address);
             GL.AttachShader(ProgramID, address);
+            Console.WriteLine(GL.GetShaderInfoLog(address));
         }
 
         public void LoadShaderFromString(String code, ShaderType type)
@@ -93,22 +94,68 @@ namespace OpenGL_CS_Game
         {
             try
             {
-                using (StreamReader sr = new StreamReader(filename))
-                {
-                    if (type == ShaderType.VertexShader)
-                    {
-                        loadShader(sr.ReadToEnd(), type, out VShaderID);
-                    }
-                    else if (type == ShaderType.FragmentShader)
-                    {
-                        loadShader(sr.ReadToEnd(), type, out FShaderID);
-                    }
-                }
+                string Shader = File.ReadAllText(filename);
+
+                while (Shader.ToLower().IndexOf("#include") != -1)
+                    Shader = ShaderInclude(Shader, filename);
+
+                if (type == ShaderType.VertexShader)
+                    loadShader(Shader, type, out VShaderID);
+                else if (type == ShaderType.FragmentShader)
+                    loadShader(Shader, type, out FShaderID);
             }
             catch
             {
                 MessageBox.Show("\"LoadShaderFromFile\" Error!\n\n" + filename);
             }
+        }
+
+        static string ShaderInclude(string Shader, string ShaderPath)
+        {
+            try
+            {
+                const string ConstInclude = "#include";
+                int Start = Shader.ToLower().IndexOf(ConstInclude);
+                int InsertPos = Start;
+                Start = Shader.IndexOf('(', Start) + 1;
+                int End = Shader.IndexOf(')', Start);
+                string Include = Shader.Substring(Start, End - Start);//.Replace("(", "").Replace(")", "");
+                Shader = Shader.Remove(InsertPos, End - InsertPos + 1);
+
+                string[] IncArgs = Include.Split(new char[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+                if (IncArgs.Length > 0 && IncArgs.Length <= 3)
+                {
+                    int A = IncArgs[0].IndexOf('\"') + 1;
+                    int B = IncArgs[0].LastIndexOf('\"');
+                    string NewShaderPath = Path.Combine(Path.GetDirectoryName(ShaderPath), IncArgs[0].Substring(A, B - A));
+
+                    switch (IncArgs.Length)
+                    {
+                        case 1:
+                            Shader = Shader.Insert(InsertPos, File.ReadAllText(NewShaderPath));
+                            break;
+                        case 2:
+                            A = Convert.ToInt32(IncArgs[1]) - 1;
+                            Shader = Shader.Insert(InsertPos, File.ReadAllLines(NewShaderPath)[A]);
+                            break;
+                        case 3:
+                            A = Convert.ToInt32(IncArgs[1]) - 1;
+                            B = Convert.ToInt32(IncArgs[2]) - 1;
+                            string[] Lines = File.ReadAllLines(NewShaderPath);
+                            for (int i = A + 1; i <= B; i++)
+                                Lines[A] += "\r\n" + Lines[i];
+                            Shader = Shader.Insert(InsertPos, Lines[A]);
+                            break;
+                    }
+                }
+                else
+                    throw new Exception();
+            }
+            catch
+            {
+                MessageBox.Show("Shader Include Error!\n", ShaderPath);
+            }
+            return Shader;
         }
 
         public void Link()
@@ -199,7 +246,7 @@ namespace OpenGL_CS_Game
             foreach (var item in Buffers)
                 if (item.Name == name)
                     return item.Value;
-                return 0;
+            return 0;
         }
 
         public ShaderProgram(String vshader, String fshader, bool fromFile = false)

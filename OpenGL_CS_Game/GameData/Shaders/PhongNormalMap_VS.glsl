@@ -5,20 +5,17 @@ layout (location = 1) in vec3 VertexNormal;
 layout (location = 2) in vec2 VertexTexCoord;
 layout (location = 3) in vec4 VertexTangent;
 
-struct LightInfo
-{
-  vec4 Position;  // Light position in eye coords.
-  vec3 Intensity; // A,D,S intensity
-};
-uniform LightInfo Light;
-
 out vec3 LightDir;
 out vec2 TexCoord;
 out vec3 ViewDir;
 
+uniform vec4 LightPosition;  // Light position in eye coords.
+
 uniform mat4 ModelViewMatrix;
 uniform mat3 NormalMatrix;
 uniform mat4 MVP;
+
+#include("Fog\VarsVS.glsl")
 
 void main()
 {
@@ -36,9 +33,10 @@ void main()
 
     // Transform light direction and view direction to tangent space
     vec3 pos = vec3(ModelViewMatrix * vec4(VertexPosition, 1.0));
-    LightDir = normalize(toObjectLocal * (Light.Position.xyz - pos));
+    LightDir = normalize(toObjectLocal * (LightPosition.xyz - pos));
 
     ViewDir = toObjectLocal * normalize(-pos);
     TexCoord = VertexTexCoord;
     gl_Position = MVP * vec4(VertexPosition, 1.0);
+	#include("Fog\VS.glsl")
 }
