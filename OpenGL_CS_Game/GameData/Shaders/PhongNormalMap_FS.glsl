@@ -16,7 +16,7 @@ uniform float MaterialShininess;    // Specular shininess factor
 
 #include("Fog\VarsFS.glsl")
 
-vec3 PhongModel (vec3 norm, vec3 diffR)
+vec3 PhongModel(vec3 norm, vec3 diffR)
 {
     vec3 r = reflect(-LightDir, norm);
     vec3 ambient = LightIntensity * MaterialKa;

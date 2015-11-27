@@ -9,7 +9,7 @@ out vec3 LightDir;
 out vec2 TexCoord;
 out vec3 ViewDir;
 
-uniform vec4 LightPosition;  // Light position in eye coords.
+uniform vec4 LightPosition; // Light position in eye coords.
 
 uniform mat4 ModelViewMatrix;
 uniform mat3 NormalMatrix;

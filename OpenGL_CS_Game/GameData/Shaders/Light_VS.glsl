@@ -12,6 +12,8 @@ uniform mat4 ModelMatrix;
 uniform vec3 LightPosition;
 uniform vec3 LightDiffuseColor;
 
+#include("Fog\VarsVS.glsl")
+
 void main()
 {	
 	vec4 normal = transpose(inverse(ModelMatrix)) * vec4(VertexNormal, 0.0);
@@ -20,8 +22,10 @@ void main()
 	vec4 worldpos = vec4(VertexPosition, 1.0) * transpose(ModelMatrix);
 	vec4 lightVector = normalize(worldpos - vec4(LightPosition, 1.0));
 	
-	f_color = LightDiffuseColor * dot(-lightVector, normal);;
+	f_color = LightDiffuseColor * dot(-lightVector, normal);
 	
 	gl_Position = MVP * vec4(VertexPosition, 1.0);
 	f_texcoord = VertexTexCoord;
+	
+	#include("Fog\VS.glsl")
 }

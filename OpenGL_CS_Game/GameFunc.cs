@@ -362,7 +362,7 @@ namespace OpenGL_CS_Game
                 for (int i2 = 0; i2 < a; i2++)
                 {
                     prefab1.Objects[i1 * a + i2] = ObjVolume.LoadFromFile(Path.Combine(MeshesPaths[1], "Keypad.obj"));
-                    prefab1.Objects[i1 * a + i2].Material = Materials["Light"]; //ReliefParallaxTest
+                    prefab1.Objects[i1 * a + i2].Material = Materials["Keypad"]; //ReliefParallaxTest //Light
                     prefab1.Objects[i1 * a + i2].Scale = new Vector3(9.0f, 9.0f, 9.0f);
                     prefab1.Objects[i1 * a + i2].Position.X = (i1 - a / 2) * 4;
                     prefab1.Objects[i1 * a + i2].Position.Z = (i2 - a / 2) * 4;
