@@ -32,7 +32,7 @@ vec3 PhongModel(vec3 norm, vec3 diffR)
 
 void main()
 {
-    vec4 normal = 2.0 * texture(NormalMapTex, TexCoord) - 1.0;
+    vec4 normal = texture(NormalMapTex, TexCoord) * 2.0 - 1.0;
     vec4 texColor = texture(ColorTex, TexCoord);
     FragColor = vec4(PhongModel(normal.xyz, texColor.rgb), 1.0);
 	#include("Fog\FS.glsl")

@@ -76,8 +76,8 @@ namespace OpenGL_CS_Game
                 // FPS
                 if (ShowFPS)
                 {
-                    FPS = 1.0 / e.Time;
-                    Title = "FPS: " + FPS.ToString("0.00");
+                    FPS = this.RenderFrequency;
+                    Title = "FPS: " + FPS.ToString("0.00") + "  UPS: " + UPS.ToString("0.00");
                 }
 
                 // Bind FBO for PostProcess
@@ -163,35 +163,40 @@ namespace OpenGL_CS_Game
 
             if (Focused)
             {
+                if (ShowFPS)
+                    UPS = this.UpdateFrequency;
+
                 Vector2 delta = LastMousePos - new Vector2(OpenTK.Input.Mouse.GetState().X, OpenTK.Input.Mouse.GetState().Y);
                 LastMousePos += delta;
                 MainCamera.AddRotation(delta.X, delta.Y);
                 ResetCursor();
 
                 // Проверяем нажатия клавиш каждый кадр, а не по прерыванию!
-                KeyboardState KbdState = OpenTK.Input.Keyboard.GetState();
-                if (KbdState.IsKeyDown(Key.W))
-                    MainCamera.Move(0f, 1.0f, 0f);
-                if (KbdState.IsKeyDown(Key.A))
-                    MainCamera.Move(-1.0f, 0f, 0f);
-                if (KbdState.IsKeyDown(Key.S))
-                    MainCamera.Move(0f, -1.0f, 0f);
-                if (KbdState.IsKeyDown(Key.D))
-                    MainCamera.Move(1.0f, 0f, 0f);
-                if (KbdState.IsKeyDown(Key.E))
-                    MainCamera.Move(0f, 0f, 1.0f);
-                if (KbdState.IsKeyDown(Key.Q))
-                    MainCamera.Move(0f, 0f, -1.0f);
+                KbdState = OpenTK.Input.Keyboard.GetState();
 
-                float camSens = 2.0f;
-                if (KbdState.IsKeyDown(Key.Left))
-                    MainCamera.AddRotation(camSens, 0.0f);
-                if (KbdState.IsKeyDown(Key.Right))
-                    MainCamera.AddRotation(-camSens, 0.0f);
-                if (KbdState.IsKeyDown(Key.Up))
-                    MainCamera.AddRotation(0.0f, camSens);
-                if (KbdState.IsKeyDown(Key.Down))
-                    MainCamera.AddRotation(0.0f, -camSens);
+                float camMoveSens = 1.0f;
+                if (KbdState[Key.W])
+                    MainCamera.Move(0f, camMoveSens, 0f);
+                if (KbdState[Key.A])
+                    MainCamera.Move(-camMoveSens, 0f, 0f);
+                if (KbdState[Key.S])
+                    MainCamera.Move(0f, -camMoveSens, 0f);
+                if (KbdState[Key.D])
+                    MainCamera.Move(camMoveSens, 0f, 0f);
+                if (KbdState[Key.E])
+                    MainCamera.Move(0f, 0f, camMoveSens);
+                if (KbdState[Key.Q])
+                    MainCamera.Move(0f, 0f, -camMoveSens);
+
+                float camRotateSens = 2.0f;
+                if (KbdState[Key.Left])
+                    MainCamera.AddRotation(camRotateSens, 0.0f);
+                if (KbdState[Key.Right])
+                    MainCamera.AddRotation(-camRotateSens, 0.0f);
+                if (KbdState[Key.Up])
+                    MainCamera.AddRotation(0.0f, camRotateSens);
+                if (KbdState[Key.Down])
+                    MainCamera.AddRotation(0.0f, -camRotateSens);
 
                 // Обновляем позиции объектов
                 time += (float)e.Time;

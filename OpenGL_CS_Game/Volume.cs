@@ -16,12 +16,14 @@ namespace OpenGL_CS_Game
         public virtual int NormalBufferID { get; set; }
         public virtual int UVBufferID { get; set; }
         public virtual int TangentBufferID { get; set; }
+        public virtual int BitangentBufferID { get; set; }
 
         public virtual int IndecesCount { get; set; }
         public virtual int VerticesCount { get; set; }
         public virtual int NormalsCount { get; set; }
         public virtual int UVsCount { get; set; }
         public virtual int TangentsCount { get; set; }
+        public virtual int BitangentsCount { get; set; }
 
         public virtual Material Material { get; set; }
         
@@ -35,7 +37,8 @@ namespace OpenGL_CS_Game
         public abstract Vector2[] GetUVs();
         public abstract Vector3[] GetNormals();
         public abstract int[] GetIndeces(int offset = 0);
-        public abstract Vector4[] GetTangents();
+        public abstract Vector3[] GetTangents();
+        public abstract Vector3[] GetBitangents();
         public abstract void CalculateModelMatrix();
     }
 }

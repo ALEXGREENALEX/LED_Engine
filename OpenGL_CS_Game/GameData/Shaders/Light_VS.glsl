@@ -4,28 +4,23 @@ in vec3 VertexPosition;
 in vec3 VertexNormal;
 in vec2 VertexTexCoord;
 
-out vec2 f_texcoord;
-out vec3 f_color;
+out vec3 f_VertexPosition;
+out vec4 f_Normal;
+out vec2 f_TexCoord;
+out mat4 f_ModelMatrix;
 
 uniform mat4 MVP;
 uniform mat4 ModelMatrix;
-uniform vec3 LightPosition;
-uniform vec3 LightDiffuseColor;
 
 #include("Fog\VarsVS.glsl")
 
 void main()
-{	
+{
 	vec4 normal = transpose(inverse(ModelMatrix)) * vec4(VertexNormal, 0.0);
-	normal = normalize(normal);
-	
-	vec4 worldpos = vec4(VertexPosition, 1.0) * transpose(ModelMatrix);
-	vec4 lightVector = normalize(worldpos - vec4(LightPosition, 1.0));
-	
-	f_color = LightDiffuseColor * dot(-lightVector, normal);
-	
+	f_Normal = normalize(normal);
+	f_ModelMatrix = transpose(ModelMatrix);
 	gl_Position = MVP * vec4(VertexPosition, 1.0);
-	f_texcoord = VertexTexCoord;
-	
+	f_VertexPosition = VertexPosition;
+	f_TexCoord = VertexTexCoord;
 	#include("Fog\VS.glsl")
 }

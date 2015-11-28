@@ -114,12 +114,49 @@ namespace OpenGL_CS_Game
         {
             try
             {
+                const string ConstCommentString = "//";
+                const string ConstCommentEndLine = "\n";
+                const string ConstCommentStart = "/*";
+                const string ConstCommentStop = "*/";
+
+                int Start, End, Len;
+                do
+                {
+                    Start = Shader.IndexOf(ConstCommentStart);
+                    End = Shader.IndexOf(ConstCommentStop, Start + ConstCommentStart.Length);
+                    Len = End - Start + ConstCommentStop.Length;
+                    if (Start < End && Start != -1 && End != -1)
+                        Shader = Shader.Remove(Start, Len);
+                } while (Start != -1 && End != -1);
+
+                do
+                {
+                    Start = Shader.IndexOf(ConstCommentString);
+                    End = Shader.IndexOf(ConstCommentEndLine, Start + ConstCommentString.Length);
+                    Len = End - Start;
+                    if (Start < End && Start != -1 && End != -1)
+                        Shader = Shader.Remove(Start, Len);
+                } while (Start != -1 && End != -1);
+            }
+            catch
+            {
+                MessageBox.Show("Shader Include (Delete Comments) Error!\n" + ShaderPath);
+            }
+
+            try
+            {
+                
                 const string ConstInclude = "#include";
                 int Start = Shader.ToLower().IndexOf(ConstInclude);
                 int InsertPos = Start;
+
+                if (InsertPos == -1) //Include not found
+                    return Shader;
+
                 Start = Shader.IndexOf('(', Start) + 1;
                 int End = Shader.IndexOf(')', Start);
-                string Include = Shader.Substring(Start, End - Start);//.Replace("(", "").Replace(")", "");
+
+                string Include = Shader.Substring(Start, End - Start);
                 Shader = Shader.Remove(InsertPos, End - InsertPos + 1);
 
                 string[] IncArgs = Include.Split(new char[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
@@ -153,7 +190,7 @@ namespace OpenGL_CS_Game
             }
             catch
             {
-                MessageBox.Show("Shader Include Error!\n", ShaderPath);
+                MessageBox.Show("Shader Include Error!\n" + ShaderPath);
             }
             return Shader;
         }

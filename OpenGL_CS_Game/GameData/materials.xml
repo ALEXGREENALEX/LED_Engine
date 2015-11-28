@@ -30,7 +30,7 @@
 <Materials>
 	<Material>
 		<Name>TransparentRedGlass</Name>
-		<Shader></Shader>
+		<Shader>Unlit</Shader>
 		<Color>1.0 0.0 0.0 0.5</Color>
 		<Transparent>True</Transparent>
 	</Material>
@@ -83,6 +83,7 @@
 	<Material>
 		<Name>Light</Name>
 		<Shader>Light</Shader>
+		<Texture>brick-wall</Texture>
 		<CullFace>True</CullFace>
 	</Material>
 	<Material>

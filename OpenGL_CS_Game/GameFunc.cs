@@ -31,12 +31,13 @@ namespace OpenGL_CS_Game
         public static float zNear = 0.1f;
         public static float zFar = 100000.0f;
 
+        KeyboardState KbdState;
         Vector2 LastMousePos;
 
         float time = 0.0f;
         float rotSpeed = (float)Math.PI / 4.0f;
         float Angle = MathHelper.DegreesToRadians(100.0f);
-        double FPS;
+        double FPS, UPS; //FramesPerSecond, UpdatesPerSecond
 
         public static List<Volume> Objects = new List<Volume>();
         public static List<Volume> DebugObjects = new List<Volume>();
@@ -338,6 +339,16 @@ namespace OpenGL_CS_Game
                 #endregion
             }
 
+            Plain plain = new Plain(100f);
+            plain.Material = Materials["Light"];
+            plain.Position.Y = -0.5f;
+            Objects.Add(plain);
+
+            Cube cube = new Cube();
+            cube.Material = Materials["Light"];
+            cube.Position.X = -2f;
+            Objects.Add(cube);
+
             ObjVolume Pipe_X_1 = ObjVolume.LoadFromFile(Path.Combine(MeshesPaths[1], "Pipe_X.obj"));
             //Pipe_X_1.Material = materials["BrickWall"];
             Pipe_X_1.Material = Materials["Refraction"]; // Reflection Refraction
@@ -355,14 +366,13 @@ namespace OpenGL_CS_Game
             obj_Keypad.Scale = new Vector3(10f, 10f, 10f);
             Objects.Add(obj_Keypad);
 
-            Fog.Enabled = true;
             int a = 14;
             Prefab prefab1 = new Prefab(new ObjVolume[a * a]);
             for (int i1 = 0; i1 < a; i1++)
                 for (int i2 = 0; i2 < a; i2++)
                 {
                     prefab1.Objects[i1 * a + i2] = ObjVolume.LoadFromFile(Path.Combine(MeshesPaths[1], "Keypad.obj"));
-                    prefab1.Objects[i1 * a + i2].Material = Materials["Keypad"]; //ReliefParallaxTest //Light
+                    prefab1.Objects[i1 * a + i2].Material = Materials["Light"]; //ReliefParallaxTest //Keypad
                     prefab1.Objects[i1 * a + i2].Scale = new Vector3(9.0f, 9.0f, 9.0f);
                     prefab1.Objects[i1 * a + i2].Position.X = (i1 - a / 2) * 4;
                     prefab1.Objects[i1 * a + i2].Position.Z = (i2 - a / 2) * 4;
@@ -411,6 +421,9 @@ namespace OpenGL_CS_Game
             if (UsePostEffects)
                 PostProcess.Init("PostProcess", Width, Height);
 
+            //FOG
+            //Fog.Enabled = true;
+
             // Включаем тест глубины
             GL.Enable(EnableCap.DepthTest);
             GL.DepthFunc(DepthFunction.Lequal);
@@ -427,14 +440,9 @@ namespace OpenGL_CS_Game
                 GL.PolygonMode(MaterialFace.Back, PolygonMode.Line);
             }
 
-            // Создаем примитивы
             SkyCube = new Cube(zFar, true);
             SkyCube.Material = Materials["SkyCubemap_Storforsen"];
             Objects.Add(SkyCube);
-
-            Plain plain = new Plain(100f);
-            plain.Position.Y = -0.5f;
-            Objects.Add(plain);
 
             // Отдаляем камеру от начала координат
             MainCamera.Position = new Vector3(0.0f, 2.0f, 0.0f);
@@ -489,13 +497,13 @@ namespace OpenGL_CS_Game
                 GL.Uniform3(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "ScaleBiasShininess"), 0.04f, 0.0f, 92.0f);
 
             // Передаем шейдеру вектор Light Position, если шейдер поддерживает это.
-            if (Shaders[v.Material.ShaderName].GetUniform("lightPosition") != -1) //Light.Position
+            if (Shaders[v.Material.ShaderName].GetUniform("EyeLightPosition") != -1) //Light.Position
             {
                 Vector4 LightVector = new Vector4(10.0f * (float)Math.Cos(Angle), 0.0f, 10.0f * (float)Math.Sin(Angle), 1.0f);
                 Matrix4 ViewMartix = MainCamera.GetViewMatrix();
                 Vector4 LightResust = LightVector.Mult(ViewMartix);
                 DebugObjects[0].Position = LightVector.Xyz;
-                GL.Uniform4(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "lightPosition"), LightResust);
+                GL.Uniform4(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "EyeLightPosition"), LightResust);
             }
 
             // Передаем шейдеру вектор Light Intensity, если шейдер поддерживает это.
@@ -614,7 +622,14 @@ namespace OpenGL_CS_Game
             if (Shaders[v.Material.ShaderName].GetAttribute("VertexTangent") != -1)
             {
                 GL.BindBuffer(BufferTarget.ArrayBuffer, v.TangentBufferID);
-                GL.VertexAttribPointer(Shaders[v.Material.ShaderName].GetAttribute("VertexTangent"), 4, VertexAttribPointerType.Float, false, 0, 0);
+                GL.VertexAttribPointer(Shaders[v.Material.ShaderName].GetAttribute("VertexTangent"), 3, VertexAttribPointerType.Float, false, 0, 0);
+            }
+
+            // Передаем шейдеру буфер тангенсов, если шейдер поддерживает это.
+            if (Shaders[v.Material.ShaderName].GetAttribute("VertexBitangent") != -1)
+            {
+                GL.BindBuffer(BufferTarget.ArrayBuffer, v.BitangentBufferID);
+                GL.VertexAttribPointer(Shaders[v.Material.ShaderName].GetAttribute("VertexBitangent"), 3, VertexAttribPointerType.Float, false, 0, 0);
             }
             #endregion
 

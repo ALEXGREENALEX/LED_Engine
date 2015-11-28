@@ -1,3 +1,1 @@
-uniform float FogMaxDist;
-uniform float FogMinDist;
-out float FogFactor;
+out vec3 f_FogPosition;

@@ -10,11 +10,12 @@ namespace OpenGL_CS_Game
 {
     class ObjVolume : Volume
     {
-        int indexBufferID, vertexBufferID, normalBufferID, uvBufferID, tangentBufferID;
+        int indexBufferID, vertexBufferID, normalBufferID, uvBufferID, tangentBufferID, bitangentBufferID;
         int[] indeces;
         Vector3[] vertices, normals;
         Vector2[] uvs;
-        Vector4[] tangents;
+        Vector3[] tangents;
+        Vector3[] bitangents;
 
         public ObjVolume()
             : base()
@@ -33,6 +34,7 @@ namespace OpenGL_CS_Game
             normalBufferID = GL.GenBuffer();
             uvBufferID = GL.GenBuffer();
             tangentBufferID = GL.GenBuffer();
+            bitangentBufferID = GL.GenBuffer();
         }
 
         public override void FreeBuffers()
@@ -42,12 +44,14 @@ namespace OpenGL_CS_Game
             GL.DeleteBuffer(normalBufferID);
             GL.DeleteBuffer(uvBufferID);
             GL.DeleteBuffer(tangentBufferID);
+            GL.DeleteBuffer(bitangentBufferID);
 
             indexBufferID = 0;
             vertexBufferID = 0;
             normalBufferID = 0;
             uvBufferID = 0;
             tangentBufferID = 0;
+            bitangentBufferID = 0;
         }
 
         public override int IndexBufferID { get { return vertexBufferID; } }
@@ -55,12 +59,14 @@ namespace OpenGL_CS_Game
         public override int NormalBufferID { get { return normalBufferID; } }
         public override int UVBufferID { get { return uvBufferID; } }
         public override int TangentBufferID { get { return tangentBufferID; } }
+        public override int BitangentBufferID { get { return bitangentBufferID; } }
 
         public override int VerticesCount { get { return vertices.Length; } }
         public override int NormalsCount { get { return normals.Length; } }
         public override int IndecesCount { get { return indeces.Length; } }
         public override int UVsCount { get { return uvs.Length; } }
         public override int TangentsCount { get { return tangents.Length; } }
+        public override int BitangentsCount { get { return bitangents.Length; } }
 
         public override Vector3[] GetVertices()
         {
@@ -87,16 +93,20 @@ namespace OpenGL_CS_Game
             return uvs;
         }
 
-        public override Vector4[] GetTangents()
+        public override Vector3[] GetTangents()
         {
             return tangents;
         }
 
-        public static void ComputeTangentBasis(Vector3[] Vertices, Vector3[] Normals, Vector2[] UVs, out Vector4[] Tangents)
+        public override Vector3[] GetBitangents()
         {
-            Tangents = new Vector4[Vertices.Length];
-            Vector3[] tan1Accum = new Vector3[Vertices.Length]; //Tangents
-            Vector3[] tan2Accum = new Vector3[Vertices.Length]; //Bitangents
+            return bitangents;
+        }
+
+        public static void ComputeTangentBasis(Vector3[] Vertices, Vector3[] Normals, Vector2[] UVs, out Vector3[] Tangents, out Vector3[] Bitangents)
+        {
+            Tangents = new Vector3[Vertices.Length];
+            Bitangents = new Vector3[Tangents.Length];
 
             // Compute the tangent vector
             for (int i = 0; i < Vertices.Length; i += 3)
@@ -115,39 +125,34 @@ namespace OpenGL_CS_Game
                 float t1 = tc2.Y - tc1.Y, t2 = tc3.Y - tc1.Y;
                 float r = 1.0f / (s1 * t2 - s2 * t1);
 
-                Vector3 tan1 = new Vector3(
+                Tangents[i] = new Vector3(
                     (t2 * q1.X - t1 * q2.X) * r,
                     (t2 * q1.Y - t1 * q2.Y) * r,
                     (t2 * q1.Z - t1 * q2.Z) * r);
 
-                Vector3 tan2 = new Vector3(
+                Bitangents[i] = new Vector3(
                     (s1 * q2.X - s2 * q1.X) * r,
                     (s1 * q2.Y - s2 * q1.Y) * r,
                     (s1 * q2.Z - s2 * q1.Z) * r);
 
-                tan1Accum[i] = tan1;
-                tan1Accum[i + 1] = tan1;
-                tan1Accum[i + 2] = tan1;
-
-                tan2Accum[i] = tan2;
-                tan2Accum[i + 1] = tan2;
-                tan2Accum[i + 2] = tan2;
+                Tangents[i + 1] = Tangents[i];
+                Tangents[i + 2] = Tangents[i];
+                Bitangents[i + 1] = Bitangents[i];
+                Bitangents[i + 2] = Bitangents[i];
             }
 
             for (int i = 0; i < Vertices.Length; i++)
             {
                 Vector3 n = Normals[i];
-                Vector3 t1 = tan1Accum[i];
-                Vector3 t2 = tan2Accum[i];
+                Vector3 t1 = Tangents[i];
+                Vector3 t2 = Bitangents[i];
 
-                // Gram-Schmidt orthogonalize. Store handedness in W.
-                Tangents[i] = new Vector4(Vector3.Normalize(t1 - (Vector3.Dot(n, t1) * n)), 1.0f);
+                // Gram-Schmidt orthogonalize.
+                Tangents[i] = Vector3.Normalize(t1 - (Vector3.Dot(n, t1) * n));
 
                 if (Vector3.Dot(Vector3.Cross(n, t1), t2) < 0.0f)
-                    Tangents[i].W = -1.0f;
+                    Tangents[i] *= -1.0f;
             }
-            tan1Accum = null;
-            tan2Accum = null;
         }
 
         public override void CalculateModelMatrix()
@@ -327,7 +332,7 @@ namespace OpenGL_CS_Game
                 vol.indeces[i] = i;
             }
 
-            ComputeTangentBasis(vol.vertices, vol.normals, vol.uvs, out vol.tangents);
+            ComputeTangentBasis(vol.vertices, vol.normals, vol.uvs, out vol.tangents, out vol.bitangents);
 
             BindBuffer_BufferData(vol);
 
@@ -353,7 +358,10 @@ namespace OpenGL_CS_Game
             GL.BufferData<Vector2>(BufferTarget.ArrayBuffer, (IntPtr)(vol.UVsCount * Vector2.SizeInBytes), vol.GetUVs(), BufferUsageHint.StaticDraw);
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, vol.TangentBufferID);
-            GL.BufferData<Vector4>(BufferTarget.ArrayBuffer, (IntPtr)(vol.TangentsCount * Vector4.SizeInBytes), vol.GetTangents(), BufferUsageHint.StaticDraw);
+            GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(vol.TangentsCount * Vector3.SizeInBytes), vol.GetTangents(), BufferUsageHint.StaticDraw);
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, vol.BitangentBufferID);
+            GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(vol.BitangentsCount * Vector3.SizeInBytes), vol.GetBitangents(), BufferUsageHint.StaticDraw);
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
 
