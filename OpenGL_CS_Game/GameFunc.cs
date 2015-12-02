@@ -16,7 +16,7 @@ namespace OpenGL_CS_Game
 {
     partial class Game : GameWindow
     {
-        bool Debug = false;
+        bool DebugMode = false;
         bool ShowFPS = false;
         bool UsePostEffects = true;
         Stopwatch StopWatch = new Stopwatch(); // Таймер для подсчета времени выполнения алгоритмов
@@ -58,7 +58,7 @@ namespace OpenGL_CS_Game
 
             #region LoadPerfomanceSettings
             Title = XML.DocumentElement.SelectSingleNode("Title").InnerText;
-            Debug = Convert.ToBoolean(XML.DocumentElement.SelectSingleNode("Debug").InnerText);
+            DebugMode = Convert.ToBoolean(XML.DocumentElement.SelectSingleNode("Debug").InnerText);
             ShowFPS = Convert.ToBoolean(XML.DocumentElement.SelectSingleNode("ShowFPS").InnerText);
             UsePostEffects = Convert.ToBoolean(XML.DocumentElement.SelectSingleNode("UsePostEffects").InnerText);
 
@@ -208,7 +208,8 @@ namespace OpenGL_CS_Game
                     }
                     catch
                     {
-                        MessageBox.Show("Texture Loading Error!");
+                        MessageBox.Show("Texture Loading Error!\n\n" + xmlNode.OuterXml);
+                        this.Close();
                     }
                 }
                 #endregion
@@ -339,6 +340,19 @@ namespace OpenGL_CS_Game
                 #endregion
             }
 
+            if (DebugMode)
+            {
+                ObjVolume DebugPointLight = ObjVolume.LoadFromFile(Path.Combine(MeshesPaths[0], "PointLight.obj"));
+
+                ObjVolume[] DebugLight = new ObjVolume[2];
+                for (int i = 0; i < DebugLight.Length; i++)
+                {
+                    DebugLight[i] = new ObjVolume(DebugPointLight);
+                    DebugLight[i].Material = Materials["DebugPointLight"];
+                }
+                DebugObjects.AddRange(DebugLight);
+            }
+
             Plain plain = new Plain(100f);
             plain.Material = Materials["Light"];
             plain.Position.Y = -0.5f;
@@ -355,9 +369,9 @@ namespace OpenGL_CS_Game
             Pipe_X_1.Position.Y += 1;
             Objects.Add(Pipe_X_1);
 
-            ObjVolume Pipe_X_2 = ObjVolume.LoadFromFile(Path.Combine(MeshesPaths[1], "Pipe_X.obj"));
+            ObjVolume Pipe_X_2 = new ObjVolume(Pipe_X_1);
             Pipe_X_2.Material = Materials["Reflection"];
-            Pipe_X_2.Position.Y += 2;
+            Pipe_X_2.Position.Y += 1;
             Objects.Add(Pipe_X_2);
 
             ObjVolume obj_Keypad = ObjVolume.LoadFromFile(Path.Combine(MeshesPaths[1], "Keypad.obj"));
@@ -366,16 +380,16 @@ namespace OpenGL_CS_Game
             obj_Keypad.Scale = new Vector3(10f, 10f, 10f);
             Objects.Add(obj_Keypad);
 
-            int a = 14;
+            int a = 30;
             Prefab prefab1 = new Prefab(new ObjVolume[a * a]);
             for (int i1 = 0; i1 < a; i1++)
                 for (int i2 = 0; i2 < a; i2++)
                 {
-                    prefab1.Objects[i1 * a + i2] = ObjVolume.LoadFromFile(Path.Combine(MeshesPaths[1], "Keypad.obj"));
+                    prefab1.Objects[i1 * a + i2] = new ObjVolume(obj_Keypad);
                     prefab1.Objects[i1 * a + i2].Material = Materials["Light"]; //ReliefParallaxTest //Keypad
-                    prefab1.Objects[i1 * a + i2].Scale = new Vector3(9.0f, 9.0f, 9.0f);
-                    prefab1.Objects[i1 * a + i2].Position.X = (i1 - a / 2) * 4;
-                    prefab1.Objects[i1 * a + i2].Position.Z = (i2 - a / 2) * 4;
+                    prefab1.Objects[i1 * a + i2].Scale = new Vector3(10.0f, 10.0f, 10.0f);
+                    prefab1.Objects[i1 * a + i2].Position.X = (i1 - a / 2) * 5;
+                    prefab1.Objects[i1 * a + i2].Position.Z = (i2 - a / 2) * 5;
                 }
             Prefabs.Add(prefab1);
 
@@ -385,25 +399,17 @@ namespace OpenGL_CS_Game
             obj_Teapot.Scale = new Vector3(3f, 3f, 3f);
             Objects.Add(obj_Teapot);
 
-            ObjVolume obj_Teapot2 = ObjVolume.LoadFromFile(Path.Combine(MeshesPaths[0], "Teapot.obj"));
+            ObjVolume obj_Teapot2 = new ObjVolume(obj_Teapot);
             obj_Teapot2.Material = Materials["BrickWall"];
             obj_Teapot2.Position.Z -= 2;
             obj_Teapot2.Scale = new Vector3(3f, 3f, 3f);
             Objects.Add(obj_Teapot2);
 
-            ObjVolume obj_Teapot3 = ObjVolume.LoadFromFile(Path.Combine(MeshesPaths[0], "Teapot.obj"));
+            ObjVolume obj_Teapot3 = new ObjVolume(obj_Teapot);
             obj_Teapot3.Material = Materials["ReliefParallaxTest"];
             obj_Teapot3.Position.Z -= 3;
             obj_Teapot3.Scale = new Vector3(3f, 3f, 3f);
             Objects.Add(obj_Teapot3);
-
-            ObjVolume[] DebugLight = new ObjVolume[2];
-            for (int i = 0; i < DebugLight.Length; i++)
-            {
-                DebugLight[i] = ObjVolume.LoadFromFile(Path.Combine(MeshesPaths[0], "DebugLight.obj"));
-                DebugLight[i].Material = Materials["DebugLight"];
-            }
-            DebugObjects.AddRange(DebugLight);
         }
 
         void initProgram()
@@ -432,7 +438,7 @@ namespace OpenGL_CS_Game
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
             //GL.BlendFuncSeparate(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha, BlendingFactorSrc.One, BlendingFactorDest.One);
 
-            if (Debug)
+            if (DebugMode)
             {
                 GL.Disable(EnableCap.Dither);
                 GL.FrontFace(FrontFaceDirection.Ccw);
@@ -479,7 +485,7 @@ namespace OpenGL_CS_Game
             // Передаем шейдеру вектор LightPosition, если шейдер поддерживает это.
             if (Shaders[v.Material.ShaderName].GetUniform("LightPosition") != -1)
             {
-                Vector3 LightPosition = new Vector3(1.0f * (float)Math.Cos(Angle), 0.0f, 1.0f * (float)Math.Sin(Angle));
+                Vector3 LightPosition = new Vector3(5.0f * (float)Math.Cos(Angle), 0.0f, 5.0f * (float)Math.Sin(Angle));
                 DebugObjects[1].Position = LightPosition;
                 GL.Uniform3(GL.GetUniformLocation(Shaders[v.Material.ShaderName].ProgramID, "LightPosition"), LightPosition);
             }
@@ -499,7 +505,7 @@ namespace OpenGL_CS_Game
             // Передаем шейдеру вектор Light Position, если шейдер поддерживает это.
             if (Shaders[v.Material.ShaderName].GetUniform("EyeLightPosition") != -1) //Light.Position
             {
-                Vector4 LightVector = new Vector4(10.0f * (float)Math.Cos(Angle), 0.0f, 10.0f * (float)Math.Sin(Angle), 1.0f);
+                Vector4 LightVector = new Vector4(6.0f * (float)Math.Cos(Angle), 0.0f, 6.0f * (float)Math.Sin(Angle), 1.0f);
                 Matrix4 ViewMartix = MainCamera.GetViewMatrix();
                 Vector4 LightResust = LightVector.Mult(ViewMartix);
                 DebugObjects[0].Position = LightVector.Xyz;

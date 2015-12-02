@@ -38,8 +38,8 @@ TextureMinFilter:
 		<TextureMinFilter>Nearest</TextureMinFilter>
 	</Texture>
 	<Texture>
-		<Name>DebugLight</Name>
-		<File>DebugLight.png</File>
+		<Name>DebugPointLight</Name>
+		<File>DebugPointLight.png</File>
 		<TextureMagFilter>Linear</TextureMagFilter>
 		<TextureMinFilter>Linear</TextureMinFilter>
 	</Texture>

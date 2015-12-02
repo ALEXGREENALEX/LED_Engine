@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
@@ -43,15 +44,12 @@ namespace OpenGL_CS_Game
 
         public override void GenBuffers()
         {
-            FreeBuffers();
-
             indexBufferID = GL.GenBuffer();
             vertexBufferID = GL.GenBuffer();
             normalBufferID = GL.GenBuffer();
             uvBufferID = GL.GenBuffer();
             tangentBufferID = GL.GenBuffer();
         }
-
         public override void FreeBuffers()
         {
             GL.DeleteBuffer(indexBufferID);

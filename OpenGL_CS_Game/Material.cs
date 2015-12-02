@@ -28,6 +28,20 @@ namespace OpenGL_CS_Game
                 textures[i] = null;
         }
 
+        public Material(Material OriginalMaterial)
+        {
+            shaderName = OriginalMaterial.ShaderName;
+            Color = new Vector4((float)R.NextDouble(), (float)R.NextDouble(), (float)R.NextDouble(), 1.0f);
+            CullFace = OriginalMaterial.CullFace;
+            Transparent = OriginalMaterial.Transparent;
+            SpecularReflectivity = OriginalMaterial.SpecularReflectivity;
+            AmbientReflectivity = OriginalMaterial.AmbientReflectivity;
+            SpecularShininess = OriginalMaterial.SpecularShininess;
+            ReflectionFactor = OriginalMaterial.ReflectionFactor;
+            RefractiveIndex = OriginalMaterial.RefractiveIndex;
+            OriginalMaterial.Textures.CopyTo(Textures, 0);
+        }
+
         public Material(string ShaderName)
         {
             shaderName = ShaderName;
@@ -66,7 +80,14 @@ namespace OpenGL_CS_Game
         public string[] Textures
         {
             get { return textures; }
-            set { textures = value; }
+            set
+            {
+                texturesCount = textures.Length;
+                texturesCount = 0;
+                for (int i = 0; i < textures.Length; i++)
+                    if (textures[i] != null)
+                        texturesCount++;
+            }
         }
 
         public bool SetTexture(int TextureUnit, string Texture)

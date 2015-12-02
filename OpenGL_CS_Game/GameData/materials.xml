@@ -12,7 +12,7 @@
 	CullFace
 		bool
 		Не работает для Transparent=true - в прозрачном материале всегда
-		рендндерится задняя, а потом передняя стороні граней!
+		рендерится задняя, а потом передняя стороны граней!
 	Transparent
 		bool
 	SpecularReflectivity
@@ -52,6 +52,7 @@
 		<Color>0.831 0.686 0.216 0.9</Color>
 		<CubemapTexture>Cubemap_Storforsen</CubemapTexture>
 		<ReflectionFactor>1.0</ReflectionFactor>
+		<CullFace>True</CullFace>
 	</Material>
 	<Material>
 		<Name>Refraction</Name>
@@ -66,7 +67,7 @@
 		<Shader>PhongNormalMap</Shader>
 		<Texture>brick-wall</Texture>
 		<Texture>brick-wall_N</Texture>
-		<CullFace>False</CullFace>
+		<CullFace>True</CullFace>
 		<SpecularReflectivity>0.2 0.2 0.2</SpecularReflectivity>
 		<AmbientReflectivity>0.05 0.05 0.05</AmbientReflectivity>
 		<SpecularShininess>1.0</SpecularShininess>
@@ -78,7 +79,7 @@
 		<Texture>ReliefParallaxTest_H</Texture>
 		<Texture>ReliefParallaxTest_N</Texture>
 		<Texture>ReliefParallaxTest_S</Texture>
-		<CullFace>False</CullFace>
+		<CullFace>True</CullFace>
 	</Material>
 	<Material>
 		<Name>Light</Name>

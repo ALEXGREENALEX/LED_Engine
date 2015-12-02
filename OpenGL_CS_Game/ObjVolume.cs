@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
@@ -25,10 +26,35 @@ namespace OpenGL_CS_Game
             GenBuffers();
         }
 
+        public ObjVolume(Volume OriginalVolume)
+            : base()
+        {
+            indeces = new int[OriginalVolume.GetIndeces().Length];
+            vertices = new Vector3[OriginalVolume.GetVertices().Length];
+            normals = new Vector3[OriginalVolume.GetNormals().Length];
+            uvs = new Vector2[OriginalVolume.GetUVs().Length];
+            tangents = new Vector3[OriginalVolume.GetTangents().Length];
+            bitangents = new Vector3[OriginalVolume.GetBitangents().Length];
+
+            OriginalVolume.GetIndeces().CopyTo(indeces, 0);
+            OriginalVolume.GetVertices().CopyTo(vertices, 0);
+            OriginalVolume.GetNormals().CopyTo(normals, 0);
+            OriginalVolume.GetUVs().CopyTo(uvs, 0);
+            OriginalVolume.GetTangents().CopyTo(tangents, 0);
+            OriginalVolume.GetBitangents().CopyTo(bitangents, 0);
+
+            Material = new Material(OriginalVolume.Material);
+
+            Position = OriginalVolume.Position;
+            Rotation = OriginalVolume.Rotation;
+            Scale = OriginalVolume.Scale;
+
+            GenBuffers();
+            BindBuffer_BufferData(this);
+        }
+
         public override void GenBuffers()
         {
-            FreeBuffers();
-
             indexBufferID = GL.GenBuffer();
             vertexBufferID = GL.GenBuffer();
             normalBufferID = GL.GenBuffer();
@@ -36,7 +62,6 @@ namespace OpenGL_CS_Game
             tangentBufferID = GL.GenBuffer();
             bitangentBufferID = GL.GenBuffer();
         }
-
         public override void FreeBuffers()
         {
             GL.DeleteBuffer(indexBufferID);

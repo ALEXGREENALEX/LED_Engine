@@ -76,8 +76,8 @@ namespace OpenGL_CS_Game
                 // FPS
                 if (ShowFPS)
                 {
-                    FPS = this.RenderFrequency;
-                    Title = "FPS: " + FPS.ToString("0.00") + "  UPS: " + UPS.ToString("0.00");
+                    FPS = 1.0 / e.Time;
+                    Title = "FPS: " + FPS.ToString("0.") + "  UPS: " + UPS.ToString("0.");
                 }
 
                 // Bind FBO for PostProcess
@@ -91,7 +91,7 @@ namespace OpenGL_CS_Game
                 DrawableObjects.AddRange(Objects);
                 foreach (var pref in Prefabs)
                     DrawableObjects.AddRange(pref.Objects);
-                if (Debug)
+                if (DebugMode)
                     DrawableObjects.AddRange(DebugObjects);
 
                 #region Сортировка прозрачных объектов
@@ -164,7 +164,7 @@ namespace OpenGL_CS_Game
             if (Focused)
             {
                 if (ShowFPS)
-                    UPS = this.UpdateFrequency;
+                    UPS = 1.0 / e.Time;
 
                 Vector2 delta = LastMousePos - new Vector2(OpenTK.Input.Mouse.GetState().X, OpenTK.Input.Mouse.GetState().Y);
                 LastMousePos += delta;

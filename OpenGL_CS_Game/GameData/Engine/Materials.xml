@@ -40,15 +40,15 @@
 		<CullFace>False</CullFace>
 	</Material>
 	<Material>
-		<Name>DebugLight</Name>
+		<Name>DebugPointLight</Name>
 		<Shader>DefaultTexture</Shader>
-		<Texture>DebugLight</Texture>
-		<CullFace>False</CullFace>
+		<Texture>DebugPointLight</Texture>
+		<CullFace>True</CullFace>
 	</Material>
 	<Material>
 		<Name>SkyCubemap_Default</Name>
 		<Shader>CubemapSky</Shader>
 		<CubemapTexture>SkyCubemap_Default</CubemapTexture>
-		<CullFace>False</CullFace>
+		<CullFace>True</CullFace>
 	</Material>
 </Materials>

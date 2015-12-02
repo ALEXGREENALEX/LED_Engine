@@ -2,10 +2,10 @@
 
 <Config>
 	<Title>OpenGL(OpenTK) C# Game</Title>
-	<Debug>true</Debug>
-	<ShowFPS>true</ShowFPS>
-	<UsePostEffects>false</UsePostEffects>
-	<VSyncEnable>false</VSyncEnable>
+	<Debug>True</Debug>
+	<ShowFPS>True</ShowFPS>
+	<UsePostEffects>True</UsePostEffects>
+	<VSyncEnable>False</VSyncEnable>
 	<Paths>
 		<GameData>GameData</GameData>
 		
