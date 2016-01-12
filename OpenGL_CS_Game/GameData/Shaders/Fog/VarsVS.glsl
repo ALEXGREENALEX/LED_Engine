@@ -1,1 +1,0 @@
-out vec3 f_FogPosition;

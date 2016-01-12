@@ -1,0 +1,10 @@
+<Meshes>
+	<Mesh>
+		<Name>Keypad</Name>
+		<File>Keypad.obj</File>
+	</Mesh>
+	<Mesh>
+		<Name>Pipe_X</Name>
+		<File>Pipe_X.obj</File>
+	</Mesh>
+</Meshes>

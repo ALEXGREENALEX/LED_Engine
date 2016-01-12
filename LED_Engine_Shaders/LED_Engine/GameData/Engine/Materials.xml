@@ -1,0 +1,57 @@
+﻿<!--Список материалов и их свойств
+	Name
+		string
+	Shader
+		string
+	Color
+		float Value (result Value Value Value 1.0f);
+		Vector3 RGB (result R G B 1.0f);
+		Vector4 RGBA (result R G B A);
+		Если не указать или оставить пустым - Случайный цвет;
+	Texture
+		string;
+		Количество от 0 до 32
+	CullFace
+		bool
+		Не работает для Transparent=true - в прозрачном материале всегда
+		рендерится задняя, а потом передняя стороны граней!
+	Transparent
+		bool
+	SpecularReflectivity
+		Vector3
+	AmbientReflectivity
+		Vector3
+	SpecularShininess
+		float
+	ReflectionFactor
+		float
+	RefractiveIndex
+		float
+-->
+
+<Materials>
+	<Material>
+		<Name></Name>
+		<Shader></Shader>
+		<CullFace>False</CullFace>
+	</Material>
+	<Material>
+		<Name>Checker</Name>
+		<Shader></Shader>
+		<Texture></Texture>
+		<CullFace>False</CullFace>
+	</Material>
+	<Material>
+		<Name>DebugPointLight</Name>
+		<Shader></Shader>
+		<Color>1.0 1.0 1.0</Color>
+		<Texture>DebugPointLight</Texture>
+		<CullFace>True</CullFace>
+	</Material>
+	<Material>
+		<Name>SkyCubemap_Default</Name>
+		<Shader>CubemapSky</Shader>
+		<Texture>SkyCubemap_Default</Texture>
+		<CullFace>True</CullFace>
+	</Material>
+</Materials>

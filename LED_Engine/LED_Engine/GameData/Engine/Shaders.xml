@@ -1,0 +1,38 @@
+﻿<Shaders>
+	<Shader>
+		<Name></Name>
+		<VertexShader>Default_VS.glsl</VertexShader>
+		<FragmentShader>Default_FS.glsl</FragmentShader>
+	</Shader>
+	<Shader>
+		<Name>DefaultTexture</Name>
+		<VertexShader>DefaultTexture_VS.glsl</VertexShader>
+		<FragmentShader>DefaultTexture_FS.glsl</FragmentShader>
+	</Shader>
+	<Shader>
+		<Name>CubemapSky</Name>
+		<VertexShader>CubemapSky_VS.glsl</VertexShader>
+		<FragmentShader>CubemapSky_FS.glsl</FragmentShader>
+	</Shader>
+	
+	<!--Debug Shaders-->
+	<Shader>
+		<Name>WorldNormal</Name>
+		<VertexShader>Debug\WorldNormal_VS.glsl</VertexShader>
+		<FragmentShader>Debug\WorldNormal_FS.glsl</FragmentShader>
+	</Shader>
+	
+	<Shader>
+		<Name>NormalVisualizer</Name>
+		<VertexShader>Debug\NormalVisualizer_VS.glsl</VertexShader>
+		<GeometryShader>Debug\NormalVisualizer_GS.glsl</GeometryShader>
+		<FragmentShader>Debug\NormalVisualizer_FS.glsl</FragmentShader>
+	</Shader>
+	
+	<!--PostProcessShader-->
+	<PostProcessShader>
+		<Name>PostProcess</Name>
+		<VertexShader>PostProcess_VS.glsl</VertexShader>
+		<FragmentShader>PostProcess_FS.glsl</FragmentShader>
+	</PostProcessShader>
+</Shaders>

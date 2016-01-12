@@ -1,1 +1,0 @@
-f_FogPosition = vec3(MVP * vec4(VertexPosition, 1.0));

@@ -1,0 +1,104 @@
+﻿<!--Список материалов и их свойств
+	Name
+		string
+	Shader
+		string
+	Color
+		float Value (result Value Value Value 1.0f);
+		Vector3 RGB (result R G B 1.0f);
+		Vector4 RGBA (result R G B A);
+		Если не указать или оставить пустым - Случайный цвет;
+	Texture
+		string;
+		Количество от 0 до 32
+	CullFace
+		bool
+		Не работает для Transparent=true - в прозрачном материале всегда
+		рендерится задняя, а потом передняя стороны граней!
+	Transparent
+		bool
+	SpecularReflectivity
+		Vector3
+	AmbientReflectivity
+		Vector3
+	SpecularShininess
+		float
+	ReflectionFactor
+		float
+	RefractiveIndex
+		float
+-->
+
+<Materials>
+	<Material>
+		<Name>TransparentRedGlass</Name>
+		<Shader>Unlit</Shader>
+		<!--<Texture>AlphaTest</Texture>-->
+		<Color>1.0 0.0 0.0 0.5</Color>
+		<Transparent>True</Transparent>
+	</Material>
+	<Material>
+		<Name>SkyCubemap_Storforsen</Name>
+		<Shader>CubemapSky</Shader>
+		<Texture>SkyCubemap_Storforsen</Texture>
+		<CullFace>True</CullFace>
+	</Material>
+	<Material>
+		<Name>SkyCubemap_Yokohama3</Name>
+		<Shader>CubemapSky</Shader>
+		<Texture>SkyCubemap_Yokohama3</Texture>
+		<CullFace>True</CullFace>
+	</Material>
+	<Material>
+		<Name>Reflection</Name>
+		<Shader>ReflectRefract</Shader>
+		<Color>0.831 0.686 0.216 0.9</Color>
+		<Texture>Cubemap_Storforsen</Texture>
+		<!--<Texture>AlphaTest</Texture>-->
+		<ReflectionFactor>1.0</ReflectionFactor>
+		<CullFace>True</CullFace>
+	</Material>
+	<Material>
+		<Name>Refraction</Name>
+		<Shader>ReflectRefract</Shader>
+		<Color>0.8 0.95 1.0 0.4</Color>
+		<Texture>Cubemap_Storforsen</Texture>
+		<!--<Texture>AlphaTest</Texture>-->
+		<ReflectionFactor>0.1</ReflectionFactor>
+		<RefractiveIndex>0.9</RefractiveIndex>
+	</Material>
+	<Material>
+		<Name>BrickWall</Name>
+		<Shader>PhongNormalMap</Shader>
+		<Texture>brick-wall</Texture>
+		<Texture>brick-wall_N</Texture>
+		<CullFace>True</CullFace>
+		<SpecularReflectivity>0.2 0.2 0.2</SpecularReflectivity>
+		<AmbientReflectivity>0.05 0.05 0.05</AmbientReflectivity>
+		<SpecularShininess>1.0</SpecularShininess>
+	</Material>
+	<Material>
+		<Name>ReliefParallaxTest</Name>
+		<Shader>ReliefParallaxMap</Shader>
+		<Texture>ReliefParallaxTest_D</Texture>
+		<Texture>ReliefParallaxTest_N</Texture>
+		<Texture>ReliefParallaxTest_S</Texture>
+		<Texture>ReliefParallaxTest_H</Texture>
+		<CullFace>True</CullFace>
+	</Material>
+	<Material>
+		<Name>Light</Name>
+		<Shader>Light</Shader>
+		<Texture>brick-wall</Texture>-->
+		<CullFace>True</CullFace>
+	</Material>
+	<Material>
+		<Name>Keypad</Name>
+		<Shader>PhongNormalMap</Shader>
+		<Texture>Keypad</Texture>
+		<Texture>Keypad_N</Texture>
+		<SpecularReflectivity>0.2 0.2 0.2</SpecularReflectivity>
+		<AmbientReflectivity>0.1 0.1 0.1</AmbientReflectivity>
+		<SpecularShininess>1.0</SpecularShininess>
+	</Material>
+</Materials>

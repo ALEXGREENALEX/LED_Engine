@@ -1,0 +1,48 @@
+﻿<!--Список всех текстур
+bool GenerateMipmap;
+
+MagFilter:
+	Nearest
+	Linear
+	LinearDetailSgis
+	LinearDetailAlphaSgis
+	LinearDetailColorSgis
+	LinearSharpenSgis
+	LinearSharpenAlphaSgis
+	LinearSharpenColorSgis
+	Filter4Sgis
+	PixelTexGenQCeilingSgix
+	PixelTexGenQRoundSgix
+	PixelTexGenQFloorSgix
+
+MinFilter:
+	Nearest
+	Linear
+	NearestMipmapNearest
+	LinearMipmapNearest
+	NearestMipmapLinear
+	LinearMipmapLinear
+	Filter4Sgis
+	LinearClipmapLinearSgix
+	PixelTexGenQCeilingSgix
+	PixelTexGenQRoundSgix
+	PixelTexGenQFloorSgix
+	NearestClipmapNearestSgix
+	NearestClipmapLinearSgix
+	LinearClipmapNearestSgix
+-->
+
+<Textures>
+	<Texture>
+		<Name></Name>
+		<File>checker.bmp</File>
+		<MagFilter>Nearest</MagFilter>
+		<MinFilter>Nearest</MinFilter>
+	</Texture>
+	<Texture>
+		<Name>DebugPointLight</Name>
+		<File>DebugPointLight.png</File>
+		<MagFilter>Linear</MagFilter>
+		<MinFilter>Linear</MinFilter>
+	</Texture>
+</Textures>

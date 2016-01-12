@@ -1,0 +1,44 @@
+﻿<!--Список всех CubemapTextures
+Dir - Папка, для удобства, где хранятся File[6].
+File[6] = {X+, X-, Y+, Y-, Z+, Z-} - 6 текстур.
+MagFilter, MinFilter, GenerateMipmap как в Textures
+SideSize - Сторона текстуры
+	Если пропустить или оставить пустым, то размер считывается из текстур
+	Это ускоряет загрузку, но замедляет рендер при больших текстурах.
+-->
+<CubemapTextures>	
+	<CubemapTexture>
+		<Name>SkyCubemap_Storforsen</Name>
+		<Dir>Storforsen</Dir>
+		<File>posx.jpg</File>
+		<File>negx.jpg</File>
+		<File>posy.jpg</File>
+		<File>negy.jpg</File>
+		<File>posz.jpg</File>
+		<File>negz.jpg</File>
+		<SideSize></SideSize>
+	</CubemapTexture>
+	<CubemapTexture>
+		<Name>SkyCubemap_Yokohama3</Name>
+		<Dir>Yokohama3</Dir>
+		<File>posx.jpg</File>
+		<File>negx.jpg</File>
+		<File>posy.jpg</File>
+		<File>negy.jpg</File>
+		<File>posz.jpg</File>
+		<File>negz.jpg</File>
+		<SideSize></SideSize>
+	</CubemapTexture>
+	<!--Далее идут Cubemaps для отражений-->
+	<CubemapTexture>
+		<Name>Cubemap_Storforsen</Name>
+		<Dir>Storforsen</Dir>
+		<File>posx.jpg</File>
+		<File>negx.jpg</File>
+		<File>posy.jpg</File>
+		<File>negy.jpg</File>
+		<File>posz.jpg</File>
+		<File>negz.jpg</File>
+		<SideSize>256</SideSize>
+	</CubemapTexture>
+</CubemapTextures>

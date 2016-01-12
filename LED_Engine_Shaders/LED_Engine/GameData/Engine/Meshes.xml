@@ -1,0 +1,10 @@
+<Meshes>
+	<Mesh>
+		<Name>PointLight</Name>
+		<File>PointLight.obj</File>
+	</Mesh>
+	<Mesh>
+		<Name>Teapot</Name>
+		<File>Teapot.obj</File>
+	</Mesh>
+</Meshes>

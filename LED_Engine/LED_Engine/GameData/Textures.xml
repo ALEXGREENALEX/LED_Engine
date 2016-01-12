@@ -1,0 +1,113 @@
+﻿<!--Список всех текстур
+bool GenerateMipmap;
+
+MagFilter:
+	Nearest
+	Linear
+	LinearDetailSgis
+	LinearDetailAlphaSgis
+	LinearDetailColorSgis
+	LinearSharpenSgis
+	LinearSharpenAlphaSgis
+	LinearSharpenColorSgis
+	Filter4Sgis
+	PixelTexGenQCeilingSgix
+	PixelTexGenQRoundSgix
+	PixelTexGenQFloorSgix
+
+MinFilter:
+	Nearest
+	Linear
+	NearestMipmapNearest
+	LinearMipmapNearest
+	NearestMipmapLinear
+	LinearMipmapLinear
+	Filter4Sgis
+	LinearClipmapLinearSgix
+	PixelTexGenQCeilingSgix
+	PixelTexGenQRoundSgix
+	PixelTexGenQFloorSgix
+	NearestClipmapNearestSgix
+	NearestClipmapLinearSgix
+	LinearClipmapNearestSgix
+-->
+
+<Textures>
+	<Texture>
+		<Name>brick-wall</Name>
+		<File>brick-wall.jpg</File>
+	</Texture>
+	<Texture>
+		<Name>brick-wall_N</Name>
+		<File>brick-wall_N.jpg</File>
+	</Texture>
+	<Texture>
+		<Name>Keypad</Name>
+		<File>Keypad.png</File>
+	</Texture>
+	<Texture>
+		<Name>Keypad_N</Name>
+		<File>Keypad_N.png</File>
+	</Texture>
+		
+	<!--Relief Parallax Test-->
+	<Texture>
+		<Name>ReliefParallaxTest_D</Name>
+		<File>ReliefParallaxTest\ReliefParallaxTest_D.png</File>
+	</Texture>
+	<Texture>
+		<Name>ReliefParallaxTest_H</Name>
+		<File>ReliefParallaxTest\ReliefParallaxTest_H.png</File>
+	</Texture>
+	<Texture>
+		<Name>ReliefParallaxTest_N</Name>
+		<File>ReliefParallaxTest\ReliefParallaxTest_N.png</File>
+	</Texture>
+	<Texture>
+		<Name>ReliefParallaxTest_S</Name>
+		<File>ReliefParallaxTest\ReliefParallaxTest_S.png</File>
+	</Texture>
+	<!--Список всех CubemapTextures
+	Dir - Папка, для удобства, где хранятся File[6].
+	File[6] = {X+, X-, Y+, Y-, Z+, Z-} - 6 текстур.
+	MagFilter, MinFilter, GenerateMipmap как в Textures
+	SideSize - Сторона текстуры
+		Если пропустить или оставить пустым, то размер считывается из текстур
+		Это ускоряет загрузку, но замедляет рендер при больших текстурах.
+	-->
+	
+	<CubemapTexture>
+		<Name>SkyCubemap_Storforsen</Name>
+		<Dir>Storforsen</Dir>
+		<File>posx.jpg</File>
+		<File>negx.jpg</File>
+		<File>posy.jpg</File>
+		<File>negy.jpg</File>
+		<File>posz.jpg</File>
+		<File>negz.jpg</File>
+		<SideSize></SideSize>
+	</CubemapTexture>
+	<CubemapTexture>
+		<Name>SkyCubemap_Yokohama3</Name>
+		<Dir>Yokohama3</Dir>
+		<File>posx.jpg</File>
+		<File>negx.jpg</File>
+		<File>posy.jpg</File>
+		<File>negy.jpg</File>
+		<File>posz.jpg</File>
+		<File>negz.jpg</File>
+		<SideSize></SideSize>
+	</CubemapTexture>
+	<!--Далее идут Cubemaps для отражений-->
+	<CubemapTexture>
+		<Name>Cubemap_Storforsen</Name>
+		<Dir>Storforsen</Dir>
+		<File>posx.jpg</File>
+		<File>negx.jpg</File>
+		<File>posy.jpg</File>
+		<File>negy.jpg</File>
+		<File>posz.jpg</File>
+		<File>negz.jpg</File>
+		<SideSize>256</SideSize>
+	</CubemapTexture>
+</Textures>
