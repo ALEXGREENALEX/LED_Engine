@@ -252,8 +252,7 @@ namespace LED_Engine
 
         public Mesh()
         {
-            //GenBuffers();
-            //BindBuffers();
+
         }
 
         public Mesh(Mesh Original, bool CopyMaterials = false)
@@ -811,21 +810,33 @@ namespace LED_Engine
             }
         }
 
-        public static Mesh MakePlain(float SideLength = 1.0f)
+        public static Mesh MakePlain(float Sides = 1.0f)
         {
-            float HalfSideLength = SideLength / 2.0f;
+            return MakePlain(Sides, Sides);
+        }
+
+        public static Mesh MakePlain(float SideA , float SideB)
+        {
+            if (SideA < 0.0f)
+                SideA = -SideA;
+            if (SideB < 0.0f)
+                SideB = -SideB;
+
+            float HalfA = SideA / 2.0f;
+            float HalfB = SideB / 2.0f;
+
             Mesh plain = new Mesh();
             plain.Name = "Plain";
 
             #region Vertexes, Normals, UVs, Indexes
             plain.Vertexes = new Vector3[]
             {
-                new Vector3(-HalfSideLength,  0, -HalfSideLength),
-                new Vector3(-HalfSideLength,  0,  HalfSideLength),
-                new Vector3( HalfSideLength,  0,  HalfSideLength),
-                new Vector3(-HalfSideLength,  0, -HalfSideLength),
-                new Vector3( HalfSideLength,  0,  HalfSideLength),
-                new Vector3( HalfSideLength,  0, -HalfSideLength)
+                new Vector3(-HalfA,  0, -HalfB),
+                new Vector3(-HalfA,  0,  HalfB),
+                new Vector3( HalfA,  0,  HalfB),
+                new Vector3(-HalfA,  0, -HalfB),
+                new Vector3( HalfA,  0,  HalfB),
+                new Vector3( HalfA,  0, -HalfB)
             };
 
             plain.Normals = new Vector3[]
@@ -858,59 +869,74 @@ namespace LED_Engine
             return plain;
         }
 
-        public static Mesh MakeCube(float SideLength = 1.0f, bool FlipPolygons = false)
+        public static Mesh MakeBox(float Sides = 1.0f, bool FlipPolygons = false)
         {
-            float HalfSideLength = SideLength / 2.0f;
-            Mesh cube = new Mesh();
-            cube.Name = "Cube";
+            return MakeBox(Sides, Sides, Sides, FlipPolygons);
+        }
+
+        public static Mesh MakeBox(float SideA, float SideB, float SideC, bool FlipPolygons = false)
+        {
+            if (SideA < 0.0f)
+                SideA = -SideA;
+            if (SideB <= 0.0f)
+                SideB = -SideB;
+            if (SideC <= 0.0f)
+                SideC = -SideC;
+
+            float HalfA = SideA / 2.0f;
+            float HalfB = SideB / 2.0f;
+            float HalfC = SideC / 2.0f;
+
+            Mesh box = new Mesh();
+            box.Name = "Box";
 
             #region Vertexes, Normals, UVs, Indexes
             if (FlipPolygons)
             {
-                cube.Vertexes = new Vector3[] {
-                    new Vector3(-HalfSideLength, -HalfSideLength,  HalfSideLength),
-                    new Vector3( HalfSideLength, -HalfSideLength,  HalfSideLength),
-                    new Vector3( HalfSideLength, -HalfSideLength, -HalfSideLength),
-                    new Vector3( HalfSideLength, -HalfSideLength, -HalfSideLength),
-                    new Vector3(-HalfSideLength, -HalfSideLength, -HalfSideLength),
-                    new Vector3(-HalfSideLength, -HalfSideLength,  HalfSideLength),
+                box.Vertexes = new Vector3[] {
+                    new Vector3(-HalfA, -HalfB,  HalfC), //1
+                    new Vector3( HalfA, -HalfB,  HalfC), //5
+                    new Vector3( HalfA, -HalfB, -HalfC), //4
+                    new Vector3( HalfA, -HalfB, -HalfC), //4
+                    new Vector3(-HalfA, -HalfB, -HalfC), //0
+                    new Vector3(-HalfA, -HalfB,  HalfC), //1
 
-                    new Vector3(-HalfSideLength,  HalfSideLength,  HalfSideLength),
-                    new Vector3(-HalfSideLength,  HalfSideLength, -HalfSideLength),
-                    new Vector3( HalfSideLength,  HalfSideLength, -HalfSideLength),
-                    new Vector3( HalfSideLength,  HalfSideLength, -HalfSideLength),
-                    new Vector3( HalfSideLength,  HalfSideLength,  HalfSideLength),
-                    new Vector3(-HalfSideLength,  HalfSideLength,  HalfSideLength),
+                    new Vector3(-HalfA,  HalfB,  HalfC), //3
+                    new Vector3(-HalfA,  HalfB, -HalfC), //2
+                    new Vector3( HalfA,  HalfB, -HalfC), //6
+                    new Vector3( HalfA,  HalfB, -HalfC), //6
+                    new Vector3( HalfA,  HalfB,  HalfC), //7
+                    new Vector3(-HalfA,  HalfB,  HalfC), //3
                     
-                    new Vector3(-HalfSideLength, -HalfSideLength,  HalfSideLength),
-                    new Vector3(-HalfSideLength,  HalfSideLength,  HalfSideLength),
-                    new Vector3( HalfSideLength,  HalfSideLength,  HalfSideLength),
-                    new Vector3( HalfSideLength,  HalfSideLength,  HalfSideLength),
-                    new Vector3( HalfSideLength, -HalfSideLength,  HalfSideLength),
-                    new Vector3(-HalfSideLength, -HalfSideLength,  HalfSideLength),
+                    new Vector3(-HalfA, -HalfB,  HalfC), //1
+                    new Vector3(-HalfA,  HalfB,  HalfC), //3
+                    new Vector3( HalfA,  HalfB,  HalfC), //7
+                    new Vector3( HalfA,  HalfB,  HalfC), //7
+                    new Vector3( HalfA, -HalfB,  HalfC), //5
+                    new Vector3(-HalfA, -HalfB,  HalfC), //1
                     
-                    new Vector3( HalfSideLength, -HalfSideLength,  HalfSideLength),
-                    new Vector3( HalfSideLength,  HalfSideLength,  HalfSideLength),
-                    new Vector3( HalfSideLength,  HalfSideLength, -HalfSideLength),
-                    new Vector3( HalfSideLength,  HalfSideLength, -HalfSideLength),
-                    new Vector3( HalfSideLength, -HalfSideLength, -HalfSideLength),
-                    new Vector3( HalfSideLength, -HalfSideLength,  HalfSideLength),
+                    new Vector3( HalfA, -HalfB,  HalfC), //5
+                    new Vector3( HalfA,  HalfB,  HalfC), //7
+                    new Vector3( HalfA,  HalfB, -HalfC), //6
+                    new Vector3( HalfA,  HalfB, -HalfC), //6
+                    new Vector3( HalfA, -HalfB, -HalfC), //4
+                    new Vector3( HalfA, -HalfB,  HalfC), //5
 
-                    new Vector3( HalfSideLength, -HalfSideLength, -HalfSideLength),
-                    new Vector3( HalfSideLength,  HalfSideLength, -HalfSideLength),
-                    new Vector3(-HalfSideLength,  HalfSideLength, -HalfSideLength),
-                    new Vector3(-HalfSideLength,  HalfSideLength, -HalfSideLength),
-                    new Vector3(-HalfSideLength, -HalfSideLength, -HalfSideLength),
-                    new Vector3( HalfSideLength, -HalfSideLength, -HalfSideLength),
+                    new Vector3( HalfA, -HalfB, -HalfC), //4
+                    new Vector3( HalfA,  HalfB, -HalfC), //6
+                    new Vector3(-HalfA,  HalfB, -HalfC), //2
+                    new Vector3(-HalfA,  HalfB, -HalfC), //2
+                    new Vector3(-HalfA, -HalfB, -HalfC), //0
+                    new Vector3( HalfA, -HalfB, -HalfC), //4
 
-                    new Vector3(-HalfSideLength, -HalfSideLength, -HalfSideLength),
-                    new Vector3(-HalfSideLength,  HalfSideLength, -HalfSideLength),
-                    new Vector3(-HalfSideLength,  HalfSideLength,  HalfSideLength),
-                    new Vector3(-HalfSideLength,  HalfSideLength,  HalfSideLength),
-                    new Vector3(-HalfSideLength, -HalfSideLength,  HalfSideLength),
-                    new Vector3(-HalfSideLength, -HalfSideLength, -HalfSideLength) };
+                    new Vector3(-HalfA, -HalfB, -HalfC), //0
+                    new Vector3(-HalfA,  HalfB, -HalfC), //2
+                    new Vector3(-HalfA,  HalfB,  HalfC), //3
+                    new Vector3(-HalfA,  HalfB,  HalfC), //3
+                    new Vector3(-HalfA, -HalfB,  HalfC), //1
+                    new Vector3(-HalfA, -HalfB, -HalfC) }; //0
 
-                cube.Normals = new Vector3[] {
+                box.Normals = new Vector3[] {
                     new Vector3( 0,  1,  0),
                     new Vector3( 0,  1,  0),
                     new Vector3( 0,  1,  0),
@@ -953,7 +979,7 @@ namespace LED_Engine
                     new Vector3( 1,  0,  0),
                     new Vector3( 1,  0,  0) };
 
-                cube.UVs = new Vector2[] {
+                box.UVs = new Vector2[] {
                     new Vector2(1, 0),
                     new Vector2(0, 0),
                     new Vector2(0, 1),
@@ -993,50 +1019,50 @@ namespace LED_Engine
             }
             else
             {
-                cube.Vertexes = new Vector3[] {
-                    new Vector3(-HalfSideLength, -HalfSideLength,  HalfSideLength),
-                    new Vector3(-HalfSideLength, -HalfSideLength, -HalfSideLength),
-                    new Vector3( HalfSideLength, -HalfSideLength, -HalfSideLength),
-                    new Vector3( HalfSideLength, -HalfSideLength, -HalfSideLength),
-                    new Vector3( HalfSideLength, -HalfSideLength,  HalfSideLength),
-                    new Vector3(-HalfSideLength, -HalfSideLength,  HalfSideLength),
+                box.Vertexes = new Vector3[] {
+                    new Vector3(-HalfA, -HalfB,  HalfC),
+                    new Vector3(-HalfA, -HalfB, -HalfC),
+                    new Vector3( HalfA, -HalfB, -HalfC),
+                    new Vector3( HalfA, -HalfB, -HalfC),
+                    new Vector3( HalfA, -HalfB,  HalfC),
+                    new Vector3(-HalfA, -HalfB,  HalfC),
 
-                    new Vector3(-HalfSideLength,  HalfSideLength,  HalfSideLength),
-                    new Vector3( HalfSideLength,  HalfSideLength,  HalfSideLength),
-                    new Vector3( HalfSideLength,  HalfSideLength, -HalfSideLength),
-                    new Vector3( HalfSideLength,  HalfSideLength, -HalfSideLength),
-                    new Vector3(-HalfSideLength,  HalfSideLength, -HalfSideLength),
-                    new Vector3(-HalfSideLength,  HalfSideLength,  HalfSideLength),
+                    new Vector3(-HalfA,  HalfB,  HalfC),
+                    new Vector3( HalfA,  HalfB,  HalfC),
+                    new Vector3( HalfA,  HalfB, -HalfC),
+                    new Vector3( HalfA,  HalfB, -HalfC),
+                    new Vector3(-HalfA,  HalfB, -HalfC),
+                    new Vector3(-HalfA,  HalfB,  HalfC),
 
-                    new Vector3(-HalfSideLength, -HalfSideLength,  HalfSideLength),
-                    new Vector3( HalfSideLength, -HalfSideLength,  HalfSideLength),
-                    new Vector3( HalfSideLength,  HalfSideLength,  HalfSideLength),
-                    new Vector3( HalfSideLength,  HalfSideLength,  HalfSideLength),
-                    new Vector3(-HalfSideLength,  HalfSideLength,  HalfSideLength),
-                    new Vector3(-HalfSideLength, -HalfSideLength,  HalfSideLength),
+                    new Vector3(-HalfA, -HalfB,  HalfC),
+                    new Vector3( HalfA, -HalfB,  HalfC),
+                    new Vector3( HalfA,  HalfB,  HalfC),
+                    new Vector3( HalfA,  HalfB,  HalfC),
+                    new Vector3(-HalfA,  HalfB,  HalfC),
+                    new Vector3(-HalfA, -HalfB,  HalfC),
 
-                    new Vector3( HalfSideLength, -HalfSideLength,  HalfSideLength),
-                    new Vector3( HalfSideLength, -HalfSideLength, -HalfSideLength),
-                    new Vector3( HalfSideLength,  HalfSideLength, -HalfSideLength),
-                    new Vector3( HalfSideLength,  HalfSideLength, -HalfSideLength),
-                    new Vector3( HalfSideLength,  HalfSideLength,  HalfSideLength),
-                    new Vector3( HalfSideLength, -HalfSideLength,  HalfSideLength),
+                    new Vector3( HalfA, -HalfB,  HalfC),
+                    new Vector3( HalfA, -HalfB, -HalfC),
+                    new Vector3( HalfA,  HalfB, -HalfC),
+                    new Vector3( HalfA,  HalfB, -HalfC),
+                    new Vector3( HalfA,  HalfB,  HalfC),
+                    new Vector3( HalfA, -HalfB,  HalfC),
 
-                    new Vector3( HalfSideLength, -HalfSideLength, -HalfSideLength),
-                    new Vector3(-HalfSideLength, -HalfSideLength, -HalfSideLength),
-                    new Vector3(-HalfSideLength,  HalfSideLength, -HalfSideLength),
-                    new Vector3(-HalfSideLength,  HalfSideLength, -HalfSideLength),
-                    new Vector3( HalfSideLength,  HalfSideLength, -HalfSideLength),
-                    new Vector3( HalfSideLength, -HalfSideLength, -HalfSideLength),
+                    new Vector3( HalfA, -HalfB, -HalfC),
+                    new Vector3(-HalfA, -HalfB, -HalfC),
+                    new Vector3(-HalfA,  HalfB, -HalfC),
+                    new Vector3(-HalfA,  HalfB, -HalfC),
+                    new Vector3( HalfA,  HalfB, -HalfC),
+                    new Vector3( HalfA, -HalfB, -HalfC),
 
-                    new Vector3(-HalfSideLength, -HalfSideLength, -HalfSideLength),
-                    new Vector3(-HalfSideLength, -HalfSideLength,  HalfSideLength),
-                    new Vector3(-HalfSideLength,  HalfSideLength,  HalfSideLength),
-                    new Vector3(-HalfSideLength,  HalfSideLength,  HalfSideLength),
-                    new Vector3(-HalfSideLength,  HalfSideLength, -HalfSideLength),
-                    new Vector3(-HalfSideLength, -HalfSideLength, -HalfSideLength) };
+                    new Vector3(-HalfA, -HalfB, -HalfC),
+                    new Vector3(-HalfA, -HalfB,  HalfC),
+                    new Vector3(-HalfA,  HalfB,  HalfC),
+                    new Vector3(-HalfA,  HalfB,  HalfC),
+                    new Vector3(-HalfA,  HalfB, -HalfC),
+                    new Vector3(-HalfA, -HalfB, -HalfC) };
 
-                cube.Normals = new Vector3[] {
+                box.Normals = new Vector3[] {
                     new Vector3( 0, -1,  0),
                     new Vector3( 0, -1,  0),
                     new Vector3( 0, -1,  0),
@@ -1079,7 +1105,7 @@ namespace LED_Engine
                     new Vector3(-1,  0,  0),
                     new Vector3(-1,  0,  0) };
 
-                cube.UVs = new Vector2[] {
+                box.UVs = new Vector2[] {
                     new Vector2(1, 0),
                     new Vector2(1, 1),
                     new Vector2(0, 1),
@@ -1118,7 +1144,7 @@ namespace LED_Engine
                     new Vector2(0, 0) };
             }
 
-            cube.Indexes(new int[] {
+            box.Indexes(new int[] {
                     0, 1, 2, 3, 4, 5,
                     6, 7, 8, 9, 10, 11,
                     12, 13, 14, 15, 16, 17,
@@ -1127,12 +1153,12 @@ namespace LED_Engine
                     30, 31, 32, 33, 34, 35 });
             #endregion
 
-            ComputeTangentBasis(cube.Vertexes, cube.Normals, cube.UVs, out cube.Tangents);
+            ComputeTangentBasis(box.Vertexes, box.Normals, box.UVs, out box.Tangents);
 
-            cube.GenBuffers();
-            cube.BindBuffers();
+            box.GenBuffers();
+            box.BindBuffers();
 
-            return cube;
+            return box;
         }
     }
 }

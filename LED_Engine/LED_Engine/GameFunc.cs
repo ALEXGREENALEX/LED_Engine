@@ -210,10 +210,10 @@ namespace LED_Engine
             plain.Position.Y = -0.5f;
             Objects.Add(plain);
 
-            Mesh cube = Mesh.MakeCube();
-            cube.Materials.Add(Materials.Load("Light"));
-            cube.Position.X = -2f;
-            Objects.Add(cube);
+            Mesh box = Mesh.MakeBox();
+            box.Materials.Add(Materials.Load("Light"));
+            box.Position.X = -2f;
+            Objects.Add(box);
 
             Mesh Pipe_X_1 = Mesh.LoadFromFile("Pipe_X_1", Engine.CombinePaths(Settings.Paths.Meshes, "Pipe_X.obj"));
             //Pipe_X_1.Material = Materials.Load("BrickWall");
@@ -273,7 +273,7 @@ namespace LED_Engine
             // FOG
             Fog.Enabled = true;
 
-            SkyCube = Mesh.MakeCube(zFar, true);
+            SkyCube = Mesh.MakeBox(zFar, true);
             SkyCube.Materials.Add(Materials.Load("SkyCubemap_Storforsen"));
             Objects.Add(SkyCube);
 
