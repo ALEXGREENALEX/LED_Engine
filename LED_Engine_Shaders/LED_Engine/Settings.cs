@@ -101,5 +101,17 @@ namespace LED_Engine
             public static bool UsePostEffects = true;
             public static bool FogEnabled = true;
         }
+
+        public static class GL
+        {
+            public static int MaxTextureImageUnits = 0; //FS
+            public static int MaxVertexTextureImageUnits = 0; //VS
+            public static int MaxGeometryTextureImageUnits = 0; //GS
+
+            /// <summary>
+            /// TextureImageUnits = Min(MaxTextureImageUnits, MaxVertexTextureImageUnits, MaxGeometryTextureImageUnits)
+            /// </summary>
+            public static int TextureImageUnits = 0;
+        }
     }
 }

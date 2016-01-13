@@ -51,20 +51,27 @@ namespace LED_Engine
                     xmlNodeList = xmlNode.SelectNodes("Texture");
                     if (xmlNodeList.Count > 0)
                     {
-                        int Count = Math.Min(xmlNodeList.Count, Material.TextureUnitsCheckCount);
-                        for (int i = 0; i < Count; i++)
+                        for (int i = 0; i < xmlNodeList.Count; i++)
                         {
-                            string TextureName = xmlNodeList.Item(i).InnerText;
+                            string TextureName = xmlNodeList.Item(i).SelectSingleNode("Name").InnerText;
+                            uint TextureUnit = Convert.ToUInt32(xmlNodeList.Item(i).SelectSingleNode("TextureUnit").InnerText);
 
+                            if (TextureUnit > material.Textures.Length | TextureName == null)
+                                continue;
+
+                            bool Found = false;
                             for (int j = 0; j < Textures.TexturesList.Count; j++)
+                            {
                                 if (Textures.TexturesList[j].Name == TextureName)
                                 {
-                                    material.SetTexture(i, Textures.TexturesList[j]);
+                                    material.Textures[TextureUnit] = Textures.TexturesList[j];
+                                    Found = true;
                                     break;
                                 }
+                            }
 
-                            if (material.Textures[i] == null)
-                                throw new Exception("LoadMaterialList() Parse Textures Exception.");
+                            if (!Found)
+                                throw new Exception("LoadMaterialList() Parse Textures Exception. Name:\"" + TextureName + "\"");
                         }
                     }
                     #endregion
@@ -218,8 +225,9 @@ namespace LED_Engine
                 {
                     Shaders.Load(M.Shader.Name);
 
-                    for (int i = 0; i < M.TexturesCount; i++)
-                        Textures.Load(M.Textures[i].Name);
+                    for (int i = 0; i < M.Textures.Length; i++)
+                        if (M.Textures[i] != null)
+                            Textures.Load(M.Textures[i].Name);
 
                     MATERIALS.Add(M);
                 }
@@ -229,7 +237,7 @@ namespace LED_Engine
             }
             catch
             {
-                Log.WriteLineRed("Shaders.LoadShader() Exception, Name: \"{0}\"", Name);
+                Log.WriteLineRed("Materials.Load() Exception, Name: \"{0}\"", Name);
                 return null;
             }
         }
@@ -291,8 +299,6 @@ namespace LED_Engine
         public bool EngineContent = false;
 
         static Random R = new Random();
-        public static int TextureUnitsCheckCount = 16; // Used only for check Textures in *.glsl TextureUnit*
-
         public string Name = String.Empty;
         public Shader Shader;
         public bool CullFace = true;
@@ -319,13 +325,10 @@ namespace LED_Engine
         /// </summary>
         public float RefractiveIndex = 1.0f;
 
-        int texturesCount = 0;
-        Texture[] textures = new Texture[TextureUnitsCheckCount];
+        public Texture[] Textures = new Texture[Settings.GL.TextureImageUnits];
 
         public Material()
         {
-            for (int i = 0; i < textures.Length; i++)
-                textures[i] = null;
         }
 
         public Material(Material OriginalMaterial, bool SaveColor = false)
@@ -344,48 +347,9 @@ namespace LED_Engine
             Shininess = OriginalMaterial.Shininess;
             ReflectionFactor = OriginalMaterial.ReflectionFactor;
             RefractiveIndex = OriginalMaterial.RefractiveIndex;
+
+            Textures = new Texture[OriginalMaterial.Textures.Length];
             OriginalMaterial.Textures.CopyTo(Textures, 0);
-        }
-
-        public Texture[] Textures
-        {
-            get { return textures; }
-            set
-            {
-                texturesCount = textures.Length;
-                texturesCount = 0;
-                for (int i = 0; i < textures.Length; i++)
-                    if (textures[i] != null)
-                        texturesCount++;
-            }
-        }
-
-        public bool SetTexture(int TextureUnit, Texture Texture)
-        {
-            if (TextureUnit >= 0 && TextureUnit < TextureUnitsCheckCount)
-            {
-                textures[TextureUnit] = Texture;
-                texturesCount = 0;
-                for (int i = 0; i < textures.Length; i++)
-                    if (textures[i] != null)
-                        texturesCount++;
-                return true;
-            }
-            else
-                return false;
-        }
-
-        public Texture GetTexture(int TextureUnit)
-        {
-            if (TextureUnit < 0 || TextureUnit >= TextureUnitsCheckCount)
-                return null;
-            else
-                return textures[TextureUnit];
-        }
-
-        public int TexturesCount
-        {
-            get { return texturesCount; }
         }
     }
 }

@@ -239,7 +239,7 @@ namespace LED_Engine
                 for (int i2 = 0; i2 < a; i2++)
                 {
                     prefab1.Objects[i1 * a + i2] = new Mesh(obj_Keypad);
-                    prefab1.Objects[i1 * a + i2].Material = Materials.Load("Light"); //ReliefParallaxTest //Keypad
+                    prefab1.Objects[i1 * a + i2].Material = Materials.Load("Keypad"); //ReliefParallaxTest //Keypad //Light
                     prefab1.Objects[i1 * a + i2].Scale = new Vector3(10.0f, 10.0f, 10.0f);
                     prefab1.Objects[i1 * a + i2].Position.X = (i1 - a / 2) * 5;
                     prefab1.Objects[i1 * a + i2].Position.Z = (i2 - a / 2) * 5;
@@ -281,10 +281,13 @@ namespace LED_Engine
         static void DrawObject(Mesh v, DrawMode DrawMode = DrawMode.Default)
         {
             // Активируем нужный TextureUnit и назначаем текстуру
-            for (int i = 0; i < v.Material.TexturesCount; i++)
+            for (int i = 0; i < v.Material.Textures.Length; i++)
             {
-                GL.ActiveTexture((TextureUnit)((int)TextureUnit.Texture0 + i));
-                GL.BindTexture(v.Material.GetTexture(i).TextureTarget, v.Material.GetTexture(i).ID);
+                if (v.Material.Textures[i] != null)
+                {
+                    GL.ActiveTexture((TextureUnit)((int)TextureUnit.Texture0 + i));
+                    GL.BindTexture(v.Material.Textures[i].TextureTarget, v.Material.Textures[i].ID);
+                }
             }
 
             #region Работаем с шейдерами
@@ -398,9 +401,9 @@ namespace LED_Engine
             TempLocation = shader.GetUniform("TexUnits[0]");
             if (TempLocation != -1)
             {
-                int[] Arr = new int[Material.TextureUnitsCheckCount];
-                for (int TUnit = 0; TUnit < v.Material.TexturesCount; TUnit++)
-                    Arr[TUnit] = 1;
+                int[] Arr = new int[v.Material.Textures.Length];
+                for (int TUnit = 0; TUnit < v.Material.Textures.Length; TUnit++)
+                    Arr[TUnit] = (v.Material.Textures[TUnit] != null ? 1 : 0);
                 GL.Uniform1(TempLocation, Arr.Length, Arr);
             }
 

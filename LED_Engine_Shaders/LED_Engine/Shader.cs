@@ -99,9 +99,10 @@ namespace LED_Engine
 
                 return S;
             }
-            catch
+            catch(Exception e)
             {
-                Log.WriteLineRed("Shaders.LoadShader() Exception, Name: \"{0}\"", Name);
+                Log.WriteLineRed("Shaders.Load() Exception, Name: \"{0}\"", Name);
+                Log.WriteLineYellow("Message: \n", e.Message);
                 return null;
             }
         }
@@ -550,13 +551,9 @@ namespace LED_Engine
         {
             GL.UseProgram(ProgramID);
 
-            int MaxTextureImageUnits;
-            GL.GetInteger(GetPName.MaxTextureImageUnits, out MaxTextureImageUnits);
-
-            for (int i = 0; i < MaxTextureImageUnits; i++)
+            for (int i = 0; i < Settings.GL.TextureImageUnits; i++)
             {
                 int TextureUnitLocation = GetUniform(StrTextureUnit + i.ToString());
-
                 if (TextureUnitLocation != -1)
                     GL.Uniform1(TextureUnitLocation, i);
             }

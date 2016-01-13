@@ -33,28 +33,43 @@
 	<Material>
 		<Name>TransparentRedGlass</Name>
 		<Shader>Unlit</Shader>
-		<!--<Texture>AlphaTest</Texture>-->
+		<!--<Texture>
+			<Name>AlphaTest</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>-->
 		<Color>1.0 0.0 0.0 0.5</Color>
 		<Transparent>True</Transparent>
 	</Material>
 	<Material>
 		<Name>SkyCubemap_Storforsen</Name>
 		<Shader>CubemapSky</Shader>
-		<Texture>SkyCubemap_Storforsen</Texture>
+		<Texture>
+			<Name>SkyCubemap_Storforsen</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
 		<CullFace>True</CullFace>
 	</Material>
 	<Material>
 		<Name>SkyCubemap_Yokohama3</Name>
 		<Shader>CubemapSky</Shader>
-		<Texture>SkyCubemap_Yokohama3</Texture>
+		<Texture>
+			<Name>SkyCubemap_Yokohama3</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
 		<CullFace>True</CullFace>
 	</Material>
 	<Material>
 		<Name>Reflection</Name>
 		<Shader>ReflectRefract</Shader>
 		<Color>0.831 0.686 0.216 0.9</Color>
-		<Texture>Cubemap_Storforsen</Texture>
-		<!--<Texture>AlphaTest</Texture>-->
+		<Texture>
+			<Name>Cubemap_Storforsen</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
+		<!--<Texture>
+			<Name>AlphaTest</Name>
+			<TextureUnit>1</TextureUnit>
+		</Texture>-->
 		<ReflectionFactor>1.0</ReflectionFactor>
 		<CullFace>True</CullFace>
 	</Material>
@@ -62,16 +77,28 @@
 		<Name>Refraction</Name>
 		<Shader>ReflectRefract</Shader>
 		<Color>0.8 0.95 1.0 0.4</Color>
-		<Texture>Cubemap_Storforsen</Texture>
-		<!--<Texture>AlphaTest</Texture>-->
+		<Texture>
+			<Name>Cubemap_Storforsen</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
+		<!--<Texture>
+			<Name>AlphaTest</Name>
+			<TextureUnit>1</TextureUnit>
+		</Texture>-->
 		<ReflectionFactor>0.1</ReflectionFactor>
 		<RefractiveIndex>0.9</RefractiveIndex>
 	</Material>
 	<Material>
 		<Name>BrickWall</Name>
 		<Shader>PhongNormalMap</Shader>
-		<Texture>brick-wall</Texture>
-		<Texture>brick-wall_N</Texture>
+		<Texture>
+			<Name>brick-wall</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>brick-wall_N</Name>
+			<TextureUnit>1</TextureUnit>
+		</Texture>
 		<CullFace>True</CullFace>
 		<SpecularReflectivity>0.2 0.2 0.2</SpecularReflectivity>
 		<AmbientReflectivity>0.05 0.05 0.05</AmbientReflectivity>
@@ -80,23 +107,44 @@
 	<Material>
 		<Name>ReliefParallaxTest</Name>
 		<Shader>ReliefParallaxMap</Shader>
-		<Texture>ReliefParallaxTest_D</Texture>
-		<Texture>ReliefParallaxTest_N</Texture>
-		<Texture>ReliefParallaxTest_S</Texture>
-		<Texture>ReliefParallaxTest_H</Texture>
+		<Texture>
+			<Name>ReliefParallaxTest_D</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>ReliefParallaxTest_N</Name>
+			<TextureUnit>1</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>ReliefParallaxTest_S</Name>
+			<TextureUnit>2</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>ReliefParallaxTest_H</Name>
+			<TextureUnit>3</TextureUnit>
+		</Texture>
 		<CullFace>True</CullFace>
 	</Material>
 	<Material>
 		<Name>Light</Name>
 		<Shader>Light</Shader>
-		<Texture>brick-wall</Texture>-->
+		<Texture>
+			<Name>brick-wall</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
 		<CullFace>True</CullFace>
 	</Material>
 	<Material>
 		<Name>Keypad</Name>
 		<Shader>PhongNormalMap</Shader>
-		<Texture>Keypad</Texture>
-		<Texture>Keypad_N</Texture>
+		<Texture>
+			<Name>Keypad</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Keypad_N</Name>
+			<TextureUnit>1</TextureUnit>
+		</Texture>
 		<SpecularReflectivity>0.2 0.2 0.2</SpecularReflectivity>
 		<AmbientReflectivity>0.1 0.1 0.1</AmbientReflectivity>
 		<SpecularShininess>1.0</SpecularShininess>

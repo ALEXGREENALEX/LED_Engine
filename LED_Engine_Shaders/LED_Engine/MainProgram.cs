@@ -30,21 +30,23 @@ namespace LED_Engine
 
             Engine.LoadConfig();
             Engine.ApplyConfig();
-            Engine.LoadContentLists();
+            //Engine.LoadContentLists();
 
             while (Settings.Window.NeedReinitWindow)
             {
-                Settings.Window.NeedReinitWindow = false;
-
                 ApplySettingsAndCreateWindow();
+                Settings.Window.NeedReinitWindow = false;
+                
+                Engine.GetGLSettings();
 
                 if (!GLContextIsLoaded)
                 {
-                    GLContextIsLoaded = true;
-
+                    Engine.LoadContentLists();
                     Engine.LoadEngineContent();
                     LoadResourcesFromMap_FAKE();
                     InitProgram();
+
+                    GLContextIsLoaded = true;
                 }
 
                 #region PostProcessInit

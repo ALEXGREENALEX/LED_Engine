@@ -38,20 +38,29 @@
 	<Material>
 		<Name>Checker</Name>
 		<Shader></Shader>
-		<Texture></Texture>
+		<Texture>
+			<Name></Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
 		<CullFace>False</CullFace>
 	</Material>
 	<Material>
 		<Name>DebugPointLight</Name>
 		<Shader></Shader>
 		<Color>1.0 1.0 1.0</Color>
-		<Texture>DebugPointLight</Texture>
+		<Texture>
+			<Name>DebugPointLight</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
 		<CullFace>True</CullFace>
 	</Material>
 	<Material>
 		<Name>SkyCubemap_Default</Name>
 		<Shader>CubemapSky</Shader>
-		<Texture>SkyCubemap_Default</Texture>
+		<Texture>
+			<Name>SkyCubemap_Default</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
 		<CullFace>True</CullFace>
 	</Material>
 </Materials>
