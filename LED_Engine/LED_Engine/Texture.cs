@@ -17,9 +17,6 @@ namespace LED_Engine
 
         public static void LoadTexturesList(string XmlFile, string TexturePath, bool EngineContent)
         {
-            ///////////////////////////////////////////////////////////////
-            Log.WriteLine(ConsoleColor.Cyan, "TextureWrapMode.ClampToEdge");
-            ///////////////////////////////////////////////////////////////
             try
             {
                 XmlDocument XML = new XmlDocument();

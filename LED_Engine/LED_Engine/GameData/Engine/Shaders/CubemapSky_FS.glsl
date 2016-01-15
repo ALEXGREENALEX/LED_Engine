@@ -1,12 +1,11 @@
 #version 330
+uniform samplerCube TextureUnit0;
 
-smooth in vec3 Cubemap_UV;
-
-uniform samplerCube CubemapTex;
+smooth in vec3 f_UV;
 
 layout (location = 0) out vec4 FragColor;
 
 void main()
 {
-    FragColor = texture(CubemapTex, Cubemap_UV);
+	FragColor = texture(TextureUnit0, f_UV);
 }

@@ -1,5 +1,4 @@
 #version 330
-
 in vec3 f_Color;
 
 out vec4 FragColor;

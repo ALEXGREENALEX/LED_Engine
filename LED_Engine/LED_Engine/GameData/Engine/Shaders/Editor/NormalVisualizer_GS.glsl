@@ -1,5 +1,4 @@
 #version 330
-
 layout(triangles) in;
 layout(line_strip, max_vertices = 6) out;
 
@@ -7,9 +6,9 @@ in vec3 g_Position[];
 in vec4 g_Normal[];
 in int  g_Return[];
 
-out vec3 f_Color;
-
 uniform mat4 MVP;
+
+out vec3 f_Color;
 
 const float NormalLength = 0.1;
 void main()

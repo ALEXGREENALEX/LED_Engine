@@ -284,10 +284,13 @@ namespace LED_Engine
         static void DrawObject(Mesh v, DrawMode DrawMode = DrawMode.Default)
         {
             // Активируем нужный TextureUnit и назначаем текстуру
-            for (int i = 0; i < v.Materials[0].TexturesCount; i++)
+            for (int i = 0; i < v.Materials[0].Textures.Length; i++)
             {
-                GL.ActiveTexture((TextureUnit)((int)TextureUnit.Texture0 + i));
-                GL.BindTexture(v.Materials[0].GetTexture(i).TextureTarget, v.Materials[0].GetTexture(i).ID);
+                if (v.Materials[0].Textures[i] != null)
+                {
+                    GL.ActiveTexture((TextureUnit)((int)TextureUnit.Texture0 + i));
+                    GL.BindTexture(v.Materials[0].Textures[i].TextureTarget, v.Materials[0].Textures[i].ID);
+                }
             }
 
             #region Работаем с шейдерами
@@ -359,51 +362,42 @@ namespace LED_Engine
 
             #region Передача различных параметров шейдерам
 
-            Vector3 LightPosition = new Vector3(5.5f * (float)Math.Cos(Angle), 0.0f, 5.5f * (float)Math.Sin(Angle));
-            DebugObjects[0].Position = LightPosition;
+            Vector3[] LightPosition = new Vector3[2];
+            LightPosition[0] = new Vector3(5.5f * (float)Math.Cos(Angle), 2.0f + (float)Math.Sin(MathHelper.TwoPi + Angle), 5.5f * (float)Math.Sin(Angle));
+            LightPosition[1] = new Vector3(10.5f * (float)Math.Sin(Angle), 2.0f + (float)Math.Cos(MathHelper.TwoPi + Angle), 3.5f * (float)Math.Cos(Angle));
+            DebugObjects[0].Position = LightPosition[0];
+            DebugObjects[1].Position = LightPosition[1];
 
             // Передаем шейдеру вектор Light Position (Eye coords), если шейдер поддерживает это.
-            TempLocation = shader.GetUniform("Light.Pos");
+            TempLocation = shader.GetUniform("Light[0].Ld");
             if (TempLocation != -1)
             {
-                Vector3 LightResult = (new Vector4(LightPosition, 1.0f) * MainCamera.GetViewMatrix()).Xyz;
-                GL.Uniform3(TempLocation, LightResult);
-            }
+                for (int LightIndex = 0; LightIndex < 2; LightIndex++)
+                {
+                    string LightIndexStr = LightIndex.ToString();
 
-            // Передаем шейдеру вектор Light Diffuse Color, если шейдер поддерживает это.
-            TempLocation = shader.GetUniform("Light.Ld");
-            if (TempLocation != -1)
-                GL.Uniform3(TempLocation, 0.8f, 0.2f, 0.8f);
+                    LightPosition[LightIndex] = (new Vector4(LightPosition[LightIndex], 1.0f) * MainCamera.GetViewMatrix()).Xyz;
 
-            // Передаем шейдеру вектор Light Specular Color, если шейдер поддерживает это.
-            TempLocation = shader.GetUniform("Light.Ls");
-            if (TempLocation != -1)
-                GL.Uniform3(TempLocation, 0.0f, 0.0f, 1.0f);
+                    // Attenuation = LightIntensity / (Constant + Linear * Distance + Quadric * Distance^2)
+                    const float k_Constant = 0.0f;
+                    const float k_Linear = 0.5f;
+                    const float k_Quadric = 0.01f;
+                    GL.Uniform3(shader.GetUniform("Light[" + LightIndexStr + "].Att"), k_Constant, k_Linear, k_Quadric);
+                    GL.Uniform3(shader.GetUniform("Light[" + LightIndexStr + "].Ld"), new Vector3(1.0f, 1.0f, 1.0f) * 2.0f);
+                    GL.Uniform3(shader.GetUniform("Light[" + LightIndexStr + "].Ls"), 1.0f, 1.0f, 1.0f);
+                    GL.Uniform3(shader.GetUniform("Light[" + LightIndexStr + "].Pos"), LightPosition[LightIndex]);
+                }
 
-            // Передаем шейдеру вектор Ambient Light, если шейдер поддерживает это.
-            TempLocation = shader.GetUniform("Light.La");
-            if (TempLocation != -1)
-                GL.Uniform3(TempLocation, 1.0f, 1.0f, 0.0f);
-
-            // Передаем шейдеру вектор Light Attenuation, если шейдер поддерживает это.
-            TempLocation = shader.GetUniform("Light.Att");
-            if (TempLocation != -1)
-            {
-                // Коэфициенты затухания света, LightIntensity = 1 (по умолчанию).
-                // Attenuation = LightIntensity / (Constant + Linear * Distance + Quadric * Distance^2)
-                const float k_Constant = 0.5f;
-                const float k_Linear = 0.05f;
-                const float k_Quadric = 0.001f;
-                GL.Uniform3(TempLocation, k_Constant, k_Linear, k_Quadric);
+                GL.Uniform3(shader.GetUniform("LightAmbient"), 0.0f, 0.0f, 0.0f);
             }
 
             // Передаем шейдеру массив тех TextureUnit-ов, которые исаользуются, если шейдер поддерживает это.
             TempLocation = shader.GetUniform("TexUnits[0]");
             if (TempLocation != -1)
             {
-                int[] Arr = new int[Material.TextureUnitsCheckCount];
-                for (int TUnit = 0; TUnit < v.Materials[0].TexturesCount; TUnit++)
-                    Arr[TUnit] = 1;
+                int[] Arr = new int[v.Materials[0].Textures.Length];
+                for (int TUnit = 0; TUnit < v.Materials[0].Textures.Length; TUnit++)
+                    Arr[TUnit] = (v.Materials[0].Textures[TUnit] != null ? 1 : 0);
                 GL.Uniform1(TempLocation, Arr.Length, Arr);
             }
 

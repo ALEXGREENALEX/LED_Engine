@@ -51,20 +51,27 @@ namespace LED_Engine
                     xmlNodeList = xmlNode.SelectNodes("Texture");
                     if (xmlNodeList.Count > 0)
                     {
-                        int Count = Math.Min(xmlNodeList.Count, Material.TextureUnitsCheckCount);
-                        for (int i = 0; i < Count; i++)
+                        for (int i = 0; i < xmlNodeList.Count; i++)
                         {
-                            string TextureName = xmlNodeList.Item(i).InnerText;
+                            string TextureName = xmlNodeList.Item(i).SelectSingleNode("Name").InnerText;
+                            uint TextureUnit = Convert.ToUInt32(xmlNodeList.Item(i).SelectSingleNode("TextureUnit").InnerText);
 
+                            if (TextureUnit > material.Textures.Length | TextureName == null)
+                                continue;
+
+                            bool Found = false;
                             for (int j = 0; j < Textures.TexturesList.Count; j++)
+                            {
                                 if (Textures.TexturesList[j].Name == TextureName)
                                 {
-                                    material.SetTexture(i, Textures.TexturesList[j]);
+                                    material.Textures[TextureUnit] = Textures.TexturesList[j];
+                                    Found = true;
                                     break;
                                 }
+                            }
 
-                            if (material.Textures[i] == null)
-                                throw new Exception("LoadMaterialList() Parse Textures Exception.");
+                            if (!Found)
+                                throw new Exception("LoadMaterialList() Parse Textures Exception. Name:\"" + TextureName + "\"");
                         }
                     }
                     #endregion
@@ -81,8 +88,8 @@ namespace LED_Engine
                         material.Transparent = Convert.ToBoolean(xmlNodeList.Item(0).InnerText);
                     #endregion
 
-                    #region Kd DiffuseReflectivity (Color)
-                    xmlNodeList = xmlNode.SelectNodes("Color");
+                    #region Kd Diffuse Color (Diffuse Reflectivity)
+                    xmlNodeList = xmlNode.SelectNodes("Kd");
                     if (xmlNodeList.Count > 0)
                     {
                         try
@@ -116,10 +123,19 @@ namespace LED_Engine
                         }
                         catch { }
                     }
+                    else
+                    {
+                        int Count = 0;
+                        for (int i = 0; i < material.Textures.Length; i++)
+                            if (material.Textures[i] != null)
+                                Count++;
+                        if (Count > 0)
+                            material.Kd = new Vector4(1.0f);
+                    }
                     #endregion
 
-                    #region Ks SpecularReflectivity
-                    xmlNodeList = xmlNode.SelectNodes("SpecularReflectivity");
+                    #region Ks Specular Reflectivity
+                    xmlNodeList = xmlNode.SelectNodes("Ks");
                     if (xmlNodeList.Count > 0)
                     {
                         string[] SpecularReflectivity = xmlNodeList.Item(0).InnerText.Split(
@@ -135,8 +151,8 @@ namespace LED_Engine
                     }
                     #endregion
 
-                    #region Ka AmbientReflectivity
-                    xmlNodeList = xmlNode.SelectNodes("AmbientReflectivity");
+                    #region Ka Ambient Reflectivity
+                    xmlNodeList = xmlNode.SelectNodes("Ka");
                     if (xmlNodeList.Count > 0)
                     {
                         string[] AmbientReflectivity = xmlNodeList.Item(0).InnerText.Split(
@@ -153,7 +169,7 @@ namespace LED_Engine
                     #endregion
 
                     #region Ke Emissive Color
-                    xmlNodeList = xmlNode.SelectNodes("EmissiveColor");
+                    xmlNodeList = xmlNode.SelectNodes("Ke");
                     if (xmlNodeList.Count > 0)
                     {
                         string[] EmissiveColor = xmlNodeList.Item(0).InnerText.Split(
@@ -169,8 +185,8 @@ namespace LED_Engine
                     }
                     #endregion
 
-                    #region Specular Shininess
-                    xmlNodeList = xmlNode.SelectNodes("SpecularShininess");
+                    #region Shininess (Specular Shininess)
+                    xmlNodeList = xmlNode.SelectNodes("Shininess");
                     if (xmlNodeList.Count > 0)
                         material.Shininess = float.Parse(xmlNodeList.Item(0).InnerText);
                     #endregion
@@ -218,8 +234,9 @@ namespace LED_Engine
                 {
                     Shaders.Load(M.Shader.Name);
 
-                    for (int i = 0; i < M.TexturesCount; i++)
-                        Textures.Load(M.Textures[i].Name);
+                    for (int i = 0; i < M.Textures.Length; i++)
+                        if (M.Textures[i] != null)
+                            Textures.Load(M.Textures[i].Name);
 
                     MATERIALS.Add(M);
                 }
@@ -229,7 +246,7 @@ namespace LED_Engine
             }
             catch
             {
-                Log.WriteLineRed("Materials.LoadMaterial() Exception, Name: \"{0}\"", Name);
+                Log.WriteLineRed("Materials.Load() Exception, Name: \"{0}\"", Name);
                 return null;
             }
         }
@@ -290,18 +307,17 @@ namespace LED_Engine
         public uint UseCounter = 0;
         public bool EngineContent = false;
 
-        static Random R = new Random();
-        public static int TextureUnitsCheckCount = 16; // Used only for check Textures in *.glsl TextureUnit*
-
         public string Name = String.Empty;
         public Shader Shader;
         public bool CullFace = true;
         public bool Transparent = false;
+
+        static Random R = new Random();
         public Vector4 Kd = new Vector4((float)R.NextDouble(), (float)R.NextDouble(), (float)R.NextDouble(), 1.0f);
-        public Vector3 Ka = new Vector3(0.1f, 0.1f, 0.1f);
-        public Vector3 Ks = new Vector3(0.2f, 0.2f, 0.2f);
-        public Vector3 Ke = new Vector3(0.0f, 0.0f, 0.0f);
-        public float Shininess = 1.0f;
+        public Vector3 Ks = new Vector3(1.0f);
+        public Vector3 Ka = new Vector3(1.0f);
+        public Vector3 Ke = new Vector3(0.0f);
+        public float Shininess = 50.0f;
 
         /// <summary>
         /// Коефициент отражения (процент отраженного света). Диапазон 0.0 - 1.0.<br>
@@ -319,72 +335,27 @@ namespace LED_Engine
         /// </summary>
         public float RefractiveIndex = 1.0f;
 
-        int texturesCount = 0;
-        Texture[] textures = new Texture[TextureUnitsCheckCount];
+        public Texture[] Textures = new Texture[Settings.GL.TextureImageUnits];
 
         public Material()
         {
-            for (int i = 0; i < textures.Length; i++)
-                textures[i] = null;
         }
 
-        public Material(Material OriginalMaterial, bool SaveColor = false)
+        public Material(Material OriginalMaterial)
         {
-            if (SaveColor)
-                Kd = OriginalMaterial.Kd;
-            else
-                Kd = new Vector4((float)R.NextDouble(), (float)R.NextDouble(), (float)R.NextDouble(), 1.0f);
-
             Shader = OriginalMaterial.Shader;
             CullFace = OriginalMaterial.CullFace;
             Transparent = OriginalMaterial.Transparent;
-            Ks = OriginalMaterial.Ks;
             Ka = OriginalMaterial.Ka;
+            Kd = OriginalMaterial.Kd;
+            Ks = OriginalMaterial.Ks;
+            Ke = OriginalMaterial.Ke;
             Shininess = OriginalMaterial.Shininess;
             ReflectionFactor = OriginalMaterial.ReflectionFactor;
             RefractiveIndex = OriginalMaterial.RefractiveIndex;
+
+            Textures = new Texture[OriginalMaterial.Textures.Length];
             OriginalMaterial.Textures.CopyTo(Textures, 0);
-        }
-
-        public Texture[] Textures
-        {
-            get { return textures; }
-            set
-            {
-                texturesCount = textures.Length;
-                texturesCount = 0;
-                for (int i = 0; i < textures.Length; i++)
-                    if (textures[i] != null)
-                        texturesCount++;
-            }
-        }
-
-        public bool SetTexture(int TextureUnit, Texture Texture)
-        {
-            if (TextureUnit >= 0 && TextureUnit < TextureUnitsCheckCount)
-            {
-                textures[TextureUnit] = Texture;
-                texturesCount = 0;
-                for (int i = 0; i < textures.Length; i++)
-                    if (textures[i] != null)
-                        texturesCount++;
-                return true;
-            }
-            else
-                return false;
-        }
-
-        public Texture GetTexture(int TextureUnit)
-        {
-            if (TextureUnit < 0 || TextureUnit >= TextureUnitsCheckCount)
-                return null;
-            else
-                return textures[TextureUnit];
-        }
-
-        public int TexturesCount
-        {
-            get { return texturesCount; }
         }
     }
 }

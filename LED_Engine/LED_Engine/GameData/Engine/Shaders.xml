@@ -5,14 +5,35 @@
 		<FragmentShader>Default_FS.glsl</FragmentShader>
 	</Shader>
 	<Shader>
-		<Name>DefaultTexture</Name>
-		<VertexShader>DefaultTexture_VS.glsl</VertexShader>
-		<FragmentShader>DefaultTexture_FS.glsl</FragmentShader>
-	</Shader>
-	<Shader>
 		<Name>CubemapSky</Name>
 		<VertexShader>CubemapSky_VS.glsl</VertexShader>
 		<FragmentShader>CubemapSky_FS.glsl</FragmentShader>
+	</Shader>
+	
+	<Shader>
+		<Name>Unlit</Name>
+		<VertexShader>Unlit_VS.glsl</VertexShader>
+		<FragmentShader>Unlit_FS.glsl</FragmentShader>
+	</Shader>
+	<Shader>
+		<Name>PhongNormalMap</Name>
+		<VertexShader>PhongNormalMap_VS.glsl</VertexShader>
+		<FragmentShader>PhongNormalMap_FS.glsl</FragmentShader>
+	</Shader>
+	<Shader>
+		<Name>ReliefParallaxMap</Name>
+		<VertexShader>ReliefParallaxMap_VS.glsl</VertexShader>
+		<FragmentShader>ReliefParallaxMap_FS.glsl</FragmentShader>
+	</Shader>
+	<Shader>
+		<Name>Light</Name>
+		<VertexShader>Light_VS.glsl</VertexShader>
+		<FragmentShader>Light_FS.glsl</FragmentShader>
+	</Shader>
+	<Shader>
+		<Name>ReflectRefract</Name>
+		<VertexShader>CubemapReflectRefract_VS.glsl</VertexShader>
+		<FragmentShader>CubemapReflectRefract_FS.glsl</FragmentShader>
 	</Shader>
 	
 	<!--Editor Shaders-->
@@ -32,7 +53,7 @@
 	<!--PostProcessShader-->
 	<PostProcessShader>
 		<Name>PostProcess</Name>
-		<VertexShader>PostProcess_VS.glsl</VertexShader>
-		<FragmentShader>PostProcess_FS.glsl</FragmentShader>
+		<VertexShader>PostProcess\PostProcess_VS.glsl</VertexShader>
+		<FragmentShader>PostProcess\PostProcess_FS.glsl</FragmentShader>
 	</PostProcessShader>
 </Shaders>

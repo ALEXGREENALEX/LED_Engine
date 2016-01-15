@@ -45,4 +45,11 @@ MinFilter:
 		<MagFilter>Linear</MagFilter>
 		<MinFilter>Linear</MinFilter>
 	</Texture>
+	
+	<Texture>
+		<Name>AlphaTest</Name>
+		<File>AlphaTest.png</File>
+		<MagFilter>Linear</MagFilter>
+		<MinFilter>Linear</MinFilter>
+	</Texture>
 </Textures>

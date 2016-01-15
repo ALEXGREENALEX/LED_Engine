@@ -11,12 +11,9 @@
 		<Rotation>0.0 0.0 0.0</Rotation>
 	</PlayerStart>
 
-	<Actors>
-		<Actor>
+	<Objects>
+		<Object>
 			<Name>BlaBlaBla</Name>
-			<Type>Static</Type>
-			<Collision></Collision>
-			<Physic></Physic>
 			<Materials>
 				<Material>Brick</Material>
 				<Material>Wood</Material>
@@ -25,8 +22,8 @@
 			<Position>0.0 0.0 0.0</Position>
 			<Rotation>0.0 0.0 0.0</Rotation>
 			<Scale>0.0 0.0 0.0</Scale>
-		</Actor>
-	</Actors>
+		</Object>
+	</Objects>
 
 	<Sounds>
 		<Sound>

@@ -4,6 +4,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 using System.Xml;
+using Pencil.Gaming;
+using Pencil.Gaming.Graphics;
+using Pencil.Gaming.MathUtils;
 
 namespace LED_Engine
 {
@@ -154,6 +157,16 @@ namespace LED_Engine
             PostProcess.UsePostEffects = Settings.Graphics.UsePostEffects;
         }
 
+        public static void GetGLSettings()
+        {
+            Settings.GL.MaxTextureImageUnits = GL.GetInteger(GetPName.MaxTextureImageUnits); //FS TextureImageUnits Only
+            Settings.GL.MaxVertexTextureImageUnits = GL.GetInteger(GetPName.MaxVertexTextureImageUnits); //VS
+            Settings.GL.MaxGeometryTextureImageUnits = GL.GetInteger(GetPName.MaxGeometryTextureImageUnits); //GS
+
+            Settings.GL.TextureImageUnits = Math.Min(Math.Min(Settings.GL.MaxTextureImageUnits,
+                Settings.GL.MaxVertexTextureImageUnits), Settings.GL.MaxGeometryTextureImageUnits);
+        }
+
         public static void LoadContentLists()
         {
             try
@@ -173,6 +186,25 @@ namespace LED_Engine
                 string[] TexturesPaths = new string[] { Settings.Paths.EngineTextures, Settings.Paths.Textures };
                 string[] CubemapTexturesPaths = new string[] { Settings.Paths.EngineCubemapTextures, Settings.Paths.CubemapTextures };
 
+                #region Load Lists
+                for (int i = 0; i < Paths.Length; i++)
+                {
+                    bool EngineContent = false;
+                    if (i == 0)
+                        EngineContent = true;
+
+                    Textures.LoadTexturesList(TexturesConfigs[i], TexturesPaths[i], EngineContent);
+                }
+
+                for (int i = 0; i < Paths.Length; i++)
+                {
+                    bool EngineContent = false;
+                    if (i == 0)
+                        EngineContent = true;
+
+                    Textures.LoadCubemapTexturesList(CubemapTexturesConfigs[i], CubemapTexturesPaths[i], EngineContent);
+                }
+
                 for (int i = 0; i < Paths.Length; i++)
                 {
                     bool EngineContent = false;
@@ -180,12 +212,35 @@ namespace LED_Engine
                         EngineContent = true;
 
                     Shaders.LoadShadersList(ShadersConfigs[i], ShadersPaths[i], EngineContent);
-                    Textures.LoadTexturesList(TexturesConfigs[i], TexturesPaths[i], EngineContent);
-                    Textures.LoadCubemapTexturesList(CubemapTexturesConfigs[i], CubemapTexturesPaths[i], EngineContent);
+                }
+
+                for (int i = 0; i < Paths.Length; i++)
+                {
+                    bool EngineContent = false;
+                    if (i == 0)
+                        EngineContent = true;
+
                     Materials.LoadMaterialsList(MaterialsConfigs[i], EngineContent);
+                }
+
+                for (int i = 0; i < Paths.Length; i++)
+                {
+                    bool EngineContent = false;
+                    if (i == 0)
+                        EngineContent = true;
+
                     Meshes.LoadMeshesList(MeshesConfigs[i], MeshesPaths[i], EngineContent);
+                }
+
+                for (int i = 0; i < Paths.Length; i++)
+                {
+                    bool EngineContent = false;
+                    if (i == 0)
+                        EngineContent = true;
+
                     Maps.LoadMapList(MapsConfigs[i], MapsPaths[i], EngineContent);
                 }
+                #endregion
             }
             catch (Exception e)
             {
@@ -196,17 +251,21 @@ namespace LED_Engine
 
         public static void LoadEngineContent()
         {
-            foreach (var i in Shaders.ShadersList)
-                if (i.EngineContent)
-                    Shaders.Load(i.Name);
-
             foreach (var i in Textures.TexturesList)
                 if (i.EngineContent)
                     Textures.Load(i.Name);
 
+            foreach (var i in Shaders.ShadersList)
+                if (i.EngineContent)
+                    Shaders.Load(i.Name);
+
             foreach (var i in Materials.MaterialsList)
                 if (i.EngineContent)
                     Materials.Load(i.Name);
+
+            //foreach (var i in Models.ModelsList)
+            //    if (i.EngineContent)
+            //        Models.Load(i.Name);
         }
 
         /// <summary>
