@@ -464,24 +464,40 @@ namespace LED_Engine
                 const string ConstCommentStart = "/*";
                 const string ConstCommentStop = "*/";
 
-                int Start, End, Len;
+                int Start, StartIndex, End, Len;
                 do
                 {
                     Start = Str.IndexOf(ConstCommentStart);
-                    End = Str.IndexOf(ConstCommentStop, Start + ConstCommentStart.Length);
-                    Len = End - Start + ConstCommentStop.Length;
-                    if (Start < End && Start != -1 && End != -1)
-                        Str = Str.Remove(Start, Len);
+                    End = -1;
+                    if (Start != -1)
+                    {
+                        StartIndex = Start + ConstCommentStart.Length;
+                        if (StartIndex < Str.Length)
+                            End = Str.IndexOf(ConstCommentStop, StartIndex);
+
+                        Len = End - Start + ConstCommentStop.Length;
+                        if (Start < End)
+                            Str = Str.Remove(Start, Len);
+                    }
                 } while (Start != -1 && End != -1);
 
                 do
                 {
                     Start = Str.IndexOf(ConstCommentString);
-                    End = Str.IndexOf(ConstCommentEndLine, Start + ConstCommentString.Length);
-                    Len = End - Start;
-                    if (Start < End && Start != -1 && End != -1)
-                        Str = Str.Remove(Start, Len);
-                } while (Start != -1 && End != -1);
+                    End = Str.Length;
+                    if (Start != -1)
+                    {
+                        StartIndex = Start + ConstCommentString.Length;
+                        if (StartIndex < Str.Length)
+                            End = Str.IndexOf(ConstCommentEndLine, StartIndex);
+                        if (End == -1)
+                            End = Str.Length;
+
+                        Len = End - Start;
+                        if (Start < End)
+                            Str = Str.Remove(Start, Len);
+                    }
+                } while (Start != -1);
             }
             catch (Exception e)
             {

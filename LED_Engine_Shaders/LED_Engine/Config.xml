@@ -37,8 +37,8 @@
 	
 	<Paths>
 		<GameData>GameData</GameData>
-		
 		<EngineContentFolder>Engine</EngineContentFolder>
+		
 		<EngineMaps>Maps</EngineMaps>
 		<EngineMeshes>Meshes</EngineMeshes>
 		<EngineShaders>Shaders</EngineShaders>

@@ -88,8 +88,8 @@ namespace LED_Engine
                         material.Transparent = Convert.ToBoolean(xmlNodeList.Item(0).InnerText);
                     #endregion
 
-                    #region Kd DiffuseReflectivity (Color)
-                    xmlNodeList = xmlNode.SelectNodes("Color");
+                    #region Kd Diffuse Color (Diffuse Reflectivity)
+                    xmlNodeList = xmlNode.SelectNodes("Kd");
                     if (xmlNodeList.Count > 0)
                     {
                         try
@@ -123,10 +123,19 @@ namespace LED_Engine
                         }
                         catch { }
                     }
+                    else
+                    {
+                        int Count = 0;
+                        for (int i = 0; i < material.Textures.Length; i++)
+                            if (material.Textures[i] != null)
+                                Count++;
+                        if (Count > 0)
+                            material.Kd = new Vector4(1.0f);
+                    }
                     #endregion
 
-                    #region Ks SpecularReflectivity
-                    xmlNodeList = xmlNode.SelectNodes("SpecularReflectivity");
+                    #region Ks Specular Reflectivity
+                    xmlNodeList = xmlNode.SelectNodes("Ks");
                     if (xmlNodeList.Count > 0)
                     {
                         string[] SpecularReflectivity = xmlNodeList.Item(0).InnerText.Split(
@@ -142,8 +151,8 @@ namespace LED_Engine
                     }
                     #endregion
 
-                    #region Ka AmbientReflectivity
-                    xmlNodeList = xmlNode.SelectNodes("AmbientReflectivity");
+                    #region Ka Ambient Reflectivity
+                    xmlNodeList = xmlNode.SelectNodes("Ka");
                     if (xmlNodeList.Count > 0)
                     {
                         string[] AmbientReflectivity = xmlNodeList.Item(0).InnerText.Split(
@@ -160,7 +169,7 @@ namespace LED_Engine
                     #endregion
 
                     #region Ke Emissive Color
-                    xmlNodeList = xmlNode.SelectNodes("EmissiveColor");
+                    xmlNodeList = xmlNode.SelectNodes("Ke");
                     if (xmlNodeList.Count > 0)
                     {
                         string[] EmissiveColor = xmlNodeList.Item(0).InnerText.Split(
@@ -176,8 +185,8 @@ namespace LED_Engine
                     }
                     #endregion
 
-                    #region Specular Shininess
-                    xmlNodeList = xmlNode.SelectNodes("SpecularShininess");
+                    #region Shininess (Specular Shininess)
+                    xmlNodeList = xmlNode.SelectNodes("Shininess");
                     if (xmlNodeList.Count > 0)
                         material.Shininess = float.Parse(xmlNodeList.Item(0).InnerText);
                     #endregion
@@ -298,16 +307,17 @@ namespace LED_Engine
         public uint UseCounter = 0;
         public bool EngineContent = false;
 
-        static Random R = new Random();
         public string Name = String.Empty;
         public Shader Shader;
         public bool CullFace = true;
         public bool Transparent = false;
+
+        static Random R = new Random();
         public Vector4 Kd = new Vector4((float)R.NextDouble(), (float)R.NextDouble(), (float)R.NextDouble(), 1.0f);
-        public Vector3 Ka = new Vector3(0.1f, 0.1f, 0.1f);
-        public Vector3 Ks = new Vector3(0.2f, 0.2f, 0.2f);
-        public Vector3 Ke = new Vector3(0.0f, 0.0f, 0.0f);
-        public float Shininess = 1.0f;
+        public Vector3 Ks = new Vector3(1.0f);
+        public Vector3 Ka = new Vector3(1.0f);
+        public Vector3 Ke = new Vector3(0.0f);
+        public float Shininess = 50.0f;
 
         /// <summary>
         /// Коефициент отражения (процент отраженного света). Диапазон 0.0 - 1.0.<br>
@@ -331,18 +341,14 @@ namespace LED_Engine
         {
         }
 
-        public Material(Material OriginalMaterial, bool SaveColor = false)
+        public Material(Material OriginalMaterial)
         {
-            if (SaveColor)
-                Kd = OriginalMaterial.Kd;
-            else
-                Kd = new Vector4((float)R.NextDouble(), (float)R.NextDouble(), (float)R.NextDouble(), 1.0f);
-
             Shader = OriginalMaterial.Shader;
             CullFace = OriginalMaterial.CullFace;
             Transparent = OriginalMaterial.Transparent;
-            Ks = OriginalMaterial.Ks;
             Ka = OriginalMaterial.Ka;
+            Kd = OriginalMaterial.Kd;
+            Ks = OriginalMaterial.Ks;
             Ke = OriginalMaterial.Ke;
             Shininess = OriginalMaterial.Shininess;
             ReflectionFactor = OriginalMaterial.ReflectionFactor;
