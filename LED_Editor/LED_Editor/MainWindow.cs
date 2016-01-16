@@ -74,6 +74,12 @@ namespace LED_Editor
             glControl1.SwapBuffers();
         }
 
+        private void materialBrowserToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TextureEditor TextureEditorForm = new TextureEditor();
+            TextureEditorForm.Show();
+        }
+
 
     }
 }

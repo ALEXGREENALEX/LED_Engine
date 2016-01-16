@@ -32,10 +32,11 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
             this.menuStrip2 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -69,7 +70,6 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButton9 = new System.Windows.Forms.ToolStripButton();
             this.SettingsButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
             this.groupBox1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.menuStrip2.SuspendLayout();
@@ -121,6 +121,15 @@
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
             // 
+            // toolStripButton4
+            // 
+            this.toolStripButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton4.Image")));
+            this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton4.Name = "toolStripButton4";
+            this.toolStripButton4.Size = new System.Drawing.Size(35, 36);
+            this.toolStripButton4.Text = "toolStripButton4";
+            // 
             // toolStripButton1
             // 
             this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -148,14 +157,14 @@
             this.toolStripButton3.Size = new System.Drawing.Size(35, 36);
             this.toolStripButton3.Text = "toolStripButton3";
             // 
-            // toolStripButton4
+            // toolStripButton5
             // 
-            this.toolStripButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton4.Image")));
-            this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton4.Name = "toolStripButton4";
-            this.toolStripButton4.Size = new System.Drawing.Size(35, 36);
-            this.toolStripButton4.Text = "toolStripButton4";
+            this.toolStripButton5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton5.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton5.Image")));
+            this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton5.Name = "toolStripButton5";
+            this.toolStripButton5.Size = new System.Drawing.Size(35, 36);
+            this.toolStripButton5.Text = "toolStripButton5";
             // 
             // menuStrip2
             // 
@@ -233,7 +242,8 @@
             // 
             this.materialBrowserToolStripMenuItem.Name = "materialBrowserToolStripMenuItem";
             this.materialBrowserToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
-            this.materialBrowserToolStripMenuItem.Text = "Material browser";
+            this.materialBrowserToolStripMenuItem.Text = "Material editor";
+            this.materialBrowserToolStripMenuItem.Click += new System.EventHandler(this.materialBrowserToolStripMenuItem_Click);
             // 
             // engineConfigToolToolStripMenuItem
             // 
@@ -467,15 +477,6 @@
             this.SettingsButton.Name = "SettingsButton";
             this.SettingsButton.Size = new System.Drawing.Size(36, 36);
             this.SettingsButton.Text = "Settings";
-            // 
-            // toolStripButton5
-            // 
-            this.toolStripButton5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton5.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton5.Image")));
-            this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton5.Name = "toolStripButton5";
-            this.toolStripButton5.Size = new System.Drawing.Size(35, 36);
-            this.toolStripButton5.Text = "toolStripButton5";
             // 
             // MainWindow
             // 
