@@ -1,14 +1,14 @@
-vec3 FXAA(sampler2D FXAA_Texture, vec2 FXAA_texcoord)
+vec3 FXAA(sampler2D FXAA_Texture, vec2 FXAA_texcoord, vec2 FXAA_ScreenSize)
 {
-	float FXAA_SPAN_MAX = 8.0;
-	float FXAA_REDUCE_MUL = 1.0 / 8.0;
-	float FXAA_REDUCE_MIN = 1.0 / 128.0;
+	const float FXAA_SPAN_MAX = 8.0;
+	const float FXAA_REDUCE_MUL = 1.0 / 8.0;
+	const float FXAA_REDUCE_MIN = 1.0 / 128.0;
 	
 	vec3 luma = vec3(0.299, 0.587, 0.114);	
-	float lumaTL = dot(luma, texture2D(FXAA_Texture, FXAA_texcoord + vec2(-1.0, -1.0) / ScreenSize).xyz);
-	float lumaTR = dot(luma, texture2D(FXAA_Texture, FXAA_texcoord + vec2( 1.0, -1.0) / ScreenSize).xyz);
-	float lumaBL = dot(luma, texture2D(FXAA_Texture, FXAA_texcoord + vec2(-1.0,  1.0) / ScreenSize).xyz);
-	float lumaBR = dot(luma, texture2D(FXAA_Texture, FXAA_texcoord + vec2( 1.0,  1.0) / ScreenSize).xyz);
+	float lumaTL = dot(luma, texture2D(FXAA_Texture, FXAA_texcoord + vec2(-1.0, -1.0) / FXAA_ScreenSize).xyz);
+	float lumaTR = dot(luma, texture2D(FXAA_Texture, FXAA_texcoord + vec2( 1.0, -1.0) / FXAA_ScreenSize).xyz);
+	float lumaBL = dot(luma, texture2D(FXAA_Texture, FXAA_texcoord + vec2(-1.0,  1.0) / FXAA_ScreenSize).xyz);
+	float lumaBR = dot(luma, texture2D(FXAA_Texture, FXAA_texcoord + vec2( 1.0,  1.0) / FXAA_ScreenSize).xyz);
 	float lumaM  = dot(luma, texture2D(FXAA_Texture, FXAA_texcoord).xyz);
 
 	vec2 dir;
@@ -19,7 +19,7 @@ vec3 FXAA(sampler2D FXAA_Texture, vec2 FXAA_texcoord)
 	float inverseDirAdjustment = 1.0 / (min(abs(dir.x), abs(dir.y)) + dirReduce);
 	
 	dir = min(vec2(FXAA_SPAN_MAX, FXAA_SPAN_MAX), 
-		max(vec2(-FXAA_SPAN_MAX, -FXAA_SPAN_MAX), dir * inverseDirAdjustment)) / ScreenSize;
+		max(vec2(-FXAA_SPAN_MAX, -FXAA_SPAN_MAX), dir * inverseDirAdjustment)) / FXAA_ScreenSize;
 
 	vec3 result1 = 0.5 * (
 		texture2D(FXAA_Texture, FXAA_texcoord + (dir * vec2(1.0/3.0 - 0.5))).xyz +

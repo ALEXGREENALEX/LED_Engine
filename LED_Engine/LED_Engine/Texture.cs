@@ -77,7 +77,7 @@ namespace LED_Engine
                 XmlDocument XML = new XmlDocument();
                 XmlNodeList xmlNodeList;
 
-                #region Load CubemapTextures
+                #region Load CubemapTextures List
                 XML.Load(XmlFile);
                 xmlNodeList = XML.DocumentElement.SelectNodes("CubemapTexture");
 
