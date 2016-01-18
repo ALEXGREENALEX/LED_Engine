@@ -38,7 +38,7 @@
             this.StartupTimer.Interval = 1000;
             this.StartupTimer.Tick += new System.EventHandler(this.StartupTimer_Tick);
             // 
-            // Form1
+            // SplashForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -47,7 +47,7 @@
             this.ClientSize = new System.Drawing.Size(640, 360);
             this.ControlBox = false;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "Form1";
+            this.Name = "SplashForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
             this.TopMost = true;
