@@ -156,33 +156,32 @@ namespace LED_Engine
                 GL.UniformMatrix4(TempLocation, false, ref InvProjMatrix);
             }*/
 
-            Vector3[] LightPosition = new Vector3[2];
+            /*Vector3[] LightPosition = new Vector3[2];
             LightPosition[0] = new Vector3(5.5f * (float)Math.Cos(Game.Angle), 2.0f + (float)Math.Sin(MathHelper.TwoPi + Game.Angle), 5.5f * (float)Math.Sin(Game.Angle));
             LightPosition[1] = new Vector3(10.5f * (float)Math.Sin(Game.Angle), 2.0f + (float)Math.Cos(MathHelper.TwoPi + Game.Angle), 3.5f * (float)Math.Cos(Game.Angle));
             Game.DebugObjects[0].Position = LightPosition[0];
-            Game.DebugObjects[1].Position = LightPosition[1];
+            Game.DebugObjects[1].Position = LightPosition[1];*/
 
             // Передаем шейдеру вектор Light Position (Eye coords), если шейдер поддерживает это.
             TempLocation = Shaders[G_ShaderIndex].GetUniform("Light[0].Ld");
             if (TempLocation != -1)
             {
-                for (int LightIndex = 0; LightIndex < 2; LightIndex++)
+                for (int i = 0; i < Lights.LIGHTS.Count; i++)
                 {
-                    string LightIndexStr = LightIndex.ToString();
+                    string IndexStr = i.ToString();
 
-                    LightPosition[LightIndex] = (new Vector4(LightPosition[LightIndex], 1.0f) * Game.MainCamera.GetViewMatrix()).Xyz;
-
-                    // Attenuation = LightIntensity / (Constant + Linear * Distance + Quadric * Distance^2)
-                    const float k_Constant = 0.0f;
-                    const float k_Linear = 0.5f;
-                    const float k_Quadric = 0.01f;
-                    GL.Uniform3(Shaders[G_ShaderIndex].GetUniform("Light[" + LightIndexStr + "].Att"), k_Constant, k_Linear, k_Quadric);
-                    GL.Uniform3(Shaders[G_ShaderIndex].GetUniform("Light[" + LightIndexStr + "].Ld"), new Vector3(0.0f, 0.0f, 1.0f) * 1.0f);
-                    GL.Uniform3(Shaders[G_ShaderIndex].GetUniform("Light[" + LightIndexStr + "].Ls"), 1.0f, 0.0f, 0.0f);
-                    GL.Uniform3(Shaders[G_ShaderIndex].GetUniform("Light[" + LightIndexStr + "].Pos"), LightPosition[LightIndex]);
+                    Vector3 LightPosition = (new Vector4(Lights.LIGHTS[i].Position, 1.0f) * Game.MainCamera.GetViewMatrix()).Xyz;
+                    Vector3 LightDirection = (new Vector4(Lights.LIGHTS[i].Direction, 0.0f) * Game.MainCamera.GetViewMatrix()).Xyz;
+                    GL.Uniform3(Shaders[G_ShaderIndex].GetUniform("Light[" + IndexStr + "].Pos"), LightPosition);
+                    GL.Uniform3(Shaders[G_ShaderIndex].GetUniform("Light[" + IndexStr + "].Dir"), LightDirection);
+                    GL.Uniform3(Shaders[G_ShaderIndex].GetUniform("Light[" + IndexStr + "].Ld"), Lights.LIGHTS[i].Diffuse);
+                    GL.Uniform3(Shaders[G_ShaderIndex].GetUniform("Light[" + IndexStr + "].Ls"), Lights.LIGHTS[i].Specular);
+                    GL.Uniform3(Shaders[G_ShaderIndex].GetUniform("Light[" + IndexStr + "].Att"), Lights.LIGHTS[i].Attenuation);
+                    GL.Uniform1(Shaders[G_ShaderIndex].GetUniform("Light[" + IndexStr + "].CutOff"), Lights.LIGHTS[i].CutOff);
+                    GL.Uniform1(Shaders[G_ShaderIndex].GetUniform("Light[" + IndexStr + "].Exp"), Lights.LIGHTS[i].Exponent);
                 }
 
-                GL.Uniform3(Shaders[G_ShaderIndex].GetUniform("LightAmbient"), 0.0f, 0.0f, 0.0f);
+                GL.Uniform3(Shaders[G_ShaderIndex].GetUniform("LightAmbient"), Lights.Ambient);
             }
 
             //Bind Textures

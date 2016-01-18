@@ -12,7 +12,7 @@ uniform vec2 ScreenSize;
 uniform vec2 ClipPlanes; // zNear, zFar
 uniform mat4 InvProjMatrix;
 
-#include("Light\FS_Vars.glsl")
+#include("Light\Light.glsl")
 
 layout(location = 0) out vec4 FragColor;
 
@@ -22,7 +22,7 @@ float LinearDepth(float NonLinearDepth, float zNear, float zFar)
 }
 
 void Test()
-{	
+{
 	if(f_UV.y > 0.5)
 		FragColor = vec4(texture2D(TextureUnit1, f_UV).rgb, 1.0);
 	else
@@ -48,10 +48,6 @@ void Test()
 
 void main()
 {
-	/*float z = texture(TextureUnit0, f_UV).x;
-	vec4 sPos = InvProjMatrix * vec4(f_UV * 2.0 - 1.0, z, 1.0);
-	vec3 EyePos = sPos.xyz / sPos.w;*/
-	
 	//Test();
 	
 	vec3 Position = vec3(
@@ -65,5 +61,6 @@ void main()
 	vec3 Ke = texture2D(TextureUnit3, f_UV).rgb;
 	float Shininess = texture2D(TextureUnit4, f_UV).a;
 	vec3 Ka = texture2D(TextureUnit5, f_UV).rgb;
+	
 	FragColor = vec4(CalcLight(Kd, Ks, Shininess, Ka, Ke, Normal, Position), 1.0);
 }
