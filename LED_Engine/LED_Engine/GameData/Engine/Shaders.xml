@@ -11,16 +11,6 @@
 	</Shader>
 	
 	<Shader>
-		<Name>Unlit</Name>
-		<VertexShader>Unlit_VS.glsl</VertexShader>
-		<FragmentShader>Unlit_FS.glsl</FragmentShader>
-	</Shader>
-	<Shader>
-		<Name>PhongNormalMap</Name>
-		<VertexShader>PhongNormalMap_VS.glsl</VertexShader>
-		<FragmentShader>PhongNormalMap_FS.glsl</FragmentShader>
-	</Shader>
-	<Shader>
 		<Name>ReliefParallaxMap</Name>
 		<VertexShader>ReliefParallaxMap_VS.glsl</VertexShader>
 		<FragmentShader>ReliefParallaxMap_FS.glsl</FragmentShader>
@@ -50,10 +40,15 @@
 		<FragmentShader>Editor\NormalVisualizer_FS.glsl</FragmentShader>
 	</Shader>
 	
-	<!--PostProcessShader-->
-	<PostProcessShader>
+	<!--RenderToTexture(RTT) Shaders-->
+	<RTT_Shader>
+		<Name>FBO</Name>
+		<VertexShader>FBO_VS.glsl</VertexShader>
+		<FragmentShader>FBO_FS.glsl</FragmentShader>
+	</RTT_Shader>
+	<RTT_Shader>
 		<Name>PostProcess</Name>
 		<VertexShader>PostProcess\PostProcess_VS.glsl</VertexShader>
 		<FragmentShader>PostProcess\PostProcess_FS.glsl</FragmentShader>
-	</PostProcessShader>
+	</RTT_Shader>
 </Shaders>

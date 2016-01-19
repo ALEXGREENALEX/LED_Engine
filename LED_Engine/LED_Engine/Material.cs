@@ -141,12 +141,21 @@ namespace LED_Engine
                         string[] SpecularReflectivity = xmlNodeList.Item(0).InnerText.Split(
                             new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
-                        if (SpecularReflectivity.Length == 3)
+                        float R, G, B;
+                        switch (SpecularReflectivity.Length)
                         {
-                            float R = float.Parse(SpecularReflectivity[0]);
-                            float G = float.Parse(SpecularReflectivity[1]);
-                            float B = float.Parse(SpecularReflectivity[2]);
-                            material.Ks = new Vector3(R, G, B);
+                            case 1:
+                                R = float.Parse(SpecularReflectivity[0]);
+                                material.Ks = new Vector3(R, R, R);
+                                break;
+                            case 3:
+                                R = float.Parse(SpecularReflectivity[0]);
+                                G = float.Parse(SpecularReflectivity[1]);
+                                B = float.Parse(SpecularReflectivity[2]);
+                                material.Ks = new Vector3(R, G, B);
+                                break;
+                            default:
+                                break;
                         }
                     }
                     #endregion
@@ -158,12 +167,21 @@ namespace LED_Engine
                         string[] AmbientReflectivity = xmlNodeList.Item(0).InnerText.Split(
                             new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
-                        if (AmbientReflectivity.Length == 3)
+                        float R, G, B;
+                        switch (AmbientReflectivity.Length)
                         {
-                            float R = float.Parse(AmbientReflectivity[0]);
-                            float G = float.Parse(AmbientReflectivity[1]);
-                            float B = float.Parse(AmbientReflectivity[2]);
-                            material.Ka = new Vector3(R, G, B);
+                            case 1:
+                                R = float.Parse(AmbientReflectivity[0]);
+                                material.Ka = new Vector3(R, R, R);
+                                break;
+                            case 3:
+                                R = float.Parse(AmbientReflectivity[0]);
+                                G = float.Parse(AmbientReflectivity[1]);
+                                B = float.Parse(AmbientReflectivity[2]);
+                                material.Ka = new Vector3(R, G, B);
+                                break;
+                            default:
+                                break;
                         }
                     }
                     #endregion
@@ -175,12 +193,21 @@ namespace LED_Engine
                         string[] EmissiveColor = xmlNodeList.Item(0).InnerText.Split(
                             new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
-                        if (EmissiveColor.Length == 3)
+                        float R, G, B;
+                        switch (EmissiveColor.Length)
                         {
-                            float R = float.Parse(EmissiveColor[0]);
-                            float G = float.Parse(EmissiveColor[1]);
-                            float B = float.Parse(EmissiveColor[2]);
-                            material.Ke = new Vector3(R, G, B);
+                            case 1:
+                                R = float.Parse(EmissiveColor[0]);
+                                material.Ke = new Vector3(R, R, R);
+                                break;
+                            case 3:
+                                R = float.Parse(EmissiveColor[0]);
+                                G = float.Parse(EmissiveColor[1]);
+                                B = float.Parse(EmissiveColor[2]);
+                                material.Ke = new Vector3(R, G, B);
+                                break;
+                            default:
+                                break;
                         }
                     }
                     #endregion

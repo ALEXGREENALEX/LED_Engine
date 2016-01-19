@@ -16,8 +16,11 @@ namespace LED_Engine
 
         static KeyboardState KeybrdState;
 
+        [STAThread]
         private static void Main(string[] args)
         {
+            Lights.MakeSomeLightsForTEST();
+
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; //For fix parsing values like "0.5" and "0,5"
 
             Glfw.SetErrorCallback(OnError);
@@ -25,39 +28,35 @@ namespace LED_Engine
             if (!Glfw.Init())
             {
                 Log.WriteLineRed("ERROR: Could not initialize GLFW, shutting down.");
+                Console.ReadKey();
                 Environment.Exit(1);
             }
 
             Engine.LoadConfig();
             Engine.ApplyConfig();
-            //Engine.LoadContentLists();
 
             while (Settings.Window.NeedReinitWindow)
             {
                 ApplySettingsAndCreateWindow();
+                RescaleToWindowSize();
                 Settings.Window.NeedReinitWindow = false;
-                
-                Engine.GetGLSettings();
 
                 if (!GLContextIsLoaded)
                 {
+                    Engine.GetGLSettings();
                     Engine.LoadContentLists();
+                    
+                    // FBO Init
+                    int FB_Width, FB_Height;
+                    Glfw.GetFramebufferSize(Window, out FB_Width, out FB_Height);
+                    FBO.Init(FB_Width, FB_Height);
+
                     Engine.LoadEngineContent();
                     LoadResourcesFromMap_FAKE();
                     InitProgram();
 
                     GLContextIsLoaded = true;
                 }
-
-                #region PostProcessInit
-                if (PostProcess.UsePostEffects)
-                {
-                    int FBWidth, FBHeight;
-                    Glfw.GetFramebufferSize(Window, out FBWidth, out FBHeight);
-                    PostProcess.Init(FBWidth, FBHeight);
-                }
-                #endregion
-                RescaleToWindowSize();
 
                 // On...DoSomething functions
                 Glfw.SetCursorPosCallback(Window, OnMouseMove);
@@ -71,6 +70,7 @@ namespace LED_Engine
                 #region Main Loop
                 while (!(Glfw.WindowShouldClose(Window) || Settings.Window.NeedReinitWindow))
                 {
+                    Glfw.PollEvents(); // Poll GLFW window events
                     if (Settings.Window.IsFocused)
                     {
                         OnUpdateFrame();
@@ -80,17 +80,14 @@ namespace LED_Engine
                         Thread.Sleep(100);
 
                     Glfw.SwapBuffers(Window); // Swap the front and back buffer, displaying the scene
-                    Glfw.PollEvents(); // Poll GLFW window events
 
                     if (FPS.ShowFPS)
                         FPS.CalcFPS(); //FPS Counter, must be at the END of the Render LOOP!
                 }
                 #endregion
-
-                PostProcess.Free();
             }
             Maps.Free(true); // Free all: Map -> Meshes, Shaders, Textures...
-
+            FBO.Free(true);
             Glfw.DestroyWindow(Window);
             Glfw.Terminate();
 

@@ -2,7 +2,7 @@
 layout(location = 0) in vec3 v_Position;
 layout(location = 1) in vec2 v_UV;
 
-#include("Light\MaterialInfo.glsl")
+#include("Other\MaterialInfo.glsl")
 uniform MaterialInfo Material;
 
 uniform mat4 MVP;

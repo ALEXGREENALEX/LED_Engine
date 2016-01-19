@@ -19,14 +19,14 @@ namespace LED_Engine
         public static Mesh SkyCube = null;
         public static float FOV = 50.0f;
         public static float zNear = 0.1f;
-        public static float zFar = 10000.0f;
+        public static float zFar = 500.0f;
 
-        static float Angle = MathHelper.DegreesToRadians(100.0f);
+        public static float Angle = MathHelper.DegreesToRadians(100.0f);
 
         public static List<Mesh> Objects = new List<Mesh>();
         public static List<Mesh> DebugObjects = new List<Mesh>();
-        static List<Mesh> TransparentObjects = new List<Mesh>();
-        static List<Mesh> DrawableObjects = new List<Mesh>();
+        public static List<Mesh> TransparentObjects = new List<Mesh>();
+        public static List<Mesh> DrawableObjects = new List<Mesh>();
 
         static void ApplySettingsAndCreateWindow()
         {
@@ -164,8 +164,8 @@ namespace LED_Engine
             else
                 GL.Disable(EnableCap.Multisample);
 
+            GL.ClearColor(Color4.Black);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            GL.ClearColor(Color4.CornflowerBlue);
             #endregion
         }
 
@@ -180,14 +180,14 @@ namespace LED_Engine
         {
             int FB_Width, FB_Height;
             Glfw.GetFramebufferSize(Window, out FB_Width, out FB_Height);
-
-            // Настраиваем проекцию камеры
-            MainCamera.SetProjectionMatrix(ProjectionTypes.Perspective, (float)FB_Width, (float)FB_Height, zNear, zFar, FOV);
-
-            GL.Viewport(0, 0, FB_Width, FB_Height);
-
-            if (PostProcess.UsePostEffects)
-                PostProcess.Rescale(FB_Width, FB_Height);
+            
+            if (FB_Width > 0 && FB_Height > 0)
+            {
+                MainCamera.SetProjectionMatrix(ProjectionTypes.Perspective, (float)FB_Width, (float)FB_Height, zNear, zFar, FOV);
+                GL.Viewport(0, 0, FB_Width, FB_Height);
+                FBO.Free();
+                FBO.Init(FB_Width, FB_Height);
+            }
         }
 
         static void LoadResourcesFromMap_FAKE()
@@ -206,12 +206,12 @@ namespace LED_Engine
             }
 
             Mesh plain = Mesh.MakePlain(100f);
-            plain.Materials.Add(Materials.Load("Light"));
+            plain.Materials.Add(Materials.Load("BrickWall"));
             plain.Position.Y = -0.5f;
             Objects.Add(plain);
 
             Mesh box = Mesh.MakeBox();
-            box.Materials.Add(Materials.Load("Light"));
+            box.Materials.Add(Materials.Load("BrickWall"));
             box.Position.X = -2f;
             Objects.Add(box);
 
@@ -242,7 +242,7 @@ namespace LED_Engine
                     model1.Meshes.Add(new Mesh(obj_Keypad));
                     model1.Meshes[i1 * a + i2].GenBuffers();
                     model1.Meshes[i1 * a + i2].BindBuffers();
-                    model1.Meshes[i1 * a + i2].Materials.Add(Materials.Load("Light")); //ReliefParallaxTest //Keypad
+                    model1.Meshes[i1 * a + i2].Materials.Add(Materials.Load("BrickWall")); //ReliefParallaxTest //Keypad
                     model1.Meshes[i1 * a + i2].Scale = new Vector3(10.0f, 10.0f, 10.0f);
                     model1.Meshes[i1 * a + i2].Position.X = (i1 - a / 2) * 5;
                     model1.Meshes[i1 * a + i2].Position.Z = (i2 - a / 2) * 5;
@@ -273,7 +273,7 @@ namespace LED_Engine
             // FOG
             Fog.Enabled = true;
 
-            SkyCube = Mesh.MakeBox(zFar, true);
+            SkyCube = Mesh.MakeBox(zFar * 2.0f / (float)Math.Sqrt(3.0), true); // Cube diagonal = side / sqrt(3)
             SkyCube.Materials.Add(Materials.Load("SkyCubemap_Storforsen"));
             Objects.Add(SkyCube);
 
@@ -361,35 +361,6 @@ namespace LED_Engine
             #endregion
 
             #region Передача различных параметров шейдерам
-
-            Vector3[] LightPosition = new Vector3[2];
-            LightPosition[0] = new Vector3(5.5f * (float)Math.Cos(Angle), 2.0f + (float)Math.Sin(MathHelper.TwoPi + Angle), 5.5f * (float)Math.Sin(Angle));
-            LightPosition[1] = new Vector3(10.5f * (float)Math.Sin(Angle), 2.0f + (float)Math.Cos(MathHelper.TwoPi + Angle), 3.5f * (float)Math.Cos(Angle));
-            DebugObjects[0].Position = LightPosition[0];
-            DebugObjects[1].Position = LightPosition[1];
-
-            // Передаем шейдеру вектор Light Position (Eye coords), если шейдер поддерживает это.
-            TempLocation = shader.GetUniform("Light[0].Ld");
-            if (TempLocation != -1)
-            {
-                for (int LightIndex = 0; LightIndex < 2; LightIndex++)
-                {
-                    string LightIndexStr = LightIndex.ToString();
-
-                    LightPosition[LightIndex] = (new Vector4(LightPosition[LightIndex], 1.0f) * MainCamera.GetViewMatrix()).Xyz;
-
-                    // Attenuation = LightIntensity / (Constant + Linear * Distance + Quadric * Distance^2)
-                    const float k_Constant = 0.0f;
-                    const float k_Linear = 0.5f;
-                    const float k_Quadric = 0.01f;
-                    GL.Uniform3(shader.GetUniform("Light[" + LightIndexStr + "].Att"), k_Constant, k_Linear, k_Quadric);
-                    GL.Uniform3(shader.GetUniform("Light[" + LightIndexStr + "].Ld"), new Vector3(1.0f, 1.0f, 1.0f) * 2.0f);
-                    GL.Uniform3(shader.GetUniform("Light[" + LightIndexStr + "].Ls"), 1.0f, 1.0f, 1.0f);
-                    GL.Uniform3(shader.GetUniform("Light[" + LightIndexStr + "].Pos"), LightPosition[LightIndex]);
-                }
-
-                GL.Uniform3(shader.GetUniform("LightAmbient"), 0.0f, 0.0f, 0.0f);
-            }
 
             // Передаем шейдеру массив тех TextureUnit-ов, которые исаользуются, если шейдер поддерживает это.
             TempLocation = shader.GetUniform("TexUnits[0]");

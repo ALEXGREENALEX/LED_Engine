@@ -154,7 +154,7 @@ namespace LED_Engine
         public static void ApplyConfig()
         {
             FPS.ShowFPS = Settings.Debug.ShowFPS;
-            PostProcess.UsePostEffects = Settings.Graphics.UsePostEffects;
+            FBO.UsePostEffects = Settings.Graphics.UsePostEffects;
         }
 
         public static void GetGLSettings()
@@ -171,6 +171,7 @@ namespace LED_Engine
         {
             try
             {
+                #region Paths
                 string[] Paths = new string[] { Settings.Paths.EngineContentPath, Settings.Paths.GameDataPath };
 
                 string[] MapsConfigs = new string[] { Settings.Paths.ContentFiles.EngineMaps, Settings.Paths.ContentFiles.Maps };
@@ -185,6 +186,7 @@ namespace LED_Engine
                 string[] ShadersPaths = new string[] { Settings.Paths.EngineShaders, Settings.Paths.Shaders };
                 string[] TexturesPaths = new string[] { Settings.Paths.EngineTextures, Settings.Paths.Textures };
                 string[] CubemapTexturesPaths = new string[] { Settings.Paths.EngineCubemapTextures, Settings.Paths.CubemapTextures };
+                #endregion
 
                 #region Load Lists
                 for (int i = 0; i < Paths.Length; i++)

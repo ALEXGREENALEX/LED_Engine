@@ -23,7 +23,8 @@ namespace LED_Engine
 
         static void OnFramebufferResize(GlfwWindowPtr window, int Width, int Height)
         {
-            RescaleToWindowSize();
+            if (Width > 0 && Height > 0)
+                RescaleToWindowSize();
         }
 
         static void OnKeyPress(GlfwWindowPtr window, Key KeyCode, int Scancode, KeyAction Action, KeyModifiers Mods)
@@ -85,8 +86,11 @@ namespace LED_Engine
 
         static void OnWindowResize(GlfwWindowPtr window, int Width, int Height)
         {
-            Settings.Window.Width = Width;
-            Settings.Window.Height = Height;
+            if (Width > 0 || Height > 0)
+            {
+                Settings.Window.Width = Width;
+                Settings.Window.Height = Height;
+            }
         }
 
         static void OnFocusChanged(GlfwWindowPtr window, bool Focused)
@@ -103,9 +107,8 @@ namespace LED_Engine
         {
             if (Settings.Window.IsFocused)
             {
-                if (PostProcess.UsePostEffects) // Bind FBO for PostProcess
-                    GL.BindFramebuffer(FramebufferTarget.Framebuffer, PostProcess.fbo);
-
+                GL.BindFramebuffer(FramebufferTarget.FramebufferExt, FBO.FBO_G);
+                GL.ClearColor(Color4.Black);
                 GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
                 GL.Enable(EnableCap.DepthTest); // Включаем тест глубины
@@ -191,12 +194,8 @@ namespace LED_Engine
                             break;
                     }
                 }
-
-                if (PostProcess.UsePostEffects)
-                {
-                    GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
-                    PostProcess.Draw();
-                }
+                FBO.Draw_G();
+                FBO.Draw_PP();
             }
         }
 

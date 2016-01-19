@@ -40,14 +40,14 @@
 <Materials>
 	<Material>
 		<Name>TransparentRedGlass</Name>
-		<Shader>Unlit</Shader>
+		<Shader></Shader>
 		<Transparent>True</Transparent>
-		<Kd>1.0 0.0 0.0 0.5</Kd>
+		<Kd>1.0 1.0 1.0 0.5</Kd>
 		
-		<!--<Texture>
+		<Texture>
 			<Name>AlphaTest</Name>
 			<TextureUnit>0</TextureUnit>
-		</Texture>-->
+		</Texture>
 	</Material>
 	<Material>
 		<Name>SkyCubemap_Storforsen</Name>
@@ -102,23 +102,6 @@
 		</Texture>-->
 	</Material>
 	<Material>
-		<Name>BrickWall</Name>
-		<Shader>PhongNormalMap</Shader>
-		<CullFace>True</CullFace>
-		<Ks>0.2 0.2 0.2</Ks>
-		<Ka>0.05 0.05 0.05</Ka>
-		<Shininess>1.0</Shininess>
-		
-		<Texture>
-			<Name>brick-wall</Name>
-			<TextureUnit>0</TextureUnit>
-		</Texture>
-		<Texture>
-			<Name>brick-wall_N</Name>
-			<TextureUnit>1</TextureUnit>
-		</Texture>
-	</Material>
-	<Material>
 		<Name>ReliefParallaxTest</Name>
 		<Shader>ReliefParallaxMap</Shader>
 		<CullFace>True</CullFace>
@@ -141,33 +124,49 @@
 		</Texture>
 	</Material>
 	<Material>
-		<Name>Light</Name>
+		<Name>BrickWall</Name>
 		<Shader>Light</Shader>
 		<CullFace>True</CullFace>
-		<Kd>1.0</Kd>
-		<Ks>0.1 0.1 0.1</Ks>
-		<Ka>0.0 0.0 0.0</Ka>
-		<Shininess>1.0</Shininess>
+		<Ks>0.4</Ks>
+		<Ka>0.1</Ka>
+		<Shininess>40.0</Shininess>
 		
 		<Texture>
 			<Name>brick-wall</Name>
 			<TextureUnit>0</TextureUnit>
 		</Texture>
+		<Texture>
+			<Name>brick-wall_N</Name>
+			<TextureUnit>1</TextureUnit>
+		</Texture>
 	</Material>
 	<Material>
 		<Name>Keypad</Name>
-		<Shader>PhongNormalMap</Shader>
-		<Ks>0.2 0.2 0.2</Ks>
-		<Ka>0.1 0.1 0.1</Ka>
-		<Shininess>1.0</Shininess>
+		<Shader>Light</Shader>
+		<Ks>1.0</Ks>
+		<Ke>1.3</Ke>
+		<Ka>0.5</Ka>
+		<Shininess>50.0</Shininess>
 		
 		<Texture>
-			<Name>Keypad</Name>
+			<Name>Keypad_D</Name>
 			<TextureUnit>0</TextureUnit>
 		</Texture>
 		<Texture>
 			<Name>Keypad_N</Name>
 			<TextureUnit>1</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Keypad_S</Name>
+			<TextureUnit>2</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Keypad_E</Name>
+			<TextureUnit>3</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Keypad_AO</Name>
+			<TextureUnit>4</TextureUnit>
 		</Texture>
 	</Material>
 </Materials>

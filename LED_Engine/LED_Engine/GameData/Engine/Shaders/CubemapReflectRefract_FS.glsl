@@ -6,14 +6,12 @@ in vec2 f_UV;
 in vec3 ReflectDir;
 in vec3 RefractDir;
 
-#include("Light\MaterialInfo.glsl")
+#include("Other\MaterialInfo.glsl")
 uniform MaterialInfo Material;
 
 uniform float ReflectFactor;
 
 layout(location = 0) out vec4 FragColor;
-
-#include("Fog\FS_Vars.glsl")
 
 void main()
 {
@@ -29,6 +27,4 @@ void main()
 	}
 	
 	FragColor = vec4(mix(refractColor, reflectColor, ReflectFactor) * DiffColor, 1.0);
-	
-	#include("Fog\FS.glsl")
 }

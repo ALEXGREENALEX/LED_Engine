@@ -41,9 +41,9 @@ namespace LED_Engine
                 }
                 #endregion
 
-                #region PostProcesses
+                #region RTT Shaders
                 XML.Load(XmlFile);
-                xmlNodeList = XML.DocumentElement.SelectNodes("PostProcessShader");
+                xmlNodeList = XML.DocumentElement.SelectNodes("RTT_Shader");
 
                 foreach (XmlNode xmlNode in xmlNodeList)
                 {
@@ -54,7 +54,7 @@ namespace LED_Engine
                     S.VS_File = Engine.CombinePaths(ShaderPath, xmlNode.SelectSingleNode("VertexShader").InnerText);
                     S.FS_File = Engine.CombinePaths(ShaderPath, xmlNode.SelectSingleNode("FragmentShader").InnerText);
 
-                    PostProcess.Shaders.Add(S);
+                    FBO.Shaders.Add(S);
                 }
                 #endregion
             }
