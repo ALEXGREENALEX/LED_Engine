@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -16,11 +17,14 @@ namespace LED_Editor
     public partial class MainWindow : Form
     {
         bool loaded = false;
+        uint Texture;
 
         public MainWindow()
         {
             SplashForm SplashScreen = new SplashForm();
             SplashScreen.ShowDialog();
+            
+
             InitializeComponent();
         }
 
@@ -45,14 +49,47 @@ namespace LED_Editor
                 return;
 
             SetupViewport();
-            glControl1.Invalidate();
+            //glControl1.Invalidate();
+            //GL.Viewport(ClientRectangle.X, ClientRectangle.Y, ClientRectangle.Width, ClientRectangle.Height);
+
+            //Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 4, Width / (float)Height, 1.0f, 64.0f);
+            //GL.MatrixMode(MatrixMode.Projection);
+            //GL.LoadMatrix(ref projection);
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
             loaded = true;
             GL.ClearColor(Color.SkyBlue);
+            //GL.ClearColor(0.1f, 0.2f, 0.5f, 0.0f);
+            GL.Enable(EnableCap.DepthTest);
+            GL.Enable(EnableCap.Texture2D);
+            Texture = (uint)LoadTexture(@"D:\KTU\Диплом\game\led_engine\LED_Engine\LED_Engine\GameData\Textures\brick-wall.jpg");
             SetupViewport();
+            return;
+        }
+
+        static int LoadTexture(string filename)
+        {
+            if (String.IsNullOrEmpty(filename))
+                throw new ArgumentException(filename);
+
+            int id = GL.GenTexture();
+            GL.BindTexture(TextureTarget.Texture2D, id);
+
+            Bitmap bmp = new Bitmap(filename);
+            BitmapData bmp_data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmp_data.Width, bmp_data.Height, 0,
+                OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, bmp_data.Scan0);
+
+            bmp.UnlockBits(bmp_data);
+
+
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+
+            return id;
         }
 
         private void glControl1_Paint(object sender, PaintEventArgs e)
@@ -64,11 +101,15 @@ namespace LED_Editor
 
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
-            GL.Color3(Color.Yellow);
-            GL.Begin(PrimitiveType.Triangles);
-            GL.Vertex2(0, 1);
-            GL.Vertex2(-1, -1);
-            GL.Vertex2(1, -1);
+            GL.BindTexture(TextureTarget.Texture2D, Texture);
+
+            GL.Begin(BeginMode.Quads);
+
+            GL.TexCoord2(0.0f, 1.0f); GL.Vertex2(-1, -1);
+            GL.TexCoord2(1.0f, 1.0f); GL.Vertex2(1, -1);
+            GL.TexCoord2(1.0f, 0.0f); GL.Vertex2(1, 1);
+            GL.TexCoord2(0.0f, 0.0f); GL.Vertex2(-1, 1);
+
             GL.End();
 
             glControl1.SwapBuffers();
