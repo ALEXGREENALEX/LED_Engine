@@ -10,7 +10,7 @@ namespace LED_Engine
     {
         public static bool Enabled = true;
         public static float MaxDistance = 80f,
-                            MinDistance = 32f;
+                            MinDistance = 20f;
         public static Vector3 Color = new Vector3(0.5f, 0.5f, 0.5f);
     }
 }

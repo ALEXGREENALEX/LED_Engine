@@ -72,9 +72,7 @@ namespace LED_Engine
 
                 if (M.UseCounter == 0)
                 {
-                    for (int i = 0; i < M.Materials.Count; i++)
-                        Materials.Load(M.Materials[i].Name);
-
+                    Materials.Load(M.Material.Name);
                     MESHES.Add(M);
                 }
 
@@ -137,6 +135,7 @@ namespace LED_Engine
         public int[] VT = new int[3];
         public int[] VN = new int[3];
         public int MaterialID = -1;
+        public int Index = 0;
         public UInt32 SmoothingGroup = 0;
 
         public int V0
@@ -194,36 +193,195 @@ namespace LED_Engine
         }
     }
 
-    class FacePart
+    public class AABox
     {
-        public int V = 0, VN = 0;
-        public UInt32 SmoothingGroup = 0;
+        float nX, pX, nY, pY, nZ, pZ;
+        Vector3[] points = new Vector3[8];
 
-        public FacePart()
+        public AABox()
         {
         }
 
-        public FacePart(int V)
+        public AABox(float SideSize)
         {
-            this.V = V;
+            nX = SideSize;
+            pX = SideSize;
+            nY = SideSize;
+            pY = SideSize;
+            nZ = SideSize;
+            pZ = SideSize;
+
+            CalcBoxFromSides();
         }
 
-        public FacePart(UInt32 SmoothingGroup)
+        public AABox(float NegativeX, float PositiveX, float NegativeY, float PositiveY, float NegativeZ, float PositiveZ)
         {
-            this.SmoothingGroup = SmoothingGroup;
+            nX = NegativeX;
+            pX = PositiveX;
+            nY = NegativeY;
+            pY = PositiveY;
+            nZ = NegativeZ;
+            pZ = PositiveZ;
+
+            CalcBoxFromSides();
         }
 
-        public FacePart(int V, int VN)
+        public AABox(AABox Box)
         {
-            this.V = V;
-            this.VN = VN;
+            nX = Box.NegativeX;
+            pX = Box.PositiveX;
+            nY = Box.NegativeY;
+            pY = Box.PositiveY;
+            nZ = Box.NegativeZ;
+            pZ = Box.PositiveZ;
+
+            Box.Points.CopyTo(points, 0);
         }
 
-        public FacePart(int V, int VN, UInt32 SmoothingGroup)
+        public float PositiveX
         {
-            this.V = V;
-            this.VN = VN;
-            this.SmoothingGroup = SmoothingGroup;
+            get { return pX; }
+            set
+            {
+                pX = value;
+                CalcBoxFromSides();
+            }
+        }
+
+        public float NegativeX
+        {
+            get { return nX; }
+            set
+            {
+                nX = value;
+                CalcBoxFromSides();
+            }
+        }
+
+        public float PositiveY
+        {
+            get { return pY; }
+            set
+            {
+                pY = value;
+                CalcBoxFromSides();
+            }
+        }
+
+        public float NegativeY
+        {
+            get { return nY; }
+            set
+            {
+                nY = value;
+                CalcBoxFromSides();
+            }
+        }
+
+        public float PositiveZ
+        {
+            get { return pZ; }
+            set
+            {
+                pZ = value;
+                CalcBoxFromSides();
+            }
+        }
+
+        public float NegativeZ
+        {
+            get { return nZ; }
+            set
+            {
+                nZ = value;
+                CalcBoxFromSides();
+            }
+        }
+
+        /// <summary>
+        /// Points layout:
+        /// P[0] = -X -Y -Z,
+        /// P[1] = +X -Y -Z,
+        /// P[2] = -X +Y -Z,
+        /// P[3] = +X +Y -Z,
+        /// P[4] = -X -Y +Z,
+        /// P[5] = +X -Y +Z,
+        /// P[6] = -X +Y +Z,
+        /// P[7] = +X +Y +Z.
+        /// </summary>
+        public Vector3[] Points
+        {
+            get { return points; }
+            set
+            {
+                points = value;
+                CalcBoxFromPoints();
+            }
+        }
+
+        void CalcBoxFromSides()
+        {
+            points[0] = new Vector3(nX, nY, nZ);
+            points[1] = new Vector3(pX, nY, nZ);
+            points[2] = new Vector3(nX, pY, nZ);
+            points[3] = new Vector3(pX, pY, nZ);
+            points[4] = new Vector3(nX, nY, pZ);
+            points[5] = new Vector3(pX, nY, pZ);
+            points[6] = new Vector3(nX, pY, pZ);
+            points[7] = new Vector3(pX, pY, pZ);
+        }
+
+        void CalcBoxFromPoints()
+        {
+            nX = points[0].X;
+            pX = points[7].X;
+            nY = points[0].Y;
+            pY = points[7].Y;
+            nZ = points[0].Z;
+            pZ = points[7].Z;
+        }
+    }
+
+    public class RadiusSphere
+    {
+        public float Inner, Outer;
+
+        public RadiusSphere()
+        {
+        }
+
+        public RadiusSphere(float Radius_InnerOuter)
+        {
+            Inner = Radius_InnerOuter;
+            Outer = Radius_InnerOuter;
+        }
+
+        public RadiusSphere(float Inner, float Outer)
+        {
+            this.Inner = Inner;
+            this.Outer = Outer;
+        }
+
+        public RadiusSphere(RadiusSphere Sphere)
+        {
+            Inner = Sphere.Inner;
+            Outer = Sphere.Outer;
+        }
+
+        public RadiusSphere(AABox Box)
+        {
+            float MaxX = Math.Max(Box.PositiveX, Box.NegativeX);
+            float MaxY = Math.Max(Box.PositiveY, Box.NegativeY);
+            float MaxZ = Math.Max(Box.PositiveZ, Box.NegativeZ);
+            Inner = Math.Max(MaxX, Math.Max(MaxY, MaxZ));
+
+            MaxX = Math.Max(Box.Points[0].Length, Box.Points[1].Length);
+            MaxX = Math.Max(MaxX, Box.Points[2].Length);
+            MaxX = Math.Max(MaxX, Box.Points[3].Length);
+            MaxX = Math.Max(MaxX, Box.Points[4].Length);
+            MaxX = Math.Max(MaxX, Box.Points[5].Length);
+            MaxX = Math.Max(MaxX, Box.Points[6].Length);
+            Outer = Math.Max(MaxX, Box.Points[7].Length);
         }
     }
 
@@ -237,13 +395,16 @@ namespace LED_Engine
         public Matrix4 ModelViewMatrix = Matrix4.Identity;
         public Matrix4 ModelViewProjectionMatrix = Matrix4.Identity;
 
+        public AABox AABox;
+        public RadiusSphere RadiusSphere;
+
         public int IndexBufferID, VertexBufferID, NormalBufferID, UVBufferID, TangentBufferID;
 
         public Vector3[] Vertexes, Normals, Tangents;
         public Vector2[] UVs;
-        int[] indexes;
+        public int[] Indexes;
 
-        public List<Material> Materials = new List<Material>();
+        public Material Material;
 
         public string Name = String.Empty;
         public string FileName = String.Empty;
@@ -252,25 +413,30 @@ namespace LED_Engine
 
         public Mesh()
         {
-
         }
 
-        public Mesh(Mesh Original, bool CopyMaterials = false)
+        public Mesh(Mesh Original, string Material = null)
         {
-            indexes = new int[Original.IndexesCount];
+            Indexes = new int[Original.Indexes.Length];
             Vertexes = new Vector3[Original.Vertexes.Length];
             Normals = new Vector3[Original.Normals.Length];
             UVs = new Vector2[Original.UVs.Length];
             Tangents = new Vector3[Original.Tangents.Length];
 
-            Original.Indexes().CopyTo(indexes, 0);
+            Original.Indexes.CopyTo(Indexes, 0);
             Original.Vertexes.CopyTo(Vertexes, 0);
             Original.Normals.CopyTo(Normals, 0);
             Original.UVs.CopyTo(UVs, 0);
             Original.Tangents.CopyTo(Tangents, 0);
 
-            if (CopyMaterials)
-                Materials.AddRange(Original.Materials);
+            if (Material == null)
+            {
+                this.Material = Original.Material;
+                if (this.Material != null)
+                    this.Material.UseCounter++;
+            }
+            else
+                this.Material = Materials.Load(Material);
 
             Name = Original.Name;
             FileName = Original.FileName;
@@ -278,6 +444,9 @@ namespace LED_Engine
             Position = Original.Position;
             Rotation = Original.Rotation;
             Scale = Original.Scale;
+
+            AABox = new AABox(Original.AABox);
+            RadiusSphere = new RadiusSphere(Original.RadiusSphere);
 
             GenBuffers();
             BindBuffers();
@@ -311,7 +480,7 @@ namespace LED_Engine
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
 
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, IndexBufferID);
-            GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(IndexesCount * sizeof(int)), Indexes(), BufferUsageHint.StaticDraw);
+            GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(Indexes.Length * sizeof(int)), Indexes, BufferUsageHint.StaticDraw);
 
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
         }
@@ -335,33 +504,21 @@ namespace LED_Engine
         {
             FreeBuffers();
 
-            indexes = null;
+            Indexes = null;
             Vertexes = null;
             Normals = null;
             UVs = null;
             Tangents = null;
+
+            AABox = null;
+            RadiusSphere = null;
         }
 
-        public int IndexesCount { get { return indexes.Length; } }
-
-        public int[] Indexes(int offset = 0)
-        {
-            int[] inds = new int[indexes.Length];
-
-            for (int i = 0; i < indexes.Length; i++)
-                inds[i] = indexes[i] + offset;
-
-            return inds;
-        }
-
-        public void Indexes(int[] Indexes)
-        {
-            indexes = Indexes;
-        }
-
-        public void CalculateModelMatrix()
+        public void CalculateMatrices(Camera Camera)
         {
             ModelMatrix = Matrix4.CreateScale(Scale) * Matrix4.CreateRotationX(Rotation.X) * Matrix4.CreateRotationY(Rotation.Y) * Matrix4.CreateRotationZ(Rotation.Z) * Matrix4.CreateTranslation(Position);
+            ModelViewMatrix = ModelMatrix * Camera.GetViewMatrix();
+            ModelViewProjectionMatrix = ModelViewMatrix * Camera.GetProjectionMatrix();
         }
 
         static void ComputeTangentBasis(Vector3[] Vertices, Vector3[] Normals, Vector2[] UVs, out Vector3[] Tangents)
@@ -503,6 +660,36 @@ namespace LED_Engine
                 Log.WriteLineRed("ObjVolume.SmoothNormals() Exception:");
                 Log.WriteLineYellow("Message: \"{0}\"\n" + e.Message);
             }
+        }
+
+        void CalcAA_Box()
+        {
+            float pX = 0.0f, nX = 0.0f,
+                    pY = 0.0f, nY = 0.0f,
+                    pZ = 0.0f, nZ = 0.0f;
+
+            for (int i = 0; i < Vertexes.Length; i++)
+            {
+                pX = Math.Max(pX, Vertexes[i].X);
+                nX = Math.Min(nX, Vertexes[i].X);
+                pY = Math.Max(pY, Vertexes[i].Y);
+                nY = Math.Min(nY, Vertexes[i].Y);
+                pZ = Math.Max(pZ, Vertexes[i].Z);
+                nZ = Math.Min(nZ, Vertexes[i].Z);
+            }
+            this.AABox = new AABox(nX, pX, nY, pY, nZ, pZ);
+        }
+
+        void CalcRadiusSphere()
+        {
+            float Min = 0.0f, Max = 0.0f;
+
+            for (int i = 0; i < Vertexes.Length; i++)
+            {
+                Min = Math.Min(Min, Vertexes[i].Length);
+                Max = Math.Max(Max, Vertexes[i].Length);
+            }
+            this.RadiusSphere = new RadiusSphere(Min, Max);
         }
 
         public static Mesh LoadFromFile(string Name, string FileName, bool UseSmoothingGroups = false)
@@ -760,7 +947,7 @@ namespace LED_Engine
                 vol.Vertexes = new Vector3[Faces.Count * 3];
                 vol.UVs = new Vector2[Faces.Count * 3];
                 vol.Normals = new Vector3[Faces.Count * 3];
-                vol.indexes = new int[Faces.Count * 3];
+                vol.Indexes = new int[Faces.Count * 3];
 
                 #region If need Calc Normals
                 if (Normals.Count == 0)
@@ -783,13 +970,17 @@ namespace LED_Engine
 
                 for (int i = 0; i < Faces.Count * 3; i++)
                 {
-                    vol.Vertexes[i] = Vertices[Faces[i / 3].V[i % 3]];
-                    vol.UVs[i] = UVs[Faces[i / 3].VT[i % 3]];
-                    vol.Normals[i] = Normals[Faces[i / 3].VN[i % 3]];
-                    vol.indexes[i] = i;
+                    Face F = Faces[i / 3];
+
+                    vol.Vertexes[i] = Vertices[F.V[i % 3]];
+                    vol.UVs[i] = UVs[F.VT[i % 3]];
+                    vol.Normals[i] = Normals[F.VN[i % 3]];
+                    vol.Indexes[i] = i;
                 }
 
                 ComputeTangentBasis(vol.Vertexes, vol.Normals, vol.UVs, out vol.Tangents);
+                vol.CalcAA_Box();
+                vol.CalcRadiusSphere();
 
                 vol.GenBuffers();
                 vol.BindBuffers();
@@ -815,7 +1006,7 @@ namespace LED_Engine
             return MakePlain(Sides, Sides);
         }
 
-        public static Mesh MakePlain(float SideA , float SideB)
+        public static Mesh MakePlain(float SideA, float SideB)
         {
             if (SideA < 0.0f)
                 SideA = -SideA;
@@ -858,10 +1049,13 @@ namespace LED_Engine
                 new Vector2(1.0f, 1.0f)
             };
 
-            plain.Indexes(new int[] { 0, 1, 2, 3, 4, 5 });
+            plain.Indexes = new int[] { 0, 1, 2, 3, 4, 5 };
             #endregion
 
             ComputeTangentBasis(plain.Vertexes, plain.Normals, plain.UVs, out plain.Tangents);
+
+            plain.CalcAA_Box();
+            plain.CalcRadiusSphere();
 
             plain.GenBuffers();
             plain.BindBuffers();
@@ -1144,21 +1338,57 @@ namespace LED_Engine
                     new Vector2(0, 0) };
             }
 
-            box.Indexes(new int[] {
+            box.Indexes = new int[] {
                     0, 1, 2, 3, 4, 5,
                     6, 7, 8, 9, 10, 11,
                     12, 13, 14, 15, 16, 17,
                     18, 19, 20, 21, 22, 23,
                     24, 25, 26, 27, 28, 29,
-                    30, 31, 32, 33, 34, 35 });
+                    30, 31, 32, 33, 34, 35 };
             #endregion
 
             ComputeTangentBasis(box.Vertexes, box.Normals, box.UVs, out box.Tangents);
+            box.CalcAA_Box();
+            box.CalcRadiusSphere();
 
             box.GenBuffers();
             box.BindBuffers();
 
             return box;
+        }
+
+        // Classes
+        class FacePart
+        {
+            public int V = 0, VN = 0;
+            public UInt32 SmoothingGroup = 0;
+
+            public FacePart()
+            {
+            }
+
+            public FacePart(int V)
+            {
+                this.V = V;
+            }
+
+            public FacePart(UInt32 SmoothingGroup)
+            {
+                this.SmoothingGroup = SmoothingGroup;
+            }
+
+            public FacePart(int V, int VN)
+            {
+                this.V = V;
+                this.VN = VN;
+            }
+
+            public FacePart(int V, int VN, UInt32 SmoothingGroup)
+            {
+                this.V = V;
+                this.VN = VN;
+                this.SmoothingGroup = SmoothingGroup;
+            }
         }
     }
 }

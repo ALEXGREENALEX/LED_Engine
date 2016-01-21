@@ -6,7 +6,7 @@ in vec2 f_UV;
 in vec3 ReflectDir;
 in vec3 RefractDir;
 
-#include("Other\MaterialInfo.glsl")
+#include("FBO\MaterialInfo.glsl")
 uniform MaterialInfo Material;
 
 uniform float ReflectFactor;

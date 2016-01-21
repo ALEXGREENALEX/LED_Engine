@@ -8,8 +8,16 @@ namespace LED_Engine
     public enum DrawMode
     {
         Default,
-        DrawNormals,
-        WordNormal,
+        Depth,
+        Diffuse,
+        Light,
+        Normals,
+        Position,
+        Reflection,
+        AmbientOclusion,
+        Emissive,
+        Specular,
+        Shininess,
     };
     public enum ActorType
     {

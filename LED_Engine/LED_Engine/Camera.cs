@@ -3,13 +3,13 @@ using Pencil.Gaming.MathUtils;
 
 namespace LED_Engine
 {
-    enum ProjectionTypes
+    public enum ProjectionTypes
     {
         Orthographic,
         Perspective
     }
 
-    class Camera
+    public class Camera
     {
         public Vector3 Position = Vector3.Zero;
         public Vector3 Orientation = new Vector3((float)Math.PI, 0f, 0f);

@@ -9,7 +9,7 @@ in vec3 f_EyePosition;
 in vec2 f_UV;
 in mat3 f_TBN;
 
-#include("Other\MaterialInfo.glsl")
+#include("FBO\MaterialInfo.glsl")
 uniform MaterialInfo Material;
 
 layout (location = 0) out vec4 Output0;
@@ -21,32 +21,31 @@ layout (location = 4) out vec4 Output4;
 void main()
 {
 	if (TexUnits[0])
-		Output0.xyz = Material.Kd.rgb * texture(TextureUnit0, f_UV).rgb;
+		Output0 = Material.Kd * texture(TextureUnit0, f_UV);
 	else
-		Output0.xyz = Material.Kd.rgb;
-	Output0.w = f_EyePosition.x;
+		Output0 = Material.Kd;
 	
 	if (TexUnits[1])
-		Output1.xyz = f_TBN * normalize(texture(TextureUnit1, f_UV).rgb * 2.0 - 1.0);
+		Output1.xy = normalize(f_TBN * normalize(texture(TextureUnit1, f_UV).rgb * 2.0 - 1.0)).xy;
 	else
-		Output1.xyz = f_TBN[2];
-	Output1.w = f_EyePosition.y;
+		Output1.xy = normalize(f_TBN[2]).xy;
+	Output1.zw = f_EyePosition.xy;
 	
 	if (TexUnits[2])
-		Output2.xyz = Material.Ke * texture(TextureUnit3, f_UV).rgb;
+		Output2.xyz = Material.Ks * texture(TextureUnit2, f_UV).rgb;
 	else
-		Output2.xyz = Material.Ke;
-	Output2.w = f_EyePosition.z;
+		Output2.xyz = Material.Ks;
+	Output2.w = Material.S;
 	
 	if (TexUnits[3])
-		Output3.xyz = Material.Ks * texture(TextureUnit2, f_UV).rgb;
+		Output3.xyz = Material.Ke * texture(TextureUnit3, f_UV).rgb;
 	else
-		Output3.xyz = Material.Ks;
-	Output3.w = Material.S;
+		Output3.xyz = Material.Ke;
+	Output3.w = f_EyePosition.z;
 	
 	if (TexUnits[4])
 		Output4.xyz = Material.Ka * texture(TextureUnit4, f_UV).r;
 	else
 		Output4.xyz = Material.Ka;
-	Output4.w = 0.0; //NOTHING (Value not used)
+	Output4.w = 0.0; //NOTHING (Value not used, Free channel)
 }

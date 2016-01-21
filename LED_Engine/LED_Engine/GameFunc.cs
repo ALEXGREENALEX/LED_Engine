@@ -25,8 +25,8 @@ namespace LED_Engine
 
         public static List<Mesh> Objects = new List<Mesh>();
         public static List<Mesh> DebugObjects = new List<Mesh>();
-        public static List<Mesh> TransparentObjects = new List<Mesh>();
         public static List<Mesh> DrawableObjects = new List<Mesh>();
+        public static List<Mesh> TransparentObjects = new List<Mesh>();
 
         static void ApplySettingsAndCreateWindow()
         {
@@ -200,36 +200,36 @@ namespace LED_Engine
                 for (int i = 0; i < DebugLight.Length; i++)
                 {
                     DebugLight[i] = new Mesh(DebugPointLight);
-                    DebugLight[i].Materials.Add(Materials.Load("DebugPointLight"));
+                    DebugLight[i].Material = Materials.Load("DebugPointLight");
                 }
                 DebugObjects.AddRange(DebugLight);
             }
 
             Mesh plain = Mesh.MakePlain(100f);
-            plain.Materials.Add(Materials.Load("BrickWall"));
+            plain.Material = Materials.Load("BrickWall");
             plain.Position.Y = -0.5f;
             Objects.Add(plain);
 
             Mesh box = Mesh.MakeBox();
-            box.Materials.Add(Materials.Load("BrickWall"));
+            box.Material = Materials.Load("BrickWall");
             box.Position.X = -2f;
             Objects.Add(box);
 
             Mesh Pipe_X_1 = Mesh.LoadFromFile("Pipe_X_1", Engine.CombinePaths(Settings.Paths.Meshes, "Pipe_X.obj"));
             //Pipe_X_1.Material = Materials.Load("BrickWall");
-            Pipe_X_1.Materials.Add(Materials.Load("Refraction")); // Reflection Refraction
+            Pipe_X_1.Material = Materials.Load("Refraction"); // Reflection Refraction
             Pipe_X_1.Position.Y += 1;
             Objects.Add(Pipe_X_1);
 
             Mesh Pipe_X_2 = new Mesh(Pipe_X_1);
             Pipe_X_2.GenBuffers();
             Pipe_X_2.BindBuffers();
-            Pipe_X_2.Materials.Add(Materials.Load("Reflection"));
+            Pipe_X_2.Material = Materials.Load("Reflection");
             Pipe_X_2.Position.Y += 1;
             Objects.Add(Pipe_X_2);
 
             Mesh obj_Keypad = Mesh.LoadFromFile("obj_Keypad", Engine.CombinePaths(Settings.Paths.Meshes, "Keypad.obj"));
-            obj_Keypad.Materials.Add(Materials.Load("Keypad"));
+            obj_Keypad.Material = Materials.Load("Keypad");
             obj_Keypad.Position = new Vector3(1.6f, 0f, 0f);
             obj_Keypad.Scale = new Vector3(10f, 10f, 10f);
             Objects.Add(obj_Keypad);
@@ -240,9 +240,7 @@ namespace LED_Engine
                 for (int i2 = 0; i2 < a; i2++)
                 {
                     model1.Meshes.Add(new Mesh(obj_Keypad));
-                    model1.Meshes[i1 * a + i2].GenBuffers();
-                    model1.Meshes[i1 * a + i2].BindBuffers();
-                    model1.Meshes[i1 * a + i2].Materials.Add(Materials.Load("BrickWall")); //ReliefParallaxTest //Keypad
+                    model1.Meshes[i1 * a + i2].Material = Materials.Load("BrickWall"); //ReliefParallaxTest //Keypad
                     model1.Meshes[i1 * a + i2].Scale = new Vector3(10.0f, 10.0f, 10.0f);
                     model1.Meshes[i1 * a + i2].Position.X = (i1 - a / 2) * 5;
                     model1.Meshes[i1 * a + i2].Position.Z = (i2 - a / 2) * 5;
@@ -250,19 +248,19 @@ namespace LED_Engine
                 }
 
             Mesh obj_Teapot = Mesh.LoadFromFile("obj_Teapot", Engine.CombinePaths(Settings.Paths.EngineMeshes, "Teapot.obj"));
-            obj_Teapot.Materials.Add(Materials.Load("TransparentRedGlass"));
+            obj_Teapot.Material = Materials.Load("TransparentRedGlass");
             obj_Teapot.Position.Z += 2;
             obj_Teapot.Scale = new Vector3(3f, 3f, 3f);
             Objects.Add(obj_Teapot);
 
             Mesh obj_Teapot2 = new Mesh(obj_Teapot);
-            obj_Teapot2.Materials.Add(Materials.Load("BrickWall"));
+            obj_Teapot2.Material = Materials.Load("BrickWall");
             obj_Teapot2.Position.Z -= 2;
             obj_Teapot2.Scale = new Vector3(3f, 3f, 3f);
             Objects.Add(obj_Teapot2);
 
             Mesh obj_Teapot3 = new Mesh(obj_Teapot);
-            obj_Teapot3.Materials.Add(Materials.Load("ReliefParallaxTest"));
+            obj_Teapot3.Material = Materials.Load("ReliefParallaxTest");
             obj_Teapot3.Position.Z -= 3;
             obj_Teapot3.Scale = new Vector3(3f, 3f, 3f);
             Objects.Add(obj_Teapot3);
@@ -274,44 +272,31 @@ namespace LED_Engine
             Fog.Enabled = true;
 
             SkyCube = Mesh.MakeBox(zFar * 2.0f / (float)Math.Sqrt(3.0), true); // Cube diagonal = side / sqrt(3)
-            SkyCube.Materials.Add(Materials.Load("SkyCubemap_Storforsen"));
-            Objects.Add(SkyCube);
+            SkyCube.Material = Materials.Load("SkyCubemap_Storforsen");
 
             MainCamera.MoveSpeed = 0.2f;
             MainCamera.Position = new Vector3(0.0f, 2.0f, 0.0f);
         }
 
-        static void DrawObject(Mesh v, DrawMode DrawMode = DrawMode.Default)
+        static void Draw(Mesh v)
         {
+            int TempLocation;
+            Shader shader = v.Material.Shader;
+            GL.UseProgram(shader.ProgramID);
+
+            v.CalculateMatrices(MainCamera);
+
             // Активируем нужный TextureUnit и назначаем текстуру
-            for (int i = 0; i < v.Materials[0].Textures.Length; i++)
+            for (int i = 0; i < v.Material.Textures.Length; i++)
             {
-                if (v.Materials[0].Textures[i] != null)
+                if (v.Material.Textures[i] != null)
                 {
                     GL.ActiveTexture((TextureUnit)((int)TextureUnit.Texture0 + i));
-                    GL.BindTexture(v.Materials[0].Textures[i].TextureTarget, v.Materials[0].Textures[i].ID);
+                    GL.BindTexture(v.Material.Textures[i].TextureTarget, v.Material.Textures[i].ID);
                 }
             }
 
             #region Работаем с шейдерами
-            Shader shader = null;
-            int TempLocation;
-
-            switch (DrawMode)
-            {
-                case DrawMode.Default:
-                    shader = v.Materials[0].Shader;
-                    break;
-                case DrawMode.DrawNormals:
-                    shader = Shaders.GetShader("NormalVisualizer");
-                    break;
-                case DrawMode.WordNormal:
-                    shader = Shaders.GetShader("WorldNormal");
-                    break;
-            }
-
-            GL.UseProgram(shader.ProgramID);
-
             #region Камера и матрицы
             // Передаем шейдеру матрицу ModelMatrix, если шейдер поддерживает это.
             TempLocation = shader.GetUniform("ModelMatrix");
@@ -366,78 +351,57 @@ namespace LED_Engine
             TempLocation = shader.GetUniform("TexUnits[0]");
             if (TempLocation != -1)
             {
-                int[] Arr = new int[v.Materials[0].Textures.Length];
-                for (int TUnit = 0; TUnit < v.Materials[0].Textures.Length; TUnit++)
-                    Arr[TUnit] = (v.Materials[0].Textures[TUnit] != null ? 1 : 0);
+                int[] Arr = new int[v.Material.Textures.Length];
+                for (int TUnit = 0; TUnit < v.Material.Textures.Length; TUnit++)
+                    Arr[TUnit] = (v.Material.Textures[TUnit] != null ? 1 : 0);
                 GL.Uniform1(TempLocation, Arr.Length, Arr);
             }
 
             // Передаем шейдеру вектор Diffuse reflectivity, если шейдер поддерживает это.
             TempLocation = shader.GetUniform("Material.Kd");
             if (TempLocation != -1)
-                GL.Uniform4(TempLocation, v.Materials[0].Kd);
+                GL.Uniform4(TempLocation, v.Material.Kd);
 
             // Передаем шейдеру вектор Specular reflectivity, если шейдер поддерживает это.
             TempLocation = shader.GetUniform("Material.Ks");
             if (TempLocation != -1)
-                GL.Uniform3(TempLocation, v.Materials[0].Ks);
+                GL.Uniform3(TempLocation, v.Material.Ks);
 
             // Передаем шейдеру вектор Ambient reflectivity, если шейдер поддерживает это.
             TempLocation = shader.GetUniform("Material.Ka");
             if (TempLocation != -1)
-                GL.Uniform3(TempLocation, v.Materials[0].Ka);
+                GL.Uniform3(TempLocation, v.Material.Ka);
 
             // Передаем шейдеру вектор Material Emissive, если шейдер поддерживает это.
             TempLocation = shader.GetUniform("Material.Ke");
             if (TempLocation != -1)
-                GL.Uniform3(TempLocation, v.Materials[0].Ke);
+                GL.Uniform3(TempLocation, v.Material.Ke);
 
             // Передаем шейдеру значение Specular shininess factor, если шейдер поддерживает это.
             TempLocation = shader.GetUniform("Material.S");
             if (TempLocation != -1)
-                GL.Uniform1(TempLocation, v.Materials[0].Shininess);
+                GL.Uniform1(TempLocation, v.Material.Shininess);
 
             // Передаем шейдеру значение ReflectFactor, если шейдер поддерживает это.
             TempLocation = shader.GetUniform("ReflectFactor");
             if (TempLocation != -1)
-                GL.Uniform1(TempLocation, v.Materials[0].ReflectionFactor);
+                GL.Uniform1(TempLocation, v.Material.ReflectionFactor);
 
             // Передаем шейдеру значение RefractiveIndex, если шейдер поддерживает это.
             TempLocation = shader.GetUniform("RefractIndex");
             if (TempLocation != -1)
-                GL.Uniform1(TempLocation, v.Materials[0].RefractiveIndex);
+                GL.Uniform1(TempLocation, v.Material.RefractiveIndex);
 
             // Передаем шейдеру вектор Material Scale Bias Shininess, если шейдер поддерживает это. (0.07, 0, 38 for Metal; 0.04, 0, 92 for Rock)
             TempLocation = shader.GetUniform("ScaleBiasShin");
             if (TempLocation != -1)
                 GL.Uniform3(TempLocation, 0.04f, 0.0f, 92.0f);
             #endregion
-
-            #region Туман
-            TempLocation = shader.GetUniform("FogEnabled");
-            if (TempLocation != -1)
-                GL.Uniform1(TempLocation, Convert.ToInt32(Fog.Enabled && Settings.Graphics.FogEnabled));
-
-            if (Settings.Graphics.FogEnabled && Fog.Enabled)
-            {
-                TempLocation = shader.GetUniform("FogMaxDist");
-                if (TempLocation != -1)
-                    GL.Uniform1(TempLocation, Fog.MaxDistance);
-
-                TempLocation = shader.GetUniform("FogMinDist");
-                if (TempLocation != -1)
-                    GL.Uniform1(TempLocation, Fog.MinDistance);
-
-                TempLocation = shader.GetUniform("FogColor");
-                if (TempLocation != -1)
-                    GL.Uniform3(TempLocation, Fog.Color);
-            }
-            #endregion
             #endregion
 
             shader.EnableVertexAttribArrays();
 
-            #region Передаем шейдеру VertexPosition, VertexNormal, VertexUV, VertexTangents, VertexBiTangents
+            #region Передаем шейдеру VertexPosition, VertexNormal, VertexUV, VertexTangents
             // Передаем шейдеру буфер позицый вертексов, если шейдер поддерживает это (должна быть 100% поддержка).
             TempLocation = shader.GetAttribute("v_Position");
             if (TempLocation != -1)
@@ -472,7 +436,7 @@ namespace LED_Engine
             #endregion
 
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, v.IndexBufferID);
-            GL.DrawElements(BeginMode.Triangles, v.IndexesCount, DrawElementsType.UnsignedInt, 0);
+            GL.DrawElements(BeginMode.Triangles, v.Indexes.Length, DrawElementsType.UnsignedInt, 0);
 
             // If you're using VAOs, then you should not disable attribute arrays, as they are encapsulated in the VAO.
             //shader.DisableVertexAttribArrays();

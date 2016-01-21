@@ -1,1 +1,0 @@
-f_FogPosition = vec3(ModelView * vec4(v_Position, 1.0));

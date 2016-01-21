@@ -104,6 +104,9 @@ namespace LED_Engine
 
         public static class GL
         {
+            /// <summary>
+            /// MaxTextureImageUnits - This is the number of fragment shader texture image units.
+            /// </summary>
             public static int MaxTextureImageUnits = 0; //FS
             public static int MaxVertexTextureImageUnits = 0; //VS
             public static int MaxGeometryTextureImageUnits = 0; //GS

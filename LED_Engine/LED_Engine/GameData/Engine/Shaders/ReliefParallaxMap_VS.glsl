@@ -20,14 +20,14 @@ void main()
 	vec3 Tan = normalize(NormalMatrix * v_Tan);
 	vec3 BiTan = normalize(cross(Norm, Tan));
 	
-	vec3 vertex = vec3(ModelView * vec4(v_Position, 1.0));
+	vec3 Pos = vec3(ModelView * vec4(v_Position, 1.0));
 	
-	vec3 temp = LightPos - vertex;
+	vec3 temp = LightPos - Pos;
 	LightVector.x = dot(temp, Tan);
 	LightVector.y = dot(temp, BiTan);
 	LightVector.z = dot(temp, Norm);
 	
-	temp = CameraPos - vertex;
+	temp = CameraPos - Pos;
 	EyeVector.x = dot(temp, Tan);
 	EyeVector.y = dot(temp, BiTan);
 	EyeVector.z = dot(temp, Norm);
@@ -35,28 +35,3 @@ void main()
   	f_UV = v_UV;
 	gl_Position = MVP * vec4(v_Position, 1.0);
 }
-/*
-#version 440
-
-layout (location = 0) in vec3 v_Position;
-layout (location = 1) in vec3 v_Normal;
-
-out vec4 eyeCordFs;
-out vec4 eyeNormalFs;
-
-uniform mat4 M_Matrix;
-uniform mat4 V_Matrix;
-uniform mat4 NormalMatrix;
-uniform mat4 MVP;
-
-void main()
-{
-    mat4 normalMatrix = transpose(inverse(modelView));
-    vec4 eyeNorm = normalize(normalMatrix * vec4(v_Normal, 0.0));
-    vec4 eyeCord = ModelView * vec4(v_Position, 1.0);
-
-    eyeCordFs = eyeCord;
-    eyeNormalFs = eyeNorm;
-
-    gl_Position = MVP * vec4(v_Position, 1.0);
-}*/

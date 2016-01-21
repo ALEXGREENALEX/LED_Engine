@@ -26,29 +26,69 @@
 		<FragmentShader>CubemapReflectRefract_FS.glsl</FragmentShader>
 	</Shader>
 	
-	<!--Editor Shaders-->
-	<Shader>
-		<Name>WorldNormal</Name>
-		<VertexShader>Editor\WorldNormal_VS.glsl</VertexShader>
-		<FragmentShader>Editor\WorldNormal_FS.glsl</FragmentShader>
-	</Shader>
-	
-	<Shader>
-		<Name>NormalVisualizer</Name>
-		<VertexShader>Editor\NormalVisualizer_VS.glsl</VertexShader>
-		<GeometryShader>Editor\NormalVisualizer_GS.glsl</GeometryShader>
-		<FragmentShader>Editor\NormalVisualizer_FS.glsl</FragmentShader>
-	</Shader>
-	
 	<!--RenderToTexture(RTT) Shaders-->
 	<RTT_Shader>
-		<Name>FBO</Name>
-		<VertexShader>FBO_VS.glsl</VertexShader>
-		<FragmentShader>FBO_FS.glsl</FragmentShader>
+		<Name>G-Buffer</Name>
+		<VertexShader>FBO\Universal_VS.glsl</VertexShader>
+		<FragmentShader>FBO\G-Buffer.glsl</FragmentShader>
 	</RTT_Shader>
+	
+		<!--PostProcess Shaders-->
 	<RTT_Shader>
 		<Name>PostProcess</Name>
-		<VertexShader>PostProcess\PostProcess_VS.glsl</VertexShader>
+		<VertexShader>FBO\Universal_VS.glsl</VertexShader>
 		<FragmentShader>PostProcess\PostProcess_FS.glsl</FragmentShader>
+	</RTT_Shader>
+
+	<!--Debug Shaders-->
+	<RTT_Shader>
+		<Name>Debug_Depth</Name>
+		<VertexShader>FBO\Universal_VS.glsl</VertexShader>
+		<FragmentShader>FBO\Debug_Depth.glsl</FragmentShader>
+	</RTT_Shader>
+	<RTT_Shader>
+		<Name>Debug_Diffuse</Name>
+		<VertexShader>FBO\Universal_VS.glsl</VertexShader>
+		<FragmentShader>FBO\Debug_Diffuse.glsl</FragmentShader>
+	</RTT_Shader>
+	<RTT_Shader>
+		<Name>Debug_Light</Name>
+		<VertexShader>FBO\Universal_VS.glsl</VertexShader>
+		<FragmentShader>FBO\Debug_Light.glsl</FragmentShader>
+	</RTT_Shader>
+	<RTT_Shader>
+		<Name>Debug_Normals</Name>
+		<VertexShader>FBO\Universal_VS.glsl</VertexShader>
+		<FragmentShader>FBO\Debug_Normals.glsl</FragmentShader>
+	</RTT_Shader>
+	<RTT_Shader>
+		<Name>Debug_Position</Name>
+		<VertexShader>FBO\Universal_VS.glsl</VertexShader>
+		<FragmentShader>FBO\Debug_Position.glsl</FragmentShader>
+	</RTT_Shader>
+	<RTT_Shader>
+		<Name>Debug_Reflection</Name>
+		<VertexShader>FBO\Universal_VS.glsl</VertexShader>
+		<FragmentShader>FBO\Debug_Reflection.glsl</FragmentShader>
+	</RTT_Shader>
+	<RTT_Shader>
+		<Name>Debug_AmbientOclusion</Name>
+		<VertexShader>FBO\Universal_VS.glsl</VertexShader>
+		<FragmentShader>FBO\Debug_AmbientOclusion.glsl</FragmentShader>
+	</RTT_Shader>
+	<RTT_Shader>
+		<Name>Debug_Emissive</Name>
+		<VertexShader>FBO\Universal_VS.glsl</VertexShader>
+		<FragmentShader>FBO\Debug_Emissive.glsl</FragmentShader>
+	</RTT_Shader>
+	<RTT_Shader>
+		<Name>Debug_Specular</Name>
+		<VertexShader>FBO\Universal_VS.glsl</VertexShader>
+		<FragmentShader>FBO\Debug_Specular.glsl</FragmentShader>
+	</RTT_Shader>
+	<RTT_Shader>
+		<Name>Debug_Shininess</Name>
+		<VertexShader>FBO\Universal_VS.glsl</VertexShader>
+		<FragmentShader>FBO\Debug_Shininess.glsl</FragmentShader>
 	</RTT_Shader>
 </Shaders>

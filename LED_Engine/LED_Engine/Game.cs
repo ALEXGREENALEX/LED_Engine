@@ -42,11 +42,69 @@ namespace LED_Engine
                 Settings.Window.NeedReinitWindow = true;
             }
 
+            #region DrawMode
             if (KeyCode == Key.F1 && Action == KeyAction.Press)
-                Settings.Debug.DrawMode = (Settings.Debug.DrawMode == DrawMode.DrawNormals ? DrawMode.Default : DrawMode.DrawNormals);
+            {
+                String[] S = Enum.GetNames(typeof(DrawMode));
+                if (Settings.Debug.DrawMode.ToString().GetHashCode() == S[0].GetHashCode())
+                    Settings.Debug.DrawMode = (DrawMode)Enum.Parse(typeof(DrawMode), S[S.Length - 1]);
+                else
+                    Settings.Debug.DrawMode = (DrawMode)((int)(Settings.Debug.DrawMode) - 1);
+            }
 
             if (KeyCode == Key.F2 && Action == KeyAction.Press)
-                Settings.Debug.DrawMode = (Settings.Debug.DrawMode == DrawMode.WordNormal ? DrawMode.Default : DrawMode.WordNormal);
+            {
+                String[] S = Enum.GetNames(typeof(DrawMode));
+                if (Settings.Debug.DrawMode.ToString().GetHashCode() == S[S.Length - 1].GetHashCode())
+                    Settings.Debug.DrawMode = (DrawMode)0;
+                else
+                    Settings.Debug.DrawMode = (DrawMode)((int)(Settings.Debug.DrawMode) + 1);
+            }
+
+            switch (Settings.Debug.DrawMode)
+            {
+                case DrawMode.Default:
+                    FBO.ShaderIndex_G = FBO.ShaderIndex_G_Orig;
+                    break;
+                case DrawMode.Depth:
+                    FBO.ShaderIndex_G = FBO.DebugShaderIndex_Depth;
+                    break;
+                case DrawMode.Diffuse:
+                    FBO.ShaderIndex_G = FBO.DebugShaderIndex_Diffuse;
+                    break;
+                case DrawMode.Light:
+                    FBO.ShaderIndex_G = FBO.DebugShaderIndex_Light;
+                    break;
+                case DrawMode.Normals:
+                    FBO.ShaderIndex_G = FBO.DebugShaderIndex_Normals;
+                    break;
+                case DrawMode.Position:
+                    FBO.ShaderIndex_G = FBO.DebugShaderIndex_Position;
+                    break;
+                case DrawMode.Reflection:
+                    FBO.ShaderIndex_G = FBO.DebugShaderIndex_Reflection;
+                    break;
+                case DrawMode.AmbientOclusion:
+                    FBO.ShaderIndex_G = FBO.DebugShaderIndex_AmbientOclusion;
+                    break;
+                case DrawMode.Emissive:
+                    FBO.ShaderIndex_G = FBO.DebugShaderIndex_Emissive;
+                    break;
+                case DrawMode.Specular:
+                    FBO.ShaderIndex_G = FBO.DebugShaderIndex_Specular;
+                    break;
+                case DrawMode.Shininess:
+                    FBO.ShaderIndex_G = FBO.DebugShaderIndex_Shininess;
+                    break;
+            }
+            #endregion
+
+            if (KeyCode == Key.F11 && Action == KeyAction.Press)
+            {
+
+                MainCamera.Position = new Vector3(0.0f, 40.0f, 20.0f);
+                MainCamera.Orientation = new Vector3(0.0f, -2.0f, 0.0f);
+            }
 
             if (KeyCode == Key.F12 && Action == KeyAction.Press)
             {
@@ -107,15 +165,11 @@ namespace LED_Engine
         {
             if (Settings.Window.IsFocused)
             {
+                // G-Buffer
                 GL.BindFramebuffer(FramebufferTarget.FramebufferExt, FBO.FBO_G);
-                GL.ClearColor(Color4.Black);
-                GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
                 GL.Enable(EnableCap.DepthTest); // Включаем тест глубины
-                //GL.DepthFunc(DepthFunction.Lequal);
-
-                GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha); // Функция смешивания цветов для прозрачных материалов
-                //GL.BlendFuncSeparate(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha, BlendingFactorSrc.One, BlendingFactorDest.One);
+                GL.DepthFunc(DepthFunction.Lequal);
+                GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
                 //if (Settings.Debug.Enabled)
                 //{
@@ -127,75 +181,69 @@ namespace LED_Engine
 
                 // Copy All Objects to DrawableObjects
                 DrawableObjects.Clear();
+                TransparentObjects.Clear();
+
                 DrawableObjects.AddRange(Objects);
                 foreach (var Model in Models.MODELS)
                     DrawableObjects.AddRange(Model.Meshes);
                 if (Settings.Debug.Enabled && Settings.Debug.DrawDebugObjects)
                     DrawableObjects.AddRange(DebugObjects);
 
-                #region Сортировка прозрачных объектов
+                #region Сортируем прозрачные объекты
                 for (int i = 0; i < DrawableObjects.Count; i++)
-                    if (DrawableObjects[i].Materials[0].Transparent)
+                {
+                    if (DrawableObjects[i].Material.Transparent)
                     {
                         TransparentObjects.Add(DrawableObjects[i]);
                         DrawableObjects.RemoveAt(i);
                         i--;
                     }
+                }
 
                 TransparentObjects.Sort(delegate(Mesh A, Mesh B)
                 {
                     return (B.Position - MainCamera.Position).Length.CompareTo((A.Position - MainCamera.Position).Length);
                 });
-
-                DrawableObjects.AddRange(TransparentObjects);
-                TransparentObjects.Clear();
+                //DrawableObjects.AddRange(TransparentObjects);
                 #endregion
 
-                foreach (Mesh v in DrawableObjects) // Отрисовываем все объекты
+                GL.Disable(EnableCap.AlphaTest);
+                GL.Disable(EnableCap.Blend);
+                foreach (Mesh v in DrawableObjects) // Draw Opaque
                 {
-                    v.CalculateModelMatrix();
-                    v.ModelViewMatrix = v.ModelMatrix * MainCamera.GetViewMatrix();
-                    v.ModelViewProjectionMatrix = v.ModelViewMatrix * MainCamera.GetProjectionMatrix();
-
-                    if (v.Materials[0].CullFace) // Отрисовка только тех сторон, что повернуты к камере
+                    if (v.Material.CullFace) // Отрисовка только тех сторон, что повернуты к камере
                         GL.Enable(EnableCap.CullFace);
                     else
                         GL.Disable(EnableCap.CullFace);
 
-                    if (v.Materials[0].Transparent) // Вкл. прозрачность только для прозрачных объектов
-                    {
-                        GL.Enable(EnableCap.AlphaTest);
-                        GL.Enable(EnableCap.Blend);
-
-                        GL.Enable(EnableCap.CullFace);
-                        GL.CullFace(CullFaceMode.Front);
-                        DrawObject(v);
-                        GL.CullFace(CullFaceMode.Back);
-                    }
-                    else
-                    {
-                        GL.Disable(EnableCap.AlphaTest);
-                        GL.Disable(EnableCap.Blend);
-                    }
-
-                    switch (Settings.Debug.DrawMode)
-                    {
-                        case DrawMode.Default:
-                            DrawObject(v);
-                            break;
-
-                        case DrawMode.DrawNormals:
-                            DrawObject(v);
-                            DrawObject(v, DrawMode.DrawNormals);
-                            break;
-
-                        case DrawMode.WordNormal:
-                            DrawObject(v, DrawMode.WordNormal);
-                            break;
-                    }
+                    Draw(v);
                 }
-                FBO.Draw_G();
-                FBO.Draw_PP();
+
+                /*foreach (Mesh v in TransparentObjects) // Draw Transparent Objects
+                {
+                    GL.Enable(EnableCap.AlphaTest);
+                    GL.Enable(EnableCap.Blend);
+                    GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha); // Функция смешивания цветов для прозрачных материалов
+                    //GL.BlendFuncSeparate(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha, BlendingFactorSrc.One, BlendingFactorDest.One);
+
+                    GL.Enable(EnableCap.CullFace);
+                    GL.CullFace(CullFaceMode.Front);
+                    Draw(v);
+                    GL.CullFace(CullFaceMode.Back);
+                    Draw(v);
+                }*/
+
+                // Draw All Geometry to PostProcess FBO
+                FBO.Draw_Geometry();
+
+                // Draw SkyBox to PostProcess FBO
+                GL.BindFramebuffer(FramebufferTarget.FramebufferExt, FBO.FBO_PP);
+                GL.Enable(EnableCap.CullFace);
+                GL.Enable(EnableCap.DepthTest);
+                Draw(SkyCube);
+
+                // Draw PostProcessed Result to Screen (FBO = 0)
+                FBO.Draw_PostPocess();
             }
         }
 
