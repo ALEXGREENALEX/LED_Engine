@@ -102,25 +102,25 @@
 		</Texture>-->
 	</Material>
 	<Material>
-		<Name>ReliefParallaxTest</Name>
-		<Shader>ReliefParallaxMap</Shader>
+		<Name>ParallaxMapping</Name>
+		<Shader>ParallaxMapping</Shader>
 		<CullFace>True</CullFace>
 		
 		<Texture>
-			<Name>ReliefParallaxTest_D</Name>
+			<Name>ParallaxTest_D</Name>
 			<TextureUnit>0</TextureUnit>
 		</Texture>
 		<Texture>
-			<Name>ReliefParallaxTest_N</Name>
+			<Name>ParallaxTest_N</Name>
 			<TextureUnit>1</TextureUnit>
 		</Texture>
 		<Texture>
-			<Name>ReliefParallaxTest_S</Name>
+			<Name>ParallaxTest_S</Name>
 			<TextureUnit>2</TextureUnit>
 		</Texture>
 		<Texture>
-			<Name>ReliefParallaxTest_H</Name>
-			<TextureUnit>3</TextureUnit>
+			<Name>ParallaxTest_H</Name>
+			<TextureUnit>5</TextureUnit>
 		</Texture>
 	</Material>
 	<Material>

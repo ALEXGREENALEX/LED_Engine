@@ -15,12 +15,10 @@ namespace LED_Engine
             DebugShaderIndex_Diffuse,
             DebugShaderIndex_Light,
             DebugShaderIndex_Normals,
-            DebugShaderIndex_Position,
-            DebugShaderIndex_Reflection,
             DebugShaderIndex_AmbientOclusion,
             DebugShaderIndex_Emissive,
             DebugShaderIndex_Specular,
-            DebugShaderIndex_Shininess;
+            DebugShaderIndex_ShininessReflection;
 
         public static List<Shader> Shaders = new List<Shader>();
 
@@ -45,7 +43,7 @@ namespace LED_Engine
              1.0f, -1.0f,
             -1.0f,  1.0f,
              1.0f,  1.0f }; // Screen vertexes positions
-
+        
         public static void Init(int ScrWidth, int ScrHeight)
         {
             FramebufferErrorCode FramebufferStatus;
@@ -80,12 +78,6 @@ namespace LED_Engine
                     case "Debug_Normals":
                         DebugShaderIndex_Normals = i;
                         break;
-                    case "Debug_Position":
-                        DebugShaderIndex_Position = i;
-                        break;
-                    case "Debug_Reflection":
-                        DebugShaderIndex_Reflection = i;
-                        break;
                     case "Debug_AmbientOclusion":
                         DebugShaderIndex_AmbientOclusion = i;
                         break;
@@ -95,8 +87,8 @@ namespace LED_Engine
                     case "Debug_Specular":
                         DebugShaderIndex_Specular = i;
                         break;
-                    case "Debug_Shininess":
-                        DebugShaderIndex_Shininess = i;
+                    case "Debug_ShininessReflection":
+                        DebugShaderIndex_ShininessReflection = i;
                         break;
                 }
             }
@@ -195,11 +187,18 @@ namespace LED_Engine
             if (TempLocation != -1) //zNear, zFar
                 GL.Uniform2(TempLocation, Game.MainCamera.zNear, Game.MainCamera.zFar);
 
-            //TempLocation = Shaders[ShaderIndex_G].GetUniform("CameraPos");
+            TempLocation = Shaders[ShaderIndex_G].GetUniform("ViewMatrixInv");
+            if (TempLocation != -1)
+            {
+                Matrix4 ViewInv = Game.MainCamera.GetViewMatrix().Inverted();
+                GL.UniformMatrix4(TempLocation, false, ref ViewInv);
+            }
+
+            //TempLocation = Shaders[ShaderIndex_G].GetUniform("Time");
             //if (TempLocation != -1)
             //{
-            //    Vector3 CameraPosEye = (new Vector4(Game.MainCamera.Position, 1.0f) * Game.MainCamera.GetViewMatrix()).Xyz;
-            //    GL.Uniform3(TempLocation, ref CameraPosEye);
+            //    float Time = (float)Glfw.GetTime();
+            //    GL.Uniform1(TempLocation, Time);
             //}
 
             #region Lights

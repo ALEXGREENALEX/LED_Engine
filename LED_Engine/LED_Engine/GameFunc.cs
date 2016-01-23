@@ -211,7 +211,7 @@ namespace LED_Engine
             Objects.Add(plain);
 
             Mesh box = Mesh.MakeBox();
-            box.Material = Materials.Load("BrickWall");
+            box.Material = Materials.Load("ParallaxMapping");
             box.Position.X = -2f;
             Objects.Add(box);
 
@@ -260,7 +260,7 @@ namespace LED_Engine
             Objects.Add(obj_Teapot2);
 
             Mesh obj_Teapot3 = new Mesh(obj_Teapot);
-            obj_Teapot3.Material = Materials.Load("ReliefParallaxTest");
+            obj_Teapot3.Material = Materials.Load("ParallaxMapping");
             obj_Teapot3.Position.Z -= 3;
             obj_Teapot3.Scale = new Vector3(3f, 3f, 3f);
             Objects.Add(obj_Teapot3);
@@ -392,10 +392,10 @@ namespace LED_Engine
             if (TempLocation != -1)
                 GL.Uniform1(TempLocation, v.Material.RefractiveIndex);
 
-            // Передаем шейдеру вектор Material Scale Bias Shininess, если шейдер поддерживает это. (0.07, 0, 38 for Metal; 0.04, 0, 92 for Rock)
-            TempLocation = shader.GetUniform("ScaleBiasShin");
+            // Передаем шейдеру Parallax Scale, если шейдер поддерживает это.
+            TempLocation = shader.GetUniform("ParallaxScale");
             if (TempLocation != -1)
-                GL.Uniform3(TempLocation, 0.04f, 0.0f, 92.0f);
+                GL.Uniform1(TempLocation, 0.04f);
             #endregion
             #endregion
 

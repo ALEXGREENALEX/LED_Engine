@@ -12,12 +12,10 @@ namespace LED_Engine
         Diffuse,
         Light,
         Normals,
-        Position,
-        Reflection,
         AmbientOclusion,
         Emissive,
         Specular,
-        Shininess,
+        ShininessReflection,
     };
     public enum ActorType
     {

@@ -1,13 +1,13 @@
 #version 330
-uniform sampler2D TextureUnit0;
-uniform sampler2D TextureUnit1;
-uniform sampler2D TextureUnit2;
-uniform sampler2D TextureUnit3;
-uniform sampler2D TextureUnit4;
+uniform sampler2D TextureUnit0; //Diffuse
+uniform sampler2D TextureUnit1; //Normal
+uniform sampler2D TextureUnit2; //Specular
+uniform sampler2D TextureUnit3; //Emissive
+uniform sampler2D TextureUnit4; //AO
 
 in vec3 f_EyePosition;
 in vec2 f_UV;
-in mat3 f_TBN;
+in mat3 f_InvTBN;
 
 #include("FBO\MaterialInfo.glsl")
 uniform MaterialInfo Material;
@@ -26,9 +26,9 @@ void main()
 		Output0 = Material.Kd;
 	
 	if (TexUnits[1])
-		Output1.xy = normalize(f_TBN * normalize(texture(TextureUnit1, f_UV).rgb * 2.0 - 1.0)).xy;
+		Output1.xy = normalize(f_InvTBN * normalize(texture(TextureUnit1, f_UV).rgb * 2.0 - 1.0)).xy;
 	else
-		Output1.xy = normalize(f_TBN[2]).xy;
+		Output1.xy = normalize(f_InvTBN[2]).xy; //Take Column with Normals in Eye Space
 	Output1.zw = f_EyePosition.xy;
 	
 	if (TexUnits[2])

@@ -29,10 +29,10 @@ namespace LED_Engine
             L_Point.Diffuse = new Vector3(0.5f);
             L_Point.Specular = new Vector3(0.5f);
 
-            L_Spot.Position = new Vector3(-1.0f, 1.2f, -1.0f);
-            L_Spot.Direction = new Vector3(0.0f, -1.0f, 1.0f);
-            L_Spot.Diffuse = new Vector3(0.9f, 0.9f, 0.0f);
-            L_Spot.Specular = new Vector3(0.0f, 0.0f, 0.0f);
+            L_Spot.Position = new Vector3(-2.0f, 2.0f, -1.0f);
+            L_Spot.Direction = new Vector3(0.0f, -1.2f, 1.0f);
+            L_Spot.Diffuse = new Vector3(1.0f, 1.0f, 1.0f);
+            L_Spot.Specular = new Vector3(0.5f, 0.5f, 0.5f);
 
             LIGHTS.Add(L_Dir);
             LIGHTS.Add(L_Point);

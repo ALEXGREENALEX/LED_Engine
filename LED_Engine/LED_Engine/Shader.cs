@@ -54,6 +54,9 @@ namespace LED_Engine
                     S.VS_File = Engine.CombinePaths(ShaderPath, xmlNode.SelectSingleNode("VertexShader").InnerText);
                     S.FS_File = Engine.CombinePaths(ShaderPath, xmlNode.SelectSingleNode("FragmentShader").InnerText);
 
+                    if (xmlNode.SelectNodes("GeometryShader").Count > 0)
+                        S.GS_File = Engine.CombinePaths(ShaderPath, xmlNode.SelectSingleNode("GeometryShader").InnerText);
+
                     FBO.Shaders.Add(S);
                 }
                 #endregion

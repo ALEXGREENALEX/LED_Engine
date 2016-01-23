@@ -78,12 +78,6 @@ namespace LED_Engine
                 case DrawMode.Normals:
                     FBO.ShaderIndex_G = FBO.DebugShaderIndex_Normals;
                     break;
-                case DrawMode.Position:
-                    FBO.ShaderIndex_G = FBO.DebugShaderIndex_Position;
-                    break;
-                case DrawMode.Reflection:
-                    FBO.ShaderIndex_G = FBO.DebugShaderIndex_Reflection;
-                    break;
                 case DrawMode.AmbientOclusion:
                     FBO.ShaderIndex_G = FBO.DebugShaderIndex_AmbientOclusion;
                     break;
@@ -93,8 +87,8 @@ namespace LED_Engine
                 case DrawMode.Specular:
                     FBO.ShaderIndex_G = FBO.DebugShaderIndex_Specular;
                     break;
-                case DrawMode.Shininess:
-                    FBO.ShaderIndex_G = FBO.DebugShaderIndex_Shininess;
+                case DrawMode.ShininessReflection:
+                    FBO.ShaderIndex_G = FBO.DebugShaderIndex_ShininessReflection;
                     break;
             }
             #endregion

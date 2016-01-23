@@ -11,13 +11,13 @@
 	</Shader>
 	
 	<Shader>
-		<Name>ReliefParallaxMap</Name>
-		<VertexShader>ReliefParallaxMap_VS.glsl</VertexShader>
-		<FragmentShader>ReliefParallaxMap_FS.glsl</FragmentShader>
+		<Name>ParallaxMapping</Name>
+		<VertexShader>Universal_VS.glsl</VertexShader>
+		<FragmentShader>ParallaxMapping_FS.glsl</FragmentShader>
 	</Shader>
 	<Shader>
 		<Name>Light</Name>
-		<VertexShader>Light_VS.glsl</VertexShader>
+		<VertexShader>Universal_VS.glsl</VertexShader>
 		<FragmentShader>Light_FS.glsl</FragmentShader>
 	</Shader>
 	<Shader>
@@ -62,16 +62,6 @@
 		<FragmentShader>FBO\Debug_Normals.glsl</FragmentShader>
 	</RTT_Shader>
 	<RTT_Shader>
-		<Name>Debug_Position</Name>
-		<VertexShader>FBO\Universal_VS.glsl</VertexShader>
-		<FragmentShader>FBO\Debug_Position.glsl</FragmentShader>
-	</RTT_Shader>
-	<RTT_Shader>
-		<Name>Debug_Reflection</Name>
-		<VertexShader>FBO\Universal_VS.glsl</VertexShader>
-		<FragmentShader>FBO\Debug_Reflection.glsl</FragmentShader>
-	</RTT_Shader>
-	<RTT_Shader>
 		<Name>Debug_AmbientOclusion</Name>
 		<VertexShader>FBO\Universal_VS.glsl</VertexShader>
 		<FragmentShader>FBO\Debug_AmbientOclusion.glsl</FragmentShader>
@@ -87,8 +77,8 @@
 		<FragmentShader>FBO\Debug_Specular.glsl</FragmentShader>
 	</RTT_Shader>
 	<RTT_Shader>
-		<Name>Debug_Shininess</Name>
+		<Name>Debug_ShininessReflection</Name>
 		<VertexShader>FBO\Universal_VS.glsl</VertexShader>
-		<FragmentShader>FBO\Debug_Shininess.glsl</FragmentShader>
+		<FragmentShader>FBO\Debug_ShininessReflection.glsl</FragmentShader>
 	</RTT_Shader>
 </Shaders>
