@@ -56,10 +56,10 @@ namespace LED_Engine
 
                 Settings.Graphics.VSyncSwapInterval = Convert.ToInt32(XML.DocumentElement.SelectSingleNode("VSyncSwapInterval").InnerText);
                 Settings.Graphics.MSAASamples = Convert.ToInt32(XML.DocumentElement.SelectSingleNode("MSAASamples").InnerText);
-                Settings.Graphics.FXAAEnabled = Convert.ToBoolean(XML.DocumentElement.SelectSingleNode("FXAAEnabled").InnerText);
+                Settings.Graphics.FXAA.Enabled = Convert.ToBoolean(XML.DocumentElement.SelectSingleNode("FXAAEnabled").InnerText);
 
                 Settings.Graphics.UsePostEffects = Convert.ToBoolean(XML.DocumentElement.SelectSingleNode("UsePostEffects").InnerText);
-                Settings.Graphics.FogEnabled = Convert.ToBoolean(XML.DocumentElement.SelectSingleNode("FogEnabled").InnerText);
+                Settings.Graphics.Fog.Enabled = Convert.ToBoolean(XML.DocumentElement.SelectSingleNode("FogEnabled").InnerText);
                 #endregion
 
                 #region Debug

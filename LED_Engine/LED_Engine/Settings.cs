@@ -96,10 +96,79 @@ namespace LED_Engine
         {
             public static int VSyncSwapInterval = 0;
             public static int MSAASamples = 0;
-            public static bool FXAAEnabled = true;
 
             public static bool UsePostEffects = true;
-            public static bool FogEnabled = true;
+
+            public static class FXAA
+            {
+                public static bool Enabled = true;
+
+                /// <summary>
+                /// fxaaQualitySubpix
+                /// Default: 0.75
+                /// </summary>
+                public static float Subpix = 0.75f;
+
+                /// <summary>
+                /// fxaaQualityEdgeThreshold
+                /// Default: 0.166
+                /// </summary>
+                public static float EdgeThreshold = 0.166f;
+
+                /// <summary>
+                /// fxaaQualityEdgeThresholdMin
+                /// Default: 0.0833
+                /// </summary>
+                public static float EdgeThresholdMin = 0.0833f;
+            }
+
+            public static class Fog
+            {
+                public static bool Enabled = true;
+                public static float MinDistance = 20f;
+                public static float MaxDistance = 80f;
+                public static Vector3 Color = new Vector3(0.5f, 0.5f, 0.5f);
+            }
+
+            public static class Vignette
+            {
+                public static bool Enabled = true;
+
+                /// <summary>
+                /// Radius of vignette circle, default 0.5 (fit circle) - 0.75
+                /// </summary>
+                public static float Radius = 0.75f;
+
+                /// <summary>
+                /// Softness [0..1], default 0.5
+                /// </summary>
+                public static float Softness = 0.5f;
+
+                /// <summary>
+                /// Opacity [0..1], default 0.5
+                /// </summary>
+                public static float Opacity = 0.5f;
+            }
+
+            public static class Sepia
+            {
+                public static bool Enabled = false;
+
+                /// <summary>
+                /// Opacity [0..1], default 0.5
+                /// </summary>
+                public static float Opacity = 0.5f;
+            }
+
+            public static class GrayScale
+            {
+                public static bool Enabled = false;
+
+                /// <summary>
+                /// Opacity [0..1], default 0.5
+                /// </summary>
+                public static float Opacity = 0.5f;
+            }
         }
 
         public static class GL

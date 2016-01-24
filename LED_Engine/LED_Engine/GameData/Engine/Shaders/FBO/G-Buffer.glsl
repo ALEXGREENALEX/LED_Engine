@@ -36,9 +36,7 @@ void main()
 	float Shininess = texture2D(TextureUnit3, f_UV).a;
 	
 	FragColor.rgb = CalcLight(Kd, Ks, Ka, Ke, Shininess, Normal, Position); //Light
-	
-	if (FogEnabled)
-		FragColor.rgb = Fog(FragColor.rgb, Position, WorldPosition);
+	FragColor.rgb = Fog(FragColor.rgb, Position, WorldPosition); //Fog
 	
 	FragColor.a = 1.0;
 }

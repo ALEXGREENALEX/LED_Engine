@@ -62,7 +62,6 @@
     <Compile Include="Map.cs" />
     <Compile Include="Material.cs" />
     <Compile Include="Mesh.cs" />
-    <Compile Include="Fog.cs" />
     <Compile Include="Model.cs" />
     <Compile Include="FBO.cs" />
     <Compile Include="MainProgram.cs" />

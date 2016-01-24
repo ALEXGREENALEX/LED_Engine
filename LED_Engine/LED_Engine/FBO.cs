@@ -43,7 +43,7 @@ namespace LED_Engine
              1.0f, -1.0f,
             -1.0f,  1.0f,
              1.0f,  1.0f }; // Screen vertexes positions
-        
+
         public static void Init(int ScrWidth, int ScrHeight)
         {
             FramebufferErrorCode FramebufferStatus;
@@ -283,17 +283,16 @@ namespace LED_Engine
             #endregion
 
             #region Fog
-            TempLocation = Shaders[ShaderIndex_G].GetUniform("FogEnabled");
+            TempLocation = Shaders[ShaderIndex_G].GetUniform("FogMinMaxDistance");
             if (TempLocation != -1)
             {
-                GL.Uniform1(TempLocation, Convert.ToInt32(Fog.Enabled && Settings.Graphics.FogEnabled));
-
-                if (Settings.Graphics.FogEnabled && Fog.Enabled)
+                if (Settings.Graphics.Fog.Enabled)
                 {
-                    GL.Uniform3(Shaders[ShaderIndex_G].GetUniform("FogColor"), Fog.Color);
-                    GL.Uniform1(Shaders[ShaderIndex_G].GetUniform("FogMaxDist"), Fog.MaxDistance);
-                    GL.Uniform1(Shaders[ShaderIndex_G].GetUniform("FogMinDist"), Fog.MinDistance);
+                    GL.Uniform2(TempLocation, Settings.Graphics.Fog.MinDistance, Settings.Graphics.Fog.MaxDistance);
+                    GL.Uniform3(Shaders[ShaderIndex_G].GetUniform("FogColor"), Settings.Graphics.Fog.Color);
                 }
+                else
+                    GL.Uniform2(TempLocation, -1.0f, 0.0f); // Disable Fog
             }
             #endregion
 
@@ -325,17 +324,50 @@ namespace LED_Engine
 
             if (UsePostEffects)
             {
-                if (Shaders[ShaderIndex_PP].GetUniform("ScreenSize") != -1)
-                    GL.Uniform2(GL.GetUniformLocation(Shaders[ShaderIndex_PP].ProgramID, "ScreenSize"), (float)ScreenWidth, (float)ScreenWidth);
+                int TempLocation = Shaders[ShaderIndex_PP].GetUniform("ScreenSize");
+                if (TempLocation != -1)
+                    GL.Uniform2(TempLocation, (float)ScreenWidth, (float)ScreenWidth);
 
-                //if (Shaders[PP_ShaderIndex].GetUniform("ClipPlanes") != -1) //zNear, zFar
-                //    GL.Uniform2(GL.GetUniformLocation(Shaders[PP_ShaderIndex].ProgramID, "ClipPlanes"), Game.MainCamera.zNear, Game.MainCamera.zFar);
+                //TempLocation = Shaders[ShaderIndex_PP].GetUniform("ClipPlanes");
+                //if (TempLocation != -1) //zNear, zFar
+                //    GL.Uniform2(TempLocation, Game.MainCamera.zNear, Game.MainCamera.zFar);
 
-                if (Shaders[ShaderIndex_PP].GetUniform("FXAAEnabled") != -1)
-                    GL.Uniform1(GL.GetUniformLocation(Shaders[ShaderIndex_PP].ProgramID, "FXAAEnabled"), Convert.ToInt32(Settings.Graphics.FXAAEnabled));
+                TempLocation = Shaders[ShaderIndex_PP].GetUniform("FXAAEnabled");
+                if (TempLocation != -1)
+                {
+                    GL.Uniform1(TempLocation, Convert.ToInt32(Settings.Graphics.FXAA.Enabled));
 
-                if (Shaders[ShaderIndex_PP].GetUniform("SepiaEnabled") != -1)
-                    GL.Uniform1(GL.GetUniformLocation(Shaders[ShaderIndex_PP].ProgramID, "SepiaEnabled"), Convert.ToInt32(0));
+                    if (Settings.Graphics.FXAA.Enabled)
+                        GL.Uniform3(Shaders[ShaderIndex_PP].GetUniform("FXAASettings"),
+                            Settings.Graphics.FXAA.Subpix,
+                            Settings.Graphics.FXAA.EdgeThreshold,
+                            Settings.Graphics.FXAA.EdgeThresholdMin);
+                }
+
+                TempLocation = Shaders[ShaderIndex_PP].GetUniform("VignetteSettings");
+                if (TempLocation != -1)
+                {
+                    if (Settings.Graphics.Vignette.Enabled)
+                        GL.Uniform3(TempLocation, Settings.Graphics.Vignette.Radius,
+                            Settings.Graphics.Vignette.Softness, Settings.Graphics.Vignette.Opacity);
+                    else
+                        GL.Uniform3(TempLocation, 0.0f, 0.0f, 0.0f); //Disable Vignette
+                }
+
+                TempLocation = Shaders[ShaderIndex_PP].GetUniform("SepiaGrayscale");
+                if (TempLocation != -1)
+                {
+                    float Sepia = 0.0f;
+                    float GrayScale = 0.0f;
+
+                    if (Settings.Graphics.Sepia.Enabled)
+                        Sepia = Settings.Graphics.Sepia.Opacity;
+
+                    if (Settings.Graphics.GrayScale.Enabled)
+                        GrayScale = Settings.Graphics.GrayScale.Opacity;
+
+                    GL.Uniform2(Shaders[ShaderIndex_PP].GetUniform("SepiaGrayscale"), Sepia, GrayScale);
+                }
             }
 
             //Bind Textures

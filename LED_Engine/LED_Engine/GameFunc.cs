@@ -269,7 +269,7 @@ namespace LED_Engine
         static void InitProgram()
         {
             // FOG
-            Fog.Enabled = true;
+            Settings.Graphics.Fog.Enabled = true;
 
             SkyCube = Mesh.MakeBox(zFar * 2.0f / (float)Math.Sqrt(3.0), true); // Cube diagonal = side / sqrt(3)
             SkyCube.Material = Materials.Load("SkyCubemap_Storforsen");
