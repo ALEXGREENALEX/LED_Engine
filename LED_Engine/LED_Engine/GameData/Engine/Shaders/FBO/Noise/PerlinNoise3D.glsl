@@ -37,7 +37,7 @@ vec3 fade(vec3 t) {
 }
 
 // Classic Perlin noise
-float cnoise(vec3 P)
+float pnoise(vec3 P)
 {
   vec3 Pi0 = floor(P); // Integer part for indexing
   vec3 Pi1 = Pi0 + vec3(1.0); // Integer part + 1

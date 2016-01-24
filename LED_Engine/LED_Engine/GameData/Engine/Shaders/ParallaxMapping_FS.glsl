@@ -21,45 +21,47 @@ layout (location = 2) out vec4 Output2;
 layout (location = 3) out vec4 Output3;
 layout (location = 4) out vec4 Output4;
 
+// Simple Parallax Mapping
+vec2 ParallaxMapping(sampler2D HeightTexture, vec2 UV, vec3 ViewVector, float Scale)
+{
+	float ParallaxOffset = (texture(HeightTexture, UV).r) * Scale;
+	return UV + ParallaxOffset * ViewVector.xy;
+}
+
+//POM, based on: http://steps3d.narod.ru/tutorials/parallax-mapping-tutorial.html
 vec2 ParallaxOcclusionMapping(sampler2D HeightTexture, vec2 UV, vec3 ViewVector, float Scale)
 {
-	const float	minSteps  = 15.0;
-	const float maxSteps  = 40.0;
-
-	float numSteps  = maxSteps + ViewVector.z * (minSteps - maxSteps);
-	float Step   = 1.0 / numSteps;
-	vec2 dtex   = -Step * Scale * ViewVector.xy / ViewVector.z;	// adjustment for one layer
-	float height = 0.99;								// height of the layer
-	vec2 newTexCoords = UV;				// our initial guess
-	float h = texture2D(HeightTexture, newTexCoords).r;
-
-	while ( h < height )
-	{
-		height -= Step;
-		newTexCoords    += dtex;
-		h = texture2D (HeightTexture, newTexCoords).r;
-	}
-									// now find point via linear interpolation
-	vec2 prev = newTexCoords - dtex; // previous point
-	float hPrev = texture2D(HeightTexture, prev).r - (height + Step); // < 0
-	float hCur = h - height;	// > 0
+	const float MinSteps  = 20.0;
+	const float MaxSteps  = 30.0;
 	
-	return mix(newTexCoords, prev, hCur / (hCur - hPrev));
+	float NumSteps = MaxSteps + ViewVector.z * (MinSteps - MaxSteps);
+	float Step = 1.0 / NumSteps;
+	vec2 dTexCoords = -Step * Scale * ViewVector.xy / ViewVector.z; //Offset for one layer
+	float Height = 0.99; //Height of the layer
+	vec2 NewTexCoords = UV;
+	float TextureHeight = texture2D(HeightTexture, NewTexCoords).r;
+	
+	while(TextureHeight < Height)
+	{
+		Height -= Step;
+		NewTexCoords += dTexCoords;
+		TextureHeight = texture2D (HeightTexture, NewTexCoords).r;
+	}
+	
+	vec2 PrevPoint = NewTexCoords - dTexCoords;
+	float hPrev = texture2D(HeightTexture, PrevPoint).r - (Height + Step); // < 0
+	float hCur = TextureHeight - Height; // > 0
+	
+	return mix(NewTexCoords, PrevPoint, hCur / (hCur - hPrev));
 }
 
 void main()
 {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	vec2 newTexCoords = f_UV;
-	
-	//Parallax Mapping setion:
 	vec3 EyeVector = normalize(transpose(f_InvTBN) * (-f_EyePosition));
 	
-	// Simple Parallax mapping
-	//float ParallaxOffset = (texture(TextureUnit5, f_UV).r) * ParallaxScale;
-	//newTexCoords = f_UV + ParallaxOffset * EyeVector.xy;
-	
-	// POM (Parallax Occlusion Mapping)
+	//newTexCoords = ParallaxMapping(TextureUnit5, f_UV, EyeVector, ParallaxScale);
 	newTexCoords = ParallaxOcclusionMapping(TextureUnit5, f_UV, EyeVector, ParallaxScale);
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 

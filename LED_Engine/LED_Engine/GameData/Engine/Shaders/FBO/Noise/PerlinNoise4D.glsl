@@ -32,7 +32,7 @@ vec4 fade(vec4 t) {
 }
 
 // Classic Perlin noise
-float cnoise(vec4 P)
+float pnoise(vec4 P)
 {
   vec4 Pi0 = floor(P); // Integer part for indexing
   vec4 Pi1 = Pi0 + 1.0; // Integer part + 1

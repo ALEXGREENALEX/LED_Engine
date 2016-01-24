@@ -2,20 +2,114 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace LED_Engine
 {
     public static class Log
     {
-        // Write
+        static StringBuilder LogStr = new StringBuilder();
+
+        #region Log
+        static void AppendLog(string value)
+        {
+            try
+            {
+                LogStr.Append(value);
+            }
+            catch
+            {
+                try
+                {
+                    LogStr.Clear();
+                    LogStr.Append(value);
+                }
+                catch
+                {
+                    Console.WriteLine("Append Log Error!!!");
+                }
+            }
+        }
+
+        static void AppendLog(string format, params object[] arg)
+        {
+            try
+            {
+                LogStr.AppendFormat(format, arg);
+            }
+            catch
+            {
+                try
+                {
+                    LogStr.Clear();
+                    LogStr.AppendFormat(format, arg);
+                }
+                catch
+                {
+                    Console.WriteLine("Append Log Error!!!");
+                }
+            }
+        }
+
+        static void AppendLogLine(string value)
+        {
+            try
+            {
+                LogStr.AppendLine(value);
+            }
+            catch
+            {
+                try
+                {
+                    LogStr.Clear();
+                    LogStr.AppendLine(value);
+                }
+                catch
+                {
+                    Console.WriteLine("Append Log Error!!!");
+                }
+            }
+        }
+
+        static void AppendLogLine(string format, params object[] arg)
+        {
+            try
+            {
+                LogStr.AppendFormat(format, arg);
+                LogStr.AppendLine();
+            }
+            catch
+            {
+                try
+                {
+                    LogStr.Clear();
+                    LogStr.AppendFormat(format, arg);
+                    LogStr.AppendLine();
+                }
+                catch
+                {
+                    Console.WriteLine("Log.AppendLog() Error!!!");
+                }
+            }
+        }
+
+        public static string GetLog()
+        {
+            return LogStr.ToString();
+        }
+        #endregion
+
+        #region Write
         public static void Write(string value)
         {
             Console.Write(value);
+            AppendLog(value);
         }
         public static void Write(string format, params object[] arg)
         {
             Console.Write(format, arg);
+            AppendLog(format, arg);
         }
 
         public static void Write(ConsoleColor Color, string value)
@@ -57,20 +151,23 @@ namespace LED_Engine
         {
             Write(ConsoleColor.Green, format, arg);
         }
+        #endregion
 
-        // WriteLine
+        #region WriteLine
         public static void WriteLine()
         {
-            Console.WriteLine();
+            WriteLine(String.Empty);
         }
 
         public static void WriteLine(string value)
         {
             Console.WriteLine(value);
+            AppendLogLine(value);
         }
         public static void WriteLine(string format, params object[] arg)
         {
             Console.WriteLine(format, arg);
+            AppendLogLine(format, arg);
         }
 
         public static void WriteLine(ConsoleColor Color, string value)
@@ -120,5 +217,6 @@ namespace LED_Engine
             for (int i = 0; i < V.Length; i++)
                 WriteLine("{0}: {1}", i + ((StartFromOne) ? 1 : 0), V[i]);
         }
+        #endregion
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Windows.Forms;
+using System.Reflection;
 using System.Xml;
 using Pencil.Gaming;
 using Pencil.Gaming.Graphics;
@@ -16,7 +16,7 @@ namespace LED_Engine
         {
             try
             {
-                Settings.Paths.StartupPath = Application.StartupPath;
+                Settings.Paths.StartupPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
                 XmlDocument XML = new XmlDocument();
                 XmlNode TempNode;
                 string TempPathStr;

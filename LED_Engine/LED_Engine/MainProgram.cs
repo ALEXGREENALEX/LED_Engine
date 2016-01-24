@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Globalization;
 using System.Threading;
 using Pencil.Gaming;
@@ -20,7 +21,6 @@ namespace LED_Engine
         private static void Main(string[] args)
         {
             Lights.MakeSomeLightsForTEST();
-
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; //For fix parsing values like "0.5" and "0,5"
 
             Glfw.SetErrorCallback(OnError);
@@ -45,7 +45,7 @@ namespace LED_Engine
                 {
                     Engine.GetGLSettings();
                     Engine.LoadContentLists();
-                    
+
                     // FBO Init
                     int FB_Width, FB_Height;
                     Glfw.GetFramebufferSize(Window, out FB_Width, out FB_Height);
@@ -91,8 +91,11 @@ namespace LED_Engine
             Glfw.DestroyWindow(Window);
             Glfw.Terminate();
 
-            //if (Settings.Debug.Enabled)
-            //    Console.ReadKey();
+            if (Settings.Debug.Enabled)
+            {
+                //Console.ReadKey();
+                System.Windows.Forms.Clipboard.SetText(Log.GetLog());
+            }
         }
     }
 }
