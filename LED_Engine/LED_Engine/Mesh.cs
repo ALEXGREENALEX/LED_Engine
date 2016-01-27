@@ -193,16 +193,16 @@ namespace LED_Engine
         }
     }
 
-    public class AABox
+    public class BoundingBox
     {
         float nX, pX, nY, pY, nZ, pZ;
         Vector3[] points = new Vector3[8];
 
-        public AABox()
+        public BoundingBox()
         {
         }
 
-        public AABox(float SideSize)
+        public BoundingBox(float SideSize)
         {
             nX = SideSize;
             pX = SideSize;
@@ -214,7 +214,7 @@ namespace LED_Engine
             CalcBoxFromSides();
         }
 
-        public AABox(float NegativeX, float PositiveX, float NegativeY, float PositiveY, float NegativeZ, float PositiveZ)
+        public BoundingBox(float NegativeX, float PositiveX, float NegativeY, float PositiveY, float NegativeZ, float PositiveZ)
         {
             nX = NegativeX;
             pX = PositiveX;
@@ -226,7 +226,7 @@ namespace LED_Engine
             CalcBoxFromSides();
         }
 
-        public AABox(AABox Box)
+        public BoundingBox(BoundingBox Box)
         {
             nX = Box.NegativeX;
             pX = Box.PositiveX;
@@ -342,33 +342,33 @@ namespace LED_Engine
         }
     }
 
-    public class RadiusSphere
+    public class BoundingSphere
     {
         public float Inner, Outer;
 
-        public RadiusSphere()
+        public BoundingSphere()
         {
         }
 
-        public RadiusSphere(float Radius_InnerOuter)
+        public BoundingSphere(float Radius_InnerOuter)
         {
             Inner = Radius_InnerOuter;
             Outer = Radius_InnerOuter;
         }
 
-        public RadiusSphere(float Inner, float Outer)
+        public BoundingSphere(float Inner, float Outer)
         {
             this.Inner = Inner;
             this.Outer = Outer;
         }
 
-        public RadiusSphere(RadiusSphere Sphere)
+        public BoundingSphere(BoundingSphere Sphere)
         {
             Inner = Sphere.Inner;
             Outer = Sphere.Outer;
         }
 
-        public RadiusSphere(AABox Box)
+        public BoundingSphere(BoundingBox Box)
         {
             float MaxX = Math.Max(Box.PositiveX, Box.NegativeX);
             float MaxY = Math.Max(Box.PositiveY, Box.NegativeY);
@@ -395,8 +395,8 @@ namespace LED_Engine
         public Matrix4 ModelViewMatrix = Matrix4.Identity;
         public Matrix4 ModelViewProjectionMatrix = Matrix4.Identity;
 
-        public AABox AABox;
-        public RadiusSphere RadiusSphere;
+        public BoundingBox BoundingBox;
+        public BoundingSphere BoundingSphere;
 
         public int IndexBufferID, VertexBufferID, NormalBufferID, UVBufferID, TangentBufferID;
 
@@ -445,8 +445,8 @@ namespace LED_Engine
             Rotation = Original.Rotation;
             Scale = Original.Scale;
 
-            AABox = new AABox(Original.AABox);
-            RadiusSphere = new RadiusSphere(Original.RadiusSphere);
+            BoundingBox = new BoundingBox(Original.BoundingBox);
+            BoundingSphere = new BoundingSphere(Original.BoundingSphere);
 
             GenBuffers();
             BindBuffers();
@@ -510,8 +510,8 @@ namespace LED_Engine
             UVs = null;
             Tangents = null;
 
-            AABox = null;
-            RadiusSphere = null;
+            BoundingBox = null;
+            BoundingSphere = null;
         }
 
         public void CalculateMatrices(Camera Camera)
@@ -662,11 +662,10 @@ namespace LED_Engine
             }
         }
 
-        void CalcAA_Box()
+        void CalcBoundingBox()
         {
-            float pX = 0.0f, nX = 0.0f,
-                    pY = 0.0f, nY = 0.0f,
-                    pZ = 0.0f, nZ = 0.0f;
+            float pX = 0.0f, pY = 0.0f, pZ = 0.0f;
+            float nX = Vertexes[0].X, nY = Vertexes[0].Y, nZ = Vertexes[0].X;
 
             for (int i = 0; i < Vertexes.Length; i++)
             {
@@ -677,19 +676,20 @@ namespace LED_Engine
                 pZ = Math.Max(pZ, Vertexes[i].Z);
                 nZ = Math.Min(nZ, Vertexes[i].Z);
             }
-            this.AABox = new AABox(nX, pX, nY, pY, nZ, pZ);
+            this.BoundingBox = new BoundingBox(nX, pX, nY, pY, nZ, pZ);
         }
 
-        void CalcRadiusSphere()
+        void CalcBoundingSphere()
         {
-            float Min = 0.0f, Max = 0.0f;
+            float Min = Vertexes[0].Length;
+            float Max = 0.0f;
 
             for (int i = 0; i < Vertexes.Length; i++)
             {
                 Min = Math.Min(Min, Vertexes[i].Length);
                 Max = Math.Max(Max, Vertexes[i].Length);
             }
-            this.RadiusSphere = new RadiusSphere(Min, Max);
+            this.BoundingSphere = new BoundingSphere(Min, Max);
         }
 
         public static Mesh LoadFromFile(string Name, string FileName, bool UseSmoothingGroups = false)
@@ -979,8 +979,8 @@ namespace LED_Engine
                 }
 
                 ComputeTangentBasis(vol.Vertexes, vol.Normals, vol.UVs, out vol.Tangents);
-                vol.CalcAA_Box();
-                vol.CalcRadiusSphere();
+                vol.CalcBoundingBox();
+                vol.CalcBoundingSphere();
 
                 vol.GenBuffers();
                 vol.BindBuffers();
@@ -1054,8 +1054,8 @@ namespace LED_Engine
 
             ComputeTangentBasis(plain.Vertexes, plain.Normals, plain.UVs, out plain.Tangents);
 
-            plain.CalcAA_Box();
-            plain.CalcRadiusSphere();
+            plain.CalcBoundingBox();
+            plain.CalcBoundingSphere();
 
             plain.GenBuffers();
             plain.BindBuffers();
@@ -1348,8 +1348,8 @@ namespace LED_Engine
             #endregion
 
             ComputeTangentBasis(box.Vertexes, box.Normals, box.UVs, out box.Tangents);
-            box.CalcAA_Box();
-            box.CalcRadiusSphere();
+            box.CalcBoundingBox();
+            box.CalcBoundingSphere();
 
             box.GenBuffers();
             box.BindBuffers();

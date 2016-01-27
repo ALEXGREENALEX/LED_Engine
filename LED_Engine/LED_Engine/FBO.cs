@@ -9,7 +9,12 @@ namespace LED_Engine
 {
     static public class FBO
     {
-        public static int ShaderIndex_G_Orig, ShaderIndex_G, ShaderIndex_PP; // It's not a Shader.ProgramID !!!
+        public static int
+            ShaderIndex_P1_Orig,
+            ShaderIndex_P1,
+            ShaderIndex_P2,
+            ShaderIndex_PP; // It's not a Shader.ProgramID !!!
+
         public static int // Debug Shaders Indexes
             DebugShaderIndex_Depth,
             DebugShaderIndex_Diffuse,
@@ -22,19 +27,34 @@ namespace LED_Engine
 
         public static List<Shader> Shaders = new List<Shader>();
 
-        public static int FBO_G, FBO_PP; //G-Buffer, PostProcess
+        public static int
+            FBO_P1, //Pass1 (G-Buffer)
+            FBO_P2, //Pass2 SSAO Blur + Lightmap
+            FBO_PP; //PostProcess
         public static bool UsePostEffects = true;
 
-        static DrawBuffersEnum[] ColorAttachments = new DrawBuffersEnum[] {
-            DrawBuffersEnum.ColorAttachment0, //Kd * DiffuseMap,        EyePosition.x
-            DrawBuffersEnum.ColorAttachment1, //Normals * NormalMap,    EyePosition.y
-            DrawBuffersEnum.ColorAttachment2, //Ke * EmissiveMap,       EyePosition.z
-            DrawBuffersEnum.ColorAttachment3, //Ks * SpecularMap,       Shininess
-            DrawBuffersEnum.ColorAttachment4};//Ka * Ambient Oclusion,  NOTHING
+        static DrawBuffersEnum[] ColorAttachments_P1 = new DrawBuffersEnum[] {
+            DrawBuffersEnum.ColorAttachment0, //Diffuse
+            DrawBuffersEnum.ColorAttachment1, //Normals.xy, Emissive.xy
+            DrawBuffersEnum.ColorAttachment2, //Position, Emissive.z
+            DrawBuffersEnum.ColorAttachment3, //Specular, Shininess
+            DrawBuffersEnum.ColorAttachment4};//AO, FREE
 
-        public static int Depth; //Depth
-        public static int[] Textures_Geometry = new int[ColorAttachments.Length]; //G-Buffer Textures
-        public static int Texture_PostProcess; //PostProcess Texture
+        static DrawBuffersEnum[] ColorAttachments_P2 = new DrawBuffersEnum[] {
+            DrawBuffersEnum.ColorAttachment0, //Position
+            DrawBuffersEnum.ColorAttachment1, //Light
+            DrawBuffersEnum.ColorAttachment2, //AO
+            DrawBuffersEnum.ColorAttachment3};//SSAO
+
+        //Pass0 OUT textures
+        public static int Depth;
+        public static int[] Textures_P1 = new int[ColorAttachments_P1.Length];
+
+        //Pass1 OUT textures
+        public static int[] Textures_P2 = new int[3];
+
+        //Pass2 OUT Textures
+        public static int Texture_PP;
 
         static int ScreenWidth, ScreenHeight;
         static int VBO;
@@ -58,9 +78,12 @@ namespace LED_Engine
 
                 switch (Shaders[i].Name)
                 {
-                    case "G-Buffer":
-                        ShaderIndex_G = i;
-                        ShaderIndex_G_Orig = i;
+                    case "Pass1":
+                        ShaderIndex_P1 = i;
+                        ShaderIndex_P1_Orig = i;
+                        break;
+                    case "Pass2":
+                        ShaderIndex_P2 = i;
                         break;
                     case "PostProcess":
                         ShaderIndex_PP = i;
@@ -94,34 +117,52 @@ namespace LED_Engine
             }
             #endregion
 
-            //Gen Textures for Deffered rendering, Post Processesing
+            #region Gen Textures for Deffered rendering, Post Processesing
             Depth = GL.GenTexture();
-            GL.GenTextures(Textures_Geometry.Length, Textures_Geometry);
-            Texture_PostProcess = GL.GenTexture();
+            GL.GenTextures(Textures_P1.Length, Textures_P1);
+            GL.GenTextures(Textures_P2.Length, Textures_P2);
+            Texture_PP = GL.GenTexture();
 
             Rescale();
+            #endregion
 
-            //G-Buffers
-            FBO_G = GL.GenFramebuffer();
-            GL.BindFramebuffer(FramebufferTarget.FramebufferExt, FBO_G);
+            #region Generate FBO's
+            //Pass1 (G-Buffer)
+            FBO_P1 = GL.GenFramebuffer();
+            GL.BindFramebuffer(FramebufferTarget.FramebufferExt, FBO_P1);
             GL.FramebufferTexture2D(FramebufferTarget.FramebufferExt, FramebufferAttachment.DepthAttachmentExt, TextureTarget.Texture2D, Depth, 0);
-            for (int i = 0; i < Textures_Geometry.Length; i++)
-                GL.FramebufferTexture2D(FramebufferTarget.FramebufferExt, FramebufferAttachment.ColorAttachment0Ext + i, TextureTarget.Texture2D, Textures_Geometry[i], 0);
-            GL.DrawBuffers(Textures_Geometry.Length, ColorAttachments);
+            for (int i = 0; i < Textures_P1.Length; i++)
+                GL.FramebufferTexture2D(FramebufferTarget.FramebufferExt, FramebufferAttachment.ColorAttachment0Ext + i, TextureTarget.Texture2D, Textures_P1[i], 0);
+            GL.DrawBuffers(ColorAttachments_P1.Length, ColorAttachments_P1);
 
-            if ((FramebufferStatus = GL.CheckFramebufferStatus(FramebufferTarget.FramebufferExt)) != FramebufferErrorCode.FramebufferCompleteExt)
-                Log.WriteLineRed("GL.CheckFramebufferStatus: \"FBO_G\" error {0}", FramebufferStatus.ToString());
+            FramebufferStatus = GL.CheckFramebufferStatus(FramebufferTarget.FramebufferExt);
+            if (FramebufferStatus != FramebufferErrorCode.FramebufferCompleteExt)
+                Log.WriteLineRed("GL.CheckFramebufferStatus: \"FBO_P1\" error {0}", FramebufferStatus.ToString());
+
+            //Pass2
+            FBO_P2 = GL.GenFramebuffer();
+            GL.BindFramebuffer(FramebufferTarget.FramebufferExt, FBO_P2);
+            GL.FramebufferTexture2D(FramebufferTarget.FramebufferExt, FramebufferAttachment.DepthAttachmentExt, TextureTarget.Texture2D, Depth, 0);
+            for (int i = 0; i < Textures_P2.Length; i++)
+                GL.FramebufferTexture2D(FramebufferTarget.FramebufferExt, FramebufferAttachment.ColorAttachment0Ext + i, TextureTarget.Texture2D, Textures_P2[i], 0);
+            GL.DrawBuffers(ColorAttachments_P2.Length, ColorAttachments_P2);
+
+            FramebufferStatus = GL.CheckFramebufferStatus(FramebufferTarget.FramebufferExt);
+            if (FramebufferStatus != FramebufferErrorCode.FramebufferCompleteExt)
+                Log.WriteLineRed("GL.CheckFramebufferStatus: \"FBO_P2\" error {0}", FramebufferStatus.ToString());
 
             //PostProcess FrameBuffer
             FBO_PP = GL.GenFramebuffer();
             GL.BindFramebuffer(FramebufferTarget.FramebufferExt, FBO_PP);
             GL.FramebufferTexture2D(FramebufferTarget.FramebufferExt, FramebufferAttachment.DepthAttachmentExt, TextureTarget.Texture2D, Depth, 0);
-            GL.FramebufferTexture2D(FramebufferTarget.FramebufferExt, FramebufferAttachment.ColorAttachment0Ext, TextureTarget.Texture2D, Texture_PostProcess, 0);
+            GL.FramebufferTexture2D(FramebufferTarget.FramebufferExt, FramebufferAttachment.ColorAttachment0Ext, TextureTarget.Texture2D, Texture_PP, 0);
 
-            if ((FramebufferStatus = GL.CheckFramebufferStatus(FramebufferTarget.FramebufferExt)) != FramebufferErrorCode.FramebufferCompleteExt)
+            FramebufferStatus = GL.CheckFramebufferStatus(FramebufferTarget.FramebufferExt);
+            if (FramebufferStatus != FramebufferErrorCode.FramebufferCompleteExt)
                 Log.WriteLineRed("GL.CheckFramebufferStatus: \"FBO_PP\" error {0}", FramebufferStatus.ToString());
 
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0); //Bind default FrameBuffer
+            #endregion
 
             VBO = GL.GenBuffer();
             GL.BindBuffer(BufferTarget.ArrayBuffer, VBO);
@@ -134,64 +175,83 @@ namespace LED_Engine
             #region Depth
             // Depth
             GL.BindTexture(TextureTarget.Texture2D, Depth);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Depth24Stencil8, ScreenWidth, ScreenHeight, 0,
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.DepthComponent32f, ScreenWidth, ScreenHeight, 0,
                 PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
-            GL.BindTexture(TextureTarget.Texture2D, 0);
             #endregion
 
-            #region G-Buffer Textures
-            for (int i = 0; i < Textures_Geometry.Length; i++)
+            #region Pass1
+            for (int i = 0; i < Textures_P1.Length; i++)
             {
-                GL.BindTexture(TextureTarget.Texture2D, Textures_Geometry[i]);
+                GL.BindTexture(TextureTarget.Texture2D, Textures_P1[i]);
                 GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba16f, ScreenWidth, ScreenHeight, 0,
                     PixelFormat.Rgba, PixelType.Float, IntPtr.Zero);
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
-                GL.BindTexture(TextureTarget.Texture2D, 0);
             }
             #endregion
 
-            #region Post Process Textures
-            GL.BindTexture(TextureTarget.Texture2D, Texture_PostProcess);
+            #region Pass2
+            for (int i = 0; i < Textures_P2.Length; i++)
+            {
+                GL.BindTexture(TextureTarget.Texture2D, Textures_P2[i]);
+                GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba16f, ScreenWidth, ScreenHeight, 0,
+                    PixelFormat.Rgba, PixelType.Float, IntPtr.Zero);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
+            }
+            #endregion
+
+            #region Post Process
+            GL.BindTexture(TextureTarget.Texture2D, Texture_PP);
             GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, ScreenWidth, ScreenHeight, 0,
                 PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
-            GL.BindTexture(TextureTarget.Texture2D, 0);
             #endregion
+
+            GL.BindTexture(TextureTarget.Texture2D, 0);
         }
 
-        public static void Draw_Geometry()
+        public static void Draw_P1()
         {
             // Bind PostProcess FBO
-            GL.BindFramebuffer(FramebufferTarget.FramebufferExt, FBO_PP);
+            GL.BindFramebuffer(FramebufferTarget.FramebufferExt, FBO_P2);
             GL.Disable(EnableCap.DepthTest);
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
-            GL.UseProgram(Shaders[ShaderIndex_G].ProgramID);
+            GL.UseProgram(Shaders[ShaderIndex_P1].ProgramID);
             int TempLocation;
 
             //TempLocation = Shaders[ShaderIndex_G].GetUniform("ScreenSize");
             //if (TempLocation != -1)
             //    GL.Uniform2(TempLocation, (float)ScreenWidth, (float)ScreenWidth);
 
-            TempLocation = Shaders[ShaderIndex_G].GetUniform("ClipPlanes");
+            TempLocation = Shaders[ShaderIndex_P1].GetUniform("ClipPlanes");
             if (TempLocation != -1) //zNear, zFar
                 GL.Uniform2(TempLocation, Game.MainCamera.zNear, Game.MainCamera.zFar);
 
-            TempLocation = Shaders[ShaderIndex_G].GetUniform("ViewMatrixInv");
+            TempLocation = Shaders[ShaderIndex_P1].GetUniform("ViewMatrixInv");
             if (TempLocation != -1)
             {
                 Matrix4 ViewInv = Game.MainCamera.GetViewMatrix().Inverted();
                 GL.UniformMatrix4(TempLocation, false, ref ViewInv);
+            }
+
+            TempLocation = Shaders[ShaderIndex_P1].GetUniform("ProjectionMatrix");
+            if (TempLocation != -1)
+            {
+                Matrix4 ProjecionMatrix = Game.MainCamera.GetProjectionMatrix();
+                GL.UniformMatrix4(TempLocation, false, ref ProjecionMatrix);
             }
 
             //TempLocation = Shaders[ShaderIndex_G].GetUniform("Time");
@@ -202,7 +262,7 @@ namespace LED_Engine
             //}
 
             #region Lights
-            TempLocation = Shaders[ShaderIndex_G].GetUniform("LightA");
+            TempLocation = Shaders[ShaderIndex_P1].GetUniform("LightA");
             if (TempLocation != -1)
             {
                 string IndexStr;
@@ -233,9 +293,9 @@ namespace LED_Engine
                     }
                 }
 
-                GL.Uniform1(Shaders[ShaderIndex_G].GetUniform("LDcount"), L_Directional.Count);
-                GL.Uniform1(Shaders[ShaderIndex_G].GetUniform("LPcount"), L_Point.Count);
-                GL.Uniform1(Shaders[ShaderIndex_G].GetUniform("LScount"), L_Spot.Count);
+                GL.Uniform1(Shaders[ShaderIndex_P1].GetUniform("LDcount"), L_Directional.Count);
+                GL.Uniform1(Shaders[ShaderIndex_P1].GetUniform("LPcount"), L_Point.Count);
+                GL.Uniform1(Shaders[ShaderIndex_P1].GetUniform("LScount"), L_Spot.Count);
 
                 // AmbientLight
                 Vector3 AmbientColor = new Vector3(0.0f);
@@ -248,9 +308,9 @@ namespace LED_Engine
                 {
                     IndexStr = i.ToString();
                     Vector3 LightDirection = (new Vector4(L_Directional[i].Direction.Normalized(), 0.0f) * Game.MainCamera.GetViewMatrix()).Xyz;
-                    GL.Uniform3(Shaders[ShaderIndex_G].GetUniform("LightD[" + IndexStr + "].Dir"), LightDirection);
-                    GL.Uniform3(Shaders[ShaderIndex_G].GetUniform("LightD[" + IndexStr + "].Ld"), L_Directional[i].Diffuse);
-                    GL.Uniform3(Shaders[ShaderIndex_G].GetUniform("LightD[" + IndexStr + "].Ls"), L_Directional[i].Specular);
+                    GL.Uniform3(Shaders[ShaderIndex_P1].GetUniform("LightD[" + IndexStr + "].Dir"), LightDirection);
+                    GL.Uniform3(Shaders[ShaderIndex_P1].GetUniform("LightD[" + IndexStr + "].Ld"), L_Directional[i].Diffuse);
+                    GL.Uniform3(Shaders[ShaderIndex_P1].GetUniform("LightD[" + IndexStr + "].Ls"), L_Directional[i].Specular);
                 }
 
                 // PointLight
@@ -258,10 +318,10 @@ namespace LED_Engine
                 {
                     IndexStr = i.ToString();
                     Vector3 LightPosition = (new Vector4(L_Point[i].Position, 1.0f) * Game.MainCamera.GetViewMatrix()).Xyz;
-                    GL.Uniform3(Shaders[ShaderIndex_G].GetUniform("LightP[" + IndexStr + "].Pos"), LightPosition);
-                    GL.Uniform3(Shaders[ShaderIndex_G].GetUniform("LightP[" + IndexStr + "].Ld"), L_Point[i].Diffuse);
-                    GL.Uniform3(Shaders[ShaderIndex_G].GetUniform("LightP[" + IndexStr + "].Ls"), L_Point[i].Specular);
-                    GL.Uniform3(Shaders[ShaderIndex_G].GetUniform("LightP[" + IndexStr + "].Att"), L_Point[i].Attenuation);
+                    GL.Uniform3(Shaders[ShaderIndex_P1].GetUniform("LightP[" + IndexStr + "].Pos"), LightPosition);
+                    GL.Uniform3(Shaders[ShaderIndex_P1].GetUniform("LightP[" + IndexStr + "].Ld"), L_Point[i].Diffuse);
+                    GL.Uniform3(Shaders[ShaderIndex_P1].GetUniform("LightP[" + IndexStr + "].Ls"), L_Point[i].Specular);
+                    GL.Uniform3(Shaders[ShaderIndex_P1].GetUniform("LightP[" + IndexStr + "].Att"), L_Point[i].Attenuation);
                 }
 
                 // SpotLight
@@ -271,25 +331,82 @@ namespace LED_Engine
 
                     Vector3 LightPosition = (new Vector4(L_Spot[i].Position, 1.0f) * Game.MainCamera.GetViewMatrix()).Xyz;
                     Vector3 LightDirection = (new Vector4(L_Spot[i].Direction.Normalized(), 0.0f) * Game.MainCamera.GetViewMatrix()).Xyz;
-                    GL.Uniform3(Shaders[ShaderIndex_G].GetUniform("LightS[" + IndexStr + "].Pos"), LightPosition);
-                    GL.Uniform3(Shaders[ShaderIndex_G].GetUniform("LightS[" + IndexStr + "].Dir"), LightDirection);
-                    GL.Uniform3(Shaders[ShaderIndex_G].GetUniform("LightS[" + IndexStr + "].Ld"), L_Spot[i].Diffuse);
-                    GL.Uniform3(Shaders[ShaderIndex_G].GetUniform("LightS[" + IndexStr + "].Ls"), L_Spot[i].Specular);
-                    GL.Uniform3(Shaders[ShaderIndex_G].GetUniform("LightS[" + IndexStr + "].Att"), L_Spot[i].Attenuation);
-                    GL.Uniform1(Shaders[ShaderIndex_G].GetUniform("LightS[" + IndexStr + "].Cut"), L_Spot[i].CutOFF);
-                    GL.Uniform1(Shaders[ShaderIndex_G].GetUniform("LightS[" + IndexStr + "].Exp"), L_Spot[i].Exponent);
+                    GL.Uniform3(Shaders[ShaderIndex_P1].GetUniform("LightS[" + IndexStr + "].Pos"), LightPosition);
+                    GL.Uniform3(Shaders[ShaderIndex_P1].GetUniform("LightS[" + IndexStr + "].Dir"), LightDirection);
+                    GL.Uniform3(Shaders[ShaderIndex_P1].GetUniform("LightS[" + IndexStr + "].Ld"), L_Spot[i].Diffuse);
+                    GL.Uniform3(Shaders[ShaderIndex_P1].GetUniform("LightS[" + IndexStr + "].Ls"), L_Spot[i].Specular);
+                    GL.Uniform3(Shaders[ShaderIndex_P1].GetUniform("LightS[" + IndexStr + "].Att"), L_Spot[i].Attenuation);
+                    GL.Uniform1(Shaders[ShaderIndex_P1].GetUniform("LightS[" + IndexStr + "].Cut"), L_Spot[i].CutOFF);
+                    GL.Uniform1(Shaders[ShaderIndex_P1].GetUniform("LightS[" + IndexStr + "].Exp"), L_Spot[i].Exponent);
                 }
             }
             #endregion
 
+            //Bind Textures
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.BindTexture(TextureTarget.Texture2D, Depth);
+            for (int i = 0; i < Textures_P1.Length; i++)
+            {
+                GL.ActiveTexture(TextureUnit.Texture1 + i);
+                GL.BindTexture(TextureTarget.Texture2D, Textures_P1[i]);
+            }
+
+            Shaders[ShaderIndex_P1].EnableVertexAttribArrays();
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, VBO);
+            GL.VertexAttribPointer(Shaders[ShaderIndex_P1].GetAttribute("v_UV"), 2, VertexAttribPointerType.Float, false, 0, 0);
+            GL.DrawArrays(BeginMode.TriangleStrip, 0, 4);
+
+            //Shaders[G_ShaderIndex].DisableVertexAttribArrays();
+        }
+
+        public static void Draw_P2()
+        {
+            // Bind PostProcess FBO
+            GL.BindFramebuffer(FramebufferTarget.FramebufferExt, FBO_PP);
+            GL.Disable(EnableCap.DepthTest);
+            GL.Clear(ClearBufferMask.ColorBufferBit);
+
+            GL.UseProgram(Shaders[ShaderIndex_P2].ProgramID);
+            int TempLocation;
+
+            //TempLocation = Shaders[ShaderIndex_P2].GetUniform("ScreenSize");
+            //if (TempLocation != -1)
+            //    GL.Uniform2(TempLocation, (float)ScreenWidth, (float)ScreenWidth);
+
+            TempLocation = Shaders[ShaderIndex_P2].GetUniform("ClipPlanes");
+            if (TempLocation != -1) //zNear, zFar
+                GL.Uniform2(TempLocation, Game.MainCamera.zNear, Game.MainCamera.zFar);
+
+            TempLocation = Shaders[ShaderIndex_P2].GetUniform("ViewMatrixInv");
+            if (TempLocation != -1)
+            {
+                Matrix4 ViewInv = Game.MainCamera.GetViewMatrix().Inverted();
+                GL.UniformMatrix4(TempLocation, false, ref ViewInv);
+            }
+
+            TempLocation = Shaders[ShaderIndex_P2].GetUniform("ProjectionMatrix");
+            if (TempLocation != -1)
+            {
+                Matrix4 ProjecionMatrix = Game.MainCamera.GetProjectionMatrix();
+                GL.UniformMatrix4(TempLocation, false, ref ProjecionMatrix);
+            }
+
+            //TempLocation = Shaders[ShaderIndex_P2].GetUniform("Time");
+            //if (TempLocation != -1)
+            //{
+            //    float Time = (float)Glfw.GetTime();
+            //    GL.Uniform1(TempLocation, Time);
+            //}
+
             #region Fog
-            TempLocation = Shaders[ShaderIndex_G].GetUniform("FogMinMaxDistance");
+            TempLocation = Shaders[ShaderIndex_P2].GetUniform("FogMinMaxDistance");
             if (TempLocation != -1)
             {
                 if (Settings.Graphics.Fog.Enabled)
                 {
                     GL.Uniform2(TempLocation, Settings.Graphics.Fog.MinDistance, Settings.Graphics.Fog.MaxDistance);
-                    GL.Uniform3(Shaders[ShaderIndex_G].GetUniform("FogColor"), Settings.Graphics.Fog.Color);
+                    GL.Uniform3(Shaders[ShaderIndex_P2].GetUniform("FogColor"), Settings.Graphics.Fog.Color);
                 }
                 else
                     GL.Uniform2(TempLocation, -1.0f, 0.0f); // Disable Fog
@@ -299,16 +416,18 @@ namespace LED_Engine
             //Bind Textures
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, Depth);
-            for (int i = 0; i < Textures_Geometry.Length; i++)
+            GL.ActiveTexture(TextureUnit.Texture1);
+            GL.BindTexture(TextureTarget.Texture2D, Textures_P1[2]); //Position
+            for (int i = 0; i < Textures_P2.Length; i++)
             {
-                GL.ActiveTexture(TextureUnit.Texture1 + i);
-                GL.BindTexture(TextureTarget.Texture2D, Textures_Geometry[i]);
+                GL.ActiveTexture(TextureUnit.Texture2 + i);
+                GL.BindTexture(TextureTarget.Texture2D, Textures_P2[i]);
             }
 
-            Shaders[ShaderIndex_G].EnableVertexAttribArrays();
+            Shaders[ShaderIndex_P2].EnableVertexAttribArrays();
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, VBO);
-            GL.VertexAttribPointer(Shaders[ShaderIndex_G].GetAttribute("v_UV"), 2, VertexAttribPointerType.Float, false, 0, 0);
+            GL.VertexAttribPointer(Shaders[ShaderIndex_P2].GetAttribute("v_UV"), 2, VertexAttribPointerType.Float, false, 0, 0);
             GL.DrawArrays(BeginMode.TriangleStrip, 0, 4);
 
             //Shaders[G_ShaderIndex].DisableVertexAttribArrays();
@@ -374,7 +493,7 @@ namespace LED_Engine
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, Depth);
             GL.ActiveTexture(TextureUnit.Texture1);
-            GL.BindTexture(TextureTarget.Texture2D, Texture_PostProcess);
+            GL.BindTexture(TextureTarget.Texture2D, Texture_PP);
 
             Shaders[ShaderIndex_PP].EnableVertexAttribArrays();
 
@@ -391,25 +510,34 @@ namespace LED_Engine
             for (int i = 0; i < Shaders.Count; i++)
                 Shaders[i].Free();
 
-            ShaderIndex_G = 0;
+            ShaderIndex_P1 = 0;
+            ShaderIndex_P2 = 0;
             ShaderIndex_PP = 0;
 
-            for (int i = 0; i < Textures_Geometry.Length; i++)
+            for (int i = 0; i < Textures_P1.Length; i++)
             {
-                GL.DeleteTexture(Textures_Geometry[i]);
-                Textures_Geometry[i] = 0;
+                GL.DeleteTexture(Textures_P1[i]);
+                Textures_P1[i] = 0;
+            }
+
+            for (int i = 0; i < Textures_P2.Length; i++)
+            {
+                GL.DeleteTexture(Textures_P2[i]);
+                Textures_P2[i] = 0;
             }
 
             GL.DeleteTexture(Depth);
-            GL.DeleteTexture(Texture_PostProcess);
+            GL.DeleteTexture(Texture_PP);
             Depth = 0;
-            Texture_PostProcess = 0;
+            Texture_PP = 0;
 
             GL.DeleteBuffer(VBO);
-            GL.DeleteFramebuffer(FBO_G);
+            GL.DeleteFramebuffer(FBO_P1);
+            GL.DeleteFramebuffer(FBO_P2);
             GL.DeleteFramebuffer(FBO_PP);
 
-            FBO_G = 0;
+            FBO_P1 = 0;
+            FBO_P2 = 0;
             FBO_PP = 0;
             VBO = 0;
 

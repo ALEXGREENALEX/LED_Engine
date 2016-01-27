@@ -64,31 +64,31 @@ namespace LED_Engine
             switch (Settings.Debug.DrawMode)
             {
                 case DrawMode.Default:
-                    FBO.ShaderIndex_G = FBO.ShaderIndex_G_Orig;
+                    FBO.ShaderIndex_P1 = FBO.ShaderIndex_P1_Orig;
                     break;
                 case DrawMode.Depth:
-                    FBO.ShaderIndex_G = FBO.DebugShaderIndex_Depth;
+                    FBO.ShaderIndex_P1 = FBO.DebugShaderIndex_Depth;
                     break;
                 case DrawMode.Diffuse:
-                    FBO.ShaderIndex_G = FBO.DebugShaderIndex_Diffuse;
+                    FBO.ShaderIndex_P1 = FBO.DebugShaderIndex_Diffuse;
                     break;
                 case DrawMode.Light:
-                    FBO.ShaderIndex_G = FBO.DebugShaderIndex_Light;
+                    FBO.ShaderIndex_P1 = FBO.DebugShaderIndex_Light;
                     break;
                 case DrawMode.Normals:
-                    FBO.ShaderIndex_G = FBO.DebugShaderIndex_Normals;
+                    FBO.ShaderIndex_P1 = FBO.DebugShaderIndex_Normals;
                     break;
                 case DrawMode.AmbientOclusion:
-                    FBO.ShaderIndex_G = FBO.DebugShaderIndex_AmbientOclusion;
+                    FBO.ShaderIndex_P1 = FBO.DebugShaderIndex_AmbientOclusion;
                     break;
                 case DrawMode.Emissive:
-                    FBO.ShaderIndex_G = FBO.DebugShaderIndex_Emissive;
+                    FBO.ShaderIndex_P1 = FBO.DebugShaderIndex_Emissive;
                     break;
                 case DrawMode.Specular:
-                    FBO.ShaderIndex_G = FBO.DebugShaderIndex_Specular;
+                    FBO.ShaderIndex_P1 = FBO.DebugShaderIndex_Specular;
                     break;
                 case DrawMode.ShininessReflection:
-                    FBO.ShaderIndex_G = FBO.DebugShaderIndex_ShininessReflection;
+                    FBO.ShaderIndex_P1 = FBO.DebugShaderIndex_ShininessReflection;
                     break;
             }
             #endregion
@@ -160,7 +160,7 @@ namespace LED_Engine
             if (Settings.Window.IsFocused)
             {
                 // G-Buffer
-                GL.BindFramebuffer(FramebufferTarget.FramebufferExt, FBO.FBO_G);
+                GL.BindFramebuffer(FramebufferTarget.FramebufferExt, FBO.FBO_P1);
                 GL.Enable(EnableCap.DepthTest); // Включаем тест глубины
                 GL.DepthFunc(DepthFunction.Lequal);
                 GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
@@ -228,7 +228,8 @@ namespace LED_Engine
                 }*/
 
                 // Draw All Geometry to PostProcess FBO
-                FBO.Draw_Geometry();
+                FBO.Draw_P1();
+                FBO.Draw_P2();
 
                 // Draw SkyBox to PostProcess FBO
                 GL.BindFramebuffer(FramebufferTarget.FramebufferExt, FBO.FBO_PP);

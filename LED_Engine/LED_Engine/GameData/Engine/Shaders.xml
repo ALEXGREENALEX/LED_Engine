@@ -28,9 +28,15 @@
 	
 	<!--RenderToTexture(RTT) Shaders-->
 	<RTT_Shader>
-		<Name>G-Buffer</Name>
+		<Name>Pass1</Name>
 		<VertexShader>FBO\Universal_VS.glsl</VertexShader>
-		<FragmentShader>FBO\G-Buffer.glsl</FragmentShader>
+		<FragmentShader>FBO\Pass1.glsl</FragmentShader>
+	</RTT_Shader>
+
+	<RTT_Shader>
+		<Name>Pass2</Name>
+		<VertexShader>FBO\Universal_VS.glsl</VertexShader>
+		<FragmentShader>FBO\Pass2.glsl</FragmentShader>
 	</RTT_Shader>
 	
 		<!--PostProcess Shaders-->

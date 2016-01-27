@@ -1,0 +1,17 @@
+n = near
+f = far
+z = depth buffer Z-value
+EZ  = eye Z value
+LZ  = depth buffer Z-value remapped to a linear [0..1] range (near plane to far plane)
+LZ2 = depth buffer Z-value remapped to a linear [0..1] range (eye to far plane)
+---------------------------------------------------------------------
+EZ  = (2 * n * f) / (f + n - z * (f - n))
+LZ  = (eyeZ - n) / (f - n) = n * (z + 1.0) / (f + n - z * (f - n))
+LZ2 = eyeZ / f = (2 * n) / (f + n - z * (f - n))
+
+or
+
+LZ2 in two instructions:
+LZ2 = 1.0 / (c0 * z + c1)
+	c0 = (1 - f / n) / 2
+	c1 = (1 + f / n) / 2

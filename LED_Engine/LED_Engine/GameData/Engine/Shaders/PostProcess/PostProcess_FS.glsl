@@ -25,7 +25,7 @@ layout(location = 0) out vec3 FragColor;
 
 void main()
 {
-	vec3 Color = texture2D(TextureUnit1, f_UV).rgb;
+	vec3 Color = texture(TextureUnit1, f_UV).rgb;
 	if(FXAAEnabled)
 		Color = FxaaPixelShader(f_UV, TextureUnit1, vec2(1.0) / ScreenSize, FXAASettings.x, FXAASettings.y, FXAASettings.z).rgb;
 	
