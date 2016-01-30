@@ -282,7 +282,8 @@ namespace LED_Engine
         {
             if (T != null)
             {
-                T.UseCounter--;
+                if (T.UseCounter > 0)
+                    T.UseCounter--;
 
                 if (T.UseCounter == 0)
                 {
@@ -472,7 +473,7 @@ namespace LED_Engine
                     //Filter parameters
                     GL.TexParameter(TextureTarget, TextureParameterName.TextureMagFilter, (int)MagFilter);
                     GL.TexParameter(TextureTarget, TextureParameterName.TextureMinFilter, (int)MinFilter);
-                    
+
                     if (AnisotropicFiltering && Glfw.ExtensionSupported("GL_EXT_texture_filter_anisotropic"))
                     {
                         int MaxAniso = GL.GetInteger((GetPName)ExtTextureFilterAnisotropic.MaxTextureMaxAnisotropyExt);

@@ -143,7 +143,7 @@
 			<Scale>3.0 3.0 3.0</Scale>
 			
 			<Materials>
-				<Material>TransparentRedGlass</Material>
+				<Material>BrickWall</Material>
 			</Materials>
 		</Mesh>
 		<Mesh>

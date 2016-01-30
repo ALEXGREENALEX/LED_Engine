@@ -294,7 +294,8 @@ namespace LED_Engine
         {
             if (M != null)
             {
-                M.UseCounter--;
+                if (M.UseCounter > 0)
+                    M.UseCounter--;
 
                 if (M.UseCounter == 0)
                 {

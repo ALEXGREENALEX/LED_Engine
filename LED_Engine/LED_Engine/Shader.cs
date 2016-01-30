@@ -157,7 +157,8 @@ namespace LED_Engine
         {
             if (S != null)
             {
-                S.UseCounter--;
+                if (S.UseCounter > 0)
+                    S.UseCounter--;
 
                 if (S.UseCounter == 0)
                 {
