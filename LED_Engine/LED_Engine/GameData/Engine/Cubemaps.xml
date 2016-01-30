@@ -1,12 +1,4 @@
-﻿<!--Список всех CubemapTextures
-Dir - Папка, указывается для удобства, где хранятся File[6].
-File[6] = {X+, X-, Y+, Y-, Z+, Z-} - 6 текстур.
-MagFilter, MinFilter, GenerateMipmap как в Textures
-SideSize - Сторона текстуры
-	Если пропустить или оставить пустым, то размер считывается из текстур
-	Это ускоряет загрузку, но замедляет рендер при больших текстурах.
--->
-<CubemapTextures>
+﻿<CubemapTextures>
 	<CubemapTexture>
 		<Name>SkyCubemap_Default</Name>
 		<Dir>Test</Dir>
@@ -16,6 +8,5 @@ SideSize - Сторона текстуры
 		<File>negy.jpg</File>
 		<File>posz.jpg</File>
 		<File>negz.jpg</File>
-		<SideSize></SideSize>
 	</CubemapTexture>
 </CubemapTextures>

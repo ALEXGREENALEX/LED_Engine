@@ -1,38 +1,4 @@
-﻿<!--Список всех текстур
-bool GenerateMipmap;
-
-MagFilter:
-	Nearest
-	Linear
-	LinearDetailSgis
-	LinearDetailAlphaSgis
-	LinearDetailColorSgis
-	LinearSharpenSgis
-	LinearSharpenAlphaSgis
-	LinearSharpenColorSgis
-	Filter4Sgis
-	PixelTexGenQCeilingSgix
-	PixelTexGenQRoundSgix
-	PixelTexGenQFloorSgix
-
-MinFilter:
-	Nearest
-	Linear
-	NearestMipmapNearest
-	LinearMipmapNearest
-	NearestMipmapLinear
-	LinearMipmapLinear
-	Filter4Sgis
-	LinearClipmapLinearSgix
-	PixelTexGenQCeilingSgix
-	PixelTexGenQRoundSgix
-	PixelTexGenQFloorSgix
-	NearestClipmapNearestSgix
-	NearestClipmapLinearSgix
-	LinearClipmapNearestSgix
--->
-
-<Textures>
+﻿<Textures>
 	<Texture>
 		<Name></Name>
 		<File>checker.bmp</File>

@@ -1,0 +1,53 @@
+--------------------------------
+			Materials
+--------------------------------
+
+Name
+	string
+Shader
+	string
+CullFace
+	bool
+	Не работает для Transparent=true - в прозрачном материале всегда
+	рендерится задняя, а потом передняя стороны граней!
+Transparent
+	bool
+Kd - Diffuse Color(Diffuse Reflectivity)
+	float Value (result Value Value Value 1.0f);
+		Vector3 RGB (result R G B 1.0f);
+	Vector4 RGBA (result R G B A);
+	Если не указать или оставить пустым - Случайный цвет;
+Ks - Specular Reflectivity
+	Vector3
+Ka - Ambient Reflectivity
+	Vector3
+Ke - Emissive Color
+	Vector3
+Shininess - Specular Shininess
+	float
+ReflectionFactor
+	float
+RefractiveIndex
+	float
+Texture[]
+	string Name;
+	uint TextureUnit;
+
+--------------------------------
+			Examples			
+--------------------------------
+<Material>
+	<Name>Material1</Name>
+	<Shader>Shader1</Shader>
+	<CullFace>False</CullFace>
+	
+	<Texture>
+		<Name>TextureWood</Name>
+		<TextureUnit>0</TextureUnit>
+	</Texture>
+	<Texture>
+		<Name>TextureWoodDark</Name>
+		<TextureUnit>1</TextureUnit>
+	</Texture>
+</Material>
+--------------------------------

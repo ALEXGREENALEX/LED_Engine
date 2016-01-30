@@ -17,6 +17,14 @@ namespace LED_Engine
         Specular,
         ShininessReflection,
     };
+
+    public enum MeshType
+    {
+        Mesh,
+        Plain,
+        Box,
+    };
+
     public enum ActorType
     {
         Static,

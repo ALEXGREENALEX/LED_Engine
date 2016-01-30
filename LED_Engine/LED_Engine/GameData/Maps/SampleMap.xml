@@ -1,30 +1,182 @@
-﻿<!--Структура карты
-В звуках, там где Radius, 0 - бесконечность
--->
-<Map>
-	<MapName>SampleMap</MapName>
+﻿<Map>
+	<Name>SampleMap</Name>
 	<Description>Blah blah blah</Description>
-	<Skybox>Alphs</Skybox>
 
 	<PlayerStart>
 		<Position>0.0 0.0 0.0</Position>
 		<Rotation>0.0 0.0 0.0</Rotation>
 	</PlayerStart>
+	
+	<Camera>
+		<Near>0.1</Near>
+		<Far>500.0</Far>
+		<FOV>60.0</FOV>
+		<MoveSpeed>0.2</MoveSpeed>
+	</Camera>
 
-	<Objects>
-		<Object>
-			<Name>BlaBlaBla</Name>
+	<Skybox>SkyCubemap_Storforsen</Skybox>
+	
+	<Fog>
+		<Enabled>true</Enabled>
+		<Color>0.5 0.5 0.5</Color>
+		<DistanceMin>20.0</DistanceMin>
+		<DistanceMax>80.0</DistanceMax>
+	</Fog>
+	
+	<Model>
+		<Name>Plain_1</Name>
+		<Visible>true</Visible>
+		<Mesh>
+			<Name>Plain_1</Name>
+			<Type>Plain</Type>
+			<Visible>true</Visible>
+			
+			<SideA>100.0</SideA>
+			<SideB>100.0</SideB>
+			
+			<Position>0.0 -0.5 0.0</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
 			<Materials>
-				<Material>Brick</Material>
-				<Material>Wood</Material>
-				<Material>Glass</Material>
+				<Material>BrickWall</Material>
 			</Materials>
+		</Mesh>
+	</Model>
+	<Model>
+		<Name>Box_1</Name>
+		<Visible>true</Visible>
+		<Mesh>
+			<Name>Box_1</Name>
+			<Type>Box</Type>
+			<Visible>true</Visible>
+			
+			<SideA>1.0</SideA>
+			<SideB>1.0</SideB>
+			<SideC>1.0</SideC>
+			<FlipPolygons>false</FlipPolygons>
+			
+			<Position>-2.0 0.0 0.0</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>ParallaxMapping</Material>
+			</Materials>
+		</Mesh>
+	</Model>
+	<Model>
+		<Name>Pipes</Name>
+		<Visible>true</Visible>
+		<Mesh>
+			<Name>Pipe_X_1</Name>
+			<Type>Mesh</Type>
+			<Mesh>Pipe_X</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>0.0 1.0 0.0</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Refraction</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Pipe_X_2</Name>
+			<Type>Mesh</Type>
+			<Mesh>Pipe_X</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>0.0 2.0 0.0</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Reflection</Material>
+			</Materials>
+		</Mesh>
+	</Model>
+	<Model>
+		<Name>Keypads</Name>
+		<Visible>true</Visible>
+		<Mesh>
+			<Name>Keypad_1</Name>
+			<Type>Mesh</Type>
+			<Mesh>Keypad</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>1.6 2.0 0.0</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>10.0 10.0 10.0</Scale>
+			
+			<Materials>
+				<Material>Keypad</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Keypad_2</Name>
+			<Type>Mesh</Type>
+			<Mesh>Keypad</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-1.6 2.0 0.0</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>10.0 10.0 10.0</Scale>
+			
+			<Materials>
+				<Material>BrickWall</Material>
+			</Materials>
+		</Mesh>
+	</Model>
+	<Model>
+		<Name>Teapots</Name>
+		<Visible>true</Visible>
+		<Mesh>
+			<Name>Teapot_1</Name>
+			<Type>Mesh</Type>
+			<Mesh>Teapot</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>0.0 0.0 2.0</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>3.0 3.0 3.0</Scale>
+			
+			<Materials>
+				<Material>TransparentRedGlass</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Teapot_2</Name>
+			<Type>Mesh</Type>
+			<Mesh>Teapot</Mesh>
+			<Visible>true</Visible>
+			
 			<Position>0.0 0.0 0.0</Position>
 			<Rotation>0.0 0.0 0.0</Rotation>
-			<Scale>0.0 0.0 0.0</Scale>
-		</Object>
-	</Objects>
-
+			<Scale>3.0 3.0 3.0</Scale>
+			
+			<Materials>
+				<Material>BrickWall</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Teapot_3</Name>
+			<Type>Mesh</Type>
+			<Mesh>Teapot</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>0.0 0.0 -1.0</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>3.0 3.0 3.0</Scale>
+			
+			<Materials>
+				<Material>ParallaxMapping</Material>
+			</Materials>
+		</Mesh>
+	</Model>
+	
+	<!--
 	<Sounds>
 		<Sound>
 			<Name>BlaBlaBla</Name>
@@ -35,4 +187,5 @@
 			<Position>0.0 0.0 0.0</Position>
 		</Sound>
 	</Sounds>
+	-->
 </Map>

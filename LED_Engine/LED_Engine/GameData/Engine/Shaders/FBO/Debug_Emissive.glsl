@@ -11,7 +11,7 @@ layout(location = 2) out vec4 Output2; //SSAO
 void main()
 {
 	vec3 Ke;
-	Ke.rg = texture(TextureUnit2, f_UV).rg;
+	Ke.rg = texture(TextureUnit2, f_UV).ba;
 	Ke.b = texture(TextureUnit3, f_UV).a;
 	Output0 = vec4(Ke, 1.0);
 	Output1 = vec4(0.0);

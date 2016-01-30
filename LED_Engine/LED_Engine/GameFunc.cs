@@ -16,17 +16,14 @@ namespace LED_Engine
     partial class Game
     {
         public static Camera MainCamera = new Camera();
-        public static Mesh SkyCube = null;
-        public static float FOV = 50.0f;
-        public static float zNear = 0.1f;
-        public static float zFar = 500.0f;
+        public static Mesh SkyBox = new Mesh();
 
         public static float Angle = MathHelper.DegreesToRadians(100.0f);
 
-        public static List<Mesh> Objects = new List<Mesh>();
-        public static List<Mesh> DebugObjects = new List<Mesh>();
-        public static List<Mesh> DrawableObjects = new List<Mesh>();
-        public static List<Mesh> TransparentObjects = new List<Mesh>();
+        public static Mesh DebugAmbientLight = new Mesh();
+        public static Mesh DebugDirectionalLight = new Mesh();
+        public static Mesh DebugPointLight = new Mesh();
+        public static Mesh DebugSpotLight = new Mesh();
 
         static void ApplySettingsAndCreateWindow()
         {
@@ -180,111 +177,39 @@ namespace LED_Engine
         {
             int FB_Width, FB_Height;
             Glfw.GetFramebufferSize(Window, out FB_Width, out FB_Height);
-            
+
             if (FB_Width > 0 && FB_Height > 0)
             {
-                MainCamera.SetProjectionMatrix(ProjectionTypes.Perspective, (float)FB_Width, (float)FB_Height, zNear, zFar, FOV);
+                MainCamera.SetProjectionMatrix(ProjectionTypes.Perspective, (float)FB_Width, (float)FB_Height, MainCamera.zNear, MainCamera.zFar, MainCamera.FOV);
                 GL.Viewport(0, 0, FB_Width, FB_Height);
                 FBO.Free();
                 FBO.Init(FB_Width, FB_Height);
             }
         }
 
-        static void LoadResourcesFromMap_FAKE()
+        static void Draw(Mesh m)
         {
-            if (Settings.Debug.Enabled)
-            {
-                Mesh DebugPointLight = Mesh.LoadFromFile("DebugPointLight", Engine.CombinePaths(Settings.Paths.EngineMeshes, "PointLight.obj"));
+            m.CalculateMatrices(MainCamera);
 
-                Mesh[] DebugLight = new Mesh[2];
-                for (int i = 0; i < DebugLight.Length; i++)
-                {
-                    DebugLight[i] = new Mesh(DebugPointLight);
-                    DebugLight[i].Material = Materials.Load("DebugPointLight");
-                }
-                DebugObjects.AddRange(DebugLight);
+            for (int i = 0; i < m.Parts.Count; i++)
+                Draw(m, m.Parts[i]);
+        }
+
+        static void Draw(Mesh m, MeshPart v)
+        {
+            if (v.Material.Transparent)
+                GL.Disable(EnableCap.CullFace);
+            else
+            {
+                if (v.Material.CullFace)
+                    GL.Enable(EnableCap.CullFace);
+                else
+                    GL.Disable(EnableCap.CullFace);
             }
 
-            Mesh plain = Mesh.MakePlain(100f);
-            plain.Material = Materials.Load("BrickWall");
-            plain.Position.Y = -0.5f;
-            Objects.Add(plain);
-
-            Mesh box = Mesh.MakeBox();
-            box.Material = Materials.Load("ParallaxMapping");
-            box.Position.X = -2f;
-            Objects.Add(box);
-
-            Mesh Pipe_X_1 = Mesh.LoadFromFile("Pipe_X_1", Engine.CombinePaths(Settings.Paths.Meshes, "Pipe_X.obj"));
-            //Pipe_X_1.Material = Materials.Load("BrickWall");
-            Pipe_X_1.Material = Materials.Load("Refraction"); // Reflection Refraction
-            Pipe_X_1.Position.Y += 1;
-            Objects.Add(Pipe_X_1);
-
-            Mesh Pipe_X_2 = new Mesh(Pipe_X_1);
-            Pipe_X_2.GenBuffers();
-            Pipe_X_2.BindBuffers();
-            Pipe_X_2.Material = Materials.Load("Reflection");
-            Pipe_X_2.Position.Y += 1;
-            Objects.Add(Pipe_X_2);
-
-            Mesh obj_Keypad = Mesh.LoadFromFile("obj_Keypad", Engine.CombinePaths(Settings.Paths.Meshes, "Keypad.obj"));
-            obj_Keypad.Material = Materials.Load("Keypad");
-            obj_Keypad.Position = new Vector3(1.6f, 0f, 0f);
-            obj_Keypad.Scale = new Vector3(10f, 10f, 10f);
-            Objects.Add(obj_Keypad);
-
-            int a = 33;
-            Model model1 = new Model();
-            for (int i1 = 0; i1 < a; i1++)
-                for (int i2 = 0; i2 < a; i2++)
-                {
-                    model1.Meshes.Add(new Mesh(obj_Keypad));
-                    model1.Meshes[i1 * a + i2].Material = Materials.Load("BrickWall"); //ReliefParallaxTest //Keypad
-                    model1.Meshes[i1 * a + i2].Scale = new Vector3(10.0f, 10.0f, 10.0f);
-                    model1.Meshes[i1 * a + i2].Position.X = (i1 - a / 2) * 5;
-                    model1.Meshes[i1 * a + i2].Position.Z = (i2 - a / 2) * 5;
-                    Objects.Add(model1.Meshes[i1 * a + i2]);
-                }
-
-            Mesh obj_Teapot = Mesh.LoadFromFile("obj_Teapot", Engine.CombinePaths(Settings.Paths.EngineMeshes, "Teapot.obj"));
-            obj_Teapot.Material = Materials.Load("TransparentRedGlass");
-            obj_Teapot.Position.Z += 2;
-            obj_Teapot.Scale = new Vector3(3f, 3f, 3f);
-            Objects.Add(obj_Teapot);
-
-            Mesh obj_Teapot2 = new Mesh(obj_Teapot);
-            obj_Teapot2.Material = Materials.Load("BrickWall");
-            obj_Teapot2.Position.Z -= 2;
-            obj_Teapot2.Scale = new Vector3(3f, 3f, 3f);
-            Objects.Add(obj_Teapot2);
-
-            Mesh obj_Teapot3 = new Mesh(obj_Teapot);
-            obj_Teapot3.Material = Materials.Load("ParallaxMapping");
-            obj_Teapot3.Position.Z -= 3;
-            obj_Teapot3.Scale = new Vector3(3f, 3f, 3f);
-            Objects.Add(obj_Teapot3);
-        }
-
-        static void InitProgram()
-        {
-            // FOG
-            Settings.Graphics.Fog.Enabled = true;
-
-            SkyCube = Mesh.MakeBox(zFar * 2.0f / (float)Math.Sqrt(3.0), true); // Cube diagonal = side / sqrt(3)
-            SkyCube.Material = Materials.Load("SkyCubemap_Storforsen");
-
-            MainCamera.MoveSpeed = 0.2f;
-            MainCamera.Position = new Vector3(0.0f, 2.0f, 0.0f);
-        }
-
-        static void Draw(Mesh v)
-        {
             int TempLocation;
             Shader shader = v.Material.Shader;
             GL.UseProgram(shader.ProgramID);
-
-            v.CalculateMatrices(MainCamera);
 
             // Активируем нужный TextureUnit и назначаем текстуру
             for (int i = 0; i < v.Material.Textures.Length; i++)
@@ -301,7 +226,7 @@ namespace LED_Engine
             // Передаем шейдеру матрицу ModelMatrix, если шейдер поддерживает это.
             TempLocation = shader.GetUniform("ModelMatrix");
             if (TempLocation != -1)
-                GL.UniformMatrix4(TempLocation, false, ref v.ModelMatrix);
+                GL.UniformMatrix4(TempLocation, false, ref m.ModelMatrix);
 
             // Передаем шейдеру матрицу ViewMatrix, если шейдер поддерживает это.
             TempLocation = shader.GetUniform("ViewMatrix");
@@ -322,13 +247,13 @@ namespace LED_Engine
             // Передаем шейдеру матрицу ModelView, если шейдер поддерживает это.
             TempLocation = shader.GetUniform("ModelView");
             if (TempLocation != -1)
-                GL.UniformMatrix4(TempLocation, false, ref v.ModelViewMatrix);
+                GL.UniformMatrix4(TempLocation, false, ref m.ModelViewMatrix);
 
             // Передаем шейдеру матрицу NormalMatrix, если шейдер поддерживает это.
             TempLocation = shader.GetUniform("NormalMatrix");
             if (TempLocation != -1)
             {
-                Matrix3 NormalMatrix = new Matrix3(v.ModelViewMatrix);
+                Matrix3 NormalMatrix = new Matrix3(m.ModelViewMatrix);
                 NormalMatrix.Invert();
                 NormalMatrix.Transpose();
                 GL.UniformMatrix3(TempLocation, false, ref NormalMatrix);
@@ -337,7 +262,7 @@ namespace LED_Engine
             // Передаем шейдеру матрицу ModelViewProjection, если шейдер поддерживает это (должна быть 100% поддержка).
             TempLocation = shader.GetUniform("MVP");
             if (TempLocation != -1)
-                GL.UniformMatrix4(TempLocation, false, ref v.ModelViewProjectionMatrix);
+                GL.UniformMatrix4(TempLocation, false, ref m.ModelViewProjectionMatrix);
 
             // Передаем шейдеру позицию камеры, если шейдер поддерживает это.
             TempLocation = shader.GetUniform("CameraPos");

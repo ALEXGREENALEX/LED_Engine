@@ -31,8 +31,8 @@ vec2 ParallaxMapping(sampler2D HeightTexture, vec2 UV, vec3 ViewVector, float Sc
 //POM, based on: http://steps3d.narod.ru/tutorials/parallax-mapping-tutorial.html
 vec2 ParallaxOcclusionMapping(sampler2D HeightTexture, vec2 UV, vec3 ViewVector, float Scale)
 {
-	const float MinSteps  = 15.0;
-	const float MaxSteps  = 30.0;
+	const float MinSteps  = 10.0;
+	const float MaxSteps  = 20.0;
 	
 	float NumSteps = MaxSteps + ViewVector.z * (MinSteps - MaxSteps);
 	float Step = 1.0 / NumSteps;

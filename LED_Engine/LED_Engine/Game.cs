@@ -173,28 +173,33 @@ namespace LED_Engine
                 //    GL.PolygonMode(MaterialFace.Back, PolygonMode.Line);
                 //}
 
-                // Copy All Objects to DrawableObjects
-                DrawableObjects.Clear();
-                TransparentObjects.Clear();
+                // Copy All Meshes to DrawableObjects
+                List<Mesh> DrawableMeshes = new List<Mesh>();
+                List<Mesh> TransparentMeshes = new List<Mesh>();
 
-                DrawableObjects.AddRange(Objects);
-                foreach (var Model in Models.MODELS)
-                    DrawableObjects.AddRange(Model.Meshes);
-                if (Settings.Debug.Enabled && Settings.Debug.DrawDebugObjects)
-                    DrawableObjects.AddRange(DebugObjects);
+                for (int i = 0; i < Models.MODELS.Count; i++)
+                    if (Models.MODELS[i].Visible)
+                        DrawableMeshes.AddRange(Models.MODELS[i].Meshes);
+
+                //if (Settings.Debug.Enabled && Settings.Debug.DrawDebugObjects)
+                //    DrawableMeshes.AddRange(DebugObjects);
 
                 #region Сортируем прозрачные объекты
-                for (int i = 0; i < DrawableObjects.Count; i++)
+                for (int i = 0; i < DrawableMeshes.Count; i++)
                 {
-                    if (DrawableObjects[i].Material.Transparent)
+                    for (int j = 0; j < DrawableMeshes[i].Parts.Count; j++)
                     {
-                        TransparentObjects.Add(DrawableObjects[i]);
-                        DrawableObjects.RemoveAt(i);
-                        i--;
+                        if (DrawableMeshes[i].Parts[j].Material.Transparent)
+                        {
+                            TransparentMeshes.Add(DrawableMeshes[i]);
+                            DrawableMeshes.RemoveAt(i);
+                            i--;
+                            break;
+                        }
                     }
                 }
 
-                TransparentObjects.Sort(delegate(Mesh A, Mesh B)
+                TransparentMeshes.Sort(delegate(Mesh A, Mesh B)
                 {
                     return (B.Position - MainCamera.Position).Length.CompareTo((A.Position - MainCamera.Position).Length);
                 });
@@ -203,15 +208,8 @@ namespace LED_Engine
 
                 GL.Disable(EnableCap.AlphaTest);
                 GL.Disable(EnableCap.Blend);
-                foreach (Mesh v in DrawableObjects) // Draw Opaque
-                {
-                    if (v.Material.CullFace) // Отрисовка только тех сторон, что повернуты к камере
-                        GL.Enable(EnableCap.CullFace);
-                    else
-                        GL.Disable(EnableCap.CullFace);
-
+                foreach (Mesh v in DrawableMeshes) // Draw Opaque
                     Draw(v);
-                }
 
                 /*foreach (Mesh v in TransparentObjects) // Draw Transparent Objects
                 {
@@ -232,10 +230,13 @@ namespace LED_Engine
                 FBO.Draw_P2();
 
                 // Draw SkyBox to PostProcess FBO
-                GL.BindFramebuffer(FramebufferTarget.FramebufferExt, FBO.FBO_PP);
-                GL.Enable(EnableCap.CullFace);
-                GL.Enable(EnableCap.DepthTest);
-                Draw(SkyCube);
+                if (SkyBox != null)
+                {
+                    GL.BindFramebuffer(FramebufferTarget.FramebufferExt, FBO.FBO_PP);
+                    GL.Enable(EnableCap.CullFace);
+                    GL.Enable(EnableCap.DepthTest);
+                    Draw(SkyBox);
+                }
 
                 // Draw PostProcessed Result to Screen (FBO = 0)
                 FBO.Draw_PostPocess();
@@ -274,7 +275,7 @@ namespace LED_Engine
             if (KeybrdState[Key.Down])
                 MainCamera.AddRotation(0.0f, -camRotateSens);
 
-            SkyCube.Position = MainCamera.Position;
+            SkyBox.Position = MainCamera.Position;
 
             Angle += 0.02f * timeK;
             if (Angle > MathHelper.Pi * 2)

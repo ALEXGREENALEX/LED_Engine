@@ -31,11 +31,20 @@ namespace LED_Engine
                     S.EngineContent = EngineContent;
 
                     S.Name = xmlNode.SelectSingleNode("Name").InnerText;
-                    S.VS_File = Engine.CombinePaths(ShaderPath, xmlNode.SelectSingleNode("VertexShader").InnerText);
-                    S.FS_File = Engine.CombinePaths(ShaderPath, xmlNode.SelectSingleNode("FragmentShader").InnerText);
+                    S.VS_File = Engine.CombinePaths(ShaderPath, xmlNode.SelectSingleNode("Vertex").InnerText);
+                    S.FS_File = Engine.CombinePaths(ShaderPath, xmlNode.SelectSingleNode("Fragment").InnerText);
 
-                    if (xmlNode.SelectNodes("GeometryShader").Count > 0)
-                        S.GS_File = Engine.CombinePaths(ShaderPath, xmlNode.SelectSingleNode("GeometryShader").InnerText);
+                    if (xmlNode.SelectNodes("Geometry").Count > 0)
+                        S.GS_File = Engine.CombinePaths(ShaderPath, xmlNode.SelectSingleNode("Geometry").InnerText);
+
+                    if (xmlNode.SelectNodes("TessControl").Count > 0)
+                        S.TCS_File = Engine.CombinePaths(ShaderPath, xmlNode.SelectSingleNode("TessControl").InnerText);
+
+                    if (xmlNode.SelectNodes("TessEvaluation").Count > 0)
+                        S.TES_File = Engine.CombinePaths(ShaderPath, xmlNode.SelectSingleNode("TessEvaluation").InnerText);
+
+                    if (xmlNode.SelectNodes("Compute").Count > 0)
+                        S.CS_File = Engine.CombinePaths(ShaderPath, xmlNode.SelectSingleNode("Compute").InnerText);
 
                     ShadersList.Add(S);
                 }
@@ -51,11 +60,20 @@ namespace LED_Engine
                     S.EngineContent = EngineContent;
 
                     S.Name = xmlNode.SelectSingleNode("Name").InnerText;
-                    S.VS_File = Engine.CombinePaths(ShaderPath, xmlNode.SelectSingleNode("VertexShader").InnerText);
-                    S.FS_File = Engine.CombinePaths(ShaderPath, xmlNode.SelectSingleNode("FragmentShader").InnerText);
+                    S.VS_File = Engine.CombinePaths(ShaderPath, xmlNode.SelectSingleNode("Vertex").InnerText);
+                    S.FS_File = Engine.CombinePaths(ShaderPath, xmlNode.SelectSingleNode("Fragment").InnerText);
 
-                    if (xmlNode.SelectNodes("GeometryShader").Count > 0)
-                        S.GS_File = Engine.CombinePaths(ShaderPath, xmlNode.SelectSingleNode("GeometryShader").InnerText);
+                    if (xmlNode.SelectNodes("Geometry").Count > 0)
+                        S.GS_File = Engine.CombinePaths(ShaderPath, xmlNode.SelectSingleNode("Geometry").InnerText);
+
+                    if (xmlNode.SelectNodes("TessControl").Count > 0)
+                        S.TCS_File = Engine.CombinePaths(ShaderPath, xmlNode.SelectSingleNode("TessControl").InnerText);
+
+                    if (xmlNode.SelectNodes("TessEvaluation").Count > 0)
+                        S.TES_File = Engine.CombinePaths(ShaderPath, xmlNode.SelectSingleNode("TessEvaluation").InnerText);
+
+                    if (xmlNode.SelectNodes("Compute").Count > 0)
+                        S.CS_File = Engine.CombinePaths(ShaderPath, xmlNode.SelectSingleNode("Compute").InnerText);
 
                     FBO.Shaders.Add(S);
                 }
@@ -90,8 +108,6 @@ namespace LED_Engine
                     SHADERS.Add(S);
                 }
 
-                S.UseCounter++;
-
                 // Проверка шейдера на ошибки
                 string InfoLog = GL.GetProgramInfoLog((int)(S.ProgramID));
                 if (InfoLog.Trim() != String.Empty)
@@ -100,9 +116,10 @@ namespace LED_Engine
                     Log.WriteLine(InfoLog);
                 }
 
+                S.UseCounter++;
                 return S;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Log.WriteLineRed("Shaders.Load() Exception, Name: \"{0}\"", Name);
                 Log.WriteLineYellow("Message: \n", e.Message);
@@ -128,60 +145,48 @@ namespace LED_Engine
 
         public static void Unload(string Name)
         {
-            Unload(GetShader(Name).ProgramID);
+            Unload(GetShader(Name));
         }
 
         public static void Unload(uint ProgramID)
         {
-            try
-            {
-                Shader S = GetShader(ProgramID);
-                if (S != null)
-                {
-                    S.UseCounter--;
+            Unload(GetShader(ProgramID));
+        }
 
-                    if (S.UseCounter == 0)
-                    {
-                        S.Free();
-                        if (!S.EngineContent)
-                            SHADERS.Remove(S);
-                    }
-                }
-            }
-            catch
+        public static void Unload(Shader S)
+        {
+            if (S != null)
             {
-                Log.WriteLineRed("Shaders.Delete() Exception, ProgramID: \"{0}\"", ProgramID);
+                S.UseCounter--;
+
+                if (S.UseCounter == 0)
+                {
+                    S.Free();
+                    SHADERS.Remove(S);
+                }
             }
         }
 
         public static void Free(bool WithEngineContent = false)
         {
-            try
+            if (WithEngineContent)
             {
-                if (WithEngineContent)
-                {
-                    foreach (var i in SHADERS)
-                        i.Free();
+                foreach (var i in SHADERS)
+                    i.Free();
 
-                    SHADERS.Clear();
-                    ShadersList.Clear();
-                }
-                else
-                {
-                    int Count = SHADERS.Count;
-                    for (int i = 0; i < Count; i++)
-                        if (!SHADERS[i].EngineContent)
-                        {
-                            SHADERS[i].Free();
-                            SHADERS.RemoveAt(i);
-                            Count--;
-                        }
-                }
+                SHADERS.Clear();
+                ShadersList.Clear();
             }
-            catch (Exception e)
+            else
             {
-                Log.WriteLineRed("Shaders.Free() Exception.");
-                Log.WriteLineYellow(e.Message);
+                int Count = SHADERS.Count;
+                for (int i = 0; i < Count; i++)
+                    if (!SHADERS[i].EngineContent)
+                    {
+                        SHADERS[i].Free();
+                        SHADERS.RemoveAt(i);
+                        Count--;
+                    }
             }
         }
     }
@@ -233,20 +238,31 @@ namespace LED_Engine
 
     public class Shader
     {
-        const string StrTextureUnit = "TextureUnit"; // In "FragmentShader.glsl" -> "uniform sampler2D TextureUnit..."
         public uint UseCounter = 0;
         public bool EngineContent = false;
 
-        public uint ProgramID = 0;
-        public uint VShaderID = 0;
-        public uint GShaderID = 0;
-        public uint FShaderID = 0;
-        public int AttributeCount = 0;
-        public int UniformCount = 0;
-        public string Name = String.Empty;
-        public string VS_File = String.Empty;
-        public string FS_File = String.Empty;
-        public string GS_File = String.Empty;
+        const string StrTextureUnit = "TextureUnit"; // In "FragmentShader.glsl" -> "uniform sampler2D TextureUnit..."
+
+        public uint
+            ProgramID = 0, //Shader program ID
+            VS_ID = 0, //Vertex Shader ID
+            FS_ID = 0, //Fragment Shader ID
+            GS_ID = 0, //Geometry Shader ID
+            TCS_ID = 0, //Tesselation Control Shader ID
+            TES_ID = 0, //Tesselation Evaluation Shader ID
+            CS_ID = 0; //Compute Shader ID
+
+        public int
+            AttributeCount = 0,
+            UniformCount = 0;
+
+        public string Name = String.Empty,
+            VS_File = String.Empty,
+            FS_File = String.Empty,
+            GS_File = String.Empty,
+            TCS_File = String.Empty,
+            TES_File = String.Empty,
+            CS_File = String.Empty;
 
         public List<AttributeInfo> Attributes = new List<AttributeInfo>();
         public List<UniformInfo> Uniforms = new List<UniformInfo>();
@@ -254,16 +270,27 @@ namespace LED_Engine
 
         public void LoadShader()
         {
+            Free();
+
             ProgramID = GL.CreateProgram();
 
-            string VSCode, FSCode;
-            string GSCode = String.Empty;
+            string VS_Code, FS_Code;
+            string GS_Code = String.Empty;
+            string TCS_Code = String.Empty;
+            string TES_Code = String.Empty;
+            string CS_Code = String.Empty;
 
-            VSCode = LoadShaderFromFile(VS_File, ShaderType.VertexShader);
-            FSCode = LoadShaderFromFile(FS_File, ShaderType.FragmentShader);
+            VS_Code = LoadShaderFromFile(VS_File, ShaderType.VertexShader);
+            FS_Code = LoadShaderFromFile(FS_File, ShaderType.FragmentShader);
 
             if (GS_File != String.Empty)
-                GSCode = LoadShaderFromFile(GS_File, ShaderType.GeometryShader);
+                GS_Code = LoadShaderFromFile(GS_File, ShaderType.GeometryShader);
+            if (TCS_File != String.Empty)
+                TCS_Code = LoadShaderFromFile(TCS_File, ShaderType.TessControlShader);
+            if (TES_File != String.Empty)
+                TES_Code = LoadShaderFromFile(TES_File, ShaderType.TessEvaluationShader);
+            if (CS_File != String.Empty)
+                CS_Code = LoadShaderFromFile(CS_File, ShaderType.ComputeShader);
 
             Link();
             GenBuffers();
@@ -277,22 +304,43 @@ namespace LED_Engine
                 Log.WriteLine(InfoLog);
 
                 Log.WriteLineYellow("Vertex shader code:");
-                Log.WriteWithLineNumbers(VSCode);
+                Log.WriteWithLineNumbers(VS_Code);
 
                 Log.WriteLineYellow("Fragment shader code:");
-                Log.WriteWithLineNumbers(FSCode);
+                Log.WriteWithLineNumbers(FS_Code);
 
                 if (GS_File != String.Empty)
                 {
                     Log.WriteLineYellow("Geometry shader code:");
-                    Log.WriteWithLineNumbers(GSCode);
+                    Log.WriteWithLineNumbers(GS_Code);
+                }
+
+                if (TCS_File != String.Empty)
+                {
+                    Log.WriteLineYellow("Tesselation Control shader code:");
+                    Log.WriteWithLineNumbers(TCS_Code);
+                }
+
+                if (TES_File != String.Empty)
+                {
+                    Log.WriteLineYellow("Tesselation Evaluation shader code:");
+                    Log.WriteWithLineNumbers(TES_Code);
+                }
+
+                if (CS_File != String.Empty)
+                {
+                    Log.WriteLineYellow("Compute shader code:");
+                    Log.WriteWithLineNumbers(CS_Code);
                 }
             }
             else
             {
-                VSCode = null;
-                FSCode = null;
-                GSCode = null;
+                VS_Code = null;
+                FS_Code = null;
+                GS_Code = null;
+                TCS_Code = null;
+                TES_Code = null;
+                CS_Code = null;
             }
             #endregion
         }
@@ -307,12 +355,27 @@ namespace LED_Engine
 
         void LoadShaderFromString(String code, ShaderType type)
         {
-            if (type == ShaderType.VertexShader)
-                loadShader(code, type, out VShaderID);
-            else if (type == ShaderType.FragmentShader)
-                loadShader(code, type, out FShaderID);
-            else if (type == ShaderType.GeometryShader)
-                loadShader(code, type, out GShaderID);
+            switch (type)
+            {
+                case ShaderType.VertexShader:
+                    loadShader(code, type, out VS_ID);
+                    break;
+                case ShaderType.FragmentShader:
+                    loadShader(code, type, out FS_ID);
+                    break;
+                case ShaderType.GeometryShader:
+                    loadShader(code, type, out GS_ID);
+                    break;
+                case ShaderType.TessControlShader:
+                    loadShader(code, type, out TCS_ID);
+                    break;
+                case ShaderType.TessEvaluationShader:
+                    loadShader(code, type, out TES_ID);
+                    break;
+                case ShaderType.ComputeShader:
+                    loadShader(code, type, out CS_ID);
+                    break;
+            }
         }
 
         string LoadShaderFromFile(String FileName, ShaderType type)
@@ -618,37 +681,41 @@ namespace LED_Engine
 
         public void Free()
         {
-            try
-            {
-                GL.DetachShader(ProgramID, VShaderID);
-                GL.DetachShader(ProgramID, GShaderID);
-                GL.DetachShader(ProgramID, FShaderID);
+            GL.DetachShader(ProgramID, VS_ID);
+            GL.DetachShader(ProgramID, FS_ID);
+            GL.DetachShader(ProgramID, GS_ID);
+            GL.DetachShader(ProgramID, TCS_ID);
+            GL.DetachShader(ProgramID, TES_ID);
+            GL.DetachShader(ProgramID, CS_ID);
 
-                GL.DeleteShader(VShaderID);
-                GL.DeleteShader(GShaderID);
-                GL.DeleteShader(FShaderID);
+            GL.DeleteShader(VS_ID);
+            GL.DeleteShader(FS_ID);
+            GL.DeleteShader(GS_ID);
+            GL.DeleteShader(TCS_ID);
+            GL.DeleteShader(TES_ID);
+            GL.DeleteShader(CS_ID);
 
-                GL.DeleteProgram(ProgramID);
+            GL.DeleteProgram(ProgramID);
 
-                for (int i = 0; i < Buffers.Count; i++)
-                    GL.DeleteBuffer(Buffers[i].Value);
+            for (int i = 0; i < Buffers.Count; i++)
+                GL.DeleteBuffer(Buffers[i].Value);
 
-                Attributes.Clear();
-                Uniforms.Clear();
-                AttributeCount = 0;
-                UniformCount = 0;
+            Attributes.Clear();
+            Buffers.Clear();
+            Uniforms.Clear();
 
-                VShaderID = 0;
-                GShaderID = 0;
-                FShaderID = 0;
-                ProgramID = 0;
+            AttributeCount = 0;
+            UniformCount = 0;
 
-                UseCounter = 0;
-            }
-            catch
-            {
-                Log.WriteLineRed("Shader.Free() Exception");
-            }
+            VS_ID = 0;
+            FS_ID = 0;
+            GS_ID = 0;
+            TCS_ID = 0;
+            TES_ID = 0;
+            CS_ID = 0;
+            ProgramID = 0;
+
+            UseCounter = 0;
         }
     }
 }

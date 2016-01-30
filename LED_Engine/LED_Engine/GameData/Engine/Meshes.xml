@@ -1,10 +1,18 @@
 <Meshes>
 	<Mesh>
-		<Name>PointLight</Name>
-		<File>PointLight.obj</File>
+		<Name>DebugAmbientLight</Name>
+		<File>DebugAmbientLight.obj</File>
 	</Mesh>
 	<Mesh>
-		<Name>Teapot</Name>
-		<File>Teapot.obj</File>
+		<Name>DebugDirectionalLight</Name>
+		<File>DebugDirectionalLight.obj</File>
+	</Mesh>
+	<Mesh>
+		<Name>DebugPointLight</Name>
+		<File>DebugPointLight.obj</File>
+	</Mesh>
+	<Mesh>
+		<Name>DebugSpotLight</Name>
+		<File>DebugSpotLight.obj</File>
 	</Mesh>
 </Meshes>

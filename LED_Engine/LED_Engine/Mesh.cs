@@ -32,7 +32,7 @@ namespace LED_Engine
                 {
                     Mesh M = new Mesh();
                     M.EngineContent = EngineContent;
-                    M.Name = xmlNode.SelectSingleNode("Name").InnerText;
+                    M.MeshName = xmlNode.SelectSingleNode("Name").InnerText;
                     M.FileName = Engine.CombinePaths(MeshPath, xmlNode.SelectSingleNode("File").InnerText);
 
                     MeshesList.Add(M);
@@ -47,7 +47,7 @@ namespace LED_Engine
             }
         }
 
-        public static Mesh GetMesh(string Name)
+        public static Mesh GetMeshByName(string Name)
         {
             foreach (var i in MESHES)
                 if (i.Name.GetHashCode() == Name.GetHashCode())
@@ -55,48 +55,81 @@ namespace LED_Engine
             return null;
         }
 
-        public static Mesh LoadMesh(string Name, bool UseSmoothingGroups = false)
+        public static Mesh GetMeshByMeshName(string MeshName)
+        {
+            foreach (var i in MESHES)
+                if (i.MeshName.GetHashCode() == MeshName.GetHashCode())
+                    return i;
+            return null;
+        }
+
+        public static Mesh GetMeshByFile(string FileName)
+        {
+            foreach (var i in MESHES)
+                if (i.FileName.GetHashCode() == FileName.GetHashCode())
+                    return i;
+            return null;
+        }
+
+        public static Mesh Load(string Name, string MeshName)
         {
             try
             {
-                Mesh M = GetMesh(Name);
+                Mesh M = GetMeshByName(Name);
 
                 if (M == null)
                 {
-                    foreach (var i in MeshesList)
-                        if (i.Name.GetHashCode() == Name.GetHashCode())
-                            M = i;
+                    M = GetMeshByMeshName(MeshName);
                     if (M == null)
-                        return null;
-                }
+                    {
+                        foreach (var v in MeshesList)
+                        {
+                            if (v.MeshName.GetHashCode() == MeshName.GetHashCode())
+                            {
+                                M = new Mesh(v);
+                                M.Load();
+                                break;
+                            }
+                        }
 
-                if (M.UseCounter == 0)
-                {
-                    Materials.Load(M.Material.Name);
-                    MESHES.Add(M);
+                        if (M == null)
+                            return null;
+                    }
+                    else
+                    {
+                        M = new Mesh(M);
+                        M.Name = Name;
+                        for (int i = 0; i < M.Parts.Count; i++)
+                            Materials.Unload(M.Parts[i].Material);
+                    }
                 }
 
                 M.UseCounter++;
                 return M;
             }
-            catch
+            catch (Exception e)
             {
                 Log.WriteLineRed("Meshes.LoadMesh() Exception, Name: \"{0}\"", Name);
+                Log.WriteLineYellow(e.Message);
                 return null;
             }
         }
 
         public static void Unload(string Name)
         {
-            Mesh M = GetMesh(Name);
+            Unload(GetMeshByName(Name));
+        }
+
+        public static void Unload(Mesh M)
+        {
             if (M != null)
             {
                 M.UseCounter--;
 
                 if (M.UseCounter == 0)
                 {
-                    if (!M.EngineContent)
-                        MESHES.Remove(M);
+                    M.Free();
+                    MESHES.Remove(M);
                 }
             }
         }
@@ -107,6 +140,9 @@ namespace LED_Engine
             {
                 if (WithEngineContent)
                 {
+                    for (int i = 0; i < MESHES.Count; i++)
+                        MESHES[i].Free();
+
                     MESHES.Clear();
                     MeshesList.Clear();
                 }
@@ -116,6 +152,7 @@ namespace LED_Engine
                     for (int i = 0; i < Count; i++)
                         if (!MESHES[i].EngineContent)
                         {
+                            MESHES[i].Free();
                             MESHES.RemoveAt(i);
                             Count--;
                         }
@@ -135,7 +172,6 @@ namespace LED_Engine
         public int[] VT = new int[3];
         public int[] VN = new int[3];
         public int MaterialID = -1;
-        public int Index = 0;
         public UInt32 SmoothingGroup = 0;
 
         public int V0
@@ -387,6 +423,15 @@ namespace LED_Engine
 
     public class Mesh
     {
+        public uint UseCounter = 0;
+        public bool EngineContent = false;
+
+        public string Name = String.Empty;
+        public string MeshName = String.Empty;
+        public string FileName = String.Empty;
+        public bool Visible = true;
+        public List<MeshPart> Parts = new List<MeshPart>();
+
         public Vector3 Position = Vector3.Zero;
         public Vector3 Rotation = Vector3.Zero;
         public Vector3 Scale = Vector3.One;
@@ -395,9 +440,60 @@ namespace LED_Engine
         public Matrix4 ModelViewMatrix = Matrix4.Identity;
         public Matrix4 ModelViewProjectionMatrix = Matrix4.Identity;
 
-        public BoundingBox BoundingBox;
-        public BoundingSphere BoundingSphere;
+        public Mesh()
+        {
+        }
 
+        public Mesh(Mesh Original)
+        {
+            Name = Original.Name + "_c";
+            MeshName = Original.MeshName;
+            FileName = Original.FileName;
+
+            Position = Original.Position;
+            Rotation = Original.Rotation;
+            Scale = Original.Scale;
+
+            for (int i = 0; i < Original.Parts.Count; i++)
+                Parts.Add(new MeshPart(Original.Parts[i]));
+        }
+
+        public void Load()
+        {
+            try
+            {
+                Free();
+
+                Parts.AddRange(MeshPart.LoadFromFile(FileName));
+            }
+            catch (Exception e)
+            {
+                Log.WriteLineRed("Mesh.Load() Exception:");
+                Log.WriteLineYellow("Error in Mesh(Name):\"{0}\" with MeshName: \"{1}\", File: \"{2}\"", Name, MeshName, FileName);
+                Log.WriteLineYellow(e.Message);
+            }
+        }
+
+        public void Free()
+        {
+            for (int i = 0; i < Parts.Count; i++)
+                Parts[i].Free();
+
+            Parts.Clear();
+
+            UseCounter = 0;
+        }
+
+        public void CalculateMatrices(Camera Camera)
+        {
+            ModelMatrix = Matrix4.CreateScale(Scale) * Matrix4.CreateRotationX(Rotation.X) * Matrix4.CreateRotationY(Rotation.Y) * Matrix4.CreateRotationZ(Rotation.Z) * Matrix4.CreateTranslation(Position);
+            ModelViewMatrix = ModelMatrix * Camera.GetViewMatrix();
+            ModelViewProjectionMatrix = ModelViewMatrix * Camera.GetProjectionMatrix();
+        }
+    }
+
+    public class MeshPart
+    {
         public int IndexBufferID, VertexBufferID, NormalBufferID, UVBufferID, TangentBufferID;
 
         public Vector3[] Vertexes, Normals, Tangents;
@@ -406,16 +502,14 @@ namespace LED_Engine
 
         public Material Material;
 
-        public string Name = String.Empty;
-        public string FileName = String.Empty;
-        public uint UseCounter = 0;
-        public bool EngineContent = false;
+        public BoundingBox BoundingBox;
+        public BoundingSphere BoundingSphere;
 
-        public Mesh()
+        public MeshPart()
         {
         }
 
-        public Mesh(Mesh Original, string Material = null)
+        public MeshPart(MeshPart Original)
         {
             Indexes = new int[Original.Indexes.Length];
             Vertexes = new Vector3[Original.Vertexes.Length];
@@ -429,24 +523,10 @@ namespace LED_Engine
             Original.UVs.CopyTo(UVs, 0);
             Original.Tangents.CopyTo(Tangents, 0);
 
-            if (Material == null)
-            {
-                this.Material = Original.Material;
-                if (this.Material != null)
-                    this.Material.UseCounter++;
-            }
-            else
-                this.Material = Materials.Load(Material);
+            this.Material = Materials.Load(Original.Material.Name);
 
-            Name = Original.Name;
-            FileName = Original.FileName;
-
-            Position = Original.Position;
-            Rotation = Original.Rotation;
-            Scale = Original.Scale;
-
-            BoundingBox = new BoundingBox(Original.BoundingBox);
-            BoundingSphere = new BoundingSphere(Original.BoundingSphere);
+            this.BoundingBox = new BoundingBox(Original.BoundingBox);
+            this.BoundingSphere = new BoundingSphere(Original.BoundingSphere);
 
             GenBuffers();
             BindBuffers();
@@ -510,15 +590,10 @@ namespace LED_Engine
             UVs = null;
             Tangents = null;
 
-            BoundingBox = null;
-            BoundingSphere = null;
-        }
+            Materials.Unload(Material.Name);
 
-        public void CalculateMatrices(Camera Camera)
-        {
-            ModelMatrix = Matrix4.CreateScale(Scale) * Matrix4.CreateRotationX(Rotation.X) * Matrix4.CreateRotationY(Rotation.Y) * Matrix4.CreateRotationZ(Rotation.Z) * Matrix4.CreateTranslation(Position);
-            ModelViewMatrix = ModelMatrix * Camera.GetViewMatrix();
-            ModelViewProjectionMatrix = ModelViewMatrix * Camera.GetProjectionMatrix();
+            this.BoundingBox = null;
+            this.BoundingSphere = null;
         }
 
         static void ComputeTangentBasis(Vector3[] Vertices, Vector3[] Normals, Vector2[] UVs, out Vector3[] Tangents)
@@ -576,12 +651,12 @@ namespace LED_Engine
             }
             catch (Exception e)
             {
-                Log.WriteLineRed("Mesh.ComputeTangentBasis() Exception.");
+                Log.WriteLineRed("MeshPart.ComputeTangentBasis() Exception.");
                 Log.WriteLineYellow(e.Message);
             }
         }
 
-        static void SmoothNormals(ref List<Face> Faces, ref List<Vector3> Normals)
+        static void ReSmoothNormals(ref List<Face> Faces, ref List<Vector3> Normals)
         {
             try
             {
@@ -657,7 +732,7 @@ namespace LED_Engine
             }
             catch (Exception e)
             {
-                Log.WriteLineRed("ObjVolume.SmoothNormals() Exception:");
+                Log.WriteLineRed("MeshPart.SmoothNormals() Exception:");
                 Log.WriteLineYellow("Message: \"{0}\"\n" + e.Message);
             }
         }
@@ -666,7 +741,6 @@ namespace LED_Engine
         {
             float pX = 0.0f, pY = 0.0f, pZ = 0.0f;
             float nX = Vertexes[0].X, nY = Vertexes[0].Y, nZ = Vertexes[0].X;
-
             for (int i = 0; i < Vertexes.Length; i++)
             {
                 pX = Math.Max(pX, Vertexes[i].X);
@@ -692,33 +766,32 @@ namespace LED_Engine
             this.BoundingSphere = new BoundingSphere(Min, Max);
         }
 
-        public static Mesh LoadFromFile(string Name, string FileName, bool UseSmoothingGroups = false)
+        public static MeshPart[] LoadFromFile(string FileName, bool UseSmoothingGroups = false)
         {
-            Mesh obj = null;
+            MeshPart[] obj = null;
             try
             {
-                obj = LoadFromString(Name, File.ReadAllText(FileName), UseSmoothingGroups);
-                obj.FileName = FileName;
+                obj = LoadFromString(File.ReadAllText(FileName), UseSmoothingGroups);
             }
             catch (FileNotFoundException e)
             {
-                Log.WriteLineRed("Mesh.LoadFromFile() FileNotFoundException:");
+                Log.WriteLineRed("MeshPart.LoadFromFile() FileNotFoundException:");
                 Log.WriteLineYellow("File not found: \"{0}\"\n\"{1}\"", FileName, e.Message);
             }
             catch (Exception e)
             {
-                Log.WriteLineRed("Mesh.LoadFromFile() Exception:");
+                Log.WriteLineRed("MeshPart.LoadFromFile() Exception:");
                 Log.WriteLineYellow("Error in file: \"{0}\"\n\"{1}\"", FileName, e.Message);
             }
             return obj;
         }
 
-        public static Mesh LoadFromString(string Name, string obj, bool UseSmoothingGroups = false)
+        public static MeshPart[] LoadFromString(string obj, bool UseSmoothingGroups = false)
         {
             try
             {
                 List<string> Lines = new List<string>(obj.Split('\n'));
-                Dictionary<string, int> Materials = new Dictionary<string, int>();
+                Dictionary<string, int> MP_Materials = new Dictionary<string, int>();
                 UInt32 CurrentSmoothingGroup = 0;
                 int CurrentMaterial = 0;
 
@@ -757,7 +830,7 @@ namespace LED_Engine
                 #endregion
 
                 // Списки для хранения данных модели
-                List<Vector3> Vertices = new List<Vector3>();
+                List<Vector3> Vertexes = new List<Vector3>();
                 List<Vector3> Normals = new List<Vector3>();
                 List<Vector2> UVs = new List<Vector2>();
                 List<Face> Faces = new List<Face>();
@@ -781,7 +854,7 @@ namespace LED_Engine
                                         float x = float.Parse(lineparts[1]) * Settings.UnitsScale;
                                         float y = float.Parse(lineparts[2]) * Settings.UnitsScale;
                                         float z = float.Parse(lineparts[3]) * Settings.UnitsScale;
-                                        Vertices.Add(new Vector3(x, y, z));
+                                        Vertexes.Add(new Vector3(x, y, z));
                                     }
                                 }
                                 catch
@@ -846,7 +919,7 @@ namespace LED_Engine
                                                 if (FaceV_Index > 0)
                                                     Face.V[j] = FaceV_Index - 1;
                                                 else if (FaceV_Index < 0)
-                                                    Face.V[j] = Vertices.Count + FaceV_Index;
+                                                    Face.V[j] = Vertexes.Count + FaceV_Index;
                                                 break;
 
                                             case 2: // "v/vt"
@@ -854,7 +927,7 @@ namespace LED_Engine
                                                 if (FaceV_Index > 0)
                                                     Face.V[j] = FaceV_Index - 1;
                                                 else if (FaceV_Index < 0)
-                                                    Face.V[j] = Vertices.Count + FaceV_Index;
+                                                    Face.V[j] = Vertexes.Count + FaceV_Index;
 
                                                 FaceVT_Index = int.Parse(FaceParams[1]);
                                                 if (FaceVT_Index > 0)
@@ -870,7 +943,7 @@ namespace LED_Engine
                                                     if (FaceV_Index > 0)
                                                         Face.V[j] = FaceV_Index - 1;
                                                     else if (FaceV_Index < 0)
-                                                        Face.V[j] = Vertices.Count + FaceV_Index;
+                                                        Face.V[j] = Vertexes.Count + FaceV_Index;
 
                                                     FaceVN_Index = int.Parse(FaceParams[2]);
                                                     if (FaceVN_Index > 0)
@@ -884,7 +957,7 @@ namespace LED_Engine
                                                     if (FaceV_Index > 0)
                                                         Face.V[j] = FaceV_Index - 1;
                                                     else if (FaceV_Index < 0)
-                                                        Face.V[j] = Vertices.Count + FaceV_Index;
+                                                        Face.V[j] = Vertexes.Count + FaceV_Index;
 
                                                     FaceVT_Index = int.Parse(FaceParams[1]);
                                                     if (FaceVT_Index > 0)
@@ -923,12 +996,12 @@ namespace LED_Engine
 
                             case "usemtl":
                                 #region Material
-                                if (Materials.ContainsKey(lineparts[1]))
-                                    CurrentMaterial = Materials[lineparts[1]];
+                                if (MP_Materials.ContainsKey(lineparts[1]))
+                                    CurrentMaterial = MP_Materials[lineparts[1]];
                                 else
                                 {
-                                    Materials.Add(lineparts[1], Materials.Count);
-                                    CurrentMaterial = Materials.Count - 1;
+                                    MP_Materials.Add(lineparts[1], MP_Materials.Count);
+                                    CurrentMaterial = MP_Materials.Count - 1;
                                 }
                                 #endregion
                                 break;
@@ -941,21 +1014,13 @@ namespace LED_Engine
                 if (UVs.Count == 0)
                     UVs.Add(new Vector2());
 
-                // Создаем ObjVolume
-                Mesh vol = new Mesh();
-                vol.Name = Name;
-                vol.Vertexes = new Vector3[Faces.Count * 3];
-                vol.UVs = new Vector2[Faces.Count * 3];
-                vol.Normals = new Vector3[Faces.Count * 3];
-                vol.Indexes = new int[Faces.Count * 3];
-
-                #region If need Calc Normals
+                #region If (NormalsCount = 0) -> Calc Normals
                 if (Normals.Count == 0)
                 {
                     for (int i = 0; i < Faces.Count; i++)
                     {
-                        Vector3 U = Vertices[Faces[i].V1] - Vertices[Faces[i].V0];
-                        Vector3 V = Vertices[Faces[i].V2] - Vertices[Faces[i].V0];
+                        Vector3 U = Vertexes[Faces[i].V1] - Vertexes[Faces[i].V0];
+                        Vector3 V = Vertexes[Faces[i].V2] - Vertexes[Faces[i].V0];
                         Normals.Add(Vector3.Cross(U, V));
                         Faces[i].VN0 = i;
                         Faces[i].VN1 = i;
@@ -966,47 +1031,74 @@ namespace LED_Engine
 
                 // Если нужно, используем группы сглаживания
                 if (UseSmoothingGroups)
-                    SmoothNormals(ref Faces, ref Normals);
+                    ReSmoothNormals(ref Faces, ref Normals);
 
-                for (int i = 0; i < Faces.Count * 3; i++)
+                // Sort Faces by MaterialID
+                Faces.Sort(delegate(Face A, Face B)
                 {
-                    Face F = Faces[i / 3];
+                    return A.MaterialID.CompareTo(B.MaterialID);
+                });
 
-                    vol.Vertexes[i] = Vertices[F.V[i % 3]];
-                    vol.UVs[i] = UVs[F.VT[i % 3]];
-                    vol.Normals[i] = Normals[F.VN[i % 3]];
-                    vol.Indexes[i] = i;
+                MeshPart[] MeshParts = new MeshPart[Faces[Faces.Count - 1].MaterialID + 1];
+                for (int m = 0; m < MeshParts.Length; m++)
+                {
+                    MeshPart v = new MeshPart();
+                    List<Face> vFaces = new List<Face>();
+
+                    //Select faces with same MaterialID
+                    for (int i = 0; i < Faces.Count; i++)
+                        if (Faces[i].MaterialID == m)
+                            vFaces.Add(Faces[i]);
+
+                    v.Vertexes = new Vector3[vFaces.Count * 3];
+                    v.UVs = new Vector2[vFaces.Count * 3];
+                    v.Normals = new Vector3[vFaces.Count * 3];
+                    v.Indexes = new int[vFaces.Count * 3];
+
+                    for (int i = 0; i < vFaces.Count * 3; i++)
+                    {
+                        Face F = vFaces[i / 3];
+
+                        v.Vertexes[i] = Vertexes[F.V[i % 3]];
+                        v.UVs[i] = UVs[F.VT[i % 3]];
+                        v.Normals[i] = Normals[F.VN[i % 3]];
+                        v.Indexes[i] = i;
+                    }
+
+                    ComputeTangentBasis(v.Vertexes, v.Normals, v.UVs, out v.Tangents);
+
+                    v.GenBuffers();
+                    v.BindBuffers();
+
+                    v.CalcBoundingBox();
+                    v.CalcBoundingSphere();
+
+                    MeshParts[m] = v;
                 }
 
-                ComputeTangentBasis(vol.Vertexes, vol.Normals, vol.UVs, out vol.Tangents);
-                vol.CalcBoundingBox();
-                vol.CalcBoundingSphere();
-
-                vol.GenBuffers();
-                vol.BindBuffers();
-
                 //Cleanup
-                Vertices = null;
+                Vertexes = null;
                 UVs = null;
                 Normals = null;
                 Faces = null;
-                Materials = null;
-                return vol;
+                MP_Materials = null;
+
+                return MeshParts;
             }
             catch (Exception e)
             {
-                Log.WriteLineRed("Mesh.LoadFromString() Exception:");
+                Log.WriteLineRed("MeshPart.LoadFromString() Exception:");
                 Log.WriteLineYellow("Message: \"{0}\"", e.Message);
                 return null;
             }
         }
 
-        public static Mesh MakePlain(float Sides = 1.0f)
+        public static MeshPart MakePlain(float Sides = 1.0f)
         {
             return MakePlain(Sides, Sides);
         }
 
-        public static Mesh MakePlain(float SideA, float SideB)
+        public static MeshPart MakePlain(float SideA, float SideB)
         {
             if (SideA < 0.0f)
                 SideA = -SideA;
@@ -1016,8 +1108,7 @@ namespace LED_Engine
             float HalfA = SideA / 2.0f;
             float HalfB = SideB / 2.0f;
 
-            Mesh plain = new Mesh();
-            plain.Name = "Plain";
+            MeshPart plain = new MeshPart();
 
             #region Vertexes, Normals, UVs, Indexes
             plain.Vertexes = new Vector3[]
@@ -1054,21 +1145,21 @@ namespace LED_Engine
 
             ComputeTangentBasis(plain.Vertexes, plain.Normals, plain.UVs, out plain.Tangents);
 
-            plain.CalcBoundingBox();
-            plain.CalcBoundingSphere();
-
             plain.GenBuffers();
             plain.BindBuffers();
+
+            plain.CalcBoundingBox();
+            plain.CalcBoundingSphere();
 
             return plain;
         }
 
-        public static Mesh MakeBox(float Sides = 1.0f, bool FlipPolygons = false)
+        public static MeshPart MakeBox(float Sides = 1.0f, bool FlipPolygons = false)
         {
             return MakeBox(Sides, Sides, Sides, FlipPolygons);
         }
 
-        public static Mesh MakeBox(float SideA, float SideB, float SideC, bool FlipPolygons = false)
+        public static MeshPart MakeBox(float SideA, float SideB, float SideC, bool FlipPolygons = false)
         {
             if (SideA < 0.0f)
                 SideA = -SideA;
@@ -1081,8 +1172,7 @@ namespace LED_Engine
             float HalfB = SideB / 2.0f;
             float HalfC = SideC / 2.0f;
 
-            Mesh box = new Mesh();
-            box.Name = "Box";
+            MeshPart box = new MeshPart();
 
             #region Vertexes, Normals, UVs, Indexes
             if (FlipPolygons)
@@ -1348,32 +1438,33 @@ namespace LED_Engine
             #endregion
 
             ComputeTangentBasis(box.Vertexes, box.Normals, box.UVs, out box.Tangents);
-            box.CalcBoundingBox();
-            box.CalcBoundingSphere();
 
             box.GenBuffers();
             box.BindBuffers();
 
+            box.CalcBoundingBox();
+            box.CalcBoundingSphere();
+
             return box;
         }
 
-        // Classes
-        class FacePart
+        // Classes and structures
+        struct FacePart
         {
-            public int V = 0, VN = 0;
-            public UInt32 SmoothingGroup = 0;
-
-            public FacePart()
-            {
-            }
+            public int V, VN;
+            public UInt32 SmoothingGroup;
 
             public FacePart(int V)
             {
                 this.V = V;
+                this.VN = 0;
+                SmoothingGroup = 0;
             }
 
             public FacePart(UInt32 SmoothingGroup)
             {
+                this.V = 0;
+                this.VN = 0;
                 this.SmoothingGroup = SmoothingGroup;
             }
 
@@ -1381,6 +1472,7 @@ namespace LED_Engine
             {
                 this.V = V;
                 this.VN = VN;
+                SmoothingGroup = 0;
             }
 
             public FacePart(int V, int VN, UInt32 SmoothingGroup)

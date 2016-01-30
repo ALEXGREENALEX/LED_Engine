@@ -27,13 +27,23 @@ namespace LED_Engine
 
         public static void Free(bool WithEngineContent = false)
         {
-            try
+            if (WithEngineContent)
             {
-                Log.WriteLineRed("Models.Free() DODELAT'!!!!!!!!!!!!");
+                for (int i = 0; i < MODELS.Count; i++)
+                    MODELS[i].Free();
+
+                MODELS.Clear();
             }
-            catch
+            else
             {
-                Log.WriteLineRed("Models.Free() Exception.");
+                int Count = MODELS.Count;
+                for (int i = 0; i < Count; i++)
+                    if (!MODELS[i].EngineContent)
+                    {
+                        MODELS[i].Free();
+                        MODELS.RemoveAt(i);
+                        Count--;
+                    }
             }
         }
     }
@@ -42,5 +52,15 @@ namespace LED_Engine
     {
         public string Name = String.Empty;
         public List<Mesh> Meshes = new List<Mesh>();
+        public bool Visible = true;
+
+        public uint UseCounter = 0;
+        public bool EngineContent = false;
+
+        public void Free()
+        {
+            for (int i = 0; i < Meshes.Count; i++)
+                Meshes[i].Free();
+        }
     }
 }

@@ -52,8 +52,7 @@ namespace LED_Engine
                     FBO.Init(FB_Width, FB_Height);
 
                     Engine.LoadEngineContent();
-                    LoadResourcesFromMap_FAKE();
-                    InitProgram();
+                    Maps.LoadMap("SampleMap");
 
                     GLContextIsLoaded = true;
                 }

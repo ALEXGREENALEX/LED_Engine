@@ -31,7 +31,6 @@ namespace LED_Engine
 
                     #region Parse
                     material.Name = xmlNode.SelectSingleNode("Name").InnerText;
-
                     material.EngineContent = EngineContent;
 
                     #region Shaders
@@ -242,6 +241,14 @@ namespace LED_Engine
             }
         }
 
+        public static Material GetMaterial(string Name)
+        {
+            foreach (var i in MATERIALS)
+                if (i.Name.GetHashCode() == Name.GetHashCode())
+                    return i;
+            return null;
+        }
+
         public static Material Load(string Name)
         {
             try
@@ -250,9 +257,9 @@ namespace LED_Engine
 
                 if (M == null)
                 {
-                    foreach (var i in MaterialsList)
-                        if (i.Name.GetHashCode() == Name.GetHashCode())
-                            M = i;
+                    foreach (var v in MaterialsList)
+                        if (v.Name.GetHashCode() == Name.GetHashCode())
+                            M = v;
                     if (M == null)
                         return null;
                 }
@@ -278,53 +285,45 @@ namespace LED_Engine
             }
         }
 
-        public static Material GetMaterial(string Name)
-        {
-            foreach (var i in MATERIALS)
-                if (i.Name.GetHashCode() == Name.GetHashCode())
-                    return i;
-            return null;
-        }
-
         public static void Unload(string Name)
         {
-            Material M = GetMaterial(Name);
+            Unload(GetMaterial(Name));
+        }
+
+        public static void Unload(Material M)
+        {
             if (M != null)
             {
                 M.UseCounter--;
 
                 if (M.UseCounter == 0)
                 {
-                    if (!M.EngineContent)
-                        MATERIALS.Remove(M);
+                    M.Free();
+                    MATERIALS.Remove(M);
                 }
             }
         }
 
         public static void Free(bool WithEngineContent = false)
         {
-            try
+            if (WithEngineContent)
             {
-                if (WithEngineContent)
-                {
-                    MATERIALS.Clear();
-                    MaterialsList.Clear();
-                }
-                else
-                {
-                    int Count = MATERIALS.Count;
-                    for (int i = 0; i < Count; i++)
-                        if (!MATERIALS[i].EngineContent)
-                        {
-                            MATERIALS.RemoveAt(i);
-                            Count--;
-                        }
-                }
+                for (int i = 0; i < MATERIALS.Count; i++)
+                    MATERIALS[i].Free();
+
+                MATERIALS.Clear();
+                MaterialsList.Clear();
             }
-            catch (Exception e)
+            else
             {
-                Log.WriteLineRed("Materials.Free() Exception.");
-                Log.WriteLineYellow(e.Message);
+                int Count = MATERIALS.Count;
+                for (int i = 0; i < Count; i++)
+                    if (!MATERIALS[i].EngineContent)
+                    {
+                        Materials.MATERIALS[i].Free();
+                        MATERIALS.RemoveAt(i);
+                        Count--;
+                    }
             }
         }
     }
@@ -341,8 +340,8 @@ namespace LED_Engine
 
         static Random R = new Random();
         public Vector4 Kd = new Vector4((float)R.NextDouble(), (float)R.NextDouble(), (float)R.NextDouble(), 1.0f);
-        public Vector3 Ks = new Vector3(1.0f);
-        public Vector3 Ka = new Vector3(1.0f);
+        public Vector3 Ks = new Vector3(0.2f);
+        public Vector3 Ka = new Vector3(0.1f);
         public Vector3 Ke = new Vector3(0.0f);
         public float Shininess = 50.0f;
 
@@ -368,21 +367,34 @@ namespace LED_Engine
         {
         }
 
-        public Material(Material OriginalMaterial)
+        public Material(Material Original)
         {
-            Shader = OriginalMaterial.Shader;
-            CullFace = OriginalMaterial.CullFace;
-            Transparent = OriginalMaterial.Transparent;
-            Ka = OriginalMaterial.Ka;
-            Kd = OriginalMaterial.Kd;
-            Ks = OriginalMaterial.Ks;
-            Ke = OriginalMaterial.Ke;
-            Shininess = OriginalMaterial.Shininess;
-            ReflectionFactor = OriginalMaterial.ReflectionFactor;
-            RefractiveIndex = OriginalMaterial.RefractiveIndex;
+            Shader = Shaders.Load(Original.Shader.Name);
 
-            Textures = new Texture[OriginalMaterial.Textures.Length];
-            OriginalMaterial.Textures.CopyTo(Textures, 0);
+            CullFace = Original.CullFace;
+            Transparent = Original.Transparent;
+            Ka = Original.Ka;
+            Kd = Original.Kd;
+            Ks = Original.Ks;
+            Ke = Original.Ke;
+            Shininess = Original.Shininess;
+            ReflectionFactor = Original.ReflectionFactor;
+            RefractiveIndex = Original.RefractiveIndex;
+
+            Textures = new Texture[Original.Textures.Length];
+            for (int i = 0; i < Textures.Length; i++)
+                if (Original.Textures[i] != null)
+                    Textures[i] = LED_Engine.Textures.Load(Original.Textures[i].Name);
+        }
+
+        public void Free()
+        {
+            Shaders.Unload(Shader);
+
+            for (int i = 0; i < Textures.Length; i++)
+                LED_Engine.Textures.Unload(Textures[i]);
+
+            UseCounter = 0;
         }
     }
 }

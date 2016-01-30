@@ -22,7 +22,7 @@ namespace LED_Engine
             Light L_Point = new Light(LightType.Point);
             Light L_Spot = new Light(LightType.Spot);
 
-            L_Amb.Diffuse = new Vector3(0.5f, 0.5f, 0.5f);
+            L_Amb.Diffuse = new Vector3(0.2f, 0.2f, 0.2f);
 
             L_Dir.Direction = new Vector3(0.0f, 1.0f, 0.0f);
             L_Dir.Diffuse = new Vector3(0.01f, 0.01f, 0.0f);

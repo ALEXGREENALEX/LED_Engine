@@ -1,0 +1,94 @@
+		Textures/CubemapTextures
+----------------------------------------
+
+Name:
+	string - Any unique name.
+
+[TextureCubemap] Dir:
+	string - Folder, not necessary, this folder contain 'File[]'.
+[TextureCubemap] File[]
+	string - {X+, X-, Y+, Y-, Z+, Z-} - 6 textures for Cubemap, see examples.
+
+[Texture2D] File
+	string - FileName to texture, see examples.
+	
+bool GenerateMipmap;
+
+MagFilter:
+	Nearest
+	Linear
+	LinearDetailSgis
+	LinearDetailAlphaSgis
+	LinearDetailColorSgis
+	LinearSharpenSgis
+	LinearSharpenAlphaSgis
+	LinearSharpenColorSgis
+	Filter4Sgis
+	PixelTexGenQCeilingSgix
+	PixelTexGenQRoundSgix
+	PixelTexGenQFloorSgix
+
+MinFilter:
+	Nearest
+	Linear
+	NearestMipmapNearest
+	LinearMipmapNearest
+	NearestMipmapLinear
+	LinearMipmapLinear
+	Filter4Sgis
+	LinearClipmapLinearSgix
+	PixelTexGenQCeilingSgix
+	PixelTexGenQRoundSgix
+	PixelTexGenQFloorSgix
+	NearestClipmapNearestSgix
+	NearestClipmapLinearSgix
+	LinearClipmapNearestSgix
+	
+TextureWrapS,
+TextureWrapT,
+TextureWrapR:
+	Clamp,
+	ClampToBorder,
+	ClampToBorderSgis,
+	ClampToEdge,
+	ClampToEdgeSgis,
+	MirroredRepeat,
+	Repeat
+
+TextureEnvMode:
+	Add,
+	Blend,
+	Combine,
+	Decal,
+	Modulate,
+	Replace,
+	ReplaceExt,
+	TextureEnvBiasSgix
+	
+[Texture2D] Size:
+	int - Width = Height
+	int, int  - Width, Height
+
+[TextureCubemap] Size:
+	int - for TextureCubemap
+	
+--------------------------------
+			Examples			
+--------------------------------
+<Texture>
+	<Name>Wall</Name>
+	<File>Wall.png</File>
+</Texture>
+--------------------------------
+<CubemapTexture>
+	<Name>SkyCubemap_Default</Name>
+	<Dir>Test</Dir>
+	<File>posx.jpg</File>
+	<File>negx.jpg</File>
+	<File>posy.jpg</File>
+	<File>negy.jpg</File>
+	<File>posz.jpg</File>
+	<File>negz.jpg</File>
+	<Size>128</Size>
+</CubemapTexture>
+--------------------------------

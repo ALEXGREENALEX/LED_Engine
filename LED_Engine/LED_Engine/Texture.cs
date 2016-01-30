@@ -31,15 +31,20 @@ namespace LED_Engine
                     Texture texture = new Texture();
                     texture.EngineContent = EngineContent;
                     texture.TextureTarget = TextureTarget.Texture2D;
+                    texture.WrapS = TextureWrapMode.Repeat;
+                    texture.WrapT = TextureWrapMode.Repeat;
+                    texture.WrapR = TextureWrapMode.Repeat;
 
-                    string Name = xmlNode.SelectSingleNode("Name").InnerText;
-                    texture.Name = Name;
-
-                    string File = Engine.CombinePaths(TexturePath, xmlNode.SelectSingleNode("File").InnerText);
-                    texture.File = File;
+                    texture.Name = xmlNode.SelectSingleNode("Name").InnerText;
+                    texture.File = Engine.CombinePaths(TexturePath, xmlNode.SelectSingleNode("File").InnerText);
 
                     if (xmlNode.SelectNodes("GenerateMipmap").Count > 0)
                         texture.GenerateMipmap = Convert.ToBoolean(xmlNode.SelectSingleNode("GenerateMipmap").InnerText);
+
+                    if (texture.GenerateMipmap)
+                        texture.MinFilter = TextureMinFilter.LinearMipmapLinear;
+                    else
+                        texture.MinFilter = TextureMinFilter.Linear;
 
                     if (xmlNode.SelectNodes("MagFilter").Count > 0)
                     {
@@ -52,10 +57,47 @@ namespace LED_Engine
                         string StrMinFilter = xmlNode.SelectSingleNode("MinFilter").InnerText;
                         texture.MinFilter = (TextureMinFilter)Enum.Parse(typeof(TextureMinFilter), StrMinFilter, true);
                     }
-                    else
+
+
+                    if (xmlNode.SelectNodes("TextureWrapS").Count > 0)
                     {
-                        if (!texture.GenerateMipmap)
-                            texture.MinFilter = TextureMinFilter.Linear;
+                        string StrTextureWrapMode = xmlNode.SelectSingleNode("TextureWrapS").InnerText;
+                        texture.WrapS = (TextureWrapMode)Enum.Parse(typeof(TextureWrapMode), StrTextureWrapMode, true);
+                    }
+
+                    if (xmlNode.SelectNodes("TextureWrapT").Count > 0)
+                    {
+                        string StrTextureWrapMode = xmlNode.SelectSingleNode("TextureWrapT").InnerText;
+                        texture.WrapT = (TextureWrapMode)Enum.Parse(typeof(TextureWrapMode), StrTextureWrapMode, true);
+                    }
+
+                    if (xmlNode.SelectNodes("TextureWrapR").Count > 0)
+                    {
+                        string StrTextureWrapMode = xmlNode.SelectSingleNode("TextureWrapR").InnerText;
+                        texture.WrapR = (TextureWrapMode)Enum.Parse(typeof(TextureWrapMode), StrTextureWrapMode, true);
+                    }
+
+                    if (xmlNode.SelectNodes("TextureEnvMode").Count > 0)
+                    {
+                        string StrTextureEnvMode = xmlNode.SelectSingleNode("TextureEnvMode").InnerText;
+                        texture.EnvironmentMode = (TextureEnvMode)Enum.Parse(typeof(TextureEnvMode), StrTextureEnvMode, true);
+                    }
+
+                    if (xmlNode.SelectNodes("Size").Count > 0)
+                    {
+                        string[] Size = xmlNode.SelectSingleNode("Size").InnerText.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                        switch (Size.Length)
+                        {
+                            case 1:
+                                texture.Size.Width = Convert.ToInt32(Size[0]);
+                                texture.Size.Height = texture.Size.Width;
+                                break;
+                            case 2:
+                                texture.Size.Width = Convert.ToInt32(Size[0]);
+                                texture.Size.Height = Convert.ToInt32(Size[1]);
+                                break;
+                        }
                     }
 
                     TexturesList.Add(texture);
@@ -86,6 +128,9 @@ namespace LED_Engine
                     Texture texture = new Texture();
                     texture.EngineContent = EngineContent;
                     texture.TextureTarget = TextureTarget.TextureCubeMap;
+                    texture.WrapS = TextureWrapMode.ClampToEdge;
+                    texture.WrapT = TextureWrapMode.ClampToEdge;
+                    texture.WrapR = TextureWrapMode.ClampToEdge;
 
                     string Name = xmlNode.SelectSingleNode("Name").InnerText;
                     texture.Name = Name;
@@ -106,6 +151,11 @@ namespace LED_Engine
                     if (xmlNode.SelectNodes("GenerateMipmap").Count > 0)
                         texture.GenerateMipmap = Convert.ToBoolean(xmlNode.SelectSingleNode("GenerateMipmap").InnerText);
 
+                    if (texture.GenerateMipmap)
+                        texture.MinFilter = TextureMinFilter.LinearMipmapLinear;
+                    else
+                        texture.MinFilter = TextureMinFilter.Linear;
+
                     if (xmlNode.SelectNodes("MagFilter").Count > 0)
                     {
                         string StrMagFilter = xmlNode.SelectSingleNode("MagFilter").InnerText;
@@ -117,10 +167,40 @@ namespace LED_Engine
                         string StrMinFilter = xmlNode.SelectSingleNode("MinFilter").InnerText;
                         texture.MinFilter = (TextureMinFilter)Enum.Parse(typeof(TextureMinFilter), StrMinFilter, true);
                     }
-                    else
+
+                    if (xmlNode.SelectNodes("TextureWrapS").Count > 0)
                     {
-                        if (!texture.GenerateMipmap)
-                            texture.MinFilter = TextureMinFilter.Linear;
+                        string StrTextureWrapMode = xmlNode.SelectSingleNode("TextureWrapS").InnerText;
+                        texture.WrapS = (TextureWrapMode)Enum.Parse(typeof(TextureWrapMode), StrTextureWrapMode, true);
+                    }
+
+                    if (xmlNode.SelectNodes("TextureWrapT").Count > 0)
+                    {
+                        string StrTextureWrapMode = xmlNode.SelectSingleNode("TextureWrapT").InnerText;
+                        texture.WrapT = (TextureWrapMode)Enum.Parse(typeof(TextureWrapMode), StrTextureWrapMode, true);
+                    }
+
+                    if (xmlNode.SelectNodes("TextureWrapR").Count > 0)
+                    {
+                        string StrTextureWrapMode = xmlNode.SelectSingleNode("TextureWrapR").InnerText;
+                        texture.WrapR = (TextureWrapMode)Enum.Parse(typeof(TextureWrapMode), StrTextureWrapMode, true);
+                    }
+
+                    if (xmlNode.SelectNodes("TextureEnvMode").Count > 0)
+                    {
+                        string StrTextureEnvMode = xmlNode.SelectSingleNode("TextureEnvMode").InnerText;
+                        texture.EnvironmentMode = (TextureEnvMode)Enum.Parse(typeof(TextureEnvMode), StrTextureEnvMode, true);
+                    }
+
+                    if (xmlNode.SelectNodes("Size").Count > 0)
+                    {
+                        string SideSizeStr = xmlNode.SelectSingleNode("Size").InnerText;
+                        if (SideSizeStr.Trim().Length > 0)
+                        {
+                            int SideSize = Convert.ToInt32(SideSizeStr);
+                            texture.Size.Width = SideSize;
+                            texture.Size.Height = SideSize;
+                        }
                     }
 
                     TexturesList.Add(texture);
@@ -129,7 +209,7 @@ namespace LED_Engine
             }
             catch (Exception e)
             {
-                Log.WriteLineRed("Textures.LoadTexturesList() Exception.");
+                Log.WriteLineRed("Textures.LoadCubemapTexturesList() Exception.");
                 Log.WriteLineRed("XmlFile: \"{0}\", EngineContent: \"{1}\"", XmlFile, EngineContent);
                 Log.WriteLineYellow(e.Message);
             }
@@ -168,19 +248,14 @@ namespace LED_Engine
             {
                 switch (T.TextureTarget)
                 {
-                    case TextureTarget.Texture2D:
-                        T.Load_Texture2D();
-                        break;
-
                     case TextureTarget.TextureCubeMap:
                         T.Load_TextureCubemap();
                         break;
-
+                    case TextureTarget.Texture2D:
                     default:
                         T.Load_Texture2D();
                         break;
                 }
-
                 TEXTURES.Add(T);
             }
 
@@ -190,12 +265,16 @@ namespace LED_Engine
 
         public static void Unload(string Name)
         {
-            Unload(GetTexture(Name).ID);
+            Unload(GetTexture(Name));
         }
 
         public static void Unload(int ID)
         {
-            Texture T = GetTexture(ID);
+            Unload(GetTexture(ID));
+        }
+
+        public static void Unload(Texture T)
+        {
             if (T != null)
             {
                 T.UseCounter--;
@@ -203,40 +282,31 @@ namespace LED_Engine
                 if (T.UseCounter == 0)
                 {
                     T.Free();
-                    if (!T.EngineContent)
-                        TEXTURES.Remove(T);
+                    TEXTURES.Remove(T);
                 }
             }
         }
 
         public static void Free(bool WithEngineContent = false)
         {
-            try
+            if (WithEngineContent)
             {
-                if (WithEngineContent)
-                {
-                    foreach (var i in TEXTURES)
-                        i.Free();
+                foreach (var i in TEXTURES)
+                    i.Free();
 
-                    TEXTURES.Clear();
-                    TexturesList.Clear();
-                }
-                else
-                {
-                    int Count = TEXTURES.Count;
-                    for (int i = 0; i < Count; i++)
-                        if (!TEXTURES[i].EngineContent)
-                        {
-                            TEXTURES[i].Free();
-                            TEXTURES.RemoveAt(i);
-                            Count--;
-                        }
-                }
+                TEXTURES.Clear();
+                TexturesList.Clear();
             }
-            catch (Exception e)
+            else
             {
-                Log.WriteLineRed("Textures.Free() Exception.");
-                Log.WriteLineYellow(e.Message);
+                int Count = TEXTURES.Count;
+                for (int i = 0; i < Count; i++)
+                    if (!TEXTURES[i].EngineContent)
+                    {
+                        TEXTURES[i].Free();
+                        TEXTURES.RemoveAt(i);
+                        Count--;
+                    }
             }
         }
     }
@@ -254,6 +324,11 @@ namespace LED_Engine
         public string Name = String.Empty;
         public string File = String.Empty;
         public string[] CubemapFiles = new string[6];
+        public Size Size = Size.Empty; // For resize Cubemap textures
+        public TextureWrapMode WrapS = TextureWrapMode.ClampToEdge;
+        public TextureWrapMode WrapT = TextureWrapMode.ClampToEdge;
+        public TextureWrapMode WrapR = TextureWrapMode.ClampToEdge;
+        public TextureEnvMode EnvironmentMode = TextureEnvMode.Modulate; //Modulate - default value in OpenGL
 
         public void Load_Texture2D()
         {
@@ -273,6 +348,9 @@ namespace LED_Engine
         {
             try
             {
+                if (Size != Size.Empty)
+                    Image = new Bitmap(Image, Size);
+
                 Free();
 
                 ID = GL.GenTexture();
@@ -293,10 +371,10 @@ namespace LED_Engine
                 //Filter parameters
                 GL.TexParameter(TextureTarget, TextureParameterName.TextureMagFilter, (int)MagFilter);
                 GL.TexParameter(TextureTarget, TextureParameterName.TextureMinFilter, (int)MinFilter);
-                //GL.TexParameter(TextureTarget, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
-                //GL.TexParameter(TextureTarget, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
-                //GL.TexParameter(TextureTarget, TextureParameterName.TextureWrapR, (int)TextureWrapMode.ClampToEdge);
-                //GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (int)TextureEnvMode.Modulate);
+                GL.TexParameter(TextureTarget, TextureParameterName.TextureWrapS, (int)WrapS);
+                GL.TexParameter(TextureTarget, TextureParameterName.TextureWrapT, (int)WrapT);
+                GL.TexParameter(TextureTarget, TextureParameterName.TextureWrapR, (int)WrapR);
+                GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (int)EnvironmentMode);
 
                 if (GenerateMipmap)
                     GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
@@ -315,8 +393,6 @@ namespace LED_Engine
             {
                 if (CubemapFiles.Length == 6)
                 {
-                    Free();
-
                     Bitmap[] BMPs = new Bitmap[CubemapFiles.Length];
                     for (int i = 0; i < BMPs.Length; i++)
                         BMPs[i] = new Bitmap(CubemapFiles[i]);
@@ -330,7 +406,7 @@ namespace LED_Engine
             {
                 Log.WriteLineRed("Error: Cannot load CubemapTexture \"{0}\" from Files:", Name);
                 for (int i = 0; i < CubemapFiles.Length; i++)
-                    Log.WriteLine((ConsoleColor)(i+1), "File{0}: \"{1}\"", i, CubemapFiles[i]);
+                    Log.WriteLine((ConsoleColor)(i + 1), "File{0}: \"{1}\"", i, CubemapFiles[i]);
                 Log.WriteLineYellow(e.Message);
                 Free();
             }
@@ -345,12 +421,14 @@ namespace LED_Engine
                     Free();
 
                     ID = GL.GenTexture();
-                    //GL.ActiveTexture(TextureUnit.Texture0);
                     GL.BindTexture(TextureTarget, ID);
 
                     // Изменяем, отображаем и вращаем текстуры
                     for (int i = 0; i < CubemapTextures.Length; i++)
                     {
+                        if (Size != Size.Empty)
+                            CubemapTextures[i] = new Bitmap(CubemapTextures[i], Size);
+
                         if (i < 2 || i > 3)
                             CubemapTextures[i].RotateFlip(RotateFlipType.RotateNoneFlipX);
                         if (i == 2 || i == 3)
@@ -381,10 +459,10 @@ namespace LED_Engine
                     //Filter parameters
                     GL.TexParameter(TextureTarget, TextureParameterName.TextureMagFilter, (int)MagFilter);
                     GL.TexParameter(TextureTarget, TextureParameterName.TextureMinFilter, (int)MinFilter);
-                    GL.TexParameter(TextureTarget, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
-                    GL.TexParameter(TextureTarget, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
-                    GL.TexParameter(TextureTarget, TextureParameterName.TextureWrapR, (int)TextureWrapMode.ClampToEdge);
-                    GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (int)TextureEnvMode.Modulate);
+                    GL.TexParameter(TextureTarget, TextureParameterName.TextureWrapS, (int)WrapS);
+                    GL.TexParameter(TextureTarget, TextureParameterName.TextureWrapT, (int)WrapT);
+                    GL.TexParameter(TextureTarget, TextureParameterName.TextureWrapR, (int)WrapR);
+                    GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (int)EnvironmentMode);
 
                     if (GenerateMipmap)
                         GL.GenerateMipmap(GenerateMipmapTarget.TextureCubeMap);
@@ -402,9 +480,10 @@ namespace LED_Engine
 
         public void Free()
         {
-            GL.DeleteTexture(ID);
-            ID = 0;
-            UseCounter = 0;
+                GL.DeleteTexture(ID);
+                ID = 0;
+
+                UseCounter = 0;
         }
     }
 }

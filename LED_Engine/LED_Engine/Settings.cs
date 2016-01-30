@@ -45,14 +45,12 @@ namespace LED_Engine
             public static class ContentFiles
             {
                 public static string
-                    EngineMaps,
                     EngineMeshes,
                     EngineTextures,
                     EngineCubemapTextures,
                     EngineMaterials,
                     EngineShaders,
 
-                    Maps,
                     Meshes,
                     Textures,
                     CubemapTextures,

@@ -1,5 +1,9 @@
 <Meshes>
 	<Mesh>
+		<Name>Teapot</Name>
+		<File>Teapot.obj</File>
+	</Mesh>
+	<Mesh>
 		<Name>Keypad</Name>
 		<File>Keypad.obj</File>
 	</Mesh>

@@ -91,7 +91,7 @@ namespace LED_Engine
                 Settings.Paths.EngineContentPath = Engine.CombinePaths(Settings.Paths.GameDataPath, TempPathStr);
 
                 TempPathStr = Engine.FixPath(TempNode.SelectSingleNode("EngineMaps").InnerText);
-                Settings.Paths.EngineMaps = Engine.CombinePaths(Settings.Paths.GameDataPath, TempPathStr);
+                Settings.Paths.EngineMaps = Engine.CombinePaths(Settings.Paths.EngineContentPath, TempPathStr);
                 TempPathStr = Engine.FixPath(TempNode.SelectSingleNode("EngineMeshes").InnerText);
                 Settings.Paths.EngineMeshes = Engine.CombinePaths(Settings.Paths.EngineContentPath, TempPathStr);
                 TempPathStr = Engine.FixPath(TempNode.SelectSingleNode("EngineTextures").InnerText);
@@ -115,8 +115,6 @@ namespace LED_Engine
 
                 #region Определяем пути к "*.xml" с инф. про ресурсы
                 TempNode = XML.DocumentElement.SelectSingleNode("EngineContent");
-                TempPathStr = Engine.FixPath(TempNode.SelectSingleNode("Maps").InnerText);
-                Settings.Paths.ContentFiles.EngineMaps = Engine.CombinePaths(Settings.Paths.EngineContentPath, TempPathStr);
                 TempPathStr = Engine.FixPath(TempNode.SelectSingleNode("Textures").InnerText);
                 Settings.Paths.ContentFiles.EngineTextures = Engine.CombinePaths(Settings.Paths.EngineContentPath, TempPathStr);
                 TempPathStr = Engine.FixPath(TempNode.SelectSingleNode("CubemapTextures").InnerText);
@@ -129,8 +127,6 @@ namespace LED_Engine
                 Settings.Paths.ContentFiles.EngineShaders = Engine.CombinePaths(Settings.Paths.EngineContentPath, TempPathStr);
 
                 TempNode = XML.DocumentElement.SelectSingleNode("Content");
-                TempPathStr = Engine.FixPath(TempNode.SelectSingleNode("Maps").InnerText);
-                Settings.Paths.ContentFiles.Maps = Engine.CombinePaths(Settings.Paths.GameDataPath, TempPathStr);
                 TempPathStr = Engine.FixPath(TempNode.SelectSingleNode("Textures").InnerText);
                 Settings.Paths.ContentFiles.Textures = Engine.CombinePaths(Settings.Paths.GameDataPath, TempPathStr);
                 TempPathStr = Engine.FixPath(TempNode.SelectSingleNode("CubemapTextures").InnerText);
@@ -174,7 +170,6 @@ namespace LED_Engine
                 #region Paths
                 string[] Paths = new string[] { Settings.Paths.EngineContentPath, Settings.Paths.GameDataPath };
 
-                string[] MapsConfigs = new string[] { Settings.Paths.ContentFiles.EngineMaps, Settings.Paths.ContentFiles.Maps };
                 string[] MaterialsConfigs = new string[] { Settings.Paths.ContentFiles.EngineMaterials, Settings.Paths.ContentFiles.Materials };
                 string[] MeshesConfigs = new string[] { Settings.Paths.ContentFiles.EngineMeshes, Settings.Paths.ContentFiles.Meshes };
                 string[] ShadersConfigs = new string[] { Settings.Paths.ContentFiles.EngineShaders, Settings.Paths.ContentFiles.Shaders };
@@ -240,7 +235,7 @@ namespace LED_Engine
                     if (i == 0)
                         EngineContent = true;
 
-                    Maps.LoadMapList(MapsConfigs[i], MapsPaths[i], EngineContent);
+                    Maps.LoadMapList(MapsPaths[i], EngineContent);
                 }
                 #endregion
             }
@@ -265,9 +260,18 @@ namespace LED_Engine
                 if (i.EngineContent)
                     Materials.Load(i.Name);
 
-            //foreach (var i in Models.ModelsList)
-            //    if (i.EngineContent)
-            //        Models.Load(i.Name);
+            if (Settings.Debug.Enabled)
+            {
+                //DebugAmbientLight = Mesh.LoadFromFile("DebugAmbientLight", Engine.CombinePaths(Settings.Paths.EngineMeshes, "DebugAmbientLight.obj"));
+                //DebugDirectionalLight = Mesh.LoadFromFile("DebugDirectionalLight", Engine.CombinePaths(Settings.Paths.EngineMeshes, "DebugDirectionalLight.obj"));
+                //DebugPointLight = Mesh.LoadFromFile("DebugPointLight", Engine.CombinePaths(Settings.Paths.EngineMeshes, "DebugPointLight.obj"));
+                //DebugSpotLight = Mesh.LoadFromFile("DebugSpotLight", Engine.CombinePaths(Settings.Paths.EngineMeshes, "DebugSpotLight.obj"));
+
+                //DebugAmbientLight.Parts[0].Material = Materials.Load("DebugAmbientLight");
+                //DebugDirectionalLight.Parts[0].Material = Materials.Load("DebugDirectionalLight");
+                //DebugPointLight.Parts[0].Material = Materials.Load("DebugPointLight");
+                //DebugSpotLight.Parts[0].Material = Materials.Load("DebugSpotLight");
+            }
         }
 
         /// <summary>
