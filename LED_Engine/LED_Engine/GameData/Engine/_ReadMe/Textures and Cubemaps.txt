@@ -12,7 +12,9 @@ Name:
 [Texture2D] File
 	string - FileName to texture, see examples.
 	
-bool GenerateMipmap;
+bool Mipmaps;
+
+bool AnisotropicFiltering;
 
 MagFilter:
 	Nearest

@@ -117,7 +117,7 @@ namespace LED_Engine
                     xmlNode = XML.DocumentElement.SelectSingleNode("Fog");
 
                     if (xmlNode.SelectNodes("Enabled").Count > 0)
-                        Settings.Graphics.Fog.Enabled = Convert.ToBoolean(xmlNode.SelectSingleNode("Enabled").InnerText);
+                        Settings.Graphics.Fog.UseFogOnMap = Convert.ToBoolean(xmlNode.SelectSingleNode("Enabled").InnerText);
 
                     if (xmlNode.SelectNodes("Color").Count > 0)
                     {

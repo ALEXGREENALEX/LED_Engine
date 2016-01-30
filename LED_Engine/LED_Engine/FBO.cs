@@ -403,7 +403,7 @@ namespace LED_Engine
             TempLocation = Shaders[ShaderIndex_P2].GetUniform("FogMinMaxDistance");
             if (TempLocation != -1)
             {
-                if (Settings.Graphics.Fog.Enabled)
+                if (Settings.Graphics.Fog.Enabled && Settings.Graphics.Fog.UseFogOnMap)
                 {
                     GL.Uniform2(TempLocation, Settings.Graphics.Fog.MinDistance, Settings.Graphics.Fog.MaxDistance);
                     GL.Uniform3(Shaders[ShaderIndex_P2].GetUniform("FogColor"), Settings.Graphics.Fog.Color);

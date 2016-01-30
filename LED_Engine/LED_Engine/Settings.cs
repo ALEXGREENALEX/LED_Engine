@@ -123,6 +123,7 @@ namespace LED_Engine
             public static class Fog
             {
                 public static bool Enabled = true;
+                public static bool UseFogOnMap = false;
                 public static float MinDistance = 20f;
                 public static float MaxDistance = 80f;
                 public static Vector3 Color = new Vector3(0.5f, 0.5f, 0.5f);

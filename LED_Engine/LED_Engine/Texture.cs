@@ -38,10 +38,10 @@ namespace LED_Engine
                     texture.Name = xmlNode.SelectSingleNode("Name").InnerText;
                     texture.File = Engine.CombinePaths(TexturePath, xmlNode.SelectSingleNode("File").InnerText);
 
-                    if (xmlNode.SelectNodes("GenerateMipmap").Count > 0)
-                        texture.GenerateMipmap = Convert.ToBoolean(xmlNode.SelectSingleNode("GenerateMipmap").InnerText);
+                    if (xmlNode.SelectNodes("Mipmaps").Count > 0)
+                        texture.Mipmaps = Convert.ToBoolean(xmlNode.SelectSingleNode("Mipmaps").InnerText);
 
-                    if (texture.GenerateMipmap)
+                    if (texture.Mipmaps)
                         texture.MinFilter = TextureMinFilter.LinearMipmapLinear;
                     else
                         texture.MinFilter = TextureMinFilter.Linear;
@@ -58,6 +58,8 @@ namespace LED_Engine
                         texture.MinFilter = (TextureMinFilter)Enum.Parse(typeof(TextureMinFilter), StrMinFilter, true);
                     }
 
+                    if (xmlNode.SelectNodes("AnisotropicFiltering").Count > 0)
+                        texture.AnisotropicFiltering = Convert.ToBoolean(xmlNode.SelectSingleNode("AnisotropicFiltering").InnerText);
 
                     if (xmlNode.SelectNodes("TextureWrapS").Count > 0)
                     {
@@ -148,10 +150,10 @@ namespace LED_Engine
                     else
                         throw new Exception("Cubemap: \"" + Name + "\" Files count < 6!!!");
 
-                    if (xmlNode.SelectNodes("GenerateMipmap").Count > 0)
-                        texture.GenerateMipmap = Convert.ToBoolean(xmlNode.SelectSingleNode("GenerateMipmap").InnerText);
+                    if (xmlNode.SelectNodes("Mipmaps").Count > 0)
+                        texture.Mipmaps = Convert.ToBoolean(xmlNode.SelectSingleNode("Mipmaps").InnerText);
 
-                    if (texture.GenerateMipmap)
+                    if (texture.Mipmaps)
                         texture.MinFilter = TextureMinFilter.LinearMipmapLinear;
                     else
                         texture.MinFilter = TextureMinFilter.Linear;
@@ -167,6 +169,9 @@ namespace LED_Engine
                         string StrMinFilter = xmlNode.SelectSingleNode("MinFilter").InnerText;
                         texture.MinFilter = (TextureMinFilter)Enum.Parse(typeof(TextureMinFilter), StrMinFilter, true);
                     }
+
+                    if (xmlNode.SelectNodes("AnisotropicFiltering").Count > 0)
+                        texture.AnisotropicFiltering = Convert.ToBoolean(xmlNode.SelectSingleNode("AnisotropicFiltering").InnerText);
 
                     if (xmlNode.SelectNodes("TextureWrapS").Count > 0)
                     {
@@ -317,10 +322,11 @@ namespace LED_Engine
         public bool EngineContent = false;
 
         public int ID = 0;
-        public bool GenerateMipmap = true;
         public TextureTarget TextureTarget = TextureTarget.Texture2D;
         public TextureMagFilter MagFilter = TextureMagFilter.Linear;
         public TextureMinFilter MinFilter = TextureMinFilter.LinearMipmapLinear;
+        public bool AnisotropicFiltering = false;
+        public bool Mipmaps = true;
         public string Name = String.Empty;
         public string File = String.Empty;
         public string[] CubemapFiles = new string[6];
@@ -371,12 +377,19 @@ namespace LED_Engine
                 //Filter parameters
                 GL.TexParameter(TextureTarget, TextureParameterName.TextureMagFilter, (int)MagFilter);
                 GL.TexParameter(TextureTarget, TextureParameterName.TextureMinFilter, (int)MinFilter);
+
+                if (AnisotropicFiltering && Glfw.ExtensionSupported("GL_EXT_texture_filter_anisotropic"))
+                {
+                    int MaxAniso = GL.GetInteger((GetPName)ExtTextureFilterAnisotropic.MaxTextureMaxAnisotropyExt);
+                    GL.TexParameter(TextureTarget, (TextureParameterName)ExtTextureFilterAnisotropic.TextureMaxAnisotropyExt, MaxAniso);
+                }
+
                 GL.TexParameter(TextureTarget, TextureParameterName.TextureWrapS, (int)WrapS);
                 GL.TexParameter(TextureTarget, TextureParameterName.TextureWrapT, (int)WrapT);
                 GL.TexParameter(TextureTarget, TextureParameterName.TextureWrapR, (int)WrapR);
                 GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (int)EnvironmentMode);
 
-                if (GenerateMipmap)
+                if (Mipmaps)
                     GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
             }
             catch (Exception e)
@@ -459,12 +472,19 @@ namespace LED_Engine
                     //Filter parameters
                     GL.TexParameter(TextureTarget, TextureParameterName.TextureMagFilter, (int)MagFilter);
                     GL.TexParameter(TextureTarget, TextureParameterName.TextureMinFilter, (int)MinFilter);
+                    
+                    if (AnisotropicFiltering && Glfw.ExtensionSupported("GL_EXT_texture_filter_anisotropic"))
+                    {
+                        int MaxAniso = GL.GetInteger((GetPName)ExtTextureFilterAnisotropic.MaxTextureMaxAnisotropyExt);
+                        GL.TexParameter(TextureTarget, (TextureParameterName)ExtTextureFilterAnisotropic.TextureMaxAnisotropyExt, MaxAniso);
+                    }
+
                     GL.TexParameter(TextureTarget, TextureParameterName.TextureWrapS, (int)WrapS);
                     GL.TexParameter(TextureTarget, TextureParameterName.TextureWrapT, (int)WrapT);
                     GL.TexParameter(TextureTarget, TextureParameterName.TextureWrapR, (int)WrapR);
                     GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (int)EnvironmentMode);
 
-                    if (GenerateMipmap)
+                    if (Mipmaps)
                         GL.GenerateMipmap(GenerateMipmapTarget.TextureCubeMap);
                 }
                 else
@@ -480,10 +500,10 @@ namespace LED_Engine
 
         public void Free()
         {
-                GL.DeleteTexture(ID);
-                ID = 0;
+            GL.DeleteTexture(ID);
+            ID = 0;
 
-                UseCounter = 0;
+            UseCounter = 0;
         }
     }
 }

@@ -2,11 +2,14 @@
 	<Texture>
 		<Name>brick-wall</Name>
 		<File>brick-wall.jpg</File>
+		<AnisotropicFiltering>true</AnisotropicFiltering>
 	</Texture>
 	<Texture>
 		<Name>brick-wall_N</Name>
 		<File>brick-wall_N.jpg</File>
+		<AnisotropicFiltering>true</AnisotropicFiltering>
 	</Texture>
+	
 	<Texture>
 		<Name>Keypad_D</Name>
 		<File>Keypad_D.png</File>
@@ -31,17 +34,21 @@
 	<Texture>
 		<Name>ParallaxTest_D</Name>
 		<File>ParallaxTest\ParallaxTest_D.png</File>
+		<Mipmaps>false</Mipmaps>
 	</Texture>
 	<Texture>
 		<Name>ParallaxTest_N</Name>
 		<File>ParallaxTest\ParallaxTest_N.png</File>
+		<Mipmaps>false</Mipmaps>
 	</Texture>
 	<Texture>
 		<Name>ParallaxTest_S</Name>
 		<File>ParallaxTest\ParallaxTest_S.png</File>
+		<Mipmaps>false</Mipmaps>
 	</Texture>
 	<Texture>
 		<Name>ParallaxTest_H</Name>
 		<File>ParallaxTest\ParallaxTest_H.png</File>
+		<Mipmaps>false</Mipmaps>
 	</Texture>
 </Textures>
