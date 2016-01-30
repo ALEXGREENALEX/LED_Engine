@@ -297,40 +297,81 @@ namespace LED_Engine
             TextureUnits();
 
             #region Check for Errors
-            string InfoLog = GL.GetProgramInfoLog((int)ProgramID);
-            if (InfoLog != String.Empty)
+            int LinkStatus;
+            GL.GetProgram(ProgramID, ProgramParameter.LinkStatus, out LinkStatus);
+            if (LinkStatus != 1)
             {
+                string StrManyEquals = String.Empty;
+                StrManyEquals += StrManyEquals.PadRight(50, '=');
+
+                string InfoLog = GL.GetProgramInfoLog((int)ProgramID).Trim();
                 Log.WriteLineRed("Shader Program Error: \"{0}\"", Name);
-                Log.WriteLine(InfoLog);
+                Log.WriteLineYellow("GetProgramInfoLog:\n{0}", InfoLog);
 
-                Log.WriteLineYellow("Vertex shader code:");
-                Log.WriteWithLineNumbers(VS_Code);
+                InfoLog = GL.GetShaderInfoLog((int)VS_ID).Trim();
+                if (InfoLog != String.Empty)
+                {
+                    Log.WriteLineGreen(StrManyEquals);
+                    Log.WriteLineYellow("GetShaderInfoLog:\n{0}", InfoLog);
+                    Log.WriteLineYellow("Vertex shader code:");
+                    Log.WriteWithLineNumbers(VS_Code);
+                }
 
-                Log.WriteLineYellow("Fragment shader code:");
-                Log.WriteWithLineNumbers(FS_Code);
+                InfoLog = GL.GetShaderInfoLog((int)FS_ID).Trim();
+                if (InfoLog != String.Empty)
+                {
+                    Log.WriteLineGreen(StrManyEquals);
+                    Log.WriteLineYellow("GetShaderInfoLog:\n{0}", InfoLog);
+                    Log.WriteLineYellow("Fragment shader code:");
+                    Log.WriteWithLineNumbers(FS_Code);
+                }
 
                 if (GS_File != String.Empty)
                 {
-                    Log.WriteLineYellow("Geometry shader code:");
-                    Log.WriteWithLineNumbers(GS_Code);
+                    InfoLog = GL.GetShaderInfoLog((int)GS_ID).Trim();
+                    if (InfoLog != String.Empty)
+                    {
+                        Log.WriteLineGreen(StrManyEquals);
+                        Log.WriteLineYellow("GetShaderInfoLog:\n{0}", InfoLog);
+                        Log.WriteLineYellow("Geometry shader code:");
+                        Log.WriteWithLineNumbers(GS_Code);
+                    }
                 }
 
                 if (TCS_File != String.Empty)
                 {
-                    Log.WriteLineYellow("Tesselation Control shader code:");
-                    Log.WriteWithLineNumbers(TCS_Code);
+                    InfoLog = GL.GetShaderInfoLog((int)TCS_ID).Trim();
+                    if (InfoLog != String.Empty)
+                    {
+                        Log.WriteLineGreen(StrManyEquals);
+                        Log.WriteLineYellow("GetShaderInfoLog:\n{0}", InfoLog);
+                        Log.WriteLineYellow("Tesselation Control shader code:");
+                        Log.WriteWithLineNumbers(TCS_Code);
+                    }
                 }
 
                 if (TES_File != String.Empty)
                 {
-                    Log.WriteLineYellow("Tesselation Evaluation shader code:");
-                    Log.WriteWithLineNumbers(TES_Code);
+                    InfoLog = GL.GetShaderInfoLog((int)TES_ID).Trim();
+                    if (InfoLog != String.Empty)
+                    {
+                        Log.WriteLineGreen(StrManyEquals);
+                        Log.WriteLineYellow("GetShaderInfoLog:\n{0}", InfoLog);
+                        Log.WriteLineYellow("Tesselation Evaluation shader code:");
+                        Log.WriteWithLineNumbers(TES_Code);
+                    }
                 }
 
                 if (CS_File != String.Empty)
                 {
-                    Log.WriteLineYellow("Compute shader code:");
-                    Log.WriteWithLineNumbers(CS_Code);
+                    InfoLog = GL.GetShaderInfoLog((int)CS_ID).Trim();
+                    if (InfoLog != String.Empty)
+                    {
+                        Log.WriteLineGreen(StrManyEquals);
+                        Log.WriteLineYellow("GetShaderInfoLog:\n{0}", InfoLog);
+                        Log.WriteLineYellow("Compute shader code:");
+                        Log.WriteWithLineNumbers(CS_Code);
+                    }
                 }
             }
             else

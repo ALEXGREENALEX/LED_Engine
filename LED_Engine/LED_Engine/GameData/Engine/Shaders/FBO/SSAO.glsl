@@ -46,7 +46,7 @@ float SSAO(sampler2D Position, vec2 UV, vec3 viewPos, vec3 viewNormal)
 	return 1.0 - ambientOcclusion / PoissonSamples.length();
 }
 
-float SSAO_Blur(sampler2D InTexture, vec2 UV, float KernelSize = 4.0)
+float SSAO_Blur(sampler2D InTexture, vec2 UV, float KernelSize)
 {
 	vec2 SizeOfTexel = 1.0 / vec2(textureSize(InTexture, 0));
 	float Summ = 0.0;

@@ -2,7 +2,7 @@
 // ------------------------------------------------------------------
 // vec3 InColor: Input Color, RGB
 // float Opacity: range [0..1], default 0.5
-vec3 Sepia(vec3 InColor, float Opacity = 0.5)
+vec3 Sepia(vec3 InColor, float Opacity)
 {
 	vec3 Result;
 	Result.r = (InColor.r * 0.393) + (InColor.g * 0.769) + (InColor.b * 0.189);

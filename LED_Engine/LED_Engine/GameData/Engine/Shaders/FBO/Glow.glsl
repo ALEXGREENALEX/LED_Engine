@@ -1,4 +1,4 @@
-vec3 Glow(sampler2D InTexture, vec2 UV, float KernelSize = 4.0)
+vec3 Glow(sampler2D InTexture, vec2 UV, float KernelSize)
 {
 	vec2 SizeOfTexel = 1.0 / vec2(textureSize(InTexture, 0));
 	vec3 Summ = vec3(0.0);
