@@ -272,10 +272,82 @@ namespace LED_Engine
             Description = String.Empty;
 
             Game.SkyBox.Free();
-            Shaders.Free(WithEngineContent);
-            Models.Free(WithEngineContent);
-            Materials.Free(WithEngineContent);
-            Textures.Free(WithEngineContent);
+            Game.MainCamera = new Camera();
+
+            for (int i = 0; i < Models.MODELS.Count; i++)
+                Models.MODELS[i].Free();
+            Models.MODELS.Clear();
+
+            int Count = Meshes.MESHES.Count;
+            for (int i = 0; i < Count; i++)
+                if (!Meshes.MESHES[i].EngineContent)
+                {
+                    Meshes.MESHES[i].Free();
+                    Meshes.MESHES.RemoveAt(i);
+                    Count--;
+                }
+
+            Count = Materials.MATERIALS.Count;
+            for (int i = 0; i < Count; i++)
+                if (!Materials.MATERIALS[i].EngineContent)
+                {
+                    Materials.MATERIALS[i].Free();
+                    Materials.MATERIALS.RemoveAt(i);
+                    Count--;
+                }
+
+            Count = Textures.TEXTURES.Count;
+            for (int i = 0; i < Count; i++)
+                if (!Textures.TEXTURES[i].EngineContent)
+                {
+                    Textures.TEXTURES[i].Free();
+                    Textures.TEXTURES.RemoveAt(i);
+                    Count--;
+                }
+
+            Count = Shaders.SHADERS.Count;
+            for (int i = 0; i < Count; i++)
+                if (!Shaders.SHADERS[i].EngineContent)
+                {
+                    Shaders.SHADERS[i].Free();
+                    Shaders.SHADERS.RemoveAt(i);
+                    Count--;
+                }
+
+            if (WithEngineContent)
+            {
+                for (int i = 0; i < Meshes.MESHES.Count; i++)
+                    Meshes.MESHES[i].Free();
+                Meshes.MESHES.Clear();
+
+                for (int i = 0; i < Meshes.MeshesList.Count; i++)
+                    Meshes.MeshesList[i].Free();
+                Meshes.MeshesList.Clear();
+
+                for (int i = 0; i < Materials.MATERIALS.Count; i++)
+                    Materials.MATERIALS[i].Free();
+                Materials.MATERIALS.Clear();
+
+                for (int i = 0; i < Materials.MaterialsList.Count; i++)
+                    Materials.MaterialsList[i].Free();
+                Materials.MaterialsList.Clear();
+
+                for (int i = 0; i < Textures.TEXTURES.Count; i++)
+                    Textures.TEXTURES[i].Free();
+                Textures.TEXTURES.Clear();
+
+                for (int i = 0; i < Textures.TexturesList.Count; i++)
+                    Textures.TexturesList[i].Free();
+                Textures.TexturesList.Clear();
+
+                for (int i = 0; i < Shaders.SHADERS.Count; i++)
+                    Shaders.SHADERS[i].Free();
+                Shaders.SHADERS.Clear();
+
+                for (int i = 0; i < Shaders.ShadersList.Count; i++)
+                    Shaders.ShadersList[i].Free();
+                Shaders.ShadersList.Clear();
+            }
         }
     }
 }

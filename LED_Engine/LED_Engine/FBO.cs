@@ -42,9 +42,9 @@ namespace LED_Engine
 
         static DrawBuffersEnum[] ColorAttachments_P2 = new DrawBuffersEnum[] {
             DrawBuffersEnum.ColorAttachment0, //Position
-            DrawBuffersEnum.ColorAttachment1, //Light
-            DrawBuffersEnum.ColorAttachment2, //AO
-            DrawBuffersEnum.ColorAttachment3};//SSAO
+            DrawBuffersEnum.ColorAttachment1, //1) Light
+            DrawBuffersEnum.ColorAttachment2, //2) AO
+            DrawBuffersEnum.ColorAttachment3};//3) SSAO
 
         //Pass0 OUT textures
         public static int Depth;
@@ -66,6 +66,7 @@ namespace LED_Engine
 
         public static void Init(int ScrWidth, int ScrHeight)
         {
+            Free();
             FramebufferErrorCode FramebufferStatus;
 
             ScreenWidth = ScrWidth;
@@ -234,7 +235,7 @@ namespace LED_Engine
 
             //TempLocation = Shaders[ShaderIndex_G].GetUniform("ScreenSize");
             //if (TempLocation != -1)
-            //    GL.Uniform2(TempLocation, (float)ScreenWidth, (float)ScreenWidth);
+            //   GL.Uniform2(TempLocation, (float)ScreenWidth, (float)ScreenHeight);
 
             TempLocation = Shaders[ShaderIndex_P1].GetUniform("ClipPlanes");
             if (TempLocation != -1) //zNear, zFar
@@ -372,7 +373,7 @@ namespace LED_Engine
 
             //TempLocation = Shaders[ShaderIndex_P2].GetUniform("ScreenSize");
             //if (TempLocation != -1)
-            //    GL.Uniform2(TempLocation, (float)ScreenWidth, (float)ScreenWidth);
+            //    GL.Uniform2(TempLocation, (float)ScreenWidth, (float)ScreenHeight);
 
             TempLocation = Shaders[ShaderIndex_P2].GetUniform("ClipPlanes");
             if (TempLocation != -1) //zNear, zFar
@@ -445,7 +446,7 @@ namespace LED_Engine
             {
                 int TempLocation = Shaders[ShaderIndex_PP].GetUniform("ScreenSize");
                 if (TempLocation != -1)
-                    GL.Uniform2(TempLocation, (float)ScreenWidth, (float)ScreenWidth);
+                    GL.Uniform2(TempLocation, (float)ScreenWidth, (float)ScreenHeight);
 
                 //TempLocation = Shaders[ShaderIndex_PP].GetUniform("ClipPlanes");
                 //if (TempLocation != -1) //zNear, zFar
@@ -504,7 +505,7 @@ namespace LED_Engine
             //Shaders[PP_ShaderIndex].DisableVertexAttribArrays();
         }
 
-        public static void Free(bool WithEngineContent = false)
+        public static void Free()
         {
             GL.BindFramebuffer(FramebufferTarget.FramebufferExt, 0);
             for (int i = 0; i < Shaders.Count; i++)
@@ -536,13 +537,10 @@ namespace LED_Engine
             GL.DeleteFramebuffer(FBO_P2);
             GL.DeleteFramebuffer(FBO_PP);
 
+            VBO = 0;
             FBO_P1 = 0;
             FBO_P2 = 0;
             FBO_PP = 0;
-            VBO = 0;
-
-            if (WithEngineContent)
-                Shaders.Clear();
         }
     }
 }

@@ -182,7 +182,6 @@ namespace LED_Engine
             {
                 MainCamera.SetProjectionMatrix(ProjectionTypes.Perspective, (float)FB_Width, (float)FB_Height, MainCamera.zNear, MainCamera.zFar, MainCamera.FOV);
                 GL.Viewport(0, 0, FB_Width, FB_Height);
-                FBO.Free();
                 FBO.Init(FB_Width, FB_Height);
             }
         }

@@ -184,6 +184,8 @@ namespace LED_Engine
                 #endregion
 
                 #region Load Lists
+                ClearLists();
+
                 for (int i = 0; i < Paths.Length; i++)
                 {
                     bool EngineContent = false;
@@ -244,6 +246,16 @@ namespace LED_Engine
                 Log.WriteLineRed("Engine.LoadContentLists() Exception.");
                 Log.WriteLineYellow(e.Message);
             }
+        }
+
+        public static void ClearLists()
+        {
+            FBO.Shaders.Clear();
+            Textures.TexturesList.Clear();
+            Shaders.ShadersList.Clear();
+            Materials.MaterialsList.Clear();
+            Meshes.MeshesList.Clear();
+            Maps.MapsList.Clear();
         }
 
         public static void LoadEngineContent()

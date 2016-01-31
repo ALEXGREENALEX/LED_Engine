@@ -125,44 +125,15 @@ namespace LED_Engine
             if (M != null)
             {
                 if (M.UseCounter > 0)
+                {
                     M.UseCounter--;
 
-                if (M.UseCounter == 0)
-                {
-                    M.Free();
-                    MESHES.Remove(M);
+                    if (M.UseCounter == 0)
+                    {
+                        M.Free();
+                        MESHES.Remove(M);
+                    }
                 }
-            }
-        }
-
-        public static void Free(bool WithEngineContent = false)
-        {
-            try
-            {
-                if (WithEngineContent)
-                {
-                    for (int i = 0; i < MESHES.Count; i++)
-                        MESHES[i].Free();
-
-                    MESHES.Clear();
-                    MeshesList.Clear();
-                }
-                else
-                {
-                    int Count = MESHES.Count;
-                    for (int i = 0; i < Count; i++)
-                        if (!MESHES[i].EngineContent)
-                        {
-                            MESHES[i].Free();
-                            MESHES.RemoveAt(i);
-                            Count--;
-                        }
-                }
-            }
-            catch (Exception e)
-            {
-                Log.WriteLineRed("Meshes.Free() Exception.");
-                Log.WriteLineYellow(e.Message);
             }
         }
     }

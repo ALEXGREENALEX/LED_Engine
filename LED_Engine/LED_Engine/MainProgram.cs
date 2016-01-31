@@ -40,7 +40,7 @@ namespace LED_Engine
                 ApplySettingsAndCreateWindow();
                 RescaleToWindowSize();
                 Settings.Window.NeedReinitWindow = false;
-
+                
                 if (!GLContextIsLoaded)
                 {
                     Engine.GetGLSettings();
@@ -86,7 +86,8 @@ namespace LED_Engine
                 #endregion
             }
             Maps.Free(true); // Free all: Map -> Meshes, Shaders, Textures...
-            FBO.Free(true);
+            FBO.Free();
+            Engine.ClearLists();
             Glfw.DestroyWindow(Window);
             Glfw.Terminate();
 

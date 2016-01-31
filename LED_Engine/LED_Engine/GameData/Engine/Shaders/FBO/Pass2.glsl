@@ -40,5 +40,6 @@ void main()
 	//vec4 R = SSLR(TextureUnit0, TextureUnit1, f_UV, Normal);
 	//FragColor.rgb = R.rgb;
 /////////////////////////////////////////////////////////////////////////////////////////////////////
+	//FragColor.a = sqrt(dot(FragColor.rgb, vec3(0.299, 0.587, 0.114))); //Luma for FXAA
 	FragColor.a = 1.0;
 }

@@ -24,28 +24,6 @@ namespace LED_Engine
                     return i;
             return null;
         }
-
-        public static void Free(bool WithEngineContent = false)
-        {
-            if (WithEngineContent)
-            {
-                for (int i = 0; i < MODELS.Count; i++)
-                    MODELS[i].Free();
-
-                MODELS.Clear();
-            }
-            else
-            {
-                int Count = MODELS.Count;
-                for (int i = 0; i < Count; i++)
-                    if (!MODELS[i].EngineContent)
-                    {
-                        MODELS[i].Free();
-                        MODELS.RemoveAt(i);
-                        Count--;
-                    }
-            }
-        }
     }
 
     public class Model
@@ -54,13 +32,10 @@ namespace LED_Engine
         public List<Mesh> Meshes = new List<Mesh>();
         public bool Visible = true;
 
-        public uint UseCounter = 0;
-        public bool EngineContent = false;
-
         public void Free()
         {
             for (int i = 0; i < Meshes.Count; i++)
-                Meshes[i].Free();
+                LED_Engine.Meshes.Unload(Meshes[i]);
         }
     }
 }

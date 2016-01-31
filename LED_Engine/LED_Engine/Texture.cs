@@ -283,36 +283,15 @@ namespace LED_Engine
             if (T != null)
             {
                 if (T.UseCounter > 0)
+                {
                     T.UseCounter--;
 
-                if (T.UseCounter == 0)
-                {
-                    T.Free();
-                    TEXTURES.Remove(T);
-                }
-            }
-        }
-
-        public static void Free(bool WithEngineContent = false)
-        {
-            if (WithEngineContent)
-            {
-                foreach (var i in TEXTURES)
-                    i.Free();
-
-                TEXTURES.Clear();
-                TexturesList.Clear();
-            }
-            else
-            {
-                int Count = TEXTURES.Count;
-                for (int i = 0; i < Count; i++)
-                    if (!TEXTURES[i].EngineContent)
+                    if (T.UseCounter == 0)
                     {
-                        TEXTURES[i].Free();
-                        TEXTURES.RemoveAt(i);
-                        Count--;
+                        T.Free();
+                        TEXTURES.Remove(T);
                     }
+                }
             }
         }
     }

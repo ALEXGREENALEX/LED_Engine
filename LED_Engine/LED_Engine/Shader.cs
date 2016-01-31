@@ -158,36 +158,15 @@ namespace LED_Engine
             if (S != null)
             {
                 if (S.UseCounter > 0)
+                {
                     S.UseCounter--;
 
-                if (S.UseCounter == 0)
-                {
-                    S.Free();
-                    SHADERS.Remove(S);
-                }
-            }
-        }
-
-        public static void Free(bool WithEngineContent = false)
-        {
-            if (WithEngineContent)
-            {
-                foreach (var i in SHADERS)
-                    i.Free();
-
-                SHADERS.Clear();
-                ShadersList.Clear();
-            }
-            else
-            {
-                int Count = SHADERS.Count;
-                for (int i = 0; i < Count; i++)
-                    if (!SHADERS[i].EngineContent)
+                    if (S.UseCounter == 0)
                     {
-                        SHADERS[i].Free();
-                        SHADERS.RemoveAt(i);
-                        Count--;
+                        S.Free();
+                        SHADERS.Remove(S);
                     }
+                }
             }
         }
     }

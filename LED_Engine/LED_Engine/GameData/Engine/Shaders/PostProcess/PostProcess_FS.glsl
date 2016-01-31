@@ -15,8 +15,9 @@ uniform vec2 SepiaGrayscale = vec2(0.0, 0.0); //Opacity of Sepia, GrayScale
 
 layout(location = 0) out vec3 FragColor;
 
+#define FXAA_GATHER4_ALPHA 0 //Use 1 for Nvidia, 0 - for NVidia and Intel
+#define FXAA_GREEN_AS_LUMA 1
 #define FXAA_QUALITY__PRESET 12 //Default 12, values 10-15, 20-29, 39
-#define FXAA_GREEN_AS_LUMA 1 //Or pack Luma in Alpha channel!!!
 #include("FXAA_3_11.glsl")
 
 #include("Vignette.glsl")

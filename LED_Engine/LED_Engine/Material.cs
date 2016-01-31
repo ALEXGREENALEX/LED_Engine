@@ -295,36 +295,15 @@ namespace LED_Engine
             if (M != null)
             {
                 if (M.UseCounter > 0)
+                {
                     M.UseCounter--;
 
-                if (M.UseCounter == 0)
-                {
-                    M.Free();
-                    MATERIALS.Remove(M);
-                }
-            }
-        }
-
-        public static void Free(bool WithEngineContent = false)
-        {
-            if (WithEngineContent)
-            {
-                for (int i = 0; i < MATERIALS.Count; i++)
-                    MATERIALS[i].Free();
-
-                MATERIALS.Clear();
-                MaterialsList.Clear();
-            }
-            else
-            {
-                int Count = MATERIALS.Count;
-                for (int i = 0; i < Count; i++)
-                    if (!MATERIALS[i].EngineContent)
+                    if (M.UseCounter == 0)
                     {
-                        Materials.MATERIALS[i].Free();
-                        MATERIALS.RemoveAt(i);
-                        Count--;
+                        M.Free();
+                        MATERIALS.Remove(M);
                     }
+                }
             }
         }
     }
