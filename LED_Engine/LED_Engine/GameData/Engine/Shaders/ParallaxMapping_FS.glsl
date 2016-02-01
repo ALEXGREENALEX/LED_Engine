@@ -21,13 +21,6 @@ layout (location = 2) out vec4 Output2;
 layout (location = 3) out vec4 Output3;
 layout (location = 4) out vec4 Output4;
 
-// Simple Parallax Mapping
-vec2 ParallaxMapping(sampler2D HeightTexture, vec2 UV, vec3 ViewVector, float Scale)
-{
-	float ParallaxOffset = (texture(HeightTexture, UV).r) * Scale;
-	return UV + ParallaxOffset * ViewVector.xy;
-}
-
 //POM, based on: http://steps3d.narod.ru/tutorials/parallax-mapping-tutorial.html
 vec2 ParallaxOcclusionMapping(sampler2D HeightTexture, vec2 UV, vec3 ViewVector, float Scale)
 {
@@ -61,7 +54,6 @@ void main()
 	vec2 newTexCoords = f_UV;
 	vec3 EyeVector = normalize(transpose(f_TBN) * (-f_EyePosition)); //Convert from Eye to Tangent Space
 	
-	//newTexCoords = ParallaxMapping(TextureUnit5, f_UV, EyeVector, ParallaxScale);
 	newTexCoords = ParallaxOcclusionMapping(TextureUnit5, f_UV, EyeVector, ParallaxScale);
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 

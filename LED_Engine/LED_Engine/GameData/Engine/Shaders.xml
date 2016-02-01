@@ -1,8 +1,8 @@
 ﻿<Shaders>
 	<Shader>
 		<Name></Name>
-		<Vertex>Default_VS.glsl</Vertex>
-		<Fragment>Default_FS.glsl</Fragment>
+		<Vertex>Universal_VS.glsl</Vertex>
+		<Fragment>Universal_FS.glsl</Fragment>
 	</Shader>
 	<Shader>
 		<Name>CubemapSky</Name>
@@ -14,11 +14,6 @@
 		<Name>ParallaxMapping</Name>
 		<Vertex>Universal_VS.glsl</Vertex>
 		<Fragment>ParallaxMapping_FS.glsl</Fragment>
-	</Shader>
-	<Shader>
-		<Name>Light</Name>
-		<Vertex>Universal_VS.glsl</Vertex>
-		<Fragment>Light_FS.glsl</Fragment>
 	</Shader>
 	<Shader>
 		<Name>ReflectRefract</Name>

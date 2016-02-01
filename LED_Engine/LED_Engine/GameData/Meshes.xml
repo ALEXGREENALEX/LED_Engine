@@ -11,4 +11,12 @@
 		<Name>Pipe_X</Name>
 		<File>Pipe_X.obj</File>
 	</Mesh>
+	<Mesh>
+		<Name>Torus_with_4_materials</Name>
+		<File>Torus_with_4_materials.obj</File>
+	</Mesh>
+	<Mesh>
+		<Name>Sponza</Name>
+		<File>Sponza.obj</File>
+	</Mesh>
 </Meshes>

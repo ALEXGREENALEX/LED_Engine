@@ -1,0 +1,52 @@
+﻿<Map>
+	<Name>Sponza</Name>
+	<Description>
+		CryTek Sponza
+		Model, from: http://graphics.cs.williams.edu/data/meshes.xml
+		Textures from: http://www.crytek.com/cryengine/cryengine3/downloads
+	</Description>
+
+	<PlayerStart>
+		<Position>0.0 0.0 0.0</Position>
+		<Rotation>0.0 0.0 0.0</Rotation>
+	</PlayerStart>
+	
+	<Camera>
+		<Near>0.1</Near>
+		<Far>500.0</Far>
+		<FOV>60.0</FOV>
+		<MoveSpeed>0.2</MoveSpeed>
+	</Camera>
+	
+	<Skybox>SkyCubemap_Default</Skybox>
+	
+	<Fog>
+		<Enabled>false</Enabled>
+		<Color>0.5 0.5 0.5</Color>
+		<DistanceMin>20.0</DistanceMin>
+		<DistanceMax>80.0</DistanceMax>
+	</Fog>
+	
+	<Model>
+		<Name>Sponza</Name>
+		<Visible>true</Visible>
+		<Mesh>
+			<Name>Sponza</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>0.0 0.0 0.0</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material></Material>
+				<Material>WhiteColor</Material>
+				<Material>RedColor</Material>
+				<Material>GreenColor</Material>
+				<Material>BlueColor</Material>
+			</Materials>
+		</Mesh>
+	</Model>
+</Map>

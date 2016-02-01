@@ -175,6 +175,27 @@
 			</Materials>
 		</Mesh>
 	</Model>
+	<Model>
+		<Name>Torus</Name>
+		<Visible>true</Visible>
+		<Mesh>
+			<Name>Torus_4_Materials</Name>
+			<Type>Mesh</Type>
+			<Mesh>Torus_with_4_materials</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>2.5 1.5 2.0</Position>
+			<Rotation>0.0 0.0 1.57075</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>WhiteColor</Material>
+				<Material>RedColor</Material>
+				<Material>GreenColor</Material>
+				<Material>BlueColor</Material>
+			</Materials>
+		</Mesh>
+	</Model>
 	
 	<!--
 	<Sounds>
