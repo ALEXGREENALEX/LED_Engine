@@ -1,25 +1,5 @@
 ﻿<Materials>
 	<Material>
-		<Name>WhiteColor</Name>
-		<Shader></Shader>
-		<Kd>1.0 1.0 1.0 1.0</Kd>
-	</Material>
-	<Material>
-		<Name>RedColor</Name>
-		<Shader></Shader>
-		<Kd>1.0 0.0 0.0 1.0</Kd>
-	</Material>
-	<Material>
-		<Name>GreenColor</Name>
-		<Shader></Shader>
-		<Kd>0.0 1.0 0.0 1.0</Kd>
-	</Material>
-	<Material>
-		<Name>BlueColor</Name>
-		<Shader></Shader>
-		<Kd>0.0 0.0 1.0 1.0</Kd>
-	</Material>
-	<Material>
 		<Name>TransparentRedGlass</Name>
 		<Shader></Shader>
 		<Transparent>True</Transparent>
@@ -30,6 +10,7 @@
 			<TextureUnit>0</TextureUnit>
 		</Texture>
 	</Material>
+	
 	<Material>
 		<Name>SkyCubemap_Storforsen</Name>
 		<Shader>CubemapSky</Shader>
@@ -40,6 +21,7 @@
 			<TextureUnit>0</TextureUnit>
 		</Texture>
 	</Material>
+	
 	<Material>
 		<Name>SkyCubemap_Yokohama3</Name>
 		<Shader>CubemapSky</Shader>
@@ -50,6 +32,7 @@
 			<TextureUnit>0</TextureUnit>
 		</Texture>
 	</Material>
+	
 	<Material>
 		<Name>Reflection</Name>
 		<Shader>ReflectRefract</Shader>
@@ -66,6 +49,7 @@
 			<TextureUnit>1</TextureUnit>
 		</Texture>-->
 	</Material>
+	
 	<Material>
 		<Name>Refraction</Name>
 		<Shader>ReflectRefract</Shader>
@@ -82,6 +66,7 @@
 			<TextureUnit>1</TextureUnit>
 		</Texture>-->
 	</Material>
+	
 	<Material>
 		<Name>ParallaxMapping</Name>
 		<Shader>ParallaxMapping</Shader>
@@ -104,6 +89,7 @@
 			<TextureUnit>5</TextureUnit>
 		</Texture>
 	</Material>
+	
 	<Material>
 		<Name>BrickWall</Name>
 		<Shader></Shader>
@@ -121,6 +107,7 @@
 			<TextureUnit>1</TextureUnit>
 		</Texture>
 	</Material>
+	
 	<Material>
 		<Name>Keypad</Name>
 		<Shader></Shader>
@@ -148,6 +135,415 @@
 		<Texture>
 			<Name>Keypad_AO</Name>
 			<TextureUnit>4</TextureUnit>
+		</Texture>
+	</Material>
+	
+	<!--Sponza Materials-->
+	<Material>
+		<Name>Sponza_Thorn</Name>
+		<Shader></Shader>
+		<!--<Transparent>True</Transparent>-->
+		<!--<Kd>0.588</Kd>
+		<Ks>0.588</Ks>
+		<Ka>0.588</Ka>
+		<Shininess>50.0</Shininess>-->
+		<Texture>
+			<Name>Sponza_Thorn_D</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Sponza_Thorn_N</Name>
+			<TextureUnit>1</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Sponza_Thorn_S</Name>
+			<TextureUnit>2</TextureUnit>
+		</Texture>
+	</Material>
+	<Material>
+		<Name>Sponza_VasePlant</Name>
+		<Shader></Shader>
+		<!--<Transparent>True</Transparent>-->
+		<!--<Kd>0.588</Kd>
+		<Ks>0.588</Ks>
+		<Ka>0.588</Ka>
+		<Shininess>50.0</Shininess>-->
+		<Texture>
+			<Name>Sponza_VasePlant_D</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Sponza_VasePlant_S</Name>
+			<TextureUnit>2</TextureUnit>
+		</Texture>
+	</Material>
+	<Material>
+		<Name>Sponza_VaseRound</Name>
+		<Shader></Shader>
+		<!--<Kd>0.588</Kd>
+		<Ks>0.588</Ks>
+		<Ka>0.588</Ka>
+		<Shininess>50.0</Shininess>-->
+		<Texture>
+			<Name>Sponza_VaseRound_D</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Sponza_VaseRound_N</Name>
+			<TextureUnit>1</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Sponza_VaseRound_S</Name>
+			<TextureUnit>2</TextureUnit>
+		</Texture>
+	</Material>
+	<Material>
+		<Name>Sponza_Background</Name>
+		<Shader></Shader>
+		<!--<Kd>0.588</Kd>
+		<Ks>0.588</Ks>
+		<Ka>0.588</Ka>
+		<Shininess>50.0</Shininess>-->
+		<Texture>
+			<Name>Sponza_Background_D</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Sponza_Background_N</Name>
+			<TextureUnit>1</TextureUnit>
+		</Texture>
+	</Material>
+	<Material>
+		<Name>Sponza_Bricks</Name>
+		<Shader></Shader>
+		<!--<Kd>0.588</Kd>
+		<Ks>0.588</Ks>
+		<Ka>0.588</Ka>
+		<Shininess>50.0</Shininess>-->
+		<Texture>
+			<Name>Sponza_Bricks_D</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Sponza_Bricks_N</Name>
+			<TextureUnit>1</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Sponza_Bricks_S</Name>
+			<TextureUnit>2</TextureUnit>
+		</Texture>
+	</Material>
+	<Material>
+		<Name>Sponza_Arch</Name>
+		<Shader></Shader>
+		<!--<Kd>0.588</Kd>
+		<Ks>0.588</Ks>
+		<Ka>0.588</Ka>
+		<Shininess>50.0</Shininess>-->
+		<Texture>
+			<Name>Sponza_Arch_D</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Sponza_Arch_N</Name>
+			<TextureUnit>1</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Sponza_Arch_S</Name>
+			<TextureUnit>2</TextureUnit>
+		</Texture>
+	</Material>
+	<Material>
+		<Name>Sponza_Ceiling</Name>
+		<Shader></Shader>
+		<!--<Kd>0.588</Kd>
+		<Ks>0.588</Ks>
+		<Ka>0.588</Ka>
+		<Shininess>50.0</Shininess>-->
+		<Texture>
+			<Name>Sponza_Ceiling_D</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Sponza_Ceiling_S</Name>
+			<TextureUnit>2</TextureUnit>
+		</Texture>
+	</Material>
+	<Material>
+		<Name>Sponza_ColumnA</Name>
+		<Shader></Shader>
+		<!--<Kd>0.588</Kd>
+		<Ks>0.588</Ks>
+		<Ka>0.588</Ka>
+		<Shininess>50.0</Shininess>-->
+		<Texture>
+			<Name>Sponza_ColumnA_D</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Sponza_ColumnA_N</Name>
+			<TextureUnit>1</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Sponza_ColumnA_S</Name>
+			<TextureUnit>2</TextureUnit>
+		</Texture>
+	</Material>
+	<Material>
+		<Name>Sponza_Floor</Name>
+		<Shader></Shader>
+		<!--<Kd>0.588</Kd>
+		<Ks>0.588</Ks>
+		<Ka>0.588</Ka>
+		<Shininess>50.0</Shininess>-->
+		<Texture>
+			<Name>Sponza_Floor_D</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Sponza_Floor_S</Name>
+			<TextureUnit>2</TextureUnit>
+		</Texture>
+	</Material>
+	<Material>
+		<Name>Sponza_ColumnC</Name>
+		<Shader></Shader>
+		<!--<Kd>0.588</Kd>
+		<Ks>0.588</Ks>
+		<Ka>0.588</Ka>
+		<Shininess>50.0</Shininess>-->
+		<Texture>
+			<Name>Sponza_ColumnC_D</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Sponza_ColumnC_N</Name>
+			<TextureUnit>1</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Sponza_ColumnC_S</Name>
+			<TextureUnit>2</TextureUnit>
+		</Texture>
+	</Material>
+	<Material>
+		<Name>Sponza_Details</Name>
+		<Shader></Shader>
+		<!--<Kd>0.588</Kd>
+		<Ks>0.588</Ks>
+		<Ka>0.588</Ka>
+		<Shininess>50.0</Shininess>-->
+		<Texture>
+			<Name>Sponza_Details_D</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Sponza_Details_S</Name>
+			<TextureUnit>2</TextureUnit>
+		</Texture>
+	</Material>
+	<Material>
+		<Name>Sponza_ColumnB</Name>
+		<Shader></Shader>
+		<!--<Kd>0.588</Kd>
+		<Ks>0.588</Ks>
+		<Ka>0.588</Ka>
+		<Shininess>50.0</Shininess>-->
+		<Texture>
+			<Name>Sponza_ColumnB_D</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Sponza_ColumnB_N</Name>
+			<TextureUnit>1</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Sponza_ColumnB_S</Name>
+			<TextureUnit>2</TextureUnit>
+		</Texture>
+	</Material>
+	<Material>
+		<Name>Sponza_Fragpole</Name>
+		<Shader></Shader>
+		<!--<Kd>0.588</Kd>
+		<Ks>0.588</Ks>
+		<Ka>0.588</Ka>
+		<Shininess>50.0</Shininess>-->
+		<Texture>
+			<Name>Sponza_Fragpole_D</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Sponza_Fragpole_S</Name>
+			<TextureUnit>2</TextureUnit>
+		</Texture>
+	</Material>
+	<Material>
+		<Name>Sponza_Fabric_Green</Name>
+		<Shader></Shader>
+		<!--<Kd>0.588</Kd>
+		<Ks>0.588</Ks>
+		<Ka>0.588</Ka>
+		<Shininess>50.0</Shininess>-->
+		<Texture>
+			<Name>Sponza_Fabric_Green_D</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Sponza_Fabric_S</Name>
+			<TextureUnit>2</TextureUnit>
+		</Texture>
+	</Material>
+	<Material>
+		<Name>Sponza_Fabric_Blue</Name>
+		<Shader></Shader>
+		<!--<Kd>0.588</Kd>
+		<Ks>0.588</Ks>
+		<Ka>0.588</Ka>
+		<Shininess>50.0</Shininess>-->
+		<Texture>
+			<Name>Sponza_Fabric_Blue_D</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Sponza_Fabric_S</Name>
+			<TextureUnit>2</TextureUnit>
+		</Texture>
+	</Material>
+	<Material>
+		<Name>Sponza_Fabric_Red</Name>
+		<Shader></Shader>
+		<!--<Kd>0.588</Kd>
+		<Ks>0.588</Ks>
+		<Ka>0.588</Ka>
+		<Shininess>50.0</Shininess>-->
+		<Texture>
+			<Name>Sponza_Fabric_Red_D</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Sponza_Fabric_S</Name>
+			<TextureUnit>2</TextureUnit>
+		</Texture>
+	</Material>
+	<Material>
+		<Name>Sponza_FabricCurtain_Blue</Name>
+		<Shader></Shader>
+		<!--<Kd>0.588</Kd>
+		<Ks>0.588</Ks>
+		<Ka>0.588</Ka>
+		<Shininess>50.0</Shininess>-->
+		<Texture>
+			<Name>Sponza_FabricCurtain_Blue_D</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Sponza_FabricCurtain_S</Name>
+			<TextureUnit>2</TextureUnit>
+		</Texture>
+	</Material>
+	<Material>
+		<Name>Sponza_FabricCurtain_Red</Name>
+		<Shader></Shader>
+		<!--<Kd>0.588</Kd>
+		<Ks>0.588</Ks>
+		<Ka>0.588</Ka>
+		<Shininess>50.0</Shininess>-->
+		<Texture>
+			<Name>Sponza_FabricCurtain_Red_D</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Sponza_FabricCurtain_S</Name>
+			<TextureUnit>2</TextureUnit>
+		</Texture>
+	</Material>
+	<Material>
+		<Name>Sponza_FabricCurtain_Green</Name>
+		<Shader></Shader>
+		<!--<Kd>0.588</Kd>
+		<Ks>0.588</Ks>
+		<Ka>0.588</Ka>
+		<Shininess>50.0</Shininess>-->
+		<Texture>
+			<Name>Sponza_FabricCurtain_Green_D</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Sponza_FabricCurtain_S</Name>
+			<TextureUnit>2</TextureUnit>
+		</Texture>
+	</Material>
+	<Material>
+		<Name>Sponza_Chain</Name>
+		<Shader></Shader>
+		<!--<Transparent>True</Transparent>-->
+		<!--<Kd>0.588</Kd>
+		<Ks>0.588</Ks>
+		<Ka>0.588</Ka>
+		<Shininess>50.0</Shininess>-->
+		<Texture>
+			<Name>Sponza_Chain_D</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Sponza_Chain_N</Name>
+			<TextureUnit>1</TextureUnit>
+		</Texture>
+	</Material>
+	<Material>
+		<Name>Sponza_VaseHanging</Name>
+		<Shader></Shader>
+		<!--<Kd>0.588</Kd>
+		<Ks>0.588</Ks>
+		<Ka>0.588</Ka>
+		<Shininess>50.0</Shininess>-->
+		<Texture>
+			<Name>Sponza_VaseHanging_D</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
+	</Material>
+	<Material>
+		<Name>Sponza_Vase</Name>
+		<Shader></Shader>
+		<!--<Kd>0.588</Kd>
+		<Ks>0.588</Ks>
+		<Ka>0.588</Ka>
+		<Shininess>50.0</Shininess>-->
+		<Texture>
+			<Name>Sponza_Vase_D</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Sponza_Vase_N</Name>
+			<TextureUnit>1</TextureUnit>
+		</Texture>
+	</Material>
+	<Material>
+		<Name>Sponza_Lion</Name>
+		<Shader></Shader>
+		<!--<Kd>0.588</Kd>
+		<Ks>0.588</Ks>
+		<Ka>0.588</Ka>
+		<Shininess>50.0</Shininess>-->
+		<Texture>
+			<Name>Sponza_Lion_D</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Sponza_Lion_N</Name>
+			<TextureUnit>1</TextureUnit>
+		</Texture>
+	</Material>
+	<Material>
+		<Name>Sponza_Roof</Name>
+		<Shader></Shader>
+		<!--<Kd>0.588</Kd>
+		<Ks>0.588</Ks>
+		<Ka>0.588</Ka>
+		<Shininess>50.0</Shininess>-->
+		<Texture>
+			<Name>Sponza_Roof_D</Name>
+			<TextureUnit>0</TextureUnit>
 		</Texture>
 	</Material>
 </Materials>

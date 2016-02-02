@@ -5,17 +5,4 @@
 		<MagFilter>Nearest</MagFilter>
 		<MinFilter>Nearest</MinFilter>
 	</Texture>
-	<Texture>
-		<Name>DebugPointLight</Name>
-		<File>DebugPointLight.png</File>
-		<MagFilter>Linear</MagFilter>
-		<MinFilter>Linear</MinFilter>
-	</Texture>
-	
-	<Texture>
-		<Name>AlphaTest</Name>
-		<File>AlphaTest.png</File>
-		<MagFilter>Linear</MagFilter>
-		<MinFilter>Linear</MinFilter>
-	</Texture>
 </Textures>

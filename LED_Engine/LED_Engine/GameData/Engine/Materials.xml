@@ -1,35 +1,82 @@
 ﻿<Materials>
+	<!--Random color-->
 	<Material>
 		<Name></Name>
 		<Shader></Shader>
 		<CullFace>False</CullFace>
 	</Material>
+	
+	<!--Colors-->
+	<Material>
+		<Name>Color_White</Name>
+		<Shader></Shader>
+		<Kd>1.0 1.0 1.0 1.0</Kd>
+	</Material>
+	
+	<Material>
+		<Name>Color_Gray</Name>
+		<Shader></Shader>
+		<Kd>0.5 0.5 0.5 1.0</Kd>
+	</Material>
+	
+	<Material>
+		<Name>Color_Black</Name>
+		<Shader></Shader>
+		<Kd>0.0 0.0 0.0 1.0</Kd>
+	</Material>
+	
+	<Material>
+		<Name>Color_Red</Name>
+		<Shader></Shader>
+		<Kd>1.0 0.0 0.0 1.0</Kd>
+	</Material>
+	
+	<Material>
+		<Name>Color_Green</Name>
+		<Shader></Shader>
+		<Kd>0.0 1.0 0.0 1.0</Kd>
+	</Material>
+	
+	<Material>
+		<Name>Color_Blue</Name>
+		<Shader></Shader>
+		<Kd>0.0 0.0 1.0 1.0</Kd>
+	</Material>
+	
+	<Material>
+		<Name>Color_Cyan</Name>
+		<Shader></Shader>
+		<Kd>0.0 1.0 1.0 1.0</Kd>
+	</Material>
+	
+	<Material>
+		<Name>Color_Magenta</Name>
+		<Shader></Shader>
+		<Kd>1.0 0.0 1.0 1.0</Kd>
+	</Material>
+	
+	<Material>
+		<Name>Color_Yellow</Name>
+		<Shader></Shader>
+		<Kd>1.0 1.0 0.0 1.0</Kd>
+	</Material>
+	
+	<!--Checker-->
 	<Material>
 		<Name>Checker</Name>
 		<Shader></Shader>
 		<CullFace>False</CullFace>
-		
 		<Texture>
 			<Name></Name>
 			<TextureUnit>0</TextureUnit>
 		</Texture>
 	</Material>
-	<Material>
-		<Name>DebugPointLight</Name>
-		<Shader></Shader>
-		<CullFace>True</CullFace>
-		<Kd>1.0 1.0 1.0</Kd>
-		
-		<Texture>
-			<Name>DebugPointLight</Name>
-			<TextureUnit>0</TextureUnit>
-		</Texture>
-	</Material>
+	
+	<!--Default Cubemap-->
 	<Material>
 		<Name>SkyCubemap_Default</Name>
 		<Shader>CubemapSky</Shader>
 		<CullFace>True</CullFace>
-		
 		<Texture>
 			<Name>SkyCubemap_Default</Name>
 			<TextureUnit>0</TextureUnit>

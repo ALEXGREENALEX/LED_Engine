@@ -41,11 +41,31 @@
 			<Scale>1.0 1.0 1.0</Scale>
 			
 			<Materials>
-				<Material></Material>
-				<Material>WhiteColor</Material>
-				<Material>RedColor</Material>
-				<Material>GreenColor</Material>
-				<Material>BlueColor</Material>
+				<Material>Sponza_Thorn</Material>
+				<Material>Sponza_VasePlant</Material>
+				<Material>Sponza_VaseRound</Material>
+				<Material>Sponza_Background</Material>
+				<Material>Sponza_Bricks</Material>
+				<Material>Sponza_Arch</Material>
+				<Material>Sponza_Ceiling</Material>
+				<Material>Sponza_ColumnA</Material>
+				<Material>Sponza_Floor</Material>
+				<Material>Sponza_ColumnC</Material>
+				<Material>Sponza_Details</Material>
+				<Material>Sponza_ColumnB</Material>
+				<Material>Sponza_Bricks</Material> <!--Tablichka-->
+				<Material>Sponza_Fragpole</Material>
+				<Material>Sponza_Fabric_Green</Material>
+				<Material>Sponza_Fabric_Blue</Material>
+				<Material>Sponza_Fabric_Red</Material>
+				<Material>Sponza_FabricCurtain_Blue</Material>
+				<Material>Sponza_FabricCurtain_Red</Material>
+				<Material>Sponza_FabricCurtain_Green</Material>
+				<Material>Sponza_Chain</Material>
+				<Material>Sponza_VaseHanging</Material>
+				<Material>Sponza_Vase</Material>
+				<Material>Sponza_Lion</Material>
+				<Material>Sponza_Roof</Material>
 			</Materials>
 		</Mesh>
 	</Model>

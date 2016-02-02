@@ -1,5 +1,11 @@
 ﻿<Textures>
 	<Texture>
+		<Name>AlphaTest</Name>
+		<File>AlphaTest.png</File>
+		<MagFilter>Linear</MagFilter>
+		<MinFilter>Linear</MinFilter>
+	</Texture>
+	<Texture>
 		<Name>brick-wall</Name>
 		<File>brick-wall.jpg</File>
 		<AnisotropicFiltering>true</AnisotropicFiltering>
@@ -10,6 +16,7 @@
 		<AnisotropicFiltering>true</AnisotropicFiltering>
 	</Texture>
 	
+	<!--Keypad-->
 	<Texture>
 		<Name>Keypad_D</Name>
 		<File>Keypad_D.png</File>
@@ -30,6 +37,7 @@
 		<Name>Keypad_AO</Name>
 		<File>Keypad_AO.png</File>
 	</Texture>
+
 	<!--Parallax Mapping Test-->
 	<Texture>
 		<Name>ParallaxTest_D</Name>
@@ -50,5 +58,203 @@
 		<Name>ParallaxTest_H</Name>
 		<File>ParallaxTest\ParallaxTest_H.png</File>
 		<Mipmaps>false</Mipmaps>
+	</Texture>
+	
+	<!--Sponza-->
+	<Texture>
+		<Name>Sponza_Thorn_D</Name>
+		<File>Sponza\Thorn\sponza_thorn_diff.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_Thorn_N</Name>
+		<File>Sponza\Thorn\sponza_thorn_norm.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_Thorn_S</Name>
+		<File>Sponza\Thorn\sponza_thorn_spec.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_VasePlant_D</Name>
+		<File>Sponza\Vase Plant\vase_plant_diff.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_VasePlant_S</Name>
+		<File>Sponza\Vase Plant\vase_plant_spec.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_VaseRound_D</Name>
+		<File>Sponza\Vase Round\vase_round_diff.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_VaseRound_N</Name>
+		<File>Sponza\Vase Round\vase_round_norm.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_VaseRound_S</Name>
+		<File>Sponza\Vase Round\vase_round_spec.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_Background_D</Name>
+		<File>Sponza\Background\background_diff.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_Background_N</Name>
+		<File>Sponza\Background\background_norm.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_Bricks_D</Name>
+		<File>Sponza\Bricks\spnza_bricks_a_diff.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_Bricks_N</Name>
+		<File>Sponza\Bricks\spnza_bricks_a_norm.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_Bricks_S</Name>
+		<File>Sponza\Bricks\spnza_bricks_a_spec.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_Arch_D</Name>
+		<File>Sponza\Arch\sponza_arch_diff.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_Arch_N</Name>
+		<File>Sponza\Arch\sponza_arch_norm.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_Arch_S</Name>
+		<File>Sponza\Arch\sponza_arch_spec.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_Ceiling_D</Name>
+		<File>Sponza\Ceiling\sponza_ceiling_a_diff.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_Ceiling_S</Name>
+		<File>Sponza\Ceiling\sponza_ceiling_a_spec.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_ColumnA_D</Name>
+		<File>Sponza\Column A\sponza_column_a_diff.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_ColumnA_N</Name>
+		<File>Sponza\Column A\sponza_column_a_norm.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_ColumnA_S</Name>
+		<File>Sponza\Column A\sponza_column_a_spec.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_Floor_D</Name>
+		<File>Sponza\Floor\sponza_floor_a_diff.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_Floor_S</Name>
+		<File>Sponza\Floor\sponza_floor_a_spec.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_ColumnC_D</Name>
+		<File>Sponza\Column C\sponza_column_c_diff.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_ColumnC_N</Name>
+		<File>Sponza\Column C\sponza_column_c_norm.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_ColumnC_S</Name>
+		<File>Sponza\Column C\sponza_column_c_spec.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_Details_D</Name>
+		<File>Sponza\Details\sponza_details_diff.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_Details_S</Name>
+		<File>Sponza\Details\sponza_details_spec.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_ColumnB_D</Name>
+		<File>Sponza\Column B\sponza_column_b_diff.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_ColumnB_N</Name>
+		<File>Sponza\Column B\sponza_column_b_norm.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_ColumnB_S</Name>
+		<File>Sponza\Column B\sponza_column_b_spec.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_Fragpole_D</Name>
+		<File>Sponza\Fragpole\sponza_flagpole_diff.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_Fragpole_S</Name>
+		<File>Sponza\Fragpole\sponza_flagpole_spec.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_Fabric_Green_D</Name>
+		<File>Sponza\Fabric\sponza_fabric_green_diff.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_Fabric_Blue_D</Name>
+		<File>Sponza\Fabric\sponza_fabric_blue_diff.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_Fabric_Red_D</Name>
+		<File>Sponza\Fabric\sponza_fabric_red_diff.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_Fabric_S</Name>
+		<File>Sponza\Fabric\sponza_fabric_spec.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_FabricCurtain_Blue_D</Name>
+		<File>Sponza\Fabric Curtain\sponza_curtain_blue_diff.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_FabricCurtain_Red_D</Name>
+		<File>Sponza\Fabric Curtain\sponza_curtain_red_diff.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_FabricCurtain_Green_D</Name>
+		<File>Sponza\Fabric Curtain\sponza_curtain_green_diff.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_FabricCurtain_S</Name>
+		<File>Sponza\Fabric Curtain\sponza_curtain_spec.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_Chain_D</Name>
+		<File>Sponza\Chain\chain_texture_diff.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_Chain_N</Name>
+		<File>Sponza\Chain\chain_texture_norm.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_VaseHanging_D</Name>
+		<File>Sponza\vase_hanging_diff.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_Vase_D</Name>
+		<File>Sponza\Vase\vase_diff.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_Vase_N</Name>
+		<File>Sponza\Vase\vase_norm.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_Lion_D</Name>
+		<File>Sponza\Lion\lion_diff.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_Lion_N</Name>
+		<File>Sponza\Lion\lion_norm.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_Roof_D</Name>
+		<File>Sponza\sponza_roof_diff.png</File>
 	</Texture>
 </Textures>

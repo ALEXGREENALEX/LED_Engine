@@ -189,10 +189,10 @@
 			<Scale>1.0 1.0 1.0</Scale>
 			
 			<Materials>
-				<Material>WhiteColor</Material>
-				<Material>RedColor</Material>
-				<Material>GreenColor</Material>
-				<Material>BlueColor</Material>
+				<Material>Color_White</Material>
+				<Material>Color_Red</Material>
+				<Material>Color_Green</Material>
+				<Material>Color_Blue</Material>
 			</Materials>
 		</Mesh>
 	</Model>
