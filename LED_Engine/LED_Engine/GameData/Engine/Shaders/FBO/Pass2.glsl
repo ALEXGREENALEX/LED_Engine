@@ -27,7 +27,6 @@ void main()
 	vec3 DiffuseLight = texture(TextureUnit2, f_UV).rgb;
 	vec3 AO = texture(TextureUnit3, f_UV).rgb;
 	
-	//vec3 Summ = DiffuseLight + Blur(SSAO) * AO + Glow(DiffuseLight);
 	vec3 Summ = DiffuseLight + AO * SSAO_Blur(TextureUnit4, f_UV, 4.0) + Glow(TextureUnit2, f_UV, 8.0);
 	FragColor.rgb = Fog(Summ, Position, WorldPosition); //Fog
 	
@@ -40,6 +39,6 @@ void main()
 	//vec4 R = SSLR(TextureUnit0, TextureUnit1, f_UV, Normal);
 	//FragColor.rgb = R.rgb;
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-	//FragColor.a = sqrt(dot(FragColor.rgb, vec3(0.299, 0.587, 0.114))); //Luma for FXAA
-	FragColor.a = 1.0;
+	FragColor.a = sqrt(dot(FragColor.rgb, vec3(0.299, 0.587, 0.114))); //Luma for FXAA
+	//FragColor.a = 1.0;
 }
