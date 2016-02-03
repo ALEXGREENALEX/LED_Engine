@@ -13,8 +13,8 @@
 	
 	<Camera>
 		<Near>0.1</Near>
-		<Far>500.0</Far>
-		<FOV>60.0</FOV>
+		<Far>100.0</Far>
+		<FOV>75.0</FOV>
 		<MoveSpeed>0.2</MoveSpeed>
 	</Camera>
 	
@@ -69,4 +69,49 @@
 			</Materials>
 		</Mesh>
 	</Model>
+	
+	<Light>
+		<Name>AmbientLight</Name>
+		<Type>Ambient</Type>
+		<Enabled>true</Enabled>
+		<Diffuse>0.3 0.3 0.3</Diffuse>
+	</Light>
+	<Light>
+		<Name>DirectionalLight_1</Name>
+		<Type>Directional</Type>
+		<Enabled>true</Enabled>
+		<Diffuse>0.5 0.5 0.5</Diffuse>
+		<Specular>0.1 0.3 0.9</Specular>
+		<Direction>0.0 1.0 -0.3</Direction>
+	</Light>
+	<Light>
+		<Name>PointLight_1</Name>
+		<Type>Point</Type>
+		<Enabled>true</Enabled>
+		<Diffuse>1.0 1.0 1.0</Diffuse>
+		<Specular>1.0 1.0 1.0</Specular>
+		<Position>5.0 1.5 1.5</Position>
+		<Attenuation>0.0 1.0 0.0</Attenuation>
+	</Light>
+	<Light>
+		<Name>PointLight_2</Name>
+		<Type>Point</Type>
+		<Enabled>true</Enabled>
+		<Diffuse>1.0 1.0 1.0</Diffuse>
+		<Specular>1.0 1.0 1.0</Specular>
+		<Position>5.0 1.5 -2.0</Position>
+		<Attenuation>0.0 1.0 0.0</Attenuation>
+	</Light>
+	<Light>
+		<Name>SpotLight_1</Name>
+		<Type>Spot</Type>
+		<Enabled>true</Enabled>
+		<Diffuse>1.0 1.0 1.0</Diffuse>
+		<Specular>1.0 1.0 1.0</Specular>
+		<Position>-2.0 2.0 -1.0</Position>
+		<Direction>0.0 -1.2 1.0</Direction>
+		<Attenuation>0.0 1.0 0.0</Attenuation>
+		<CutOff>70.0</CutOff>
+		<Exponent>5.0</Exponent>
+	</Light>
 </Map>

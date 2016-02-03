@@ -20,7 +20,6 @@ namespace LED_Engine
         [STAThread]
         private static void Main(string[] args)
         {
-            Lights.MakeSomeLightsForTEST();
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; //For fix parsing values like "0.5" and "0,5"
 
             Glfw.SetErrorCallback(OnError);
@@ -52,7 +51,7 @@ namespace LED_Engine
                     FBO.Init(FB_Width, FB_Height);
 
                     Engine.LoadEngineContent();
-                    Maps.LoadMap("Sponza");
+                    Maps.LoadMap("Sponza"); //Sponza //SampleMap
 
                     GLContextIsLoaded = true;
                 }

@@ -104,34 +104,42 @@
 	<Texture>
 		<Name>Sponza_Bricks_D</Name>
 		<File>Sponza\Bricks\spnza_bricks_a_diff.png</File>
+		<AnisotropicFiltering>true</AnisotropicFiltering>
 	</Texture>
 	<Texture>
 		<Name>Sponza_Bricks_N</Name>
 		<File>Sponza\Bricks\spnza_bricks_a_norm.png</File>
+		<AnisotropicFiltering>true</AnisotropicFiltering>
 	</Texture>
 	<Texture>
 		<Name>Sponza_Bricks_S</Name>
 		<File>Sponza\Bricks\spnza_bricks_a_spec.png</File>
+		<AnisotropicFiltering>true</AnisotropicFiltering>
 	</Texture>
 	<Texture>
 		<Name>Sponza_Arch_D</Name>
 		<File>Sponza\Arch\sponza_arch_diff.png</File>
+		<AnisotropicFiltering>true</AnisotropicFiltering>
 	</Texture>
 	<Texture>
 		<Name>Sponza_Arch_N</Name>
 		<File>Sponza\Arch\sponza_arch_norm.png</File>
+		<AnisotropicFiltering>true</AnisotropicFiltering>
 	</Texture>
 	<Texture>
 		<Name>Sponza_Arch_S</Name>
 		<File>Sponza\Arch\sponza_arch_spec.png</File>
+		<AnisotropicFiltering>true</AnisotropicFiltering>
 	</Texture>
 	<Texture>
 		<Name>Sponza_Ceiling_D</Name>
 		<File>Sponza\Ceiling\sponza_ceiling_a_diff.png</File>
+		<AnisotropicFiltering>true</AnisotropicFiltering>
 	</Texture>
 	<Texture>
 		<Name>Sponza_Ceiling_S</Name>
 		<File>Sponza\Ceiling\sponza_ceiling_a_spec.png</File>
+		<AnisotropicFiltering>true</AnisotropicFiltering>
 	</Texture>
 	<Texture>
 		<Name>Sponza_ColumnA_D</Name>
@@ -148,10 +156,12 @@
 	<Texture>
 		<Name>Sponza_Floor_D</Name>
 		<File>Sponza\Floor\sponza_floor_a_diff.png</File>
+		<AnisotropicFiltering>true</AnisotropicFiltering>
 	</Texture>
 	<Texture>
 		<Name>Sponza_Floor_S</Name>
 		<File>Sponza\Floor\sponza_floor_a_spec.png</File>
+		<AnisotropicFiltering>true</AnisotropicFiltering>
 	</Texture>
 	<Texture>
 		<Name>Sponza_ColumnC_D</Name>

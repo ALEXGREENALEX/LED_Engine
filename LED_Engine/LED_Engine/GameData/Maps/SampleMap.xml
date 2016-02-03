@@ -196,7 +196,55 @@
 			</Materials>
 		</Mesh>
 	</Model>
-	
+	<!--
+	<Light>
+		<Name></Name>
+		<Type></Type>
+		<Enabled></Enabled>
+		<Diffuse>1.0 1.0 1.0</Diffuse>
+		<Specular>1.0 1.0 1.0</Specular>
+		<Position></Position>
+		<Direction></Direction>
+		<Attenuation></Attenuation>
+		<CutOff></CutOff>
+		<Exponent></Exponent>
+	</Light>
+	-->
+	<Light>
+		<Name>AmbientLight</Name>
+		<Type>Ambient</Type>
+		<Enabled>true</Enabled>
+		<Diffuse>0.5 0.5 0.5</Diffuse>
+	</Light>
+	<Light>
+		<Name>DirectionalLight_1</Name>
+		<Type>Directional</Type>
+		<Enabled>true</Enabled>
+		<Diffuse>0.5 0.5 0.5</Diffuse>
+		<Specular>0.1 0.3 0.9</Specular>
+		<Direction>0.0 1.0 0.0</Direction>
+	</Light>
+	<Light>
+		<Name>PointLight_1</Name>
+		<Type>Point</Type>
+		<Enabled>true</Enabled>
+		<Diffuse>1.0 1.0 1.0</Diffuse>
+		<Specular>1.0 1.0 1.0</Specular>
+		<Position>5.0 1.5 1.5</Position>
+		<Attenuation>0.0 1.0 0.0</Attenuation>
+	</Light>
+	<Light>
+		<Name>SpotLight_1</Name>
+		<Type>Spot</Type>
+		<Enabled>true</Enabled>
+		<Diffuse>1.0 1.0 1.0</Diffuse>
+		<Specular>1.0 1.0 1.0</Specular>
+		<Position>-2.0 2.0 -1.0</Position>
+		<Direction>0.0 -1.2 1.0</Direction>
+		<Attenuation>0.0 1.0 0.0</Attenuation>
+		<CutOff>50.0</CutOff>
+		<Exponent>2.0</Exponent>
+	</Light>
 	<!--
 	<Sounds>
 		<Sound>

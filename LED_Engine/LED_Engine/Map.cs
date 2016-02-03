@@ -53,6 +53,7 @@ namespace LED_Engine
             {
                 XmlDocument XML = new XmlDocument();
                 XmlNode xmlNode;
+                XmlNodeList xmlNodeList;
 
                 XML.Load(MapsList[MapName]);
 
@@ -241,6 +242,115 @@ namespace LED_Engine
                 }
                 #endregion
 
+                #region Light
+                foreach (XmlNode xmlNodeLight in XML.DocumentElement.SelectNodes("Light"))
+                {
+                    Light light = new Light();
+                    light.Name = xmlNodeLight.SelectSingleNode("Name").InnerText;
+
+                    if (xmlNodeLight.SelectNodes("Enabled").Count > 0)
+                        light.Enabled = Convert.ToBoolean(xmlNodeLight.SelectSingleNode("Enabled").InnerText);
+
+                    LightType lightType = LightType.Point;
+                    if (xmlNodeLight.SelectNodes("Type").Count > 0)
+                    {
+                        string meshTypeStr = xmlNodeLight.SelectSingleNode("Type").InnerText;
+
+                        if (!Enum.TryParse(meshTypeStr, true, out lightType))
+                            lightType = LightType.Point;
+
+                        light.Type = lightType;
+                    }
+
+                    #region Diffuse Light
+                    xmlNodeList = xmlNodeLight.SelectNodes("Diffuse");
+                    if (xmlNodeList.Count > 0)
+                    {
+                        try
+                        {
+                            string[] Diffuse = xmlNodeList.Item(0).InnerText.Split(
+                                new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                            float R, G, B;
+                            switch (Diffuse.Length)
+                            {
+                                case 1:
+                                    R = float.Parse(Diffuse[0]);
+                                    light.Diffuse = new Vector3(R, R, R);
+                                    break;
+                                case 3:
+                                    R = float.Parse(Diffuse[0]);
+                                    G = float.Parse(Diffuse[1]);
+                                    B = float.Parse(Diffuse[2]);
+                                    light.Diffuse = new Vector3(R, G, B);
+                                    break;
+                            }
+                        }
+                        catch { }
+                    }
+                    #endregion
+
+                    #region Specular Light
+                    xmlNodeList = xmlNodeLight.SelectNodes("Specular");
+                    if (xmlNodeList.Count > 0)
+                    {
+                        string[] Specular = xmlNodeList.Item(0).InnerText.Split(
+                            new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                        float R, G, B;
+                        switch (Specular.Length)
+                        {
+                            case 1:
+                                R = float.Parse(Specular[0]);
+                                light.Specular = new Vector3(R, R, R);
+                                break;
+                            case 3:
+                                R = float.Parse(Specular[0]);
+                                G = float.Parse(Specular[1]);
+                                B = float.Parse(Specular[2]);
+                                light.Specular = new Vector3(R, G, B);
+                                break;
+                        }
+                    }
+                    #endregion
+
+                    #region Position
+                    xmlNodeList = xmlNodeLight.SelectNodes("Position");
+                    if (xmlNodeList.Count > 0)
+                    {
+                        string[] Pos = xmlNodeList.Item(0).InnerText.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                        light.Position = new Vector3(float.Parse(Pos[0]), float.Parse(Pos[1]), float.Parse(Pos[2]));
+                    }
+                    #endregion
+
+                    #region Direction
+                    xmlNodeList = xmlNodeLight.SelectNodes("Direction");
+                    if (xmlNodeList.Count > 0)
+                    {
+                        string[] Direct = xmlNodeList.Item(0).InnerText.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                        light.Direction = new Vector3(float.Parse(Direct[0]), float.Parse(Direct[1]), float.Parse(Direct[2]));
+                    }
+                    #endregion
+
+                    #region Attenuation
+                    xmlNodeList = xmlNodeLight.SelectNodes("Attenuation");
+                    if (xmlNodeList.Count > 0)
+                    {
+                        string[] Atten = xmlNodeList.Item(0).InnerText.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                        light.Attenuation = new Vector3(float.Parse(Atten[0]), float.Parse(Atten[1]), float.Parse(Atten[2]));
+                    }
+                    #endregion
+
+                    if (xmlNodeLight.SelectNodes("CutOFF").Count > 0)
+                        light.CutOFF = float.Parse(xmlNodeLight.SelectSingleNode("CutOFF").InnerText);
+
+                    if (xmlNodeLight.SelectNodes("Exponent").Count > 0)
+                        light.Exponent = float.Parse(xmlNodeLight.SelectSingleNode("Exponent").InnerText);
+
+                    Lights.LIGHTS.Add(light);
+                }
+                #endregion
+
                 #region Sounds
                 //xmlNodeList = XML.DocumentElement.SelectSingleNode("Sounds").SelectNodes("Sound");
 
@@ -271,6 +381,7 @@ namespace LED_Engine
             Name = String.Empty;
             Description = String.Empty;
 
+            Lights.LIGHTS.Clear();
             Game.SkyBox.Free();
             Game.MainCamera = new Camera();
 
