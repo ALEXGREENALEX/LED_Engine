@@ -7,24 +7,24 @@
 	</Description>
 
 	<PlayerStart>
-		<Position>0.0 0.0 0.0</Position>
-		<Rotation>0.0 0.0 0.0</Rotation>
+		<Position>0.0 2.0 0.0</Position>
+		<Rotation>1.570796 0.0 0.0</Rotation>
 	</PlayerStart>
 	
 	<Camera>
 		<Near>0.1</Near>
 		<Far>100.0</Far>
-		<FOV>75.0</FOV>
+		<FOV>60.0</FOV>
 		<MoveSpeed>0.2</MoveSpeed>
 	</Camera>
 	
 	<Skybox>SkyCubemap_Default</Skybox>
 	
 	<Fog>
-		<Enabled>false</Enabled>
+		<Enabled>true</Enabled>
 		<Color>0.5 0.5 0.5</Color>
-		<DistanceMin>20.0</DistanceMin>
-		<DistanceMax>80.0</DistanceMax>
+		<DistanceMin>10.0</DistanceMin>
+		<DistanceMax>50.0</DistanceMax>
 	</Fog>
 	
 	<Model>

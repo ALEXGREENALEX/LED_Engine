@@ -18,8 +18,6 @@ namespace LED_Engine
         public static Camera MainCamera = new Camera();
         public static Mesh SkyBox = new Mesh();
 
-        public static float Angle = MathHelper.DegreesToRadians(100.0f);
-
         public static Mesh DebugAmbientLight = new Mesh();
         public static Mesh DebugDirectionalLight = new Mesh();
         public static Mesh DebugPointLight = new Mesh();
@@ -161,7 +159,7 @@ namespace LED_Engine
             else
                 GL.Disable(EnableCap.Multisample);
 
-            GL.ClearColor(Color4.Black);
+            GL.ClearColor(Color4.Gray);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             #endregion
         }
@@ -196,15 +194,10 @@ namespace LED_Engine
 
         static void Draw(Mesh m, MeshPart v)
         {
-            if (v.Material.Transparent)
-                GL.Disable(EnableCap.CullFace);
+            if (v.Material.CullFace)
+                GL.Enable(EnableCap.CullFace);
             else
-            {
-                if (v.Material.CullFace)
-                    GL.Enable(EnableCap.CullFace);
-                else
-                    GL.Disable(EnableCap.CullFace);
-            }
+                GL.Disable(EnableCap.CullFace);
 
             int TempLocation;
             Shader shader = v.Material.Shader;

@@ -27,12 +27,6 @@
 		<Vertex>FBO\Universal_VS.glsl</Vertex>
 		<Fragment>FBO\Pass1.glsl</Fragment>
 	</RTT_Shader>
-
-	<RTT_Shader>
-		<Name>Pass2</Name>
-		<Vertex>FBO\Universal_VS.glsl</Vertex>
-		<Fragment>FBO\Pass2.glsl</Fragment>
-	</RTT_Shader>
 	
 		<!--PostProcess Shaders-->
 	<RTT_Shader>

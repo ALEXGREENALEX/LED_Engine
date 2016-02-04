@@ -142,7 +142,7 @@
 	<Material>
 		<Name>Sponza_Thorn</Name>
 		<Shader></Shader>
-		<!--<Transparent>True</Transparent>-->
+		<Transparent>True</Transparent>
 		<!--<Kd>0.588</Kd>
 		<Ks>0.588</Ks>
 		<Ka>0.588</Ka>
@@ -163,7 +163,7 @@
 	<Material>
 		<Name>Sponza_VasePlant</Name>
 		<Shader></Shader>
-		<!--<Transparent>True</Transparent>-->
+		<Transparent>True</Transparent>
 		<!--<Kd>0.588</Kd>
 		<Ks>0.588</Ks>
 		<Ka>0.588</Ka>
@@ -476,7 +476,7 @@
 	<Material>
 		<Name>Sponza_Chain</Name>
 		<Shader></Shader>
-		<!--<Transparent>True</Transparent>-->
+		<Transparent>True</Transparent>
 		<!--<Kd>0.588</Kd>
 		<Ks>0.588</Ks>
 		<Ka>0.588</Ka>

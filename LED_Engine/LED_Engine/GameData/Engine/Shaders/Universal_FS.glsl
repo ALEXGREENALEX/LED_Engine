@@ -28,6 +28,9 @@ void main()
 	
 	if (TexUnits[0])
 		Diffuse *= texture(TextureUnit0, f_UV);
+		
+	if (Diffuse.a <= 0.02)
+		discard;
 	
 	if (TexUnits[1])
 		NormalXY.xy = normalize(f_TBN * normalize(texture(TextureUnit1, f_UV).rgb * 2.0 - 1.0)).xy;

@@ -80,7 +80,7 @@ void PhongModel(SpotLightInfo L, vec3 N, vec3 Pos, float Shininess, inout vec3 D
 	}
 }
 
-vec3 CalcLight(vec3 Position, vec3 Normal, vec3 Kd, vec3 Ks, vec3 Ka, vec3 Ke, float Shininess, out vec3 AO)
+vec3 CalcLight(vec3 Position, vec3 Normal, vec3 Kd, vec3 Ks, vec3 Ka, vec3 Ke, float Shininess)
 {
 	vec3 AccumDiffuse = vec3(0.0);
 	vec3 AccumSpecular = vec3(0.0);
@@ -112,8 +112,8 @@ vec3 CalcLight(vec3 Position, vec3 Normal, vec3 Kd, vec3 Ks, vec3 Ka, vec3 Ke, f
 			i = LightS.length();
 	}
 	
-	AO = LightA * Ka;
-	return	AccumDiffuse * Kd + //Diffuse
+	return	LightA * Ka + //Ambient
+			AccumDiffuse * Kd + //Diffuse
 			AccumSpecular * Ks + //Specular
 			Ke; //Emissive
 }

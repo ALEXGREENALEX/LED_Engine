@@ -105,19 +105,19 @@ namespace LED_Engine
                 /// fxaaQualitySubpix
                 /// Default: 0.75
                 /// </summary>
-                public static float Subpix = 0.75f;
+                public static float Subpix = 1.0f;
 
                 /// <summary>
                 /// fxaaQualityEdgeThreshold
                 /// Default: 0.166
                 /// </summary>
-                public static float EdgeThreshold = 0.166f;
+                public static float EdgeThreshold = 0.125f;
 
                 /// <summary>
                 /// fxaaQualityEdgeThresholdMin
-                /// Default: 0.0833
+                /// Default: 0.0625
                 /// </summary>
-                public static float EdgeThresholdMin = 0.0833f;
+                public static float EdgeThresholdMin = 0.0625f;
             }
 
             public static class Fog

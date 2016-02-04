@@ -163,19 +163,11 @@ namespace LED_Engine
                 GL.BindFramebuffer(FramebufferTarget.FramebufferExt, FBO.FBO_P1);
                 GL.Enable(EnableCap.DepthTest); // Включаем тест глубины
                 GL.DepthFunc(DepthFunction.Lequal);
+                GL.ClearColor(Color4.Gray);
                 GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
-                //if (Settings.Debug.Enabled)
-                //{
-                //    GL.Disable(EnableCap.Dither);
-                //    GL.FrontFace(FrontFaceDirection.Ccw);
-                //    GL.PolygonMode(MaterialFace.Front, PolygonMode.Fill);
-                //    GL.PolygonMode(MaterialFace.Back, PolygonMode.Line);
-                //}
 
                 // Copy All Meshes to DrawableObjects
                 List<Mesh> DrawableMeshes = new List<Mesh>();
-                List<Mesh> TransparentMeshes = new List<Mesh>();
 
                 for (int i = 0; i < Models.MODELS.Count; i++)
                     if (Models.MODELS[i].Visible)
@@ -184,55 +176,17 @@ namespace LED_Engine
                 //if (Settings.Debug.Enabled && Settings.Debug.DrawDebugObjects)
                 //    DrawableMeshes.AddRange(DebugObjects);
 
-                #region Сортируем прозрачные объекты
-                for (int i = 0; i < DrawableMeshes.Count; i++)
-                {
-                    for (int j = 0; j < DrawableMeshes[i].Parts.Count; j++)
-                    {
-                        if (DrawableMeshes[i].Parts[j].Material.Transparent)
-                        {
-                            TransparentMeshes.Add(DrawableMeshes[i]);
-                            DrawableMeshes.RemoveAt(i);
-                            i--;
-                            break;
-                        }
-                    }
-                }
-
-                TransparentMeshes.Sort(delegate(Mesh A, Mesh B)
-                {
-                    return (B.Position - MainCamera.Position).Length.CompareTo((A.Position - MainCamera.Position).Length);
-                });
-                //DrawableObjects.AddRange(TransparentObjects);
-                #endregion
-
-                GL.Disable(EnableCap.AlphaTest);
-                GL.Disable(EnableCap.Blend);
-                foreach (Mesh v in DrawableMeshes) // Draw Opaque
+                foreach (Mesh v in DrawableMeshes) //Draw All
                     Draw(v);
-
-                /*foreach (Mesh v in TransparentObjects) // Draw Transparent Objects
-                {
-                    GL.Enable(EnableCap.AlphaTest);
-                    GL.Enable(EnableCap.Blend);
-                    GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha); // Функция смешивания цветов для прозрачных материалов
-                    //GL.BlendFuncSeparate(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha, BlendingFactorSrc.One, BlendingFactorDest.One);
-
-                    GL.Enable(EnableCap.CullFace);
-                    GL.CullFace(CullFaceMode.Front);
-                    Draw(v);
-                    GL.CullFace(CullFaceMode.Back);
-                    Draw(v);
-                }*/
 
                 // Draw All Geometry to PostProcess FBO
                 FBO.Draw_P1();
-                FBO.Draw_P2();
 
                 // Draw SkyBox to PostProcess FBO
                 if (SkyBox != null)
                 {
                     GL.BindFramebuffer(FramebufferTarget.FramebufferExt, FBO.FBO_PP);
+                    GL.ClearColor(Color4.Gray);
                     GL.Enable(EnableCap.CullFace);
                     GL.Enable(EnableCap.DepthTest);
                     Draw(SkyBox);
@@ -276,10 +230,6 @@ namespace LED_Engine
                 MainCamera.AddRotation(0.0f, -camRotateSens);
 
             SkyBox.Position = MainCamera.Position;
-
-            Angle += 0.02f * timeK;
-            if (Angle > MathHelper.Pi * 2)
-                Angle = -MathHelper.Pi * 2;
         }
     }
 }

@@ -76,6 +76,9 @@
 	<Texture>
 		<Name>Sponza_VasePlant_D</Name>
 		<File>Sponza\Vase Plant\vase_plant_diff.png</File>
+		<Mipmaps>true</Mipmaps>
+		<MagFilter>Nearest</MagFilter>
+		<MinFilter>NearestMipmapNearest</MinFilter>
 	</Texture>
 	<Texture>
 		<Name>Sponza_VasePlant_S</Name>
