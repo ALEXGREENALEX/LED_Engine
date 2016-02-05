@@ -11,11 +11,6 @@
 	</Shader>
 	
 	<Shader>
-		<Name>ParallaxMapping</Name>
-		<Vertex>Universal_VS.glsl</Vertex>
-		<Fragment>ParallaxMapping_FS.glsl</Fragment>
-	</Shader>
-	<Shader>
 		<Name>ReflectRefract</Name>
 		<Vertex>CubemapReflectRefract_VS.glsl</Vertex>
 		<Fragment>CubemapReflectRefract_FS.glsl</Fragment>
@@ -70,10 +65,5 @@
 		<Name>Debug_Specular</Name>
 		<Vertex>FBO\Universal_VS.glsl</Vertex>
 		<Fragment>FBO\Debug_Specular.glsl</Fragment>
-	</RTT_Shader>
-	<RTT_Shader>
-		<Name>Debug_ShininessReflection</Name>
-		<Vertex>FBO\Universal_VS.glsl</Vertex>
-		<Fragment>FBO\Debug_ShininessReflection.glsl</Fragment>
 	</RTT_Shader>
 </Shaders>

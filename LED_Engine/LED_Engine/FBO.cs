@@ -21,8 +21,7 @@ namespace LED_Engine
             DebugShaderIndex_Normals,
             DebugShaderIndex_AmbientOclusion,
             DebugShaderIndex_Emissive,
-            DebugShaderIndex_Specular,
-            DebugShaderIndex_ShininessReflection;
+            DebugShaderIndex_Specular;
 
         public static List<Shader> Shaders = new List<Shader>();
 
@@ -96,9 +95,6 @@ namespace LED_Engine
                         break;
                     case "Debug_Specular":
                         DebugShaderIndex_Specular = i;
-                        break;
-                    case "Debug_ShininessReflection":
-                        DebugShaderIndex_ShininessReflection = i;
                         break;
                 }
             }

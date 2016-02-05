@@ -112,12 +112,14 @@
 	<Texture>
 		<Name>Sponza_Bricks_N</Name>
 		<File>Sponza\Bricks\spnza_bricks_a_norm.png</File>
-		<AnisotropicFiltering>true</AnisotropicFiltering>
 	</Texture>
 	<Texture>
 		<Name>Sponza_Bricks_S</Name>
 		<File>Sponza\Bricks\spnza_bricks_a_spec.png</File>
-		<AnisotropicFiltering>true</AnisotropicFiltering>
+	</Texture>
+	<Texture>
+		<Name>Sponza_Bricks_H</Name>
+		<File>Sponza\Bricks\spnza_bricks_a_heig.png</File>
 	</Texture>
 	<Texture>
 		<Name>Sponza_Arch_D</Name>
@@ -127,12 +129,10 @@
 	<Texture>
 		<Name>Sponza_Arch_N</Name>
 		<File>Sponza\Arch\sponza_arch_norm.png</File>
-		<AnisotropicFiltering>true</AnisotropicFiltering>
 	</Texture>
 	<Texture>
 		<Name>Sponza_Arch_S</Name>
 		<File>Sponza\Arch\sponza_arch_spec.png</File>
-		<AnisotropicFiltering>true</AnisotropicFiltering>
 	</Texture>
 	<Texture>
 		<Name>Sponza_Ceiling_D</Name>
@@ -142,7 +142,6 @@
 	<Texture>
 		<Name>Sponza_Ceiling_S</Name>
 		<File>Sponza\Ceiling\sponza_ceiling_a_spec.png</File>
-		<AnisotropicFiltering>true</AnisotropicFiltering>
 	</Texture>
 	<Texture>
 		<Name>Sponza_ColumnA_D</Name>
@@ -162,9 +161,12 @@
 		<AnisotropicFiltering>true</AnisotropicFiltering>
 	</Texture>
 	<Texture>
+		<Name>Sponza_Floor_N</Name>
+		<File>Sponza\Floor\sponza_floor_a_norm.png</File>
+	</Texture>
+	<Texture>
 		<Name>Sponza_Floor_S</Name>
 		<File>Sponza\Floor\sponza_floor_a_spec.png</File>
-		<AnisotropicFiltering>true</AnisotropicFiltering>
 	</Texture>
 	<Texture>
 		<Name>Sponza_ColumnC_D</Name>
@@ -241,6 +243,9 @@
 	<Texture>
 		<Name>Sponza_Chain_D</Name>
 		<File>Sponza\Chain\chain_texture_diff.png</File>
+		<Mipmaps>true</Mipmaps>
+		<MagFilter>Nearest</MagFilter>
+		<MinFilter>NearestMipmapLinear</MinFilter>
 	</Texture>
 	<Texture>
 		<Name>Sponza_Chain_N</Name>
@@ -248,7 +253,11 @@
 	</Texture>
 	<Texture>
 		<Name>Sponza_VaseHanging_D</Name>
-		<File>Sponza\vase_hanging_diff.png</File>
+		<File>Sponza\Vase Hanging\vase_hanging_diff.png</File>
+	</Texture>
+	<Texture>
+		<Name>Sponza_VaseHanging_E</Name>
+		<File>Sponza\Vase Hanging\vase_hanging_emis.png</File>
 	</Texture>
 	<Texture>
 		<Name>Sponza_Vase_D</Name>

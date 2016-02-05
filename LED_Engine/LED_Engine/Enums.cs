@@ -15,7 +15,6 @@ namespace LED_Engine
         AmbientOclusion,
         Emissive,
         Specular,
-        ShininessReflection,
     };
 
     public enum MeshType

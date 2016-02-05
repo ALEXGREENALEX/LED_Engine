@@ -87,9 +87,6 @@ namespace LED_Engine
                 case DrawMode.Specular:
                     FBO.ShaderIndex_P1 = FBO.DebugShaderIndex_Specular;
                     break;
-                case DrawMode.ShininessReflection:
-                    FBO.ShaderIndex_P1 = FBO.DebugShaderIndex_ShininessReflection;
-                    break;
             }
             #endregion
 

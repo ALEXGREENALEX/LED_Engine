@@ -19,6 +19,16 @@
 		<File>posz.jpg</File>
 		<File>negz.jpg</File>
 	</CubemapTexture>
+	<CubemapTexture>
+		<Name>SkyCubemap_SaintLazarusChurch</Name>
+		<Dir>SaintLazarusChurch</Dir>
+		<File>posx.jpg</File>
+		<File>negx.jpg</File>
+		<File>posy.jpg</File>
+		<File>negy.jpg</File>
+		<File>posz.jpg</File>
+		<File>negz.jpg</File>
+	</CubemapTexture>
 	<!--Далее идут Cubemaps для отражений-->
 	<CubemapTexture>
 		<Name>Cubemap_Storforsen</Name>

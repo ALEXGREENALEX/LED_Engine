@@ -9,6 +9,6 @@ layout(location = 0) out vec4 FragColor;
 
 void main()
 {
-	float Depth = LinearDepth(TextureUnit0, f_UV);
+	float Depth = LinearDepth(TextureUnit0, f_UV) * 1.2;
 	FragColor = vec4(Depth, Depth, Depth, 1.0);
 }

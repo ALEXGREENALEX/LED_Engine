@@ -1,16 +1,5 @@
 ﻿<Materials>
-	<Material>
-		<Name>TransparentRedGlass</Name>
-		<Shader></Shader>
-		<Transparent>True</Transparent>
-		<Kd>1.0 1.0 1.0 0.5</Kd>
-		
-		<Texture>
-			<Name>AlphaTest</Name>
-			<TextureUnit>0</TextureUnit>
-		</Texture>
-	</Material>
-	
+	<!--Cubemaps materials-->
 	<Material>
 		<Name>SkyCubemap_Storforsen</Name>
 		<Shader>CubemapSky</Shader>
@@ -34,6 +23,18 @@
 	</Material>
 	
 	<Material>
+		<Name>SkyCubemap_SaintLazarusChurch</Name>
+		<Shader>CubemapSky</Shader>
+		<CullFace>True</CullFace>
+		
+		<Texture>
+			<Name>SkyCubemap_SaintLazarusChurch</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
+	</Material>
+	
+	<!--Materials-->
+	<Material>
 		<Name>Reflection</Name>
 		<Shader>ReflectRefract</Shader>
 		<CullFace>True</CullFace>
@@ -44,10 +45,6 @@
 			<Name>Cubemap_Storforsen</Name>
 			<TextureUnit>0</TextureUnit>
 		</Texture>
-		<!--<Texture>
-			<Name>AlphaTest</Name>
-			<TextureUnit>1</TextureUnit>
-		</Texture>-->
 	</Material>
 	
 	<Material>
@@ -61,15 +58,11 @@
 			<Name>Cubemap_Storforsen</Name>
 			<TextureUnit>0</TextureUnit>
 		</Texture>
-		<!--<Texture>
-			<Name>AlphaTest</Name>
-			<TextureUnit>1</TextureUnit>
-		</Texture>-->
 	</Material>
 	
 	<Material>
 		<Name>ParallaxMapping</Name>
-		<Shader>ParallaxMapping</Shader>
+		<Shader></Shader>
 		<CullFace>True</CullFace>
 		
 		<Texture>
@@ -232,6 +225,10 @@
 			<Name>Sponza_Bricks_S</Name>
 			<TextureUnit>2</TextureUnit>
 		</Texture>
+		<Texture>
+			<Name>Sponza_Bricks_H</Name>
+			<TextureUnit>5</TextureUnit>
+		</Texture>
 	</Material>
 	<Material>
 		<Name>Sponza_Arch</Name>
@@ -299,6 +296,10 @@
 		<Texture>
 			<Name>Sponza_Floor_D</Name>
 			<TextureUnit>0</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Sponza_Floor_N</Name>
+			<TextureUnit>1</TextureUnit>
 		</Texture>
 		<Texture>
 			<Name>Sponza_Floor_S</Name>
@@ -477,6 +478,7 @@
 		<Name>Sponza_Chain</Name>
 		<Shader></Shader>
 		<Transparent>True</Transparent>
+		<CullFace>false</CullFace>
 		<!--<Kd>0.588</Kd>
 		<Ks>0.588</Ks>
 		<Ka>0.588</Ka>
@@ -493,6 +495,7 @@
 	<Material>
 		<Name>Sponza_VaseHanging</Name>
 		<Shader></Shader>
+		<Ke>2.0</Ke>
 		<!--<Kd>0.588</Kd>
 		<Ks>0.588</Ks>
 		<Ka>0.588</Ka>
@@ -500,6 +503,10 @@
 		<Texture>
 			<Name>Sponza_VaseHanging_D</Name>
 			<TextureUnit>0</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Sponza_VaseHanging_E</Name>
+			<TextureUnit>3</TextureUnit>
 		</Texture>
 	</Material>
 	<Material>
