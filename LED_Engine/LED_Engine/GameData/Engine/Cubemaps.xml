@@ -9,4 +9,14 @@
 		<File>posz.jpg</File>
 		<File>negz.jpg</File>
 	</CubemapTexture>
+	<CubemapTexture>
+		<Name>SkyCubemap_WhiteRoom</Name>
+		<Dir>WhiteRoom</Dir>
+		<File>WhiteRoom_XZ.jpg</File>
+		<File>WhiteRoom_XZ.jpg</File>
+		<File>WhiteRoom_Y.jpg</File>
+		<File>WhiteRoom_Y.jpg</File>
+		<File>WhiteRoom_XZ.jpg</File>
+		<File>WhiteRoom_XZ.jpg</File>
+	</CubemapTexture>
 </CubemapTextures>

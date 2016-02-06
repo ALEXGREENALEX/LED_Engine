@@ -19,4 +19,8 @@
 		<Name>Sponza</Name>
 		<File>Sponza.obj</File>
 	</Mesh>
+	<Mesh>
+		<Name>Woods</Name>
+		<File>Woods.obj</File>
+	</Mesh>
 </Meshes>

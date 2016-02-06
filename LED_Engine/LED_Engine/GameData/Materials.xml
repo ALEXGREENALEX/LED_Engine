@@ -61,29 +61,6 @@
 	</Material>
 	
 	<Material>
-		<Name>ParallaxMapping</Name>
-		<Shader></Shader>
-		<CullFace>True</CullFace>
-		
-		<Texture>
-			<Name>ParallaxTest_D</Name>
-			<TextureUnit>0</TextureUnit>
-		</Texture>
-		<Texture>
-			<Name>ParallaxTest_N</Name>
-			<TextureUnit>1</TextureUnit>
-		</Texture>
-		<Texture>
-			<Name>ParallaxTest_S</Name>
-			<TextureUnit>2</TextureUnit>
-		</Texture>
-		<Texture>
-			<Name>ParallaxTest_H</Name>
-			<TextureUnit>5</TextureUnit>
-		</Texture>
-	</Material>
-	
-	<Material>
 		<Name>BrickWall</Name>
 		<Shader></Shader>
 		<CullFace>True</CullFace>
@@ -551,6 +528,105 @@
 		<Texture>
 			<Name>Sponza_Roof_D</Name>
 			<TextureUnit>0</TextureUnit>
+		</Texture>
+	</Material>
+	
+	<!--Woods Material-->
+	<Material>
+		<Name>Woods_D</Name>
+		<Shader></Shader>
+		<CullFace>True</CullFace>
+		
+		<Texture>
+			<Name>Woods_D</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
+	</Material>
+	<Material>
+		<Name>Woods_DNS</Name>
+		<Shader></Shader>
+		<CullFace>True</CullFace>
+		<Ks>0.8</Ks>
+		<Shininess>40.0</Shininess>
+		<Texture>
+			<Name>Woods_D</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Woods_N</Name>
+			<TextureUnit>1</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Woods_S</Name>
+			<TextureUnit>2</TextureUnit>
+		</Texture>
+	</Material>
+	
+	<!--POM-->
+	<Material>
+		<Name>ParallaxMapping_1</Name>
+		<Shader></Shader>
+		<CullFace>True</CullFace>
+		
+		<Texture>
+			<Name>ParallaxTest_1_D</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>ParallaxTest_1_N</Name>
+			<TextureUnit>1</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>ParallaxTest_1_S</Name>
+			<TextureUnit>2</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>ParallaxTest_1_H</Name>
+			<TextureUnit>5</TextureUnit>
+		</Texture>
+	</Material>
+	<Material>
+		<Name>ParallaxMapping_2</Name>
+		<Shader></Shader>
+		<CullFace>True</CullFace>
+		
+		<Texture>
+			<Name>ParallaxTest_2_D</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>ParallaxTest_2_N</Name>
+			<TextureUnit>1</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>ParallaxTest_2_S</Name>
+			<TextureUnit>2</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>ParallaxTest_2_H</Name>
+			<TextureUnit>5</TextureUnit>
+		</Texture>
+	</Material>
+	<Material>
+		<Name>ParallaxMapping_3</Name>
+		<Shader></Shader>
+		<CullFace>True</CullFace>
+		
+		<Texture>
+			<Name>ParallaxTest_3_D</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>ParallaxTest_3_N</Name>
+			<TextureUnit>1</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>ParallaxTest_3_S</Name>
+			<TextureUnit>2</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>ParallaxTest_3_H</Name>
+			<TextureUnit>5</TextureUnit>
 		</Texture>
 	</Material>
 </Materials>

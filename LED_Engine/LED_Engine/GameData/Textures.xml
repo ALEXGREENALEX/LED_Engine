@@ -37,28 +37,6 @@
 		<Name>Keypad_AO</Name>
 		<File>Keypad_AO.png</File>
 	</Texture>
-
-	<!--Parallax Mapping Test-->
-	<Texture>
-		<Name>ParallaxTest_D</Name>
-		<File>ParallaxTest\ParallaxTest_D.png</File>
-		<Mipmaps>false</Mipmaps>
-	</Texture>
-	<Texture>
-		<Name>ParallaxTest_N</Name>
-		<File>ParallaxTest\ParallaxTest_N.png</File>
-		<Mipmaps>false</Mipmaps>
-	</Texture>
-	<Texture>
-		<Name>ParallaxTest_S</Name>
-		<File>ParallaxTest\ParallaxTest_S.png</File>
-		<Mipmaps>false</Mipmaps>
-	</Texture>
-	<Texture>
-		<Name>ParallaxTest_H</Name>
-		<File>ParallaxTest\ParallaxTest_H.png</File>
-		<Mipmaps>false</Mipmaps>
-	</Texture>
 	
 	<!--Sponza-->
 	<Texture>
@@ -278,5 +256,125 @@
 	<Texture>
 		<Name>Sponza_Roof_D</Name>
 		<File>Sponza\sponza_roof_diff.png</File>
+	</Texture>
+	<!--Woods-->
+	<Texture>
+		<Name>Woods_D</Name>
+		<File>Woods\Woods_D.png</File>
+		<MagFilter>Linear</MagFilter>
+		<MinFilter>LinearMipmapLinear</MinFilter>
+		<AnisotropicFiltering>true</AnisotropicFiltering>
+	</Texture>
+	<Texture>
+		<Name>Woods_S</Name>
+		<File>Woods\Woods_S.png</File>
+		<MagFilter>Linear</MagFilter>
+		<MinFilter>LinearMipmapLinear</MinFilter>
+		<AnisotropicFiltering>true</AnisotropicFiltering>
+	</Texture>
+	<Texture>
+		<Name>Woods_N</Name>
+		<File>Woods\Woods_N.png</File>
+		<MagFilter>Linear</MagFilter>
+		<MinFilter>LinearMipmapLinear</MinFilter>
+		<AnisotropicFiltering>true</AnisotropicFiltering>
+	</Texture>
+	
+	<!--Parallax Mapping Test-->
+	<Texture>
+		<Name>ParallaxTest_1_D</Name>
+		<File>ParallaxTest_1\ParallaxTest_D.png</File>
+		<Mipmaps>true</Mipmaps>
+		<MagFilter>Linear</MagFilter>
+		<MinFilter>LinearMipmapNearest</MinFilter>
+		<AnisotropicFiltering>true</AnisotropicFiltering>
+	</Texture>
+	<Texture>
+		<Name>ParallaxTest_1_N</Name>
+		<File>ParallaxTest_1\ParallaxTest_N.png</File>
+		<Mipmaps>true</Mipmaps>
+		<MagFilter>Linear</MagFilter>
+		<MinFilter>LinearMipmapNearest</MinFilter>
+		<AnisotropicFiltering>true</AnisotropicFiltering>
+	</Texture>
+	<Texture>
+		<Name>ParallaxTest_1_S</Name>
+		<File>ParallaxTest_1\ParallaxTest_S.png</File>
+		<Mipmaps>true</Mipmaps>
+		<MagFilter>Linear</MagFilter>
+		<MinFilter>LinearMipmapNearest</MinFilter>
+		<AnisotropicFiltering>true</AnisotropicFiltering>
+	</Texture>
+	<Texture>
+		<Name>ParallaxTest_1_H</Name>
+		<File>ParallaxTest_1\ParallaxTest_H.png</File>
+		<Mipmaps>true</Mipmaps>
+		<MagFilter>Linear</MagFilter>
+		<MinFilter>LinearMipmapNearest</MinFilter>
+		<AnisotropicFiltering>true</AnisotropicFiltering>
+	</Texture>
+	<Texture>
+		<Name>ParallaxTest_2_D</Name>
+		<File>ParallaxTest_2\ParallaxTest_D.png</File>
+		<Mipmaps>true</Mipmaps>
+		<MagFilter>Linear</MagFilter>
+		<MinFilter>LinearMipmapNearest</MinFilter>
+		<AnisotropicFiltering>true</AnisotropicFiltering>
+	</Texture>
+	<Texture>
+		<Name>ParallaxTest_2_N</Name>
+		<File>ParallaxTest_2\ParallaxTest_N.png</File>
+		<Mipmaps>true</Mipmaps>
+		<MagFilter>Linear</MagFilter>
+		<MinFilter>LinearMipmapNearest</MinFilter>
+		<AnisotropicFiltering>true</AnisotropicFiltering>
+	</Texture>
+	<Texture>
+		<Name>ParallaxTest_2_S</Name>
+		<File>ParallaxTest_2\ParallaxTest_S.png</File>
+		<Mipmaps>true</Mipmaps>
+		<MagFilter>Linear</MagFilter>
+		<MinFilter>LinearMipmapNearest</MinFilter>
+		<AnisotropicFiltering>true</AnisotropicFiltering>
+	</Texture>
+	<Texture>
+		<Name>ParallaxTest_2_H</Name>
+		<File>ParallaxTest_2\ParallaxTest_H.png</File>
+		<Mipmaps>true</Mipmaps>
+		<MagFilter>Linear</MagFilter>
+		<MinFilter>LinearMipmapNearest</MinFilter>
+		<AnisotropicFiltering>true</AnisotropicFiltering>
+	</Texture>
+	<Texture>
+		<Name>ParallaxTest_3_D</Name>
+		<File>ParallaxTest_3\ParallaxTest_D.png</File>
+		<Mipmaps>true</Mipmaps>
+		<MagFilter>Linear</MagFilter>
+		<MinFilter>LinearMipmapNearest</MinFilter>
+		<AnisotropicFiltering>true</AnisotropicFiltering>
+	</Texture>
+	<Texture>
+		<Name>ParallaxTest_3_N</Name>
+		<File>ParallaxTest_3\ParallaxTest_N.png</File>
+		<Mipmaps>true</Mipmaps>
+		<MagFilter>Linear</MagFilter>
+		<MinFilter>LinearMipmapNearest</MinFilter>
+		<AnisotropicFiltering>true</AnisotropicFiltering>
+	</Texture>
+	<Texture>
+		<Name>ParallaxTest_3_S</Name>
+		<File>ParallaxTest_3\ParallaxTest_S.png</File>
+		<Mipmaps>true</Mipmaps>
+		<MagFilter>Linear</MagFilter>
+		<MinFilter>LinearMipmapNearest</MinFilter>
+		<AnisotropicFiltering>true</AnisotropicFiltering>
+	</Texture>
+	<Texture>
+		<Name>ParallaxTest_3_H</Name>
+		<File>ParallaxTest_3\ParallaxTest_H.png</File>
+		<Mipmaps>true</Mipmaps>
+		<MagFilter>Linear</MagFilter>
+		<MinFilter>LinearMipmapNearest</MinFilter>
+		<AnisotropicFiltering>true</AnisotropicFiltering>
 	</Texture>
 </Textures>

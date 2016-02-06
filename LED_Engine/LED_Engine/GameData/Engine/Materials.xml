@@ -72,13 +72,22 @@
 		</Texture>
 	</Material>
 	
-	<!--Default Cubemap-->
+	<!--Cubemaps-->
 	<Material>
 		<Name>SkyCubemap_Default</Name>
 		<Shader>CubemapSky</Shader>
 		<CullFace>True</CullFace>
 		<Texture>
 			<Name>SkyCubemap_Default</Name>
+			<TextureUnit>0</TextureUnit>
+		</Texture>
+	</Material>
+	<Material>
+		<Name>SkyCubemap_WhiteRoom</Name>
+		<Shader>CubemapSky</Shader>
+		<CullFace>True</CullFace>
+		<Texture>
+			<Name>SkyCubemap_WhiteRoom</Name>
 			<TextureUnit>0</TextureUnit>
 		</Texture>
 	</Material>

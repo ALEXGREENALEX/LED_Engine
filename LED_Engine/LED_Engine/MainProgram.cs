@@ -51,7 +51,12 @@ namespace LED_Engine
                     FBO.Init(FB_Width, FB_Height);
 
                     Engine.LoadEngineContent();
-                    Maps.LoadMap("Sponza"); //Sponza //SampleMap
+
+                    //Load Map
+                    if (args.Length > 0)
+                        Maps.LoadMap(args[0]);
+                    else
+                        Maps.LoadMap("Sponza"); //Sponza //SampleMap //Woods
 
                     GLContextIsLoaded = true;
                 }
