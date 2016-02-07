@@ -482,6 +482,10 @@
 			<TextureUnit>0</TextureUnit>
 		</Texture>
 		<Texture>
+			<Name>Sponza_VaseHanging_S</Name>
+			<TextureUnit>2</TextureUnit>
+		</Texture>
+		<Texture>
 			<Name>Sponza_VaseHanging_E</Name>
 			<TextureUnit>3</TextureUnit>
 		</Texture>

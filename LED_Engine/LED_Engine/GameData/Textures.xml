@@ -234,6 +234,10 @@
 		<File>Sponza\Vase Hanging\vase_hanging_diff.png</File>
 	</Texture>
 	<Texture>
+		<Name>Sponza_VaseHanging_S</Name>
+		<File>Sponza\Vase Hanging\vase_hanging_spec.png</File>
+	</Texture>
+	<Texture>
 		<Name>Sponza_VaseHanging_E</Name>
 		<File>Sponza\Vase Hanging\vase_hanging_emis.png</File>
 	</Texture>
