@@ -18,6 +18,7 @@ namespace LED_Editor
     {
         bool loaded = false;
         uint Texture;
+        
 
         public MainWindow()
         {

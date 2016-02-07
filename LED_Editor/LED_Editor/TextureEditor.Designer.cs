@@ -62,11 +62,12 @@
             this.TexturesListBox = new System.Windows.Forms.ListBox();
             this.MaterialTabs = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.TexturesGLControl = new OpenTK.GLControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.TexturesGLControl = new OpenTK.GLControl();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.SaveButton = new System.Windows.Forms.ToolStripButton();
             this.RevertButton = new System.Windows.Forms.ToolStripButton();
+            this.GLControlPanel = new System.Windows.Forms.Panel();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -74,8 +75,8 @@
             this.TextureFilePanel.SuspendLayout();
             this.FiltersPanel.SuspendLayout();
             this.MaterialTabs.SuspendLayout();
-            this.tabPage1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
+            this.GLControlPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -88,16 +89,16 @@
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Controls.Add(this.TexturesListBox);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel1.Location = new System.Drawing.Point(325, 39);
+            this.panel1.Location = new System.Drawing.Point(442, 39);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(340, 616);
+            this.panel1.Size = new System.Drawing.Size(340, 405);
             this.panel1.TabIndex = 3;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label3.Location = new System.Drawing.Point(6, 247);
+            this.label3.Location = new System.Drawing.Point(6, 215);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(45, 17);
             this.label3.TabIndex = 12;
@@ -106,16 +107,16 @@
             // NameTextBox
             // 
             this.NameTextBox.Enabled = false;
-            this.NameTextBox.Location = new System.Drawing.Point(49, 246);
+            this.NameTextBox.Location = new System.Drawing.Point(57, 214);
             this.NameTextBox.Name = "NameTextBox";
-            this.NameTextBox.Size = new System.Drawing.Size(218, 20);
+            this.NameTextBox.Size = new System.Drawing.Size(207, 20);
             this.NameTextBox.TabIndex = 11;
             // 
             // EngineCheckBox
             // 
             this.EngineCheckBox.AutoSize = true;
             this.EngineCheckBox.Enabled = false;
-            this.EngineCheckBox.Location = new System.Drawing.Point(273, 218);
+            this.EngineCheckBox.Location = new System.Drawing.Point(269, 191);
             this.EngineCheckBox.Name = "EngineCheckBox";
             this.EngineCheckBox.Size = new System.Drawing.Size(59, 17);
             this.EngineCheckBox.TabIndex = 10;
@@ -124,7 +125,7 @@
             // 
             // TexturesDeleteButton
             // 
-            this.TexturesDeleteButton.Location = new System.Drawing.Point(94, 212);
+            this.TexturesDeleteButton.Location = new System.Drawing.Point(90, 185);
             this.TexturesDeleteButton.Name = "TexturesDeleteButton";
             this.TexturesDeleteButton.Size = new System.Drawing.Size(75, 23);
             this.TexturesDeleteButton.TabIndex = 9;
@@ -134,7 +135,7 @@
             // 
             // TexturesAddButton
             // 
-            this.TexturesAddButton.Location = new System.Drawing.Point(13, 212);
+            this.TexturesAddButton.Location = new System.Drawing.Point(9, 185);
             this.TexturesAddButton.Name = "TexturesAddButton";
             this.TexturesAddButton.Size = new System.Drawing.Size(75, 23);
             this.TexturesAddButton.TabIndex = 8;
@@ -146,9 +147,9 @@
             // 
             this.panel2.AutoSize = true;
             this.panel2.Controls.Add(this.tableLayoutPanel1);
-            this.panel2.Location = new System.Drawing.Point(3, 272);
+            this.panel2.Location = new System.Drawing.Point(0, 240);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(336, 312);
+            this.panel2.Size = new System.Drawing.Size(337, 335);
             this.panel2.TabIndex = 7;
             // 
             // tableLayoutPanel1
@@ -167,7 +168,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(336, 312);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(337, 335);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // CubemapTexturePanel
@@ -389,14 +390,13 @@
             this.MagFilterComboBox.Name = "MagFilterComboBox";
             this.MagFilterComboBox.Size = new System.Drawing.Size(318, 21);
             this.MagFilterComboBox.TabIndex = 11;
-            this.MagFilterComboBox.SelectedIndexChanged += new System.EventHandler(this.MagFilterComboBox_SelectedIndexChanged);
             // 
             // TexturesListBox
             // 
             this.TexturesListBox.FormattingEnabled = true;
             this.TexturesListBox.Location = new System.Drawing.Point(7, 20);
             this.TexturesListBox.Name = "TexturesListBox";
-            this.TexturesListBox.Size = new System.Drawing.Size(325, 186);
+            this.TexturesListBox.Size = new System.Drawing.Size(325, 160);
             this.TexturesListBox.TabIndex = 0;
             this.TexturesListBox.SelectedIndexChanged += new System.EventHandler(this.TexturesListBox_SelectedIndexChanged);
             // 
@@ -404,46 +404,48 @@
             // 
             this.MaterialTabs.Controls.Add(this.tabPage1);
             this.MaterialTabs.Controls.Add(this.tabPage3);
-            this.MaterialTabs.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MaterialTabs.Dock = System.Windows.Forms.DockStyle.Top;
             this.MaterialTabs.Location = new System.Drawing.Point(0, 39);
             this.MaterialTabs.Name = "MaterialTabs";
             this.MaterialTabs.SelectedIndex = 0;
-            this.MaterialTabs.Size = new System.Drawing.Size(325, 616);
+            this.MaterialTabs.Size = new System.Drawing.Size(442, 18);
             this.MaterialTabs.TabIndex = 5;
             this.MaterialTabs.SelectedIndexChanged += new System.EventHandler(this.MaterialTabs_SelectedIndexChanged);
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.TexturesGLControl);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(317, 590);
+            this.tabPage1.Size = new System.Drawing.Size(434, 0);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Texture";
             this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // TexturesGLControl
-            // 
-            this.TexturesGLControl.BackColor = System.Drawing.Color.Black;
-            this.TexturesGLControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TexturesGLControl.Location = new System.Drawing.Point(3, 3);
-            this.TexturesGLControl.Name = "TexturesGLControl";
-            this.TexturesGLControl.Size = new System.Drawing.Size(311, 584);
-            this.TexturesGLControl.TabIndex = 0;
-            this.TexturesGLControl.VSync = false;
-            this.TexturesGLControl.Paint += new System.Windows.Forms.PaintEventHandler(this.TexturesGLControl_Paint);
-            this.TexturesGLControl.Resize += new System.EventHandler(this.TexturesGLControl_Resize);
             // 
             // tabPage3
             // 
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(317, 590);
+            this.tabPage3.Size = new System.Drawing.Size(453, 0);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "CubeMap";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // TexturesGLControl
+            // 
+            this.TexturesGLControl.BackColor = System.Drawing.Color.Black;
+            this.TexturesGLControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TexturesGLControl.Location = new System.Drawing.Point(0, 0);
+            this.TexturesGLControl.Name = "TexturesGLControl";
+            this.TexturesGLControl.Size = new System.Drawing.Size(438, 383);
+            this.TexturesGLControl.TabIndex = 0;
+            this.TexturesGLControl.VSync = false;
+            this.TexturesGLControl.Load += new System.EventHandler(this.TexturesGLControl_Load);
+            this.TexturesGLControl.Paint += new System.Windows.Forms.PaintEventHandler(this.TexturesGLControl_Paint);
+            this.TexturesGLControl.MouseMove += new System.Windows.Forms.MouseEventHandler(this.TexturesGLControl_MouseMove);
+            this.TexturesGLControl.MouseUp += new System.Windows.Forms.MouseEventHandler(this.TexturesGLControl_MouseUp);
+            this.TexturesGLControl.Resize += new System.EventHandler(this.TexturesGLControl_Resize);
             // 
             // toolStrip1
             // 
@@ -455,7 +457,7 @@
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.toolStrip1.Size = new System.Drawing.Size(665, 39);
+            this.toolStrip1.Size = new System.Drawing.Size(782, 39);
             this.toolStrip1.TabIndex = 5;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -479,19 +481,31 @@
             this.RevertButton.Size = new System.Drawing.Size(36, 36);
             this.RevertButton.Text = "Reload";
             // 
+            // GLControlPanel
+            // 
+            this.GLControlPanel.BackColor = System.Drawing.SystemColors.Window;
+            this.GLControlPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.GLControlPanel.Controls.Add(this.TexturesGLControl);
+            this.GLControlPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.GLControlPanel.Location = new System.Drawing.Point(0, 57);
+            this.GLControlPanel.Name = "GLControlPanel";
+            this.GLControlPanel.Size = new System.Drawing.Size(442, 387);
+            this.GLControlPanel.TabIndex = 6;
+            // 
             // TextureEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(665, 655);
+            this.ClientSize = new System.Drawing.Size(782, 444);
+            this.Controls.Add(this.GLControlPanel);
             this.Controls.Add(this.MaterialTabs);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.toolStrip1);
+            this.MinimumSize = new System.Drawing.Size(798, 482);
             this.Name = "TextureEditor";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "TextureEditor";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.TextureEditor_FormClosed);
-            this.Load += new System.EventHandler(this.TextureEditor_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
@@ -505,9 +519,9 @@
             this.FiltersPanel.ResumeLayout(false);
             this.FiltersPanel.PerformLayout();
             this.MaterialTabs.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            this.GLControlPanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -553,5 +567,6 @@
         private System.Windows.Forms.TextBox NameTextBox;
         private System.Windows.Forms.Label label3;
         private OpenTK.GLControl TexturesGLControl;
+        private System.Windows.Forms.Panel GLControlPanel;
     }
 }
