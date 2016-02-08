@@ -24,7 +24,6 @@
 	<RefreshRate>60</RefreshRate>
 	<RefreshRateLimit>200</RefreshRateLimit>
 	<VSyncSwapInterval>0</VSyncSwapInterval>
-	<MSAASamples>0</MSAASamples>
 	<UsePostEffects>True</UsePostEffects>
 	<FXAAEnabled>True</FXAAEnabled>
 	<FogEnabled>True</FogEnabled>

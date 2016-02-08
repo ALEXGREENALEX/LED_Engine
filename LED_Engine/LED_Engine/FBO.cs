@@ -391,8 +391,6 @@ namespace LED_Engine
 
             //Bind Textures
             GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindTexture(TextureTarget.Texture2D, Depth);
-            GL.ActiveTexture(TextureUnit.Texture1);
             GL.BindTexture(TextureTarget.Texture2D, Texture_PP);
 
             Shaders[ShaderIndex_PP].EnableVertexAttribArrays();

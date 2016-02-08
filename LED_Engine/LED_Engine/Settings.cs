@@ -93,7 +93,6 @@ namespace LED_Engine
         public static class Graphics
         {
             public static int VSyncSwapInterval = 0;
-            public static int MSAASamples = 0;
 
             public static bool UsePostEffects = true;
 

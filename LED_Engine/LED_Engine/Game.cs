@@ -170,9 +170,6 @@ namespace LED_Engine
                     if (Models.MODELS[i].Visible)
                         DrawableMeshes.AddRange(Models.MODELS[i].Meshes);
 
-                //if (Settings.Debug.Enabled && Settings.Debug.DrawDebugObjects)
-                //    DrawableMeshes.AddRange(DebugObjects);
-
                 foreach (Mesh v in DrawableMeshes) //Draw All
                     Draw(v);
 

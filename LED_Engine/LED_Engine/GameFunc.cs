@@ -39,7 +39,6 @@ namespace LED_Engine
             Glfw.WindowHint(WindowHint.Focused, 1); // Set Focus On Init
             Glfw.WindowHint(WindowHint.Resizeable, 1);
             Glfw.WindowHint(WindowHint.AutoIconify, 1); // Auto Mininize and Restore FullScreen Window
-            Glfw.WindowHint(WindowHint.Samples, Settings.Graphics.MSAASamples); //MSAA
             #endregion
 
             if (Settings.Window.Fullscreen)
@@ -153,11 +152,6 @@ namespace LED_Engine
             #endregion
 
             Glfw.SwapInterval(Settings.Graphics.VSyncSwapInterval); //V-sync
-
-            if (Settings.Graphics.MSAASamples > 0) // MSAA
-                GL.Enable(EnableCap.Multisample);
-            else
-                GL.Disable(EnableCap.Multisample);
 
             GL.ClearColor(Color4.Gray);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);

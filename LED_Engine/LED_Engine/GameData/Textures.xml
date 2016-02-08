@@ -33,10 +33,6 @@
 		<Name>Keypad_E</Name>
 		<File>Keypad_E.png</File>
 	</Texture>
-	<Texture>
-		<Name>Keypad_AO</Name>
-		<File>Keypad_AO.png</File>
-	</Texture>
 	
 	<!--Sponza-->
 	<Texture>

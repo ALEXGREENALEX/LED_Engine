@@ -3,8 +3,7 @@ uniform sampler2D TextureUnit0; //Diffuse
 uniform sampler2D TextureUnit1; //Normal
 uniform sampler2D TextureUnit2; //Specular
 uniform sampler2D TextureUnit3; //Emissive
-uniform sampler2D TextureUnit4; //AO
-uniform sampler2D TextureUnit5; //Height
+uniform sampler2D TextureUnit4; //Height
 
 in vec3 f_EyePosition;
 in vec2 f_UV;
@@ -26,10 +25,10 @@ void main()
 {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	vec2 newTexCoords = f_UV;
-	if (TexUnits[5])
+	if (TexUnits[4])
 	{
 		vec3 EyeVector = normalize(transpose(f_TBN) * (-f_EyePosition)); //Convert from Eye to Tangent Space
-		newTexCoords = ParallaxOcclusionMapping(TextureUnit5, f_UV, EyeVector, ParallaxScale);
+		newTexCoords = ParallaxOcclusionMapping(TextureUnit4, f_UV, EyeVector, ParallaxScale);
 	}
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -37,7 +36,6 @@ void main()
 	vec2 NormalXY;
 	vec4 SpecularShininess = vec4(Material.Ks, Material.S);
 	vec3 Emissive = Material.Ke;
-	vec3 Ambient = Material.Ka;
 	
 	if (TexUnits[0])
 		Diffuse *= texture(TextureUnit0, newTexCoords);
@@ -56,15 +54,12 @@ void main()
 	if (TexUnits[3])
 		Emissive *= texture(TextureUnit3, newTexCoords).rgb;
 	
-	if (TexUnits[4])
-		Ambient *= texture(TextureUnit4, newTexCoords).r;
-	
 	Output0 = Diffuse;
 	Output1.xy = NormalXY;
 	Output1.zw = Emissive.xy;
 	Output2.xyz = f_EyePosition;
 	Output2.w = Emissive.z;
 	Output3 = SpecularShininess;
-	Output4.xyz = Ambient;
+	Output4.xyz = Material.Ka;
 	Output4.w = 0.0; //NOTHING (Value not used, Free channel)
 }

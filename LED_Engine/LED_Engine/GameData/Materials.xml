@@ -102,10 +102,6 @@
 			<Name>Keypad_E</Name>
 			<TextureUnit>3</TextureUnit>
 		</Texture>
-		<Texture>
-			<Name>Keypad_AO</Name>
-			<TextureUnit>4</TextureUnit>
-		</Texture>
 	</Material>
 	
 	<!--Sponza Materials-->
@@ -204,7 +200,7 @@
 		</Texture>
 		<Texture>
 			<Name>Sponza_Bricks_H</Name>
-			<TextureUnit>5</TextureUnit>
+			<TextureUnit>4</TextureUnit>
 		</Texture>
 	</Material>
 	<Material>
@@ -586,7 +582,7 @@
 		</Texture>
 		<Texture>
 			<Name>ParallaxTest_1_H</Name>
-			<TextureUnit>5</TextureUnit>
+			<TextureUnit>4</TextureUnit>
 		</Texture>
 	</Material>
 	<Material>
@@ -608,7 +604,7 @@
 		</Texture>
 		<Texture>
 			<Name>ParallaxTest_2_H</Name>
-			<TextureUnit>5</TextureUnit>
+			<TextureUnit>4</TextureUnit>
 		</Texture>
 	</Material>
 	<Material>
@@ -630,7 +626,7 @@
 		</Texture>
 		<Texture>
 			<Name>ParallaxTest_3_H</Name>
-			<TextureUnit>5</TextureUnit>
+			<TextureUnit>4</TextureUnit>
 		</Texture>
 	</Material>
 </Materials>

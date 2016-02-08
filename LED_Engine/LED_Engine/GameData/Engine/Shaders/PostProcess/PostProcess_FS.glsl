@@ -1,6 +1,5 @@
 #version 330
-uniform sampler2D TextureUnit0; //Depth
-uniform sampler2D TextureUnit1; //MainTexture
+uniform sampler2D TextureUnit0; //MainTexture
 
 in vec2 f_UV;
 
@@ -25,9 +24,11 @@ layout(location = 0) out vec3 FragColor;
 
 void main()
 {
-	vec3 Color = texture(TextureUnit1, f_UV).rgb;
+	vec3 Color;
 	if(FXAAEnabled)
-		Color = FxaaPixelShader(f_UV, TextureUnit1, vec2(1.0) / ScreenSize, FXAASettings.x, FXAASettings.y, FXAASettings.z).rgb;
+		Color = FxaaPixelShader(f_UV, TextureUnit0, vec2(1.0) / ScreenSize, FXAASettings.x, FXAASettings.y, FXAASettings.z).rgb;
+	else
+		Color = texture(TextureUnit0, f_UV).rgb;
 	
 	Color = Vignette(Color, f_UV, VignetteSettings.x, VignetteSettings.y, VignetteSettings.z);
 	Color = Sepia(Color, SepiaGrayscale.x);
