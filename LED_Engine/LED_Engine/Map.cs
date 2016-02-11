@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Xml;
 using Pencil.Gaming.MathUtils;
@@ -178,8 +177,14 @@ namespace LED_Engine
                         {
                             string meshTypeStr = xmlNodeMesh.SelectSingleNode("Type").InnerText;
 
-                            if (!Enum.TryParse(meshTypeStr, true, out meshType))
+                            try
+                            {
+                                meshType = (MeshType)Enum.Parse(typeof(MeshType), meshTypeStr, true);
+                            }
+                            catch
+                            {
                                 meshType = MeshType.Mesh;
+                            }
                         }
 
                         float SideA, SideB, SideC;
@@ -258,8 +263,14 @@ namespace LED_Engine
                     {
                         string meshTypeStr = xmlNodeLight.SelectSingleNode("Type").InnerText;
 
-                        if (!Enum.TryParse(meshTypeStr, true, out lightType))
+                        try
+                        {
+                            lightType = (LightType)Enum.Parse(typeof(LightType), meshTypeStr, true);
+                        }
+                        catch
+                        {
                             lightType = LightType.Point;
+                        }
 
                         light.Type = lightType;
                     }

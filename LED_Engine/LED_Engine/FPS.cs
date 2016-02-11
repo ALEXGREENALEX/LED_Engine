@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+//using System.Diagnostics;
 using System.Text;
 using System.Threading;
 using Pencil.Gaming;
@@ -9,48 +9,38 @@ namespace LED_Engine
 {
     public static class FPS
     {
-        public static bool ShowFPS = false;
-        public static double
-            FPS_Frame = 0.0,
-            RealFPS = 60.0;
+        const int ElapsedMax = 20; //Calc FPS every 'ElapsedMax' frame
 
-        const double FPS_UpdateTime = 0.1;
+        public static bool ShowFPS = false;
+        public static float
+            OldTime = 0.0f,
+            Period = 0.017f, //Start value, 1/60
+            RealFPS = 60.0f; //Start value
+
+        static int ElapsedIndex = 0;
+        static float[] Elapsed = new float[ElapsedMax];
 
         public static void CalcFPS()
         {
-            FPS_Frame++;
-            if (Glfw.GetTime() >= FPS_UpdateTime)
+            float NewTime = (float)Glfw.GetTime();
+            float elapsed = NewTime - OldTime;
+
+            Elapsed[ElapsedIndex] = elapsed;
+            ElapsedIndex++;
+            OldTime = NewTime;
+
+            if (ElapsedIndex >= ElapsedMax)
             {
-                RealFPS = FPS_Frame / Glfw.GetTime();
-                FPS_Frame = 0.0;
-                Glfw.SetTime(0.0);
+                ElapsedIndex = 0;
+
+                for (int i = 0; i < ElapsedMax - 1; i++) // (Last + previus)
+                    elapsed += Elapsed[i];
+
+                Period = elapsed / (float)ElapsedMax;
+                RealFPS = 1.0f / Period;
+
                 Glfw.SetWindowTitle(Game.Window, "FPS: " + RealFPS.ToString("0.0"));
             }
         }
     }
-
-    //public static class UPS
-    //{
-    //    //static int upsFrameCount = 0;
-    //    //static long upsStartTime = 0;
-
-    //    //public static void LimitUPS(int ups)
-    //    //{
-    //    //    long freq;
-    //    //    long frame;
-    //    //    freq = Stopwatch.Frequency;
-    //    //    frame = Stopwatch.GetTimestamp();
-    //    //    while ((frame - upsStartTime) * ups < freq * upsFrameCount)
-    //    //    {
-    //    //        int sleepTime = (int)((upsStartTime * ups + freq * upsFrameCount - frame * ups) * 1000 / (freq * ups));
-    //    //        if (sleepTime > 0) Thread.Sleep(sleepTime);
-    //    //        frame = Stopwatch.GetTimestamp();
-    //    //    }
-    //    //    if (++upsFrameCount > ups)
-    //    //    {
-    //    //        upsFrameCount = 0;
-    //    //        upsStartTime = frame;
-    //    //    }
-    //    //}
-    //}
 }

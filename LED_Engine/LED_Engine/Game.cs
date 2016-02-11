@@ -194,7 +194,7 @@ namespace LED_Engine
         static void OnUpdateFrame()
         {
             // Коеф. изменения позиций объектов относительно падения FPS
-            float timeK = 60.0f / (float)FPS.RealFPS;
+            float timeK = FPS.Period;
 
             // Проверяем нажатия клавиш каждый кадр, а не по прерыванию!
             KeybrdState = KeyboardState.GetState(Window);
@@ -213,7 +213,7 @@ namespace LED_Engine
             if (KeybrdState[Key.Q])
                 MainCamera.Move(0f, 0f, -camMoveSens);
 
-            float camRotateSens = 2.0f * timeK;
+            float camRotateSens = 200.0f * timeK;
             if (KeybrdState[Key.Left])
                 MainCamera.AddRotation(camRotateSens, 0.0f);
             if (KeybrdState[Key.Right])

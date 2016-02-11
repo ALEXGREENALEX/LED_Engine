@@ -56,7 +56,7 @@ namespace LED_Engine
                     if (args.Length > 0)
                         Maps.LoadMap(args[0]);
                     else
-                        Maps.LoadMap("Sponza"); //Sponza //SampleMap //Woods
+                        Maps.LoadMap("Materials_Test_Map"); //Sponza //SampleMap //Materials_Test_Map
 
                     GLContextIsLoaded = true;
                 }
@@ -73,7 +73,6 @@ namespace LED_Engine
                 #region Main Loop
                 while (!(Glfw.WindowShouldClose(Window) || Settings.Window.NeedReinitWindow))
                 {
-                    Glfw.PollEvents(); // Poll GLFW window events
                     if (Settings.Window.IsFocused)
                     {
                         OnUpdateFrame();
@@ -83,6 +82,7 @@ namespace LED_Engine
                         Thread.Sleep(100);
 
                     Glfw.SwapBuffers(Window); // Swap the front and back buffer, displaying the scene
+                    Glfw.PollEvents(); // Poll GLFW window events
 
                     if (FPS.ShowFPS)
                         FPS.CalcFPS(); //FPS Counter, must be at the END of the Render LOOP!

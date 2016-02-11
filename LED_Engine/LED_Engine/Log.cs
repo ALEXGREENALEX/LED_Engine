@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text;
 
@@ -22,7 +21,7 @@ namespace LED_Engine
             {
                 try
                 {
-                    LogStr.Clear();
+                    LogStr.Length = 0;
                     LogStr.Append(value);
                 }
                 catch
@@ -42,7 +41,7 @@ namespace LED_Engine
             {
                 try
                 {
-                    LogStr.Clear();
+                    LogStr.Length = 0;
                     LogStr.AppendFormat(format, arg);
                 }
                 catch
@@ -62,7 +61,7 @@ namespace LED_Engine
             {
                 try
                 {
-                    LogStr.Clear();
+                    LogStr.Length = 0;
                     LogStr.AppendLine(value);
                 }
                 catch
@@ -83,7 +82,7 @@ namespace LED_Engine
             {
                 try
                 {
-                    LogStr.Clear();
+                    LogStr.Length = 0;
                     LogStr.AppendFormat(format, arg);
                     LogStr.AppendLine();
                 }

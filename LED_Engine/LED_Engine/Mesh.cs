@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
@@ -203,8 +202,7 @@ namespace LED_Engine
 
     public class BoundingBox
     {
-        float nX, pX, nY, pY, nZ, pZ;
-        Vector3[] points = new Vector3[8];
+        float lenX, lenY, lenZ;
 
         public BoundingBox()
         {
@@ -212,141 +210,41 @@ namespace LED_Engine
 
         public BoundingBox(float SideSize)
         {
-            nX = SideSize;
-            pX = SideSize;
-            nY = SideSize;
-            pY = SideSize;
-            nZ = SideSize;
-            pZ = SideSize;
-
-            CalcBoxFromSides();
+            LenX = SideSize;
+            LenY = SideSize;
+            LenZ = SideSize;
         }
 
-        public BoundingBox(float NegativeX, float PositiveX, float NegativeY, float PositiveY, float NegativeZ, float PositiveZ)
+        public BoundingBox(float LengthX, float LengthY, float LengthZ)
         {
-            nX = NegativeX;
-            pX = PositiveX;
-            nY = NegativeY;
-            pY = PositiveY;
-            nZ = NegativeZ;
-            pZ = PositiveZ;
-
-            CalcBoxFromSides();
+            LenX = LengthX;
+            LenY = LengthY;
+            LenZ = LengthZ;
         }
 
         public BoundingBox(BoundingBox Box)
         {
-            nX = Box.NegativeX;
-            pX = Box.PositiveX;
-            nY = Box.NegativeY;
-            pY = Box.PositiveY;
-            nZ = Box.NegativeZ;
-            pZ = Box.PositiveZ;
-
-            Box.Points.CopyTo(points, 0);
+            lenX = Box.LenX;
+            lenY = Box.LenY;
+            lenZ = Box.LenZ;
         }
 
-        public float PositiveX
+        public float LenX
         {
-            get { return pX; }
-            set
-            {
-                pX = value;
-                CalcBoxFromSides();
-            }
+            get { return lenX; }
+            set { lenX = (float)Math.Abs(value); }
         }
 
-        public float NegativeX
+        public float LenY
         {
-            get { return nX; }
-            set
-            {
-                nX = value;
-                CalcBoxFromSides();
-            }
+            get { return lenY; }
+            set { lenY = (float)Math.Abs(value); }
         }
 
-        public float PositiveY
+        public float LenZ
         {
-            get { return pY; }
-            set
-            {
-                pY = value;
-                CalcBoxFromSides();
-            }
-        }
-
-        public float NegativeY
-        {
-            get { return nY; }
-            set
-            {
-                nY = value;
-                CalcBoxFromSides();
-            }
-        }
-
-        public float PositiveZ
-        {
-            get { return pZ; }
-            set
-            {
-                pZ = value;
-                CalcBoxFromSides();
-            }
-        }
-
-        public float NegativeZ
-        {
-            get { return nZ; }
-            set
-            {
-                nZ = value;
-                CalcBoxFromSides();
-            }
-        }
-
-        /// <summary>
-        /// Points layout:
-        /// P[0] = -X -Y -Z,
-        /// P[1] = +X -Y -Z,
-        /// P[2] = -X +Y -Z,
-        /// P[3] = +X +Y -Z,
-        /// P[4] = -X -Y +Z,
-        /// P[5] = +X -Y +Z,
-        /// P[6] = -X +Y +Z,
-        /// P[7] = +X +Y +Z.
-        /// </summary>
-        public Vector3[] Points
-        {
-            get { return points; }
-            set
-            {
-                points = value;
-                CalcBoxFromPoints();
-            }
-        }
-
-        void CalcBoxFromSides()
-        {
-            points[0] = new Vector3(nX, nY, nZ);
-            points[1] = new Vector3(pX, nY, nZ);
-            points[2] = new Vector3(nX, pY, nZ);
-            points[3] = new Vector3(pX, pY, nZ);
-            points[4] = new Vector3(nX, nY, pZ);
-            points[5] = new Vector3(pX, nY, pZ);
-            points[6] = new Vector3(nX, pY, pZ);
-            points[7] = new Vector3(pX, pY, pZ);
-        }
-
-        void CalcBoxFromPoints()
-        {
-            nX = points[0].X;
-            pX = points[7].X;
-            nY = points[0].Y;
-            pY = points[7].Y;
-            nZ = points[0].Z;
-            pZ = points[7].Z;
+            get { return lenZ; }
+            set { lenZ = (float)Math.Abs(value); }
         }
     }
 
@@ -378,18 +276,8 @@ namespace LED_Engine
 
         public BoundingSphere(BoundingBox Box)
         {
-            float MaxX = Math.Max(Box.PositiveX, Box.NegativeX);
-            float MaxY = Math.Max(Box.PositiveY, Box.NegativeY);
-            float MaxZ = Math.Max(Box.PositiveZ, Box.NegativeZ);
-            Inner = Math.Max(MaxX, Math.Max(MaxY, MaxZ));
-
-            MaxX = Math.Max(Box.Points[0].Length, Box.Points[1].Length);
-            MaxX = Math.Max(MaxX, Box.Points[2].Length);
-            MaxX = Math.Max(MaxX, Box.Points[3].Length);
-            MaxX = Math.Max(MaxX, Box.Points[4].Length);
-            MaxX = Math.Max(MaxX, Box.Points[5].Length);
-            MaxX = Math.Max(MaxX, Box.Points[6].Length);
-            Outer = Math.Max(MaxX, Box.Points[7].Length);
+            Inner = Math.Min(Box.LenX, Math.Min(Box.LenY, Box.LenZ));
+            Outer = new Vector3(Box.LenX, Box.LenY, Box.LenZ).Length / 2.0f;
         }
     }
 
@@ -711,18 +599,15 @@ namespace LED_Engine
 
         void CalcBoundingBox()
         {
-            float pX = 0.0f, pY = 0.0f, pZ = 0.0f;
-            float nX = Vertexes[0].X, nY = Vertexes[0].Y, nZ = Vertexes[0].X;
+            BoundingBox Box = new BoundingBox();
+
             for (int i = 0; i < Vertexes.Length; i++)
             {
-                pX = Math.Max(pX, Vertexes[i].X);
-                nX = Math.Min(nX, Vertexes[i].X);
-                pY = Math.Max(pY, Vertexes[i].Y);
-                nY = Math.Min(nY, Vertexes[i].Y);
-                pZ = Math.Max(pZ, Vertexes[i].Z);
-                nZ = Math.Min(nZ, Vertexes[i].Z);
+                Box.LenX = (float)Math.Max(Box.LenX, Vertexes[i].X);
+                Box.LenX = (float)Math.Max(Box.LenY, Vertexes[i].Y);
+                Box.LenX = (float)Math.Max(Box.LenZ, Vertexes[i].Z);
             }
-            this.BoundingBox = new BoundingBox(nX, pX, nY, pY, nZ, pZ);
+            this.BoundingBox = Box;
         }
 
         void CalcBoundingSphere()
@@ -732,8 +617,8 @@ namespace LED_Engine
 
             for (int i = 0; i < Vertexes.Length; i++)
             {
-                Min = Math.Min(Min, Vertexes[i].Length);
-                Max = Math.Max(Max, Vertexes[i].Length);
+                Min = (float)Math.Min(Min, Vertexes[i].Length);
+                Max = (float)Math.Max(Max, Vertexes[i].Length);
             }
             this.BoundingSphere = new BoundingSphere(Min, Max);
         }
