@@ -181,49 +181,14 @@ namespace LED_Engine
         static void Draw(Mesh m)
         {
             m.CalculateMatrices(MainCamera);
+            FrustumCulling.ExtractFrustum(MainCamera.GetViewMatrix() * MainCamera.GetProjectionMatrix());
 
-            // Variant 1.1 /////////////////////////////////
-            //FrustumCulling.ExtractFrustum(m.ModelViewProjectionMatrix);
-            //Vector3 Position = m.Position;
-            //Position = new Vector3(new Vector4(m.Position) * m.ModelViewProjectionMatrix);
-
-            //for (int i = 0; i < m.Parts.Count; i++)
-            //    if (FrustumCulling.SphereInFrustumIntersect(Position, m.Parts[i].BoundingSphere.Outer) > 0)
-            //        Draw(m, m.Parts[i]);
-            /////////////////////////////////////////////////
-
-            // Variant 1.2 //////////////////////////////////
-            //FrustumCulling.ExtractFrustum_(m.ModelViewProjectionMatrix);
-            //Vector3 Position = m.Position;
-            //Position = new Vector3(new Vector4(m.Position) * m.ModelViewProjectionMatrix);
-
-            //for (int i = 0; i < m.Parts.Count; i++)
-            //    if (FrustumCulling.SphereInFrustumIntersect(Position, m.Parts[i].BoundingSphere.Outer) > 0)
-            //        Draw(m, m.Parts[i]);
-            /////////////////////////////////////////////////
-
-            // Variant 2 ////////////////////////////////////
-            //Frustum Fr = new Frustum();
-            //Fr.CalculateFrustum(MainCamera.GetProjectionMatrix(), m.ModelViewMatrix);
-
-            //Vector3 Position = m.Position;
-            ////Position = new Vector3(new Vector4(m.Position) * m.ModelViewProjectionMatrix);
-
-            //for (int i = 0; i < m.Parts.Count; i++)
-            //    if (Fr.SphereVsFrustum(Position, m.Parts[i].BoundingSphere.Inner))
-            //        Draw(m, m.Parts[i]);
-            /////////////////////////////////////////////////
-
-            // Variant 3 ////////////////////////////////////
-            //for (int i = 0; i < m.Parts.Count; i++)
-            //    if (Frustum3.frustrumCheck(m, MainCamera))
-            //        Draw(m, m.Parts[i]);
-            /////////////////////////////////////////////////
-
-            // Without Frustum //////////////////////////////
-            for (int i = 0; i < m.Parts.Count; i++)
-                Draw(m, m.Parts[i]);
-            /////////////////////////////////////////////////
+            if (/*FrustumCulling.SphereInFrustum(m.Position, m.BoundingSphere.Outer) ||*/
+                FrustumCulling.BoxInFrustum(m.Position, m.BoundingBox.Size))
+                for (int i = 0; i < m.Parts.Count; i++)
+                    if (/*FrustumCulling.SphereInFrustum(m.Position + m.Parts[i].BoundingSphere.Position, m.Parts[i].BoundingSphere.Outer) ||*/
+                        FrustumCulling.BoxInFrustum(m.Position + m.Parts[i].BoundingBox.Position, m.Parts[i].BoundingBox.Size))
+                        Draw(m, m.Parts[i]);
         }
 
         static void Draw(Mesh m, MeshPart v)

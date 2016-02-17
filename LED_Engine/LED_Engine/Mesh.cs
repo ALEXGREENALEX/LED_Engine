@@ -87,6 +87,7 @@ namespace LED_Engine
                             {
                                 M = new Mesh(v);
                                 M.Load();
+                                M.Name = Name;
                                 break;
                             }
                         }
@@ -202,64 +203,48 @@ namespace LED_Engine
 
     public class BoundingBox
     {
-        float lenX, lenY, lenZ;
+        public Vector3 Position = Vector3.Zero;
+        float size = 0.0f;
 
         public BoundingBox()
         {
         }
 
-        public BoundingBox(float SideSize)
+        public BoundingBox(Vector3 Position, float Size)
         {
-            LenX = SideSize;
-            LenY = SideSize;
-            LenZ = SideSize;
-        }
-
-        public BoundingBox(float LengthX, float LengthY, float LengthZ)
-        {
-            LenX = LengthX;
-            LenY = LengthY;
-            LenZ = LengthZ;
+            this.Position = Position;
+            this.Size = Size;
         }
 
         public BoundingBox(BoundingBox Box)
         {
-            lenX = Box.LenX;
-            lenY = Box.LenY;
-            lenZ = Box.LenZ;
+            if (Box != null)
+            {
+                Position = Box.Position;
+                size = Box.Size;
+            }
         }
 
-        public float LenX
+        public float Size
         {
-            get { return lenX; }
-            set { lenX = (float)Math.Abs(value); }
-        }
-
-        public float LenY
-        {
-            get { return lenY; }
-            set { lenY = (float)Math.Abs(value); }
-        }
-
-        public float LenZ
-        {
-            get { return lenZ; }
-            set { lenZ = (float)Math.Abs(value); }
+            get { return size; }
+            set { size = (float)Math.Abs(value); }
         }
     }
 
     public class BoundingSphere
     {
-        public float Inner, Outer;
+        public Vector3 Position = Vector3.Zero;
+        public float inner, outer;
 
         public BoundingSphere()
         {
         }
 
-        public BoundingSphere(float Radius_InnerOuter)
+        public BoundingSphere(float Radiuses)
         {
-            Inner = Radius_InnerOuter;
-            Outer = Radius_InnerOuter;
+            Inner = Radiuses;
+            Outer = Radiuses;
         }
 
         public BoundingSphere(float Inner, float Outer)
@@ -268,16 +253,33 @@ namespace LED_Engine
             this.Outer = Outer;
         }
 
-        public BoundingSphere(BoundingSphere Sphere)
+        public BoundingSphere(Vector3 Position, float Inner, float Outer)
         {
-            Inner = Sphere.Inner;
-            Outer = Sphere.Outer;
+            this.Position = Position;
+            this.Inner = Inner;
+            this.Outer = Outer;
         }
 
-        public BoundingSphere(BoundingBox Box)
+        public BoundingSphere(BoundingSphere Sphere)
         {
-            Inner = Math.Min(Box.LenX, Math.Min(Box.LenY, Box.LenZ));
-            Outer = new Vector3(Box.LenX, Box.LenY, Box.LenZ).Length / 2.0f;
+            if (Sphere != null)
+            {
+                Position = Sphere.Position;
+                inner = Sphere.Inner;
+                outer = Sphere.Outer;
+            }
+        }
+
+        public float Inner
+        {
+            get { return inner; }
+            set { inner = (float)Math.Abs(value); }
+        }
+
+        public float Outer
+        {
+            get { return outer; }
+            set { outer = (float)Math.Abs(value); }
         }
     }
 
@@ -290,6 +292,8 @@ namespace LED_Engine
         public string MeshName = String.Empty;
         public string FileName = String.Empty;
         public bool Visible = true;
+        public BoundingBox BoundingBox;
+        public BoundingSphere BoundingSphere;
         public List<MeshPart> Parts = new List<MeshPart>();
 
         public Vector3 Position = Vector3.Zero;
@@ -316,6 +320,75 @@ namespace LED_Engine
 
             for (int i = 0; i < Original.Parts.Count; i++)
                 Parts.Add(new MeshPart(Original.Parts[i]));
+
+            this.BoundingBox = new BoundingBox(Original.BoundingBox);
+            this.BoundingSphere = new BoundingSphere(Original.BoundingSphere);
+        }
+
+        public void CalcBoundingObjects()
+        {
+            BoundingSphere MeshBSphere = new BoundingSphere();
+            BoundingBox MeshBBox = new BoundingBox();
+            float MeshMin = float.MaxValue, MeshMinX = float.MaxValue, MeshMinY = float.MaxValue, MeshMinZ = float.MaxValue;
+            float MeshMax = float.MaxValue, MeshMaxX = float.MinValue, MeshMaxY = float.MinValue, MeshMaxZ = float.MinValue;
+
+            foreach (var v in Parts)
+            {
+                BoundingSphere BSphere = new BoundingSphere();
+                BoundingBox BBox = new BoundingBox();
+                float Min = float.MaxValue, MinX = float.MaxValue, MinY = float.MaxValue, MinZ = float.MaxValue;
+                float Max = float.MaxValue, MaxX = float.MinValue, MaxY = float.MinValue, MaxZ = float.MinValue;
+
+                for (int i = 0; i < v.Vertexes.Length; i++)
+                {
+                    MinX = Math.Min(MinX, v.Vertexes[i].X);
+                    MinY = Math.Min(MinY, v.Vertexes[i].Y);
+                    MinZ = Math.Min(MinZ, v.Vertexes[i].Z);
+                    MaxX = Math.Max(MaxX, v.Vertexes[i].X);
+                    MaxY = Math.Max(MaxY, v.Vertexes[i].Y);
+                    MaxZ = Math.Max(MaxZ, v.Vertexes[i].Z);
+                }
+
+                MeshMinX = Math.Min(MeshMinX, MinX);
+                MeshMinY = Math.Min(MeshMinY, MinY);
+                MeshMinZ = Math.Min(MeshMinZ, MinZ);
+                MeshMaxX = Math.Max(MeshMaxX, MaxX);
+                MeshMaxY = Math.Max(MeshMaxY, MaxY);
+                MeshMaxZ = Math.Max(MeshMaxZ, MaxZ);
+
+                BSphere.Position = new Vector3(MinX + MaxX, MinY + MaxY, MinZ + MaxZ) / 2.0f;
+                BBox.Position = BSphere.Position;
+                BBox.Size = Math.Max(Math.Max(MaxX - BBox.Position.X, MaxY - BBox.Position.Y), MaxZ - BBox.Position.Z);
+
+                for (int i = 0; i < v.Vertexes.Length; i++)
+                {
+                    float Len = (BSphere.Position + v.Vertexes[i]).Length;
+                    Min = Math.Min(Min, Len);
+                    Max = Math.Max(Max, Len);
+                }
+                BSphere.Inner = Min;
+                BSphere.Outer = Max;
+                v.BoundingBox = BBox;
+                v.BoundingSphere = BSphere;
+            }
+
+            MeshBSphere.Position = new Vector3(MeshMinX + MeshMaxX, MeshMinY + MeshMaxY, MeshMinZ + MeshMaxZ) / 2.0f;
+            MeshBBox.Position = MeshBSphere.Position;
+            MeshBBox.Size = Math.Max(Math.Max(MeshMaxX - MeshBBox.Position.X, MeshMaxY - MeshBBox.Position.Y), MeshMaxZ - MeshBBox.Position.Z);
+
+            foreach (var v in Parts)
+            {
+                for (int i = 0; i < v.Vertexes.Length; i++)
+                {
+                    float Len = (MeshBSphere.Position + v.Vertexes[i]).Length;
+                    MeshMin = Math.Min(MeshMin, Len);
+                    MeshMax = Math.Max(MeshMax, Len);
+                }
+                MeshBSphere.Inner = MeshMin;
+                MeshBSphere.Outer = MeshMax;
+            }
+            this.BoundingBox = MeshBBox;
+            this.BoundingSphere = MeshBSphere;
         }
 
         public void Load()
@@ -325,6 +398,7 @@ namespace LED_Engine
                 Free();
 
                 Parts.AddRange(MeshPart.LoadFromFile(FileName));
+                CalcBoundingObjects();
             }
             catch (Exception e)
             {
@@ -340,6 +414,9 @@ namespace LED_Engine
                 Parts[i].Free();
 
             Parts.Clear();
+
+            this.BoundingBox = null;
+            this.BoundingSphere = null;
 
             UseCounter = 0;
         }
@@ -450,10 +527,10 @@ namespace LED_Engine
             UVs = null;
             Tangents = null;
 
-            Materials.Unload(Material.Name);
-
             this.BoundingBox = null;
             this.BoundingSphere = null;
+
+            Materials.Unload(Material.Name);
         }
 
         static void ComputeTangentBasis(Vector3[] Vertices, Vector3[] Normals, Vector2[] UVs, out Vector3[] Tangents)
@@ -595,32 +672,6 @@ namespace LED_Engine
                 Log.WriteLineRed("MeshPart.SmoothNormals() Exception:");
                 Log.WriteLineYellow("Message: \"{0}\"\n" + e.Message);
             }
-        }
-
-        void CalcBoundingBox()
-        {
-            BoundingBox Box = new BoundingBox();
-
-            for (int i = 0; i < Vertexes.Length; i++)
-            {
-                Box.LenX = (float)Math.Max(Box.LenX, Vertexes[i].X);
-                Box.LenX = (float)Math.Max(Box.LenY, Vertexes[i].Y);
-                Box.LenX = (float)Math.Max(Box.LenZ, Vertexes[i].Z);
-            }
-            this.BoundingBox = Box;
-        }
-
-        void CalcBoundingSphere()
-        {
-            float Min = Vertexes[0].Length;
-            float Max = 0.0f;
-
-            for (int i = 0; i < Vertexes.Length; i++)
-            {
-                Min = (float)Math.Min(Min, Vertexes[i].Length);
-                Max = (float)Math.Max(Max, Vertexes[i].Length);
-            }
-            this.BoundingSphere = new BoundingSphere(Min, Max);
         }
 
         public static MeshPart[] LoadFromFile(string FileName, bool UseSmoothingGroups = false)
@@ -927,9 +978,6 @@ namespace LED_Engine
                     v.GenBuffers();
                     v.BindBuffers();
 
-                    v.CalcBoundingBox();
-                    v.CalcBoundingSphere();
-
                     MeshParts[m] = v;
                 }
 
@@ -1004,9 +1052,6 @@ namespace LED_Engine
 
             plain.GenBuffers();
             plain.BindBuffers();
-
-            plain.CalcBoundingBox();
-            plain.CalcBoundingSphere();
 
             return plain;
         }
@@ -1298,9 +1343,6 @@ namespace LED_Engine
 
             box.GenBuffers();
             box.BindBuffers();
-
-            box.CalcBoundingBox();
-            box.CalcBoundingSphere();
 
             return box;
         }

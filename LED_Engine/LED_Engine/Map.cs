@@ -77,7 +77,7 @@ namespace LED_Engine
                     if (xmlNode.SelectNodes("Rotation").Count > 0)
                     {
                         string[] Rotation = xmlNode.SelectSingleNode("Rotation").InnerText.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                        Game.MainCamera.Orientation = new Vector3(float.Parse(Rotation[0]), float.Parse(Rotation[1]), float.Parse(Rotation[2]));
+                        Game.MainCamera.Direction = new Vector3(float.Parse(Rotation[0]), float.Parse(Rotation[1]), float.Parse(Rotation[2]));
                     }
                 }
                 #endregion
@@ -109,6 +109,7 @@ namespace LED_Engine
                         MeshPart MPart = MeshPart.MakeBox(Game.MainCamera.zFar * 2.0f / (float)Math.Sqrt(3.0), true); // Cube diagonal = side / sqrt(3)
                         MPart.Material = Materials.Load(SkyBox);
                         Game.SkyBox.Parts.Add(MPart);
+                        Game.SkyBox.CalcBoundingObjects();
                     }
                 }
                 #endregion
@@ -199,6 +200,7 @@ namespace LED_Engine
                                 SideB = float.Parse(xmlNodeMesh.SelectSingleNode("SideB").InnerText);
                                 mp = MeshPart.MakePlain(SideA, SideB);
                                 mesh.Parts.Add(mp);
+                                mesh.CalcBoundingObjects();
                                 break;
 
                             case MeshType.Box:
@@ -213,6 +215,7 @@ namespace LED_Engine
 
                                 mp = MeshPart.MakeBox(SideA, SideB, SideC, FlipPolygons);
                                 mesh.Parts.Add(mp);
+                                mesh.CalcBoundingObjects();
                                 break;
 
                             case MeshType.Mesh:

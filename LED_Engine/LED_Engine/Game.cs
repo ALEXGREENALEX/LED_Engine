@@ -94,7 +94,7 @@ namespace LED_Engine
             {
 
                 MainCamera.Position = new Vector3(0.0f, 40.0f, 20.0f);
-                MainCamera.Orientation = new Vector3(0.0f, -2.0f, 0.0f);
+                MainCamera.Direction = new Vector3(0.0f, -2.0f, 0.0f);
             }
 
             if (KeyCode == Key.F12 && Action == KeyAction.Press)
@@ -121,7 +121,9 @@ namespace LED_Engine
         {
             double deltaX = Settings.Window.X + Settings.Window.Width / 2 - posx;
             double deltaY = Settings.Window.Y + Settings.Window.Height / 2 - posy;
+
             MainCamera.AddRotation((float)deltaX, (float)deltaY);
+
             Glfw.SetCursorPos(window,
                 (double)(Settings.Window.X + Settings.Window.Width / 2),
                 (double)(Settings.Window.Y + Settings.Window.Height / 2));
@@ -200,6 +202,7 @@ namespace LED_Engine
             KeybrdState = KeyboardState.GetState(Window);
 
             float camMoveSens = 5.0f * timeK;
+
             if (KeybrdState[Key.W])
                 MainCamera.Move(0f, camMoveSens, 0f);
             if (KeybrdState[Key.A])
