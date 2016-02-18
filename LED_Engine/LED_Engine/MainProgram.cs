@@ -56,7 +56,7 @@ namespace LED_Engine
                     if (args.Length > 0)
                         Maps.LoadMap(args[0]);
                     else
-                        Maps.LoadMap("Materials_Test_Map"); //Sponza //SampleMap //Materials_Test_Map
+                        Maps.LoadMap("Sponza"); //Sponza //SampleMap //Materials_Test_Map
 
                     GLContextIsLoaded = true;
                 }
@@ -98,7 +98,9 @@ namespace LED_Engine
             if (Settings.Debug.Enabled)
             {
                 //Console.ReadKey();
-                System.Windows.Forms.Clipboard.SetText(Log.GetLog());
+                string log = Log.GetLog();
+                if (log.Length > 256)
+                    System.Windows.Forms.Clipboard.SetText(log);
             }
         }
     }

@@ -11,48 +11,48 @@ namespace LED_Engine
     {
         public static float[,] Frustum = new float[6, 4];
 
-        public static void ExtractFrustum(Matrix4 MVP)
+        public static void ExtractFrustum(Matrix4 VP)
         {
             // Left Frustum Plain
-            Frustum[0, 0] = MVP.M14 - MVP.M11;
-            Frustum[0, 1] = MVP.M24 - MVP.M21;
-            Frustum[0, 2] = MVP.M34 - MVP.M31;
-            Frustum[0, 3] = MVP.M44 - MVP.M41;
+            Frustum[0, 0] = VP.M14 - VP.M11;
+            Frustum[0, 1] = VP.M24 - VP.M21;
+            Frustum[0, 2] = VP.M34 - VP.M31;
+            Frustum[0, 3] = VP.M44 - VP.M41;
             NormalizeFrustumPlane(0);
 
             // Right Frustum Plain
-            Frustum[1, 0] = MVP.M14 + MVP.M11;
-            Frustum[1, 1] = MVP.M24 + MVP.M21;
-            Frustum[1, 2] = MVP.M34 + MVP.M31;
-            Frustum[1, 3] = MVP.M44 + MVP.M41;
+            Frustum[1, 0] = VP.M14 + VP.M11;
+            Frustum[1, 1] = VP.M24 + VP.M21;
+            Frustum[1, 2] = VP.M34 + VP.M31;
+            Frustum[1, 3] = VP.M44 + VP.M41;
             NormalizeFrustumPlane(1);
 
             // Bottom Frustum Plain
-            Frustum[2, 0] = MVP.M14 + MVP.M12;
-            Frustum[2, 1] = MVP.M24 + MVP.M22;
-            Frustum[2, 2] = MVP.M34 + MVP.M32;
-            Frustum[2, 3] = MVP.M44 + MVP.M42;
+            Frustum[2, 0] = VP.M14 + VP.M12;
+            Frustum[2, 1] = VP.M24 + VP.M22;
+            Frustum[2, 2] = VP.M34 + VP.M32;
+            Frustum[2, 3] = VP.M44 + VP.M42;
             NormalizeFrustumPlane(2);
 
             // Top Frustum Plain
-            Frustum[3, 0] = MVP.M14 - MVP.M12;
-            Frustum[3, 1] = MVP.M24 - MVP.M22;
-            Frustum[3, 2] = MVP.M34 - MVP.M32;
-            Frustum[3, 3] = MVP.M44 - MVP.M42;
+            Frustum[3, 0] = VP.M14 - VP.M12;
+            Frustum[3, 1] = VP.M24 - VP.M22;
+            Frustum[3, 2] = VP.M34 - VP.M32;
+            Frustum[3, 3] = VP.M44 - VP.M42;
             NormalizeFrustumPlane(3);
 
             // Near Frustum Plain
-            Frustum[4, 0] = MVP.M14 - MVP.M13;
-            Frustum[4, 1] = MVP.M24 - MVP.M23;
-            Frustum[4, 2] = MVP.M34 - MVP.M33;
-            Frustum[4, 3] = MVP.M44 - MVP.M43;
+            Frustum[4, 0] = VP.M14 - VP.M13;
+            Frustum[4, 1] = VP.M24 - VP.M23;
+            Frustum[4, 2] = VP.M34 - VP.M33;
+            Frustum[4, 3] = VP.M44 - VP.M43;
             NormalizeFrustumPlane(4);
 
             // Far Frustum Plain
-            Frustum[5, 0] = MVP.M14 + MVP.M13;
-            Frustum[5, 1] = MVP.M24 + MVP.M23;
-            Frustum[5, 2] = MVP.M34 + MVP.M33;
-            Frustum[5, 3] = MVP.M44 + MVP.M43;
+            Frustum[5, 0] = VP.M14 + VP.M13;
+            Frustum[5, 1] = VP.M24 + VP.M23;
+            Frustum[5, 2] = VP.M34 + VP.M33;
+            Frustum[5, 3] = VP.M44 + VP.M43;
             NormalizeFrustumPlane(5);
         }
 
@@ -132,78 +132,78 @@ namespace LED_Engine
         #endregion
 
         #region Box
-        public static bool BoxInFrustum(Vector3 Position, float Size)
+        public static bool BoxInFrustum(Vector3 Position, Vector3 Size)
         {
             for (int i = 0; i < 6; i++)
             {
-                if (Frustum[i, 0] * (Position.X - Size) + Frustum[i, 1] * (Position.Y - Size) + Frustum[i, 2] * (Position.Z - Size) + Frustum[i, 3] > 0)
+                if (Frustum[i, 0] * (Position.X - Size.X) + Frustum[i, 1] * (Position.Y - Size.Y) + Frustum[i, 2] * (Position.Z - Size.Z) + Frustum[i, 3] > 0)
                     continue;
-                if (Frustum[i, 0] * (Position.X + Size) + Frustum[i, 1] * (Position.Y - Size) + Frustum[i, 2] * (Position.Z - Size) + Frustum[i, 3] > 0)
+                if (Frustum[i, 0] * (Position.X + Size.X) + Frustum[i, 1] * (Position.Y - Size.Y) + Frustum[i, 2] * (Position.Z - Size.Z) + Frustum[i, 3] > 0)
                     continue;
-                if (Frustum[i, 0] * (Position.X - Size) + Frustum[i, 1] * (Position.Y + Size) + Frustum[i, 2] * (Position.Z - Size) + Frustum[i, 3] > 0)
+                if (Frustum[i, 0] * (Position.X - Size.X) + Frustum[i, 1] * (Position.Y + Size.Y) + Frustum[i, 2] * (Position.Z - Size.Z) + Frustum[i, 3] > 0)
                     continue;
-                if (Frustum[i, 0] * (Position.X + Size) + Frustum[i, 1] * (Position.Y + Size) + Frustum[i, 2] * (Position.Z - Size) + Frustum[i, 3] > 0)
+                if (Frustum[i, 0] * (Position.X + Size.X) + Frustum[i, 1] * (Position.Y + Size.Y) + Frustum[i, 2] * (Position.Z - Size.Z) + Frustum[i, 3] > 0)
                     continue;
-                if (Frustum[i, 0] * (Position.X - Size) + Frustum[i, 1] * (Position.Y - Size) + Frustum[i, 2] * (Position.Z + Size) + Frustum[i, 3] > 0)
+                if (Frustum[i, 0] * (Position.X - Size.X) + Frustum[i, 1] * (Position.Y - Size.Y) + Frustum[i, 2] * (Position.Z + Size.Z) + Frustum[i, 3] > 0)
                     continue;
-                if (Frustum[i, 0] * (Position.X + Size) + Frustum[i, 1] * (Position.Y - Size) + Frustum[i, 2] * (Position.Z + Size) + Frustum[i, 3] > 0)
+                if (Frustum[i, 0] * (Position.X + Size.X) + Frustum[i, 1] * (Position.Y - Size.Y) + Frustum[i, 2] * (Position.Z + Size.Z) + Frustum[i, 3] > 0)
                     continue;
-                if (Frustum[i, 0] * (Position.X - Size) + Frustum[i, 1] * (Position.Y + Size) + Frustum[i, 2] * (Position.Z + Size) + Frustum[i, 3] > 0)
+                if (Frustum[i, 0] * (Position.X - Size.X) + Frustum[i, 1] * (Position.Y + Size.Y) + Frustum[i, 2] * (Position.Z + Size.Z) + Frustum[i, 3] > 0)
                     continue;
-                if (Frustum[i, 0] * (Position.X + Size) + Frustum[i, 1] * (Position.Y + Size) + Frustum[i, 2] * (Position.Z + Size) + Frustum[i, 3] > 0)
+                if (Frustum[i, 0] * (Position.X + Size.X) + Frustum[i, 1] * (Position.Y + Size.Y) + Frustum[i, 2] * (Position.Z + Size.Z) + Frustum[i, 3] > 0)
                     continue;
                 return false;
             }
             return true;
         }
 
-        public static bool BoxInFrustum(float X, float Y, float Z, float Size)
+        public static bool BoxInFrustum(float X, float Y, float Z, Vector3 Size)
         {
             for (int i = 0; i < 6; i++)
             {
-                if (Frustum[i, 0] * (X - Size) + Frustum[i, 1] * (Y - Size) + Frustum[i, 2] * (Z - Size) + Frustum[i, 3] > 0)
+                if (Frustum[i, 0] * (X - Size.X) + Frustum[i, 1] * (Y - Size.Y) + Frustum[i, 2] * (Z - Size.Z) + Frustum[i, 3] > 0)
                     continue;
-                if (Frustum[i, 0] * (X + Size) + Frustum[i, 1] * (Y - Size) + Frustum[i, 2] * (Z - Size) + Frustum[i, 3] > 0)
+                if (Frustum[i, 0] * (X + Size.X) + Frustum[i, 1] * (Y - Size.Y) + Frustum[i, 2] * (Z - Size.Z) + Frustum[i, 3] > 0)
                     continue;
-                if (Frustum[i, 0] * (X - Size) + Frustum[i, 1] * (Y + Size) + Frustum[i, 2] * (Z - Size) + Frustum[i, 3] > 0)
+                if (Frustum[i, 0] * (X - Size.X) + Frustum[i, 1] * (Y + Size.Y) + Frustum[i, 2] * (Z - Size.Z) + Frustum[i, 3] > 0)
                     continue;
-                if (Frustum[i, 0] * (X + Size) + Frustum[i, 1] * (Y + Size) + Frustum[i, 2] * (Z - Size) + Frustum[i, 3] > 0)
+                if (Frustum[i, 0] * (X + Size.X) + Frustum[i, 1] * (Y + Size.Y) + Frustum[i, 2] * (Z - Size.Z) + Frustum[i, 3] > 0)
                     continue;
-                if (Frustum[i, 0] * (X - Size) + Frustum[i, 1] * (Y - Size) + Frustum[i, 2] * (Z + Size) + Frustum[i, 3] > 0)
+                if (Frustum[i, 0] * (X - Size.X) + Frustum[i, 1] * (Y - Size.Y) + Frustum[i, 2] * (Z + Size.Z) + Frustum[i, 3] > 0)
                     continue;
-                if (Frustum[i, 0] * (X + Size) + Frustum[i, 1] * (Y - Size) + Frustum[i, 2] * (Z + Size) + Frustum[i, 3] > 0)
+                if (Frustum[i, 0] * (X + Size.X) + Frustum[i, 1] * (Y - Size.Y) + Frustum[i, 2] * (Z + Size.Z) + Frustum[i, 3] > 0)
                     continue;
-                if (Frustum[i, 0] * (X - Size) + Frustum[i, 1] * (Y + Size) + Frustum[i, 2] * (Z + Size) + Frustum[i, 3] > 0)
+                if (Frustum[i, 0] * (X - Size.X) + Frustum[i, 1] * (Y + Size.Y) + Frustum[i, 2] * (Z + Size.Z) + Frustum[i, 3] > 0)
                     continue;
-                if (Frustum[i, 0] * (X + Size) + Frustum[i, 1] * (Y + Size) + Frustum[i, 2] * (Z + Size) + Frustum[i, 3] > 0)
+                if (Frustum[i, 0] * (X + Size.X) + Frustum[i, 1] * (Y + Size.Y) + Frustum[i, 2] * (Z + Size.Z) + Frustum[i, 3] > 0)
                     continue;
                 return false;
             }
             return true;
         }
 
-        public static int BoxInFrustumIntersect(Vector3 Position, float Size)
+        public static int BoxInFrustumIntersect(Vector3 Position, Vector3 Size)
         {
             int c;
             int c2 = 0;
             for (int i = 0; i < 6; i++)
             {
                 c = 0;
-                if (Frustum[i, 0] * (Position.X - Size) + Frustum[i, 1] * (Position.Y - Size) + Frustum[i, 2] * (Position.Z - Size) + Frustum[i, 3] > 0)
+                if (Frustum[i, 0] * (Position.X - Size.X) + Frustum[i, 1] * (Position.Y - Size.Y) + Frustum[i, 2] * (Position.Z - Size.Z) + Frustum[i, 3] > 0)
                     c++;
-                if (Frustum[i, 0] * (Position.X + Size) + Frustum[i, 1] * (Position.Y - Size) + Frustum[i, 2] * (Position.Z - Size) + Frustum[i, 3] > 0)
+                if (Frustum[i, 0] * (Position.X + Size.X) + Frustum[i, 1] * (Position.Y - Size.Y) + Frustum[i, 2] * (Position.Z - Size.Z) + Frustum[i, 3] > 0)
                     c++;
-                if (Frustum[i, 0] * (Position.X - Size) + Frustum[i, 1] * (Position.Y + Size) + Frustum[i, 2] * (Position.Z - Size) + Frustum[i, 3] > 0)
+                if (Frustum[i, 0] * (Position.X - Size.X) + Frustum[i, 1] * (Position.Y + Size.Y) + Frustum[i, 2] * (Position.Z - Size.Z) + Frustum[i, 3] > 0)
                     c++;
-                if (Frustum[i, 0] * (Position.X + Size) + Frustum[i, 1] * (Position.Y + Size) + Frustum[i, 2] * (Position.Z - Size) + Frustum[i, 3] > 0)
+                if (Frustum[i, 0] * (Position.X + Size.X) + Frustum[i, 1] * (Position.Y + Size.Y) + Frustum[i, 2] * (Position.Z - Size.Z) + Frustum[i, 3] > 0)
                     c++;
-                if (Frustum[i, 0] * (Position.X - Size) + Frustum[i, 1] * (Position.Y - Size) + Frustum[i, 2] * (Position.Z + Size) + Frustum[i, 3] > 0)
+                if (Frustum[i, 0] * (Position.X - Size.X) + Frustum[i, 1] * (Position.Y - Size.Y) + Frustum[i, 2] * (Position.Z + Size.Z) + Frustum[i, 3] > 0)
                     c++;
-                if (Frustum[i, 0] * (Position.X + Size) + Frustum[i, 1] * (Position.Y - Size) + Frustum[i, 2] * (Position.Z + Size) + Frustum[i, 3] > 0)
+                if (Frustum[i, 0] * (Position.X + Size.X) + Frustum[i, 1] * (Position.Y - Size.Y) + Frustum[i, 2] * (Position.Z + Size.Z) + Frustum[i, 3] > 0)
                     c++;
-                if (Frustum[i, 0] * (Position.X - Size) + Frustum[i, 1] * (Position.Y + Size) + Frustum[i, 2] * (Position.Z + Size) + Frustum[i, 3] > 0)
+                if (Frustum[i, 0] * (Position.X - Size.X) + Frustum[i, 1] * (Position.Y + Size.Y) + Frustum[i, 2] * (Position.Z + Size.Z) + Frustum[i, 3] > 0)
                     c++;
-                if (Frustum[i, 0] * (Position.X + Size) + Frustum[i, 1] * (Position.Y + Size) + Frustum[i, 2] * (Position.Z + Size) + Frustum[i, 3] > 0)
+                if (Frustum[i, 0] * (Position.X + Size.X) + Frustum[i, 1] * (Position.Y + Size.Y) + Frustum[i, 2] * (Position.Z + Size.Z) + Frustum[i, 3] > 0)
                     c++;
                 if (c == 0)
                     return 0;
@@ -213,28 +213,28 @@ namespace LED_Engine
             return (c2 == 6) ? 2 : 1;
         }
 
-        public static int BoxInFrustumIntersect(float X, float Y, float Z, float Size)
+        public static int BoxInFrustumIntersect(float X, float Y, float Z, Vector3 Size)
         {
             int c;
             int c2 = 0;
             for (int i = 0; i < 6; i++)
             {
                 c = 0;
-                if (Frustum[i, 0] * (X - Size) + Frustum[i, 1] * (Y - Size) + Frustum[i, 2] * (Z - Size) + Frustum[i, 3] > 0)
+                if (Frustum[i, 0] * (X - Size.X) + Frustum[i, 1] * (Y - Size.Y) + Frustum[i, 2] * (Z - Size.Z) + Frustum[i, 3] > 0)
                     c++;
-                if (Frustum[i, 0] * (X + Size) + Frustum[i, 1] * (Y - Size) + Frustum[i, 2] * (Z - Size) + Frustum[i, 3] > 0)
+                if (Frustum[i, 0] * (X + Size.X) + Frustum[i, 1] * (Y - Size.Y) + Frustum[i, 2] * (Z - Size.Z) + Frustum[i, 3] > 0)
                     c++;
-                if (Frustum[i, 0] * (X - Size) + Frustum[i, 1] * (Y + Size) + Frustum[i, 2] * (Z - Size) + Frustum[i, 3] > 0)
+                if (Frustum[i, 0] * (X - Size.X) + Frustum[i, 1] * (Y + Size.Y) + Frustum[i, 2] * (Z - Size.Z) + Frustum[i, 3] > 0)
                     c++;
-                if (Frustum[i, 0] * (X + Size) + Frustum[i, 1] * (Y + Size) + Frustum[i, 2] * (Z - Size) + Frustum[i, 3] > 0)
+                if (Frustum[i, 0] * (X + Size.X) + Frustum[i, 1] * (Y + Size.Y) + Frustum[i, 2] * (Z - Size.Z) + Frustum[i, 3] > 0)
                     c++;
-                if (Frustum[i, 0] * (X - Size) + Frustum[i, 1] * (Y - Size) + Frustum[i, 2] * (Z + Size) + Frustum[i, 3] > 0)
+                if (Frustum[i, 0] * (X - Size.X) + Frustum[i, 1] * (Y - Size.Y) + Frustum[i, 2] * (Z + Size.Z) + Frustum[i, 3] > 0)
                     c++;
-                if (Frustum[i, 0] * (X + Size) + Frustum[i, 1] * (Y - Size) + Frustum[i, 2] * (Z + Size) + Frustum[i, 3] > 0)
+                if (Frustum[i, 0] * (X + Size.X) + Frustum[i, 1] * (Y - Size.Y) + Frustum[i, 2] * (Z + Size.Z) + Frustum[i, 3] > 0)
                     c++;
-                if (Frustum[i, 0] * (X - Size) + Frustum[i, 1] * (Y + Size) + Frustum[i, 2] * (Z + Size) + Frustum[i, 3] > 0)
+                if (Frustum[i, 0] * (X - Size.X) + Frustum[i, 1] * (Y + Size.Y) + Frustum[i, 2] * (Z + Size.Z) + Frustum[i, 3] > 0)
                     c++;
-                if (Frustum[i, 0] * (X + Size) + Frustum[i, 1] * (Y + Size) + Frustum[i, 2] * (Z + Size) + Frustum[i, 3] > 0)
+                if (Frustum[i, 0] * (X + Size.X) + Frustum[i, 1] * (Y + Size.Y) + Frustum[i, 2] * (Z + Size.Z) + Frustum[i, 3] > 0)
                     c++;
                 if (c == 0)
                     return 0;

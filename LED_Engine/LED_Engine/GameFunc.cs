@@ -183,11 +183,9 @@ namespace LED_Engine
             m.CalculateMatrices(MainCamera);
             FrustumCulling.ExtractFrustum(MainCamera.GetViewMatrix() * MainCamera.GetProjectionMatrix());
 
-            if (/*FrustumCulling.SphereInFrustum(m.Position, m.BoundingSphere.Outer) ||*/
-                FrustumCulling.BoxInFrustum(m.Position, m.BoundingBox.Size))
+            if (FrustumCulling.BoxInFrustum(m.Position, m.BoundingBox.Size))
                 for (int i = 0; i < m.Parts.Count; i++)
-                    if (/*FrustumCulling.SphereInFrustum(m.Position + m.Parts[i].BoundingSphere.Position, m.Parts[i].BoundingSphere.Outer) ||*/
-                        FrustumCulling.BoxInFrustum(m.Position + m.Parts[i].BoundingBox.Position, m.Parts[i].BoundingBox.Size))
+                    if (FrustumCulling.BoxInFrustum(m.Position + m.Parts[i].BoundingBox.Position, m.Parts[i].BoundingBox.Size))
                         Draw(m, m.Parts[i]);
         }
 

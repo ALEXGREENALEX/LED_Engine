@@ -204,13 +204,13 @@ namespace LED_Engine
     public class BoundingBox
     {
         public Vector3 Position = Vector3.Zero;
-        float size = 0.0f;
+        Vector3 size = Vector3.Zero;
 
         public BoundingBox()
         {
         }
 
-        public BoundingBox(Vector3 Position, float Size)
+        public BoundingBox(Vector3 Position, Vector3 Size)
         {
             this.Position = Position;
             this.Size = Size;
@@ -221,14 +221,14 @@ namespace LED_Engine
             if (Box != null)
             {
                 Position = Box.Position;
-                size = Box.Size;
+                size = Box.size;
             }
         }
 
-        public float Size
+        public Vector3 Size
         {
             get { return size; }
-            set { size = (float)Math.Abs(value); }
+            set { size = new Vector3(Math.Abs(value.X), Math.Abs(value.Y), Math.Abs(value.Z)); }
         }
     }
 
@@ -330,14 +330,14 @@ namespace LED_Engine
             BoundingSphere MeshBSphere = new BoundingSphere();
             BoundingBox MeshBBox = new BoundingBox();
             float MeshMin = float.MaxValue, MeshMinX = float.MaxValue, MeshMinY = float.MaxValue, MeshMinZ = float.MaxValue;
-            float MeshMax = float.MaxValue, MeshMaxX = float.MinValue, MeshMaxY = float.MinValue, MeshMaxZ = float.MinValue;
+            float MeshMax = float.MinValue, MeshMaxX = float.MinValue, MeshMaxY = float.MinValue, MeshMaxZ = float.MinValue;
 
             foreach (var v in Parts)
             {
                 BoundingSphere BSphere = new BoundingSphere();
                 BoundingBox BBox = new BoundingBox();
                 float Min = float.MaxValue, MinX = float.MaxValue, MinY = float.MaxValue, MinZ = float.MaxValue;
-                float Max = float.MaxValue, MaxX = float.MinValue, MaxY = float.MinValue, MaxZ = float.MinValue;
+                float Max = float.MinValue, MaxX = float.MinValue, MaxY = float.MinValue, MaxZ = float.MinValue;
 
                 for (int i = 0; i < v.Vertexes.Length; i++)
                 {
@@ -358,7 +358,7 @@ namespace LED_Engine
 
                 BSphere.Position = new Vector3(MinX + MaxX, MinY + MaxY, MinZ + MaxZ) / 2.0f;
                 BBox.Position = BSphere.Position;
-                BBox.Size = Math.Max(Math.Max(MaxX - BBox.Position.X, MaxY - BBox.Position.Y), MaxZ - BBox.Position.Z);
+                BBox.Size = new Vector3(MaxX - BBox.Position.X, MaxY - BBox.Position.Y, MaxZ - BBox.Position.Z);
 
                 for (int i = 0; i < v.Vertexes.Length; i++)
                 {
@@ -374,7 +374,7 @@ namespace LED_Engine
 
             MeshBSphere.Position = new Vector3(MeshMinX + MeshMaxX, MeshMinY + MeshMaxY, MeshMinZ + MeshMaxZ) / 2.0f;
             MeshBBox.Position = MeshBSphere.Position;
-            MeshBBox.Size = Math.Max(Math.Max(MeshMaxX - MeshBBox.Position.X, MeshMaxY - MeshBBox.Position.Y), MeshMaxZ - MeshBBox.Position.Z);
+            MeshBBox.Size = new Vector3(MeshMaxX - MeshBBox.Position.X, MeshMaxY - MeshBBox.Position.Y, MeshMaxZ - MeshBBox.Position.Z);
 
             foreach (var v in Parts)
             {
