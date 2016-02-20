@@ -301,7 +301,7 @@ namespace LED_Engine
             #endregion
 
             #region Fog
-            TempLocation = Shaders[ShaderIndex_P1].GetUniform("FogMinMaxDistance");
+            TempLocation = Shaders[ShaderIndex_P1].GetUniform("FogMinMax");
             if (TempLocation != -1)
             {
                 if (Settings.Graphics.Fog.Enabled && Settings.Graphics.Fog.UseFogOnMap)

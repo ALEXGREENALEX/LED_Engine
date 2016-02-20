@@ -1,16 +1,16 @@
 uniform vec3 FogColor;
-uniform vec2 FogMinMaxDistance;
+uniform vec2 FogMinMax;
 
 //#include("Noise\PerlinNoise3D.glsl")
 #include("Noise\SimplexNoise3D.glsl")
 
 vec3 Fog(vec3 Color, vec3 Position, vec3 WorldPosition)
 {
-	if (FogMinMaxDistance.x < 0.0) //Fog Disabled
+	if (FogMinMax.x < 0.0) //Fog Disabled
 		return Color;
 	
 	float Distance = length(Position);
-	float FogFactor = (FogMinMaxDistance.y - Distance) / (FogMinMaxDistance.y - FogMinMaxDistance.x);
+	float FogFactor = (FogMinMax.y - Distance) / (FogMinMax.y - FogMinMax.x);
 	
 	// Add noise for best result
 	//FogFactor += pnoise(WorldPosition / 5.1) * 0.1 - 0.05;
