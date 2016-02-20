@@ -4,7 +4,7 @@
 
 	<PlayerStart>
 		<Position>0.0 0.4 3.0</Position>
-		<Rotation>3.14 -0.3 0.0</Rotation>
+		<Rotation>180.0 -20.0 0.0</Rotation>
 	</PlayerStart>
 	
 	<Camera>
@@ -172,7 +172,7 @@
 		<Position>0.0 2.0 -1.0</Position>
 		<Direction>0.0 -1.2 1.0</Direction>
 		<Attenuation>0.0 1.0 0.0</Attenuation>
-		<CutOff>80.0</CutOff>
+		<CutOFF>55.0</CutOFF>
 		<Exponent>4.0</Exponent>
 	</Light>
 	<Light>
@@ -184,7 +184,7 @@
 		<Position>0.0 2.0 4.0</Position>
 		<Direction>0.0 -1.2 1.0</Direction>
 		<Attenuation>0.0 1.0 0.0</Attenuation>
-		<CutOff>80.0</CutOff>
+		<CutOFF>55.0</CutOFF>
 		<Exponent>4.0</Exponent>
 	</Light>
 	<Light>

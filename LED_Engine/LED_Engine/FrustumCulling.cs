@@ -131,6 +131,7 @@ namespace LED_Engine
         }
         #endregion
 
+        /*
         #region Box
         public static bool BoxInFrustum(Vector3 Position, Vector3 Size)
         {
@@ -244,5 +245,6 @@ namespace LED_Engine
             return (c2 == 6) ? 2 : 1;
         }
         #endregion
+        */
     }
 }

@@ -235,7 +235,7 @@ namespace LED_Engine
     public class BoundingSphere
     {
         public Vector3 Position = Vector3.Zero;
-        public float inner, outer;
+        float inner, outer;
 
         public BoundingSphere()
         {

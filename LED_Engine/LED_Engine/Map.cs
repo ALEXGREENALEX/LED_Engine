@@ -77,7 +77,8 @@ namespace LED_Engine
                     if (xmlNode.SelectNodes("Rotation").Count > 0)
                     {
                         string[] Rotation = xmlNode.SelectSingleNode("Rotation").InnerText.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                        Game.MainCamera.Direction = new Vector3(float.Parse(Rotation[0]), float.Parse(Rotation[1]), float.Parse(Rotation[2]));
+                        Game.MainCamera.Direction = new Vector3(MathHelper.DegreesToRadians(float.Parse(Rotation[0])),
+                            MathHelper.DegreesToRadians(float.Parse(Rotation[1])), MathHelper.DegreesToRadians(float.Parse(Rotation[2])));
                     }
                 }
                 #endregion
@@ -229,7 +230,8 @@ namespace LED_Engine
                         mesh.Position = new Vector3(float.Parse(Pos[0]), float.Parse(Pos[1]), float.Parse(Pos[2]));
 
                         string[] Rot = xmlNodeMesh.SelectSingleNode("Rotation").InnerText.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                        mesh.Rotation = new Vector3(float.Parse(Rot[0]), float.Parse(Rot[1]), float.Parse(Rot[2]));
+                        mesh.Rotation = new Vector3(MathHelper.DegreesToRadians(float.Parse(Rot[0])),
+                            MathHelper.DegreesToRadians(float.Parse(Rot[1])), MathHelper.DegreesToRadians(float.Parse(Rot[2])));
 
                         string[] Scl = xmlNodeMesh.SelectSingleNode("Scale").InnerText.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
                         mesh.Scale = new Vector3(float.Parse(Scl[0]), float.Parse(Scl[1]), float.Parse(Scl[2]));
@@ -344,7 +346,8 @@ namespace LED_Engine
                     if (xmlNodeList.Count > 0)
                     {
                         string[] Direct = xmlNodeList.Item(0).InnerText.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                        light.Direction = new Vector3(float.Parse(Direct[0]), float.Parse(Direct[1]), float.Parse(Direct[2]));
+                        light.Direction = new Vector3(MathHelper.DegreesToRadians(float.Parse(Direct[0])),
+                            MathHelper.DegreesToRadians(float.Parse(Direct[1])), MathHelper.DegreesToRadians(float.Parse(Direct[2])));
                     }
                     #endregion
 

@@ -1,14 +1,14 @@
 ﻿<Map>
 	<Name>Sponza</Name>
 	<Description>
-		CryTek Sponza
+		CryTek Sponza Test Map(Model)
 		Model, from: http://graphics.cs.williams.edu/data/meshes.xml
 		Textures from: http://www.crytek.com/cryengine/cryengine3/downloads
 	</Description>
 
 	<PlayerStart>
 		<Position>0.0 2.0 0.0</Position>
-		<Rotation>1.570796 0.0 0.0</Rotation>
+		<Rotation>-90.0 0.0 0.0</Rotation>
 	</PlayerStart>
 	
 	<Camera>
@@ -31,9 +31,9 @@
 		<Name>Sponza</Name>
 		<Visible>true</Visible>
 		<Mesh>
-			<Name>Sponza</Name>
+			<Name>Sponza_Box</Name>
 			<Type>Mesh</Type>
-			<Mesh>Sponza</Mesh>
+			<Mesh>Sponza_Box</Mesh>
 			<Visible>true</Visible>
 			
 			<Position>0.0 0.0 0.0</Position>
@@ -41,31 +41,1737 @@
 			<Scale>1.0 1.0 1.0</Scale>
 			
 			<Materials>
-				<Material>Sponza_Thorn</Material>
-				<Material>Sponza_VasePlant</Material>
-				<Material>Sponza_VaseRound</Material>
-				<Material>Sponza_Background</Material>
+				<Material>Sponza_Bricks</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Roof</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Roof</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>0.0 13.65 0.0</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Roof</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Atrium</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Atrium</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>0.0 0.0 0.0</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
 				<Material>Sponza_Bricks</Material>
 				<Material>Sponza_Arch</Material>
 				<Material>Sponza_Ceiling</Material>
-				<Material>Sponza_ColumnA</Material>
 				<Material>Sponza_Floor</Material>
 				<Material>Sponza_ColumnC</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Details_D1</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Details_D1</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>0.0 1.21 6.1</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
 				<Material>Sponza_Details</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Details_D2</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Details_D2</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>0.0 1.5 -6.1</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Details</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Details_D2_2</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Details_D2</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>13.7 5.65 0.0</Position>
+			<Rotation>0.0 -90.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Details</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Details_W1</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Details_W</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>3.72 2.05 6.17</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Details</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Details_W2</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Details_W</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-3.69 2.05 6.17</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Details</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Details_P_1</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Details_P</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>0.0 9.7 -2.22</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Arch</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Details_P_2</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Details_P</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>3.7 9.7 -2.22</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Arch</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Details_P_3</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Details_P</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-3.7 9.7 -2.22</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Arch</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Details_P_4</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Details_P</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>7.41 9.7 -2.22</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Arch</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Details_P_5</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Details_P</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-7.41 9.7 -2.22</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Arch</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Details_P_6</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Details_P</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>0.0 9.7 2.22</Position>
+			<Rotation>0.0 180.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Arch</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Details_P_7</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Details_P</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>3.7 9.7 2.22</Position>
+			<Rotation>0.0 180.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Arch</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Details_P_8</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Details_P</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-3.7 9.7 2.22</Position>
+			<Rotation>0.0 180.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Arch</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Details_P_9</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Details_P</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>7.41 9.7 2.22</Position>
+			<Rotation>0.0 180.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Arch</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Details_P_10</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Details_P</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-7.41 9.7 2.22</Position>
+			<Rotation>0.0 180.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Arch</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Details_P_11</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Details_P</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-9.49 9.7 0.0</Position>
+			<Rotation>0.0 90.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Arch</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Details_O_1</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Details_O</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-2.04 12.45 -2.22</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Arch</Material>
+				<Material>Sponza_Ceiling</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Details_O_2</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Details_O</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>2.04 12.45 -2.22</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Arch</Material>
+				<Material>Sponza_Ceiling</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Details_O_3</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Details_O</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>5.68 12.45 -2.22</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Arch</Material>
+				<Material>Sponza_Ceiling</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Details_O_4</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Details_O</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-5.68 12.45 -2.22</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Arch</Material>
+				<Material>Sponza_Ceiling</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Details_O_5</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Details_O</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-2.04 12.45 2.22</Position>
+			<Rotation>0.0 180.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Arch</Material>
+				<Material>Sponza_Ceiling</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Details_O_6</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Details_O</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>2.04 12.45 2.22</Position>
+			<Rotation>0.0 180.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Arch</Material>
+				<Material>Sponza_Ceiling</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Details_O_7</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Details_O</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>5.68 12.45 2.22</Position>
+			<Rotation>0.0 180.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Arch</Material>
+				<Material>Sponza_Ceiling</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Details_O_8</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Details_O</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-5.68 12.45 2.22</Position>
+			<Rotation>0.0 180.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Arch</Material>
+				<Material>Sponza_Ceiling</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Details_O_9</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Details_O</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-9.45 12.45 0.0</Position>
+			<Rotation>0.0 90.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Arch</Material>
+				<Material>Sponza_Ceiling</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Column_AL_1</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Column_AL</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-9.37 0.0 2.28</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_ColumnA</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Column_AL_2</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Column_AL</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-9.37 0.0 -2.28</Position>
+			<Rotation>0.0 -90.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_ColumnA</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Column_AL_3</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Column_AL</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>9.37 0.0 -2.28</Position>
+			<Rotation>0.0 180.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_ColumnA</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Column_AL_4</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Column_AL</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>9.37 0.0 2.28</Position>
+			<Rotation>0.0 90.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_ColumnA</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Column_A_1</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Column_A</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-5.54 0.0 2.41</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_ColumnA</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Column_A_2</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Column_A</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-1.83 0.0 2.41</Position>
+			<Rotation>0.0 90.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_ColumnA</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Column_A_3</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Column_A</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>1.86 0.0 2.41</Position>
+			<Rotation>0.0 -90.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_ColumnA</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Column_A_4</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Column_A</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>5.55 0.0 2.41</Position>
+			<Rotation>0.0 180.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_ColumnA</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Column_A_5</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Column_A</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-5.54 0.0 -2.41</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_ColumnA</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Column_A_6</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Column_A</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-1.83 0.0 -2.41</Position>
+			<Rotation>0.0 90.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_ColumnA</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Column_A_7</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Column_A</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>1.86 0.0 -2.41</Position>
+			<Rotation>0.0 -90.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_ColumnA</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Column_A_8</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Column_A</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>5.55 0.0 -2.41</Position>
+			<Rotation>0.0 180.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_ColumnA</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Column_B_1</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Column_B</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>9.46 5.07 0.0</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
 				<Material>Sponza_ColumnB</Material>
-				<Material>Sponza_Bricks</Material> <!--Tablichka-->
-				<Material>Sponza_Fragpole</Material>
-				<Material>Sponza_Fabric_Green</Material>
-				<Material>Sponza_Fabric_Blue</Material>
-				<Material>Sponza_Fabric_Red</Material>
-				<Material>Sponza_FabricCurtain_Blue</Material>
-				<Material>Sponza_FabricCurtain_Red</Material>
-				<Material>Sponza_FabricCurtain_Green</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Column_B_2</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Column_B</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-9.5 5.07 0.0</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_ColumnB</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Column_B_3</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Column_B</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>7.41 5.07 2.44</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_ColumnB</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Column_B_4</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Column_B</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>7.41 5.07 -2.44</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_ColumnB</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Column_B_5</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Column_B</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-7.41 5.07 2.44</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_ColumnB</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Column_B_6</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Column_B</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-7.41 5.07 -2.44</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_ColumnB</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Column_B_7</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Column_B</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>3.69 5.07 2.44</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_ColumnB</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Column_B_8</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Column_B</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>3.69 5.07 -2.44</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_ColumnB</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Column_B_9</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Column_B</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-3.69 5.07 2.44</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_ColumnB</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Column_B_10</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Column_B</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-3.69 5.07 -2.44</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_ColumnB</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Column_B_11</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Column_B</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>0.0 5.07 2.44</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_ColumnB</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Column_B_12</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Column_B</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>0.0 5.07 -2.44</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_ColumnB</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Column_CL_1</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Column_CL</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-9.33 5.07 2.28</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_ColumnC</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Column_CL_2</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Column_CL</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-9.33 5.07 -2.30</Position>
+			<Rotation>0.0 -90.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_ColumnC</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Column_CL_3</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Column_CL</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>9.33 5.07 -2.30</Position>
+			<Rotation>0.0 180.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_ColumnC</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Column_CL_4</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Column_CL</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>9.33 5.07 2.30</Position>
+			<Rotation>0.0 90.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_ColumnC</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Column_C_1</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Column_C</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-5.54 5.07 2.4</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_ColumnC</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Column_C_2</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Column_C</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-1.84 5.07 2.4</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_ColumnC</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Column_C_3</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Column_C</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>1.84 5.07 2.4</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_ColumnC</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Column_C_4</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Column_C</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>5.54 5.07 2.4</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_ColumnC</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Column_C_5</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Column_C</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-5.54 5.07 -2.42</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_ColumnC</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Column_C_6</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Column_C</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-1.84 5.07 -2.42</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_ColumnC</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Column_C_7</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Column_C</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>1.84 5.07 -2.42</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_ColumnC</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Column_C_8</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Column_C</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>5.54 5.07 -2.42</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_ColumnC</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Vase_1</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Vase</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>11.85 0.0 -4.4</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Vase</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Vase_2</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Vase</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>11.85 0.0 4.4</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Vase</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Vase_3</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Vase</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-11.85 0.0 4.4</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Vase</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Vase_4</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Vase</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-11.85 0.0 -4.4</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Vase</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Vase_Plant_1</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Vase_Plant</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>9.0 0.0 1.9</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_VasePlant</Material>
+				<Material>Sponza_VaseRound</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Vase_Plant_2</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Vase_Plant</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>1.84 0.0 1.9</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_VasePlant</Material>
+				<Material>Sponza_VaseRound</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Vase_Plant_3</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Vase_Plant</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-1.84 0.0 1.9</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_VasePlant</Material>
+				<Material>Sponza_VaseRound</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Vase_Plant_4</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Vase_Plant</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-9.0 0.0 1.9</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_VasePlant</Material>
+				<Material>Sponza_VaseRound</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Vase_Plant_5</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Vase_Plant</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>9.0 0.0 -1.9</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_VasePlant</Material>
+				<Material>Sponza_VaseRound</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Vase_Plant_6</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Vase_Plant</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>1.84 0.0 -1.9</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_VasePlant</Material>
+				<Material>Sponza_VaseRound</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Vase_Plant_7</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Vase_Plant</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-1.84 0.0 -1.9</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_VasePlant</Material>
+				<Material>Sponza_VaseRound</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Vase_Plant_8</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Vase_Plant</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-9.0 0.0 -1.9</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_VasePlant</Material>
+				<Material>Sponza_VaseRound</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Vase_Hanging_1</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Vase_Hanging</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>5.52 1.95 1.88</Position>
+			<Rotation>0.0 180.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
 				<Material>Sponza_Chain</Material>
 				<Material>Sponza_VaseHanging</Material>
-				<Material>Sponza_Vase</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Vase_Hanging_2</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Vase_Hanging</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-5.52 1.95 1.88</Position>
+			<Rotation>0.0 180.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Chain</Material>
+				<Material>Sponza_VaseHanging</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Vase_Hanging_3</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Vase_Hanging</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-5.52 1.95 -1.88</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Chain</Material>
+				<Material>Sponza_VaseHanging</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Vase_Hanging_4</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Vase_Hanging</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>5.52 1.95 -1.88</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Chain</Material>
+				<Material>Sponza_VaseHanging</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Thorn_1</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Vegetations_1</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-5.56 1.73 -2.36</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Thorn</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Thorn_2</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Vegetations_2</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-1.79 1.54 -2.39</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Thorn</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Thorn_3</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Vegetations_3</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>1.82 1.67 -2.38</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Thorn</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Thorn_4</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Vegetations_4</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>5.57 0.97 -2.45</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Thorn</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Thorn_5</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Vegetations_5</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-5.5 0.97 2.17</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Thorn</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Thorn_6</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Vegetations_6</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-1.83 0.91 2.43</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Thorn</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Thorn_7</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Vegetations_7</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>1.84 1.68 2.35</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Thorn</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Thorn_8</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Vegetations_8</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>5.6 1.48 2.34</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Thorn</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Curtain_1</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Curtain</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>0.01 2.82 2.44</Position>
+			<Rotation>0.0 180.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Fragpole</Material>
+				<Material>Sponza_FabricCurtain_Blue</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Curtain_2</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Curtain</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>3.72 2.82 2.44</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Fragpole</Material>
+				<Material>Sponza_FabricCurtain_Green</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Curtain_3</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Curtain</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-3.7 2.82 2.44</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Fragpole</Material>
+				<Material>Sponza_FabricCurtain_Red</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Curtain_4</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Curtain</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-7.40 2.82 2.44</Position>
+			<Rotation>0.0 180.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Fragpole</Material>
+				<Material>Sponza_FabricCurtain_Green</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Curtain_5</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Curtain</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>7.40 2.82 2.44</Position>
+			<Rotation>0.0 180.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Fragpole</Material>
+				<Material>Sponza_FabricCurtain_Red</Material>
+			</Materials>
+		</Mesh>
+		
+				<Mesh>
+			<Name>Sponza_Curtain_6</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Curtain</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>0.01 2.82 -2.44</Position>
+			<Rotation>0.0 180.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Fragpole</Material>
+				<Material>Sponza_FabricCurtain_Green</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Curtain_7</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Curtain</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>3.72 2.82 -2.44</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Fragpole</Material>
+				<Material>Sponza_FabricCurtain_Red</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Curtain_8</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Curtain</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-3.7 2.82 -2.44</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Fragpole</Material>
+				<Material>Sponza_FabricCurtain_Blue</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Curtain_9</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Curtain</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-7.40 2.82 -2.44</Position>
+			<Rotation>0.0 180.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Fragpole</Material>
+				<Material>Sponza_FabricCurtain_Red</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Curtain_10</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Curtain</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>7.40 2.82 -2.44</Position>
+			<Rotation>0.0 180.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Fragpole</Material>
+				<Material>Sponza_FabricCurtain_Blue</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Fabric_1</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Fabric</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>5.57 4.3 -2.41</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Fabric_Blue</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Fabric_2</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Fabric</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>1.8 4.3 -2.41</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Fabric_Green</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Fabric_3</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Fabric</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-1.8 4.3 -2.41</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Fabric_Red</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Fabric_4</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Fabric</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-5.57 4.3 -2.41</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Fabric_Blue</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Fabric_5</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Fabric</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>5.57 4.3 2.41</Position>
+			<Rotation>0.0 180.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Fabric_Green</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Fabric_6</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Fabric</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>1.8 4.3 2.41</Position>
+			<Rotation>0.0 180.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Fabric_Red</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Fabric_7</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Fabric</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-1.8 4.3 2.41</Position>
+			<Rotation>0.0 180.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Fabric_Blue</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Fabric_8</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Fabric</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-5.57 4.3 2.41</Position>
+			<Rotation>0.0 180.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Fabric_Green</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Fragpole_1</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Fragpole</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>5.57 8.58 -1.39</Position>
+			<Rotation>0.0 180.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Fragpole</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Fragpole_2</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Fragpole</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>1.86 8.58 -1.39</Position>
+			<Rotation>0.0 180.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Fragpole</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Fragpole_3</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Fragpole</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-1.86 8.58 -1.39</Position>
+			<Rotation>0.0 180.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Fragpole</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Fragpole_4</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Fragpole</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-5.57 8.58 -1.39</Position>
+			<Rotation>0.0 180.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Fragpole</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Fragpole_5</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Fragpole</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>5.57 8.58 1.39</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Fragpole</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Fragpole_6</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Fragpole</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>1.86 8.58 1.39</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Fragpole</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Fragpole_7</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Fragpole</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-1.86 8.58 1.39</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Fragpole</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Fragpole_8</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Fragpole</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-5.57 8.58 1.39</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Fragpole</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Flag_A</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Flag_A</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-1.91 8.62 -1.32</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Fabric_Blue</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Flag_B</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Flag_B</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>1.82 8.61 -1.24</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Fabric_Green</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Flag_C</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Flag_C</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>5.57 8.61 -1.24</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Fabric_Red</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Lion_Background_1</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Lion_Background</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-13.52 1.74 0.0</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Background</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Lion_Background_2</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Lion_Background</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>13.52 1.74 0.0</Position>
+			<Rotation>0.0 180.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Background</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Lion_Background_3</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Lion_Background</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-13.52 6.26 0.0</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Background</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Lion_1</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Lion</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>-13.26 1.72 0.0</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
 				<Material>Sponza_Lion</Material>
-				<Material>Sponza_Roof</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Sponza_Lion_2</Name>
+			<Type>Mesh</Type>
+			<Mesh>Sponza_Lion</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>13.26 1.72 0.0</Position>
+			<Rotation>0.0 180.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Sponza_Lion</Material>
 			</Materials>
 		</Mesh>
 	</Model>
@@ -82,7 +1788,7 @@
 		<Enabled>true</Enabled>
 		<Diffuse>0.5 0.5 0.5</Diffuse>
 		<Specular>0.1 0.3 0.9</Specular>
-		<Direction>0.0 1.0 -0.3</Direction>
+		<Direction>0.0 1.0 0.3</Direction>
 	</Light>
 	<Light>
 		<Name>PointLight_1</Name>
@@ -106,12 +1812,12 @@
 		<Name>SpotLight_1</Name>
 		<Type>Spot</Type>
 		<Enabled>true</Enabled>
-		<Diffuse>1.0 1.0 1.0</Diffuse>
-		<Specular>1.0 1.0 1.0</Specular>
-		<Position>-2.0 2.0 -1.0</Position>
-		<Direction>0.0 -1.2 1.0</Direction>
+		<Diffuse>4.2 3.8 2.8</Diffuse>
+		<Specular>16.0 12.0 8.0</Specular>
+		<Position>-2.0 2.2 0.0</Position>
+		<Direction>-90.0 -3.0 0.0</Direction>
 		<Attenuation>0.0 1.0 0.0</Attenuation>
-		<CutOff>70.0</CutOff>
-		<Exponent>5.0</Exponent>
+		<CutOFF>8.0</CutOFF>
+		<Exponent>10.0</Exponent>
 	</Light>
 </Map>

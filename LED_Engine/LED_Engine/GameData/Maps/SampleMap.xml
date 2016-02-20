@@ -185,7 +185,7 @@
 			<Visible>true</Visible>
 			
 			<Position>2.5 1.5 2.0</Position>
-			<Rotation>0.0 0.0 1.57075</Rotation>
+			<Rotation>0.0 0.0 90.0</Rotation>
 			<Scale>1.0 1.0 1.0</Scale>
 			
 			<Materials>
@@ -206,7 +206,7 @@
 		<Position></Position>
 		<Direction></Direction>
 		<Attenuation></Attenuation>
-		<CutOff></CutOff>
+		<CutOFF></CutOFF>
 		<Exponent></Exponent>
 	</Light>
 	-->
@@ -242,7 +242,7 @@
 		<Position>-2.0 2.0 -1.0</Position>
 		<Direction>0.0 -1.2 1.0</Direction>
 		<Attenuation>0.0 1.0 0.0</Attenuation>
-		<CutOff>50.0</CutOff>
+		<CutOFF>50.0</CutOFF>
 		<Exponent>2.0</Exponent>
 	</Light>
 	<!--

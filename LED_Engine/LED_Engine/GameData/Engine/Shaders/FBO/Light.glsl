@@ -86,30 +86,30 @@ vec3 CalcLight(vec3 Position, vec3 Normal, vec3 Kd, vec3 Ks, vec3 Ka, vec3 Ke, f
 	vec3 AccumSpecular = vec3(0.0);
 	
 	// Directional Lights
-	for(int i = 0; i < LightD.length(); i++)
+	for(int i = 0; i < Max_DirectionalLights; i++)
 	{
 		if (i < LDcount)
 			PhongModel(LightD[i], Normal, Position, Shininess, AccumDiffuse, AccumSpecular);
 		else
-			i = LightD.length();
+			i = Max_DirectionalLights;
 	}
 	
 	// Point Lights
-	for(int i = 0; i < LightP.length(); i++)
+	for(int i = 0; i < Max_PointLights; i++)
 	{
 		if (i < LPcount)
 			PhongModel(LightP[i], Normal, Position, Shininess, AccumDiffuse, AccumSpecular);
 		else
-			i = LightP.length();
+			i = Max_PointLights;
 	}
 	
 	// Spot Lights
-	for(int i = 0; i < LightS.length(); i++)
+	for(int i = 0; i < Max_SpotLights; i++)
 	{
 		if (i < LScount)
 			PhongModel(LightS[i], Normal, Position, Shininess, AccumDiffuse, AccumSpecular);
 		else
-			i = LightS.length();
+			i = Max_SpotLights;
 	}
 	
 	return	LightA * Ka + //Ambient

@@ -181,7 +181,7 @@
 	</Material>
 	<Material>
 		<Name>Sponza_Bricks</Name>
-		<Shader></Shader>
+		<Shader></Shader><!--<Shader>ParallaxOcclusionMapping</Shader>-->
 		<!--<Kd>0.588</Kd>
 		<Ks>0.588</Ks>
 		<Ka>0.588</Ka>
@@ -198,10 +198,10 @@
 			<Name>Sponza_Bricks_S</Name>
 			<TextureUnit>2</TextureUnit>
 		</Texture>
-		<Texture>
+		<!--<Texture>
 			<Name>Sponza_Bricks_H</Name>
 			<TextureUnit>4</TextureUnit>
-		</Texture>
+		</Texture>-->
 	</Material>
 	<Material>
 		<Name>Sponza_Arch</Name>
@@ -565,7 +565,7 @@
 	<!--POM-->
 	<Material>
 		<Name>ParallaxMapping_1</Name>
-		<Shader></Shader>
+		<Shader>ParallaxOcclusionMapping</Shader>
 		<CullFace>True</CullFace>
 		
 		<Texture>
@@ -587,7 +587,7 @@
 	</Material>
 	<Material>
 		<Name>ParallaxMapping_2</Name>
-		<Shader></Shader>
+		<Shader>ParallaxOcclusionMapping</Shader>
 		<CullFace>True</CullFace>
 		
 		<Texture>
@@ -609,7 +609,7 @@
 	</Material>
 	<Material>
 		<Name>ParallaxMapping_3</Name>
-		<Shader></Shader>
+		<Shader>ParallaxOcclusionMapping</Shader>
 		<CullFace>True</CullFace>
 		
 		<Texture>
