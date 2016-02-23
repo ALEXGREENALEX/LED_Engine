@@ -39,7 +39,7 @@ namespace LED_Engine
                 ApplySettingsAndCreateWindow();
                 RescaleToWindowSize();
                 Settings.Window.NeedReinitWindow = false;
-                
+
                 if (!GLContextIsLoaded)
                 {
                     Engine.GetGLSettings();
@@ -73,13 +73,8 @@ namespace LED_Engine
                 #region Main Loop
                 while (!(Glfw.WindowShouldClose(Window) || Settings.Window.NeedReinitWindow))
                 {
-                    if (Settings.Window.IsFocused)
-                    {
-                        OnUpdateFrame();
-                        OnRenderFrame();
-                    }
-                    else
-                        Thread.Sleep(100);
+                    OnUpdateFrame();
+                    OnRenderFrame();
 
                     Glfw.SwapBuffers(Window); // Swap the front and back buffer, displaying the scene
                     Glfw.PollEvents(); // Poll GLFW window events

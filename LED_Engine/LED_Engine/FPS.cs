@@ -40,6 +40,7 @@ namespace LED_Engine
                 RealFPS = 1.0f / Period;
 
                 Glfw.SetWindowTitle(Game.Window, "FPS: " + RealFPS.ToString("0.0"));
+                //Log.WriteLineGreen("FPS: " + RealFPS.ToString("0.0"));
             }
         }
     }

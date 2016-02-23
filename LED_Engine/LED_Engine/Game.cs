@@ -90,20 +90,11 @@ namespace LED_Engine
             }
             #endregion
 
-            if (KeyCode == Key.F11 && Action == KeyAction.Press)
-            {
-
-                MainCamera.Position = new Vector3(0.0f, 40.0f, 20.0f);
-                MainCamera.Direction = new Vector3(0.0f, -2.0f, 0.0f);
-            }
-
             if (KeyCode == Key.F12 && Action == KeyAction.Press)
             {
-                MessageBox.Show(Shaders.SHADERS.Count.ToString(), "SHADERS");
-                MessageBox.Show(Textures.TEXTURES.Count.ToString(), "TEXTURES");
-                MessageBox.Show(Materials.MATERIALS.Count.ToString(), "MATERIALS");
-                MessageBox.Show(Models.MODELS.Count.ToString(), "MODELS");
-                MessageBox.Show(Meshes.MESHES.Count.ToString(), "MESHES");
+                Application.EnableVisualStyles();
+                LightSettings lightSettings = new LightSettings();
+                lightSettings.Show();
             }
         }
 
@@ -119,14 +110,17 @@ namespace LED_Engine
 
         static void OnMouseMove(GlfwWindowPtr window, double posx, double posy)
         {
-            double deltaX = Settings.Window.X + Settings.Window.Width / 2 - posx;
-            double deltaY = Settings.Window.Y + Settings.Window.Height / 2 - posy;
+            if (Settings.Window.IsFocused)
+            {
+                double deltaX = Settings.Window.X + Settings.Window.Width / 2 - posx;
+                double deltaY = Settings.Window.Y + Settings.Window.Height / 2 - posy;
 
-            MainCamera.AddRotation((float)deltaX, (float)deltaY);
+                MainCamera.AddRotation((float)deltaX, (float)deltaY);
 
-            Glfw.SetCursorPos(window,
-                (double)(Settings.Window.X + Settings.Window.Width / 2),
-                (double)(Settings.Window.Y + Settings.Window.Height / 2));
+                Glfw.SetCursorPos(window,
+                    (double)(Settings.Window.X + Settings.Window.Width / 2),
+                    (double)(Settings.Window.Y + Settings.Window.Height / 2));
+            }
         }
 
         static void OnWindowPositionChange(GlfwWindowPtr window, int X, int Y)
@@ -156,41 +150,38 @@ namespace LED_Engine
 
         static void OnRenderFrame()
         {
-            if (Settings.Window.IsFocused)
+            // G-Buffer
+            GL.BindFramebuffer(FramebufferTarget.FramebufferExt, FBO.FBO_P1);
+            GL.Enable(EnableCap.DepthTest); // Включаем тест глубины
+            GL.DepthFunc(DepthFunction.Lequal);
+            GL.ClearColor(Color4.Gray);
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+            // Copy All Meshes to DrawableObjects
+            List<Mesh> DrawableMeshes = new List<Mesh>();
+
+            for (int i = 0; i < Models.MODELS.Count; i++)
+                if (Models.MODELS[i].Visible)
+                    DrawableMeshes.AddRange(Models.MODELS[i].Meshes);
+
+            foreach (Mesh v in DrawableMeshes) //Draw All
+                Draw(v);
+
+            // Draw All Geometry to PostProcess FBO
+            FBO.Draw_P1();
+
+            // Draw SkyBox to PostProcess FBO
+            if (SkyBox != null)
             {
-                // G-Buffer
-                GL.BindFramebuffer(FramebufferTarget.FramebufferExt, FBO.FBO_P1);
-                GL.Enable(EnableCap.DepthTest); // Включаем тест глубины
-                GL.DepthFunc(DepthFunction.Lequal);
+                GL.BindFramebuffer(FramebufferTarget.FramebufferExt, FBO.FBO_PP);
                 GL.ClearColor(Color4.Gray);
-                GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
-                // Copy All Meshes to DrawableObjects
-                List<Mesh> DrawableMeshes = new List<Mesh>();
-
-                for (int i = 0; i < Models.MODELS.Count; i++)
-                    if (Models.MODELS[i].Visible)
-                        DrawableMeshes.AddRange(Models.MODELS[i].Meshes);
-
-                foreach (Mesh v in DrawableMeshes) //Draw All
-                    Draw(v);
-
-                // Draw All Geometry to PostProcess FBO
-                FBO.Draw_P1();
-
-                // Draw SkyBox to PostProcess FBO
-                if (SkyBox != null)
-                {
-                    GL.BindFramebuffer(FramebufferTarget.FramebufferExt, FBO.FBO_PP);
-                    GL.ClearColor(Color4.Gray);
-                    GL.Enable(EnableCap.CullFace);
-                    GL.Enable(EnableCap.DepthTest);
-                    Draw(SkyBox);
-                }
-
-                // Draw PostProcessed Result to Screen (FBO = 0)
-                FBO.Draw_PostPocess();
+                GL.Enable(EnableCap.CullFace);
+                GL.Enable(EnableCap.DepthTest);
+                Draw(SkyBox);
             }
+
+            // Draw PostProcessed Result to Screen (FBO = 0)
+            FBO.Draw_PostPocess();
         }
 
         static void OnUpdateFrame()

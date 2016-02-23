@@ -64,6 +64,12 @@
     <Compile Include="Game.cs" />
     <Compile Include="GameFunc.cs" />
     <Compile Include="Light.cs" />
+    <Compile Include="LightSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LightSettings.Designer.cs">
+      <DependentUpon>LightSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Log.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="Material.cs" />
@@ -80,6 +86,9 @@
     <Compile Include="Settings.cs" />
     <Compile Include="Shader.cs" />
     <Compile Include="Texture.cs" />
+    <EmbeddedResource Include="LightSettings.resx">
+      <DependentUpon>LightSettings.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>

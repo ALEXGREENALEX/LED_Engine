@@ -1780,13 +1780,13 @@
 		<Name>AmbientLight</Name>
 		<Type>Ambient</Type>
 		<Enabled>true</Enabled>
-		<Diffuse>0.3 0.3 0.3</Diffuse>
+		<Diffuse>0.5 0.5 0.5</Diffuse>
 	</Light>
 	<Light>
 		<Name>DirectionalLight_1</Name>
 		<Type>Directional</Type>
 		<Enabled>true</Enabled>
-		<Diffuse>0.5 0.5 0.5</Diffuse>
+		<Diffuse>0.7 0.7 0.7</Diffuse>
 		<Specular>0.1 0.3 0.9</Specular>
 		<Direction>0.0 1.0 0.3</Direction>
 	</Light>
@@ -1794,8 +1794,8 @@
 		<Name>PointLight_1</Name>
 		<Type>Point</Type>
 		<Enabled>true</Enabled>
-		<Diffuse>1.0 1.0 1.0</Diffuse>
-		<Specular>1.0 1.0 1.0</Specular>
+		<Diffuse>0.0 0.0 1.0</Diffuse>
+		<Specular>2.0 1.0 2.0</Specular>
 		<Position>5.0 1.5 1.5</Position>
 		<Attenuation>0.0 1.0 0.0</Attenuation>
 	</Light>
@@ -1809,15 +1809,24 @@
 		<Attenuation>0.0 1.0 0.0</Attenuation>
 	</Light>
 	<Light>
+		<Name>PointLight_3</Name>
+		<Type>Point</Type>
+		<Enabled>true</Enabled>
+		<Diffuse>5.0 5.0 5.0</Diffuse>
+		<Specular>5.0 5.0 5.0</Specular>
+		<Position>0.0 5.0 0.0</Position>
+		<Attenuation>0.0 0.8 0.0</Attenuation>
+	</Light>
+	<Light>
 		<Name>SpotLight_1</Name>
 		<Type>Spot</Type>
 		<Enabled>true</Enabled>
-		<Diffuse>4.2 3.8 2.8</Diffuse>
-		<Specular>16.0 12.0 8.0</Specular>
+		<Diffuse>8.4 7.6 5.6</Diffuse>
+		<Specular>32.0 24.0 16.0</Specular>
 		<Position>-2.0 2.2 0.0</Position>
 		<Direction>-90.0 -3.0 0.0</Direction>
 		<Attenuation>0.0 1.0 0.0</Attenuation>
 		<CutOFF>8.0</CutOFF>
-		<Exponent>10.0</Exponent>
+		<Exponent>80.0</Exponent>
 	</Light>
 </Map>

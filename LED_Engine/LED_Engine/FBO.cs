@@ -168,7 +168,7 @@ namespace LED_Engine
 
             #region Post Process
             GL.BindTexture(TextureTarget.Texture2D, Texture_PP);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba16f, ScreenWidth, ScreenHeight, 0,
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.SrgbAlpha, ScreenWidth, ScreenHeight, 0,
                 PixelFormat.Rgba, PixelType.Float, IntPtr.Zero);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
