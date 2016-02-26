@@ -4,7 +4,7 @@
 
 	<PlayerStart>
 		<Position>0.0 0.4 3.0</Position>
-		<Rotation>180.0 -20.0 0.0</Rotation>
+		<Rotation>180.0 -20.0</Rotation>
 	</PlayerStart>
 	
 	<Camera>
@@ -161,7 +161,7 @@
 		<Enabled>true</Enabled>
 		<Diffuse>0.3 0.3 0.3</Diffuse>
 		<Specular>0.5 0.5 0.5</Specular>
-		<Direction>0.1 0.8 -0.3</Direction>
+		<Direction>0.0 90.0</Direction>
 	</Light>
 	<Light>
 		<Name>SpotLight_Woods_1</Name>
@@ -169,8 +169,8 @@
 		<Enabled>true</Enabled>
 		<Diffuse>2.0</Diffuse>
 		<Specular>2.0</Specular>
-		<Position>0.0 2.0 -1.0</Position>
-		<Direction>0.0 -1.2 1.0</Direction>
+		<Position>0.0 2.0 -0.5</Position>
+		<Direction>0.0 -70.0</Direction>
 		<Attenuation>0.0 1.0 0.0</Attenuation>
 		<CutOFF>55.0</CutOFF>
 		<Exponent>4.0</Exponent>
@@ -182,7 +182,7 @@
 		<Diffuse>2.0</Diffuse>
 		<Specular>2.0</Specular>
 		<Position>0.0 2.0 4.0</Position>
-		<Direction>0.0 -1.2 1.0</Direction>
+		<Direction>0.0 -70.0</Direction>
 		<Attenuation>0.0 1.0 0.0</Attenuation>
 		<CutOFF>55.0</CutOFF>
 		<Exponent>4.0</Exponent>

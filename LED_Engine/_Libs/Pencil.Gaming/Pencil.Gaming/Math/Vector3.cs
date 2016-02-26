@@ -125,16 +125,20 @@ namespace Pencil.Gaming.MathUtils
         /// <summary>
         /// Gets or sets the value at the index of the Vector.
         /// </summary>
-        public float this[int index] {
-            get{
-                if(index == 0) return X;
-                else if(index == 1) return Y;
-                else if(index == 2) return Z;
+        public float this[int index]
+        {
+            get
+            {
+                if (index == 0) return X;
+                else if (index == 1) return Y;
+                else if (index == 2) return Z;
                 throw new IndexOutOfRangeException("You tried to access this vector at index: " + index);
-            } set{
-                if(index == 0) X = value;
-                else if(index == 1) Y = value;
-                else if(index == 2) Z = value;
+            }
+            set
+            {
+                if (index == 0) X = value;
+                else if (index == 1) Y = value;
+                else if (index == 2) Z = value;
                 else throw new IndexOutOfRangeException("You tried to set this vector at index: " + index);
             }
         }
@@ -145,7 +149,7 @@ namespace Pencil.Gaming.MathUtils
 
         /// <summary>Add the Vector passed as parameter to this instance.</summary>
         /// <param name="right">Right operand. This parameter is only read from.</param>
-        
+
         [Obsolete("Use static Add() method instead.")]
         public void Add(Vector3 right)
         {
@@ -156,7 +160,7 @@ namespace Pencil.Gaming.MathUtils
 
         /// <summary>Add the Vector passed as parameter to this instance.</summary>
         /// <param name="right">Right operand. This parameter is only read from.</param>
-        
+
         [Obsolete("Use static Add() method instead.")]
         public void Add(ref Vector3 right)
         {
@@ -171,7 +175,7 @@ namespace Pencil.Gaming.MathUtils
 
         /// <summary>Subtract the Vector passed as parameter from this instance.</summary>
         /// <param name="right">Right operand. This parameter is only read from.</param>
-        
+
         [Obsolete("Use static Subtract() method instead.")]
         public void Sub(Vector3 right)
         {
@@ -182,7 +186,7 @@ namespace Pencil.Gaming.MathUtils
 
         /// <summary>Subtract the Vector passed as parameter from this instance.</summary>
         /// <param name="right">Right operand. This parameter is only read from.</param>
-        
+
         [Obsolete("Use static Subtract() method instead.")]
         public void Sub(ref Vector3 right)
         {
@@ -339,7 +343,7 @@ namespace Pencil.Gaming.MathUtils
 
         /// <summary>Scales this instance by the given parameter.</summary>
         /// <param name="scale">The scaling of the individual components.</param>
-        
+
         [Obsolete("Use static Multiply() method instead.")]
         public void Scale(Vector3 scale)
         {
@@ -350,7 +354,7 @@ namespace Pencil.Gaming.MathUtils
 
         /// <summary>Scales this instance by the given parameter.</summary>
         /// <param name="scale">The scaling of the individual components.</param>
-        
+
         [Obsolete("Use static Multiply() method instead.")]
         public void Scale(ref Vector3 scale)
         {
@@ -360,6 +364,23 @@ namespace Pencil.Gaming.MathUtils
         }
 
         #endregion public void Scale()
+
+        #region public void ExtractYawPitch()
+
+        /// <summary>
+        /// Get Yaw from Direction vector.
+        /// </summary>
+        /// <param name="DirectionVector">Direction vector.</param>
+        /// <returns>Yaw, Pitch in radians/</returns>
+        public Vector2 ExtractYawPitch()
+        {
+            var V = this.Normalized();
+            float Pitch = (float)Math.Asin(V.Y);
+            float Yaw = (float)Math.Atan2(V.X, V.Z);
+            return new Vector2(Yaw, Pitch);
+        }
+
+        #endregion
 
         #endregion
 
@@ -1248,10 +1269,10 @@ namespace Pencil.Gaming.MathUtils
         {
             Vector4 result;
 
-            result.X = 
-                vector.X * worldViewProjection.M11 + 
-                vector.Y * worldViewProjection.M21 + 
-                vector.Z * worldViewProjection.M31 + 
+            result.X =
+                vector.X * worldViewProjection.M11 +
+                vector.Y * worldViewProjection.M21 +
+                vector.Z * worldViewProjection.M31 +
                 worldViewProjection.M41;
 
             result.Y =
@@ -1338,6 +1359,22 @@ namespace Pencil.Gaming.MathUtils
             return new Vector3(result.X, result.Y, result.Z);
         }
 
+        #endregion
+
+        #region FromYawPitch
+        /// <summary>
+        /// Get Direction vector from Yaw and Pitch (in radians).
+        /// </summary>
+        /// <param name="Yaw">Yaw in radians.</param>
+        /// <param name="Pitch">Pitch in radians.</param>
+        /// <returns>Direction vector</returns>
+        public static Vector3 FromYawPitch(float Yaw, float Pitch)
+        {
+            float CosPitch = (float)Math.Cos(Pitch); //Optimization
+            Vector3 Result = new Vector3(CosPitch * (float)Math.Sin(Yaw), (float)Math.Sin(Pitch), CosPitch * (float)Math.Cos(Yaw));
+            //Result.Normalize();
+            return Result;
+        }
         #endregion
 
         #endregion
@@ -1504,7 +1541,7 @@ namespace Pencil.Gaming.MathUtils
             vec.Z *= scale.Z;
             return vec;
         }
-		
+
         /// <summary>
         /// Divides an instance by a scalar.
         /// </summary>

@@ -13,7 +13,7 @@ namespace LED_Engine
     public class Camera
     {
         public Vector3 Position = Vector3.Zero;
-        public Vector3 Direction = new Vector3((float)Math.PI, 0f, 0f);
+        public Vector2 YawPitch = new Vector2((float)Math.PI, 0f);
         public float MoveSpeed = 0.2f;
         public float MouseSensitivity = 0.01f;
 
@@ -49,29 +49,24 @@ namespace LED_Engine
 
         public Matrix4 GetViewMatrix()
         {
-            Vector3 Dir = new Vector3();
-            Dir.X = (float)(Math.Cos(Direction.Y) * Math.Sin(Direction.X));
-            Dir.Y = (float)Math.Sin(Direction.Y);
-            Dir.Z = (float)(Math.Cos(Direction.Y) * Math.Cos(Direction.X));
-
+            Vector3 Dir = Vector3.FromYawPitch(YawPitch.X, YawPitch.Y);
             return Matrix4.LookAt(Position, Position + Dir, Vector3.UnitY);
-          
         }
 
         public void Move(float x, float y, float z)
         {
-            Vector3 offset = new Vector3();
-            Vector3 forward = new Vector3((float)Math.Sin(Direction.X), 0, (float)Math.Cos(Direction.X));
-            Vector3 right = new Vector3(-forward.Z, 0, forward.X);
+            Vector3 Offset = new Vector3();
+            Vector3 Forward = new Vector3((float)Math.Sin(YawPitch.X), 0, (float)Math.Cos(YawPitch.X));
+            Vector3 Right = new Vector3(-Forward.Z, 0, Forward.X);
 
-            offset += x * right;
-            offset += y * forward;
-            offset.Y += z; //offset.Y += Orientation.Y / 4;
+            Offset += x * Right;
+            Offset += y * Forward;
+            Offset.Y += z; //offset.Y += Orientation.Y / 4;
 
-            offset.NormalizeFast();
-            offset *= MoveSpeed;
+            Offset.NormalizeFast();
+            Offset *= MoveSpeed;
 
-            Position += offset;
+            Position += Offset;
         }
 
         /// <summary>
@@ -84,8 +79,8 @@ namespace LED_Engine
             x = x * MouseSensitivity;
             y = y * MouseSensitivity;
 
-            Direction.X = (Direction.X + x) % (MathHelper.TwoPi);
-            Direction.Y = Math.Max(Math.Min(Direction.Y + y, MathHelper.PiOver2 - 0.01f), -MathHelper.PiOver2 + 0.01f);
+            YawPitch.X = (YawPitch.X + x) % (MathHelper.TwoPi);
+            YawPitch.Y = Math.Max(Math.Min(YawPitch.Y + y, MathHelper.PiOver2 - 0.01f), -MathHelper.PiOver2 + 0.01f);
         }
 
         public float FOV

@@ -2,13 +2,12 @@
 	<Name>Sponza</Name>
 	<Description>
 		CryTek Sponza Test Map(Model)
-		Model, from: http://graphics.cs.williams.edu/data/meshes.xml
-		Textures from: http://www.crytek.com/cryengine/cryengine3/downloads
+		http://www.crytek.com/cryengine/cryengine3/downloads
 	</Description>
 
 	<PlayerStart>
 		<Position>0.0 2.0 0.0</Position>
-		<Rotation>-90.0 0.0 0.0</Rotation>
+		<Rotation>90.0 0.0</Rotation>
 	</PlayerStart>
 	
 	<Camera>
@@ -1788,7 +1787,7 @@
 		<Enabled>true</Enabled>
 		<Diffuse>0.7 0.7 0.7</Diffuse>
 		<Specular>0.1 0.3 0.9</Specular>
-		<Direction>0.0 1.0 0.3</Direction>
+		<Direction>-15.0 70.0</Direction>
 	</Light>
 	<Light>
 		<Name>PointLight_1</Name>
@@ -1824,7 +1823,7 @@
 		<Diffuse>8.4 7.6 5.6</Diffuse>
 		<Specular>32.0 24.0 16.0</Specular>
 		<Position>-2.0 2.2 0.0</Position>
-		<Direction>-90.0 -3.0 0.0</Direction>
+		<Direction>-90.0 -1.75</Direction>
 		<Attenuation>0.0 1.0 0.0</Attenuation>
 		<CutOFF>8.0</CutOFF>
 		<Exponent>80.0</Exponent>

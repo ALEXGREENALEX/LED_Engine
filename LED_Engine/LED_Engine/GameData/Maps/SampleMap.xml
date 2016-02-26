@@ -3,8 +3,8 @@
 	<Description>Blah blah blah</Description>
 
 	<PlayerStart>
-		<Position>0.0 0.0 0.0</Position>
-		<Rotation>0.0 0.0 0.0</Rotation>
+		<Position>0.0 2.0 5.0</Position>
+		<Rotation>180.0 0.0</Rotation>
 	</PlayerStart>
 	
 	<Camera>
@@ -222,14 +222,14 @@
 		<Enabled>true</Enabled>
 		<Diffuse>0.5 0.5 0.5</Diffuse>
 		<Specular>0.1 0.3 0.9</Specular>
-		<Direction>0.0 1.0 0.0</Direction>
+		<Direction>0.0 90.0</Direction>
 	</Light>
 	<Light>
 		<Name>PointLight_1</Name>
 		<Type>Point</Type>
 		<Enabled>true</Enabled>
-		<Diffuse>1.0 1.0 1.0</Diffuse>
-		<Specular>1.0 1.0 1.0</Specular>
+		<Diffuse>3.0 3.0 3.0</Diffuse>
+		<Specular>3.0 3.0 3.0</Specular>
 		<Position>5.0 1.5 1.5</Position>
 		<Attenuation>0.0 1.0 0.0</Attenuation>
 	</Light>
@@ -237,24 +237,12 @@
 		<Name>SpotLight_1</Name>
 		<Type>Spot</Type>
 		<Enabled>true</Enabled>
-		<Diffuse>1.0 1.0 1.0</Diffuse>
-		<Specular>1.0 1.0 1.0</Specular>
+		<Diffuse>3.0 3.0 3.0</Diffuse>
+		<Specular>3.0 3.0 3.0</Specular>
 		<Position>-2.0 2.0 -1.0</Position>
-		<Direction>0.0 -1.2 1.0</Direction>
+		<Direction>0.0 -70.0</Direction>
 		<Attenuation>0.0 1.0 0.0</Attenuation>
-		<CutOFF>50.0</CutOFF>
-		<Exponent>2.0</Exponent>
+		<CutOFF>45.0</CutOFF>
+		<Exponent>5.0</Exponent>
 	</Light>
-	<!--
-	<Sounds>
-		<Sound>
-			<Name>BlaBlaBla</Name>
-			<Enabled>True</Enabled>
-			<File>Crap.ogg</File>
-			<Volume>0.5</Volume>
-			<Radius>0</Radius>
-			<Position>0.0 0.0 0.0</Position>
-		</Sound>
-	</Sounds>
-	-->
 </Map>

@@ -92,7 +92,6 @@ namespace LED_Engine
 
             if (KeyCode == Key.F12 && Action == KeyAction.Press)
             {
-                Application.EnableVisualStyles();
                 LightSettings lightSettings = new LightSettings();
                 lightSettings.Show();
             }

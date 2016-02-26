@@ -77,8 +77,9 @@ namespace LED_Engine
                     if (xmlNode.SelectNodes("Rotation").Count > 0)
                     {
                         string[] Rotation = xmlNode.SelectSingleNode("Rotation").InnerText.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                        Game.MainCamera.Direction = new Vector3(MathHelper.DegreesToRadians(float.Parse(Rotation[0])),
-                            MathHelper.DegreesToRadians(float.Parse(Rotation[1])), MathHelper.DegreesToRadians(float.Parse(Rotation[2])));
+                        Game.MainCamera.YawPitch = new Vector2(
+                            MathHelper.DegreesToRadians(-float.Parse(Rotation[0])),
+                            MathHelper.DegreesToRadians(float.Parse(Rotation[1])));
                     }
                 }
                 #endregion
@@ -346,8 +347,10 @@ namespace LED_Engine
                     if (xmlNodeList.Count > 0)
                     {
                         string[] Direct = xmlNodeList.Item(0).InnerText.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                        light.Direction = new Vector3(MathHelper.DegreesToRadians(float.Parse(Direct[0])),
-                            MathHelper.DegreesToRadians(float.Parse(Direct[1])), MathHelper.DegreesToRadians(float.Parse(Direct[2])));
+                        
+                        light.Direction = Vector3.FromYawPitch(
+                            MathHelper.DegreesToRadians(float.Parse(Direct[0])),
+                            MathHelper.DegreesToRadians(float.Parse(Direct[1])));
                     }
                     #endregion
 

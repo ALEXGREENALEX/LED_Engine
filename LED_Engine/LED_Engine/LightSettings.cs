@@ -5,6 +5,9 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.IO;
+using System.Xml;
+using System.Xml.Serialization;
 using Pencil.Gaming;
 using Pencil.Gaming.MathUtils;
 
@@ -29,6 +32,7 @@ namespace LED_Engine
 
         void ListsRefresh()
         {
+            LIndex = -1;
             listBox_Lights.Items.Clear();
             foreach (var l in Lights.LIGHTS)
                 listBox_Lights.Items.Add(l.Name);
@@ -53,21 +57,27 @@ namespace LED_Engine
             checkBox_LEnabled.Checked = Lights.LIGHTS[LIndex].Enabled;
             comboBox_Type.Text = Lights.LIGHTS[LIndex].Type.ToString();
             textBox_Name.Text = Lights.LIGHTS[LIndex].Name;
+
             textBox_PosX.Text = Lights.LIGHTS[LIndex].Position.X.ToString();
             textBox_PosY.Text = Lights.LIGHTS[LIndex].Position.Y.ToString();
             textBox_PosZ.Text = Lights.LIGHTS[LIndex].Position.Z.ToString();
-            textBox_DirX.Text = MathHelper.RadiansToDegrees(Lights.LIGHTS[LIndex].Direction.X).ToString();
-            textBox_DirY.Text = MathHelper.RadiansToDegrees(Lights.LIGHTS[LIndex].Direction.Y).ToString();
-            textBox_DirZ.Text = MathHelper.RadiansToDegrees(Lights.LIGHTS[LIndex].Direction.Z).ToString();
+
+            Vector2 DirectionYawPitch = Lights.LIGHTS[LIndex].Direction.ExtractYawPitch();
+            textBox_DirYaw.Text = MathHelper.RadiansToDegrees(DirectionYawPitch.X).ToString();
+            textBox_DirPitch.Text = MathHelper.RadiansToDegrees(DirectionYawPitch.Y).ToString();
+
             textBox_DiffR.Text = Lights.LIGHTS[LIndex].Diffuse.X.ToString();
             textBox_DiffG.Text = Lights.LIGHTS[LIndex].Diffuse.Y.ToString();
             textBox_DiffB.Text = Lights.LIGHTS[LIndex].Diffuse.Z.ToString();
+
             textBox_SpecR.Text = Lights.LIGHTS[LIndex].Specular.X.ToString();
             textBox_SpecG.Text = Lights.LIGHTS[LIndex].Specular.Y.ToString();
             textBox_SpecB.Text = Lights.LIGHTS[LIndex].Specular.Z.ToString();
+
             textBox_AttC.Text = Lights.LIGHTS[LIndex].Attenuation.X.ToString();
             textBox_AttL.Text = Lights.LIGHTS[LIndex].Attenuation.Y.ToString();
             textBox_AttQ.Text = Lights.LIGHTS[LIndex].Attenuation.Z.ToString();
+
             textBox_CutOFF.Text = Lights.LIGHTS[LIndex].CutOFF.ToString();
             textBox_Exp.Text = Lights.LIGHTS[LIndex].Exponent.ToString();
         }
@@ -87,10 +97,9 @@ namespace LED_Engine
                         float.Parse(textBox_PosY.Text),
                         float.Parse(textBox_PosZ.Text));
 
-                    Lights.LIGHTS[LIndex].Direction = new Vector3(
-                        MathHelper.DegreesToRadians(float.Parse(textBox_DirX.Text)),
-                        MathHelper.DegreesToRadians(float.Parse(textBox_DirY.Text)),
-                        MathHelper.DegreesToRadians(float.Parse(textBox_DirZ.Text)));
+                    Lights.LIGHTS[LIndex].Direction = Vector3.FromYawPitch(
+                        MathHelper.DegreesToRadians(float.Parse(textBox_DirYaw.Text)),
+                        MathHelper.DegreesToRadians(float.Parse(textBox_DirPitch.Text)));
 
                     Lights.LIGHTS[LIndex].Diffuse = new Vector3(
                         float.Parse(textBox_DiffR.Text),
@@ -133,6 +142,45 @@ namespace LED_Engine
             L.Name = "Light_" + DateTime.Now.ToLongTimeString();
             Lights.LIGHTS.Add(L);
             listBox_Lights.Items.Add(L.Name);
+        }
+
+        private void button_Serialize_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(SerializeToXml<List<Light>>(Lights.LIGHTS));
+            MessageBox.Show("Lights was Serialized to Clipboard");
+        }
+
+        private void button_Deserialize_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Lights.LIGHTS = DeserializeFromXml<List<Light>>(Clipboard.GetText());
+                ListsRefresh();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        public static string SerializeToXml<T>(T Obj)
+        {
+            StringBuilder SB = new StringBuilder();
+            XmlWriter XmlWr = XmlWriter.Create(SB);
+            XmlSerializer ser = new XmlSerializer(typeof(T));
+            ser.Serialize(XmlWr, Obj);
+            return SB.ToString();
+        }
+
+        public static T DeserializeFromXml<T>(string XmlStr)
+        {
+            T result;
+            var ser = new XmlSerializer(typeof(T));
+            using (var tr = new StringReader(XmlStr))
+            {
+                result = (T)ser.Deserialize(tr);
+            }
+            return result;
         }
     }
 }

@@ -265,7 +265,7 @@ namespace LED_Engine
                 for (int i = 0; i < L_Directional.Count; i++)
                 {
                     IndexStr = i.ToString();
-                    Vector3 LightDirection = (new Vector4(L_Directional[i].Direction.Normalized(), 0.0f) * Game.MainCamera.GetViewMatrix()).Xyz;
+                    Vector3 LightDirection = (new Vector4(L_Directional[i].Direction, 0.0f) * Game.MainCamera.GetViewMatrix()).Xyz;
                     GL.Uniform3(Shaders[ShaderIndex_P1].GetUniform("LightD[" + IndexStr + "].Dir"), LightDirection);
                     GL.Uniform3(Shaders[ShaderIndex_P1].GetUniform("LightD[" + IndexStr + "].Ld"), L_Directional[i].Diffuse);
                     GL.Uniform3(Shaders[ShaderIndex_P1].GetUniform("LightD[" + IndexStr + "].Ls"), L_Directional[i].Specular);
@@ -288,7 +288,7 @@ namespace LED_Engine
                     IndexStr = i.ToString();
 
                     Vector3 LightPosition = (new Vector4(L_Spot[i].Position, 1.0f) * Game.MainCamera.GetViewMatrix()).Xyz;
-                    Vector3 LightDirection = (new Vector4(L_Spot[i].Direction.Normalized(), 0.0f) * Game.MainCamera.GetViewMatrix()).Xyz;
+                    Vector3 LightDirection = (new Vector4(L_Spot[i].Direction, 0.0f) * Game.MainCamera.GetViewMatrix()).Xyz;
                     GL.Uniform3(Shaders[ShaderIndex_P1].GetUniform("LightS[" + IndexStr + "].Pos"), LightPosition);
                     GL.Uniform3(Shaders[ShaderIndex_P1].GetUniform("LightS[" + IndexStr + "].Dir"), LightDirection);
                     GL.Uniform3(Shaders[ShaderIndex_P1].GetUniform("LightS[" + IndexStr + "].Ld"), L_Spot[i].Diffuse);

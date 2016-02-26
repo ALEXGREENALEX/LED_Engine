@@ -358,6 +358,23 @@ namespace Pencil.Gaming.MathUtils
 
         #endregion public void Scale()
 
+        #region public void ExtractYawPitch()
+
+        /// <summary>
+        /// Get Yaw from Direction vector.
+        /// </summary>
+        /// <param name="DirectionVector">Direction vector.</param>
+        /// <returns>Yaw, Pitch in radians/</returns>
+        public Vector2d ExtractYawPitch()
+        {
+            var V = this.Normalized();
+            double Pitch = Math.Asin(V.Y);
+            double Yaw = Math.Atan2(V.X, V.Z);
+            return new Vector2d(Yaw, Pitch);
+        }
+
+        #endregion
+
         #endregion
 
         #region Static
@@ -1220,6 +1237,22 @@ namespace Pencil.Gaming.MathUtils
             result = System.Math.Acos(MathHelper.Clamp(temp / (first.Length * second.Length), -1.0, 1.0));
         }
 
+        #endregion
+
+        #region FromYawPitch
+        /// <summary>
+        /// Get Direction vector from Yaw and Pitch (in radians).
+        /// </summary>
+        /// <param name="Yaw">Yaw in radians.</param>
+        /// <param name="Pitch">Pitch in radians.</param>
+        /// <returns>Direction vector</returns>
+        public static Vector3d FromYawPitch(double Yaw, double Pitch)
+        {
+            double CosPitch = Math.Cos(Pitch); //Optimization
+            Vector3d Result = new Vector3d(CosPitch * Math.Sin(Yaw), Math.Sin(Pitch), CosPitch * Math.Cos(Yaw));
+            //Result.Normalize();
+            return Result;
+        }
         #endregion
 
         #endregion

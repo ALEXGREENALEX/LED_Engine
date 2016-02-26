@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Globalization;
 using System.Threading;
+using System.Windows.Forms;
 using Pencil.Gaming;
 using Pencil.Gaming.Graphics;
 using Pencil.Gaming.MathUtils;
@@ -20,6 +21,7 @@ namespace LED_Engine
         [STAThread]
         private static void Main(string[] args)
         {
+            Application.EnableVisualStyles();
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; //For fix parsing values like "0.5" and "0,5"
 
             Glfw.SetErrorCallback(OnError);

@@ -34,9 +34,8 @@
             this.textBox_PosX = new System.Windows.Forms.TextBox();
             this.textBox_PosY = new System.Windows.Forms.TextBox();
             this.textBox_PosZ = new System.Windows.Forms.TextBox();
-            this.textBox_DirX = new System.Windows.Forms.TextBox();
-            this.textBox_DirY = new System.Windows.Forms.TextBox();
-            this.textBox_DirZ = new System.Windows.Forms.TextBox();
+            this.textBox_DirYaw = new System.Windows.Forms.TextBox();
+            this.textBox_DirPitch = new System.Windows.Forms.TextBox();
             this.comboBox_Type = new System.Windows.Forms.ComboBox();
             this.textBox_DiffB = new System.Windows.Forms.TextBox();
             this.textBox_DiffG = new System.Windows.Forms.TextBox();
@@ -51,6 +50,8 @@
             this.textBox_Exp = new System.Windows.Forms.TextBox();
             this.listBox_Lights = new System.Windows.Forms.ListBox();
             this.checkBox_LEnabled = new System.Windows.Forms.CheckBox();
+            this.button_Serialize = new System.Windows.Forms.Button();
+            this.button_Deserialize = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button_Add
@@ -109,32 +110,23 @@
             this.textBox_PosZ.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textBox_PosZ.TextChanged += new System.EventHandler(this.SomeChanged);
             // 
-            // textBox_DirX
+            // textBox_DirYaw
             // 
-            this.textBox_DirX.Location = new System.Drawing.Point(278, 38);
-            this.textBox_DirX.Name = "textBox_DirX";
-            this.textBox_DirX.Size = new System.Drawing.Size(167, 20);
-            this.textBox_DirX.TabIndex = 8;
-            this.textBox_DirX.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.textBox_DirX.TextChanged += new System.EventHandler(this.SomeChanged);
+            this.textBox_DirYaw.Location = new System.Drawing.Point(278, 38);
+            this.textBox_DirYaw.Name = "textBox_DirYaw";
+            this.textBox_DirYaw.Size = new System.Drawing.Size(167, 20);
+            this.textBox_DirYaw.TabIndex = 8;
+            this.textBox_DirYaw.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBox_DirYaw.TextChanged += new System.EventHandler(this.SomeChanged);
             // 
-            // textBox_DirY
+            // textBox_DirPitch
             // 
-            this.textBox_DirY.Location = new System.Drawing.Point(451, 38);
-            this.textBox_DirY.Name = "textBox_DirY";
-            this.textBox_DirY.Size = new System.Drawing.Size(167, 20);
-            this.textBox_DirY.TabIndex = 9;
-            this.textBox_DirY.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.textBox_DirY.TextChanged += new System.EventHandler(this.SomeChanged);
-            // 
-            // textBox_DirZ
-            // 
-            this.textBox_DirZ.Location = new System.Drawing.Point(624, 38);
-            this.textBox_DirZ.Name = "textBox_DirZ";
-            this.textBox_DirZ.Size = new System.Drawing.Size(167, 20);
-            this.textBox_DirZ.TabIndex = 10;
-            this.textBox_DirZ.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.textBox_DirZ.TextChanged += new System.EventHandler(this.SomeChanged);
+            this.textBox_DirPitch.Location = new System.Drawing.Point(451, 38);
+            this.textBox_DirPitch.Name = "textBox_DirPitch";
+            this.textBox_DirPitch.Size = new System.Drawing.Size(167, 20);
+            this.textBox_DirPitch.TabIndex = 9;
+            this.textBox_DirPitch.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBox_DirPitch.TextChanged += new System.EventHandler(this.SomeChanged);
             // 
             // comboBox_Type
             // 
@@ -266,11 +258,33 @@
             this.checkBox_LEnabled.UseVisualStyleBackColor = true;
             this.checkBox_LEnabled.CheckedChanged += new System.EventHandler(this.SomeChanged);
             // 
+            // button_Serialize
+            // 
+            this.button_Serialize.Location = new System.Drawing.Point(544, 167);
+            this.button_Serialize.Name = "button_Serialize";
+            this.button_Serialize.Size = new System.Drawing.Size(114, 37);
+            this.button_Serialize.TabIndex = 27;
+            this.button_Serialize.Text = "Serialize";
+            this.button_Serialize.UseVisualStyleBackColor = true;
+            this.button_Serialize.Click += new System.EventHandler(this.button_Serialize_Click);
+            // 
+            // button_Deserialize
+            // 
+            this.button_Deserialize.Location = new System.Drawing.Point(664, 167);
+            this.button_Deserialize.Name = "button_Deserialize";
+            this.button_Deserialize.Size = new System.Drawing.Size(121, 37);
+            this.button_Deserialize.TabIndex = 28;
+            this.button_Deserialize.Text = "Deserialize";
+            this.button_Deserialize.UseVisualStyleBackColor = true;
+            this.button_Deserialize.Click += new System.EventHandler(this.button_Deserialize_Click);
+            // 
             // LightSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(797, 216);
+            this.Controls.Add(this.button_Deserialize);
+            this.Controls.Add(this.button_Serialize);
             this.Controls.Add(this.checkBox_LEnabled);
             this.Controls.Add(this.listBox_Lights);
             this.Controls.Add(this.textBox_Exp);
@@ -285,9 +299,8 @@
             this.Controls.Add(this.textBox_DiffG);
             this.Controls.Add(this.textBox_DiffR);
             this.Controls.Add(this.comboBox_Type);
-            this.Controls.Add(this.textBox_DirZ);
-            this.Controls.Add(this.textBox_DirY);
-            this.Controls.Add(this.textBox_DirX);
+            this.Controls.Add(this.textBox_DirPitch);
+            this.Controls.Add(this.textBox_DirYaw);
             this.Controls.Add(this.textBox_PosZ);
             this.Controls.Add(this.textBox_PosY);
             this.Controls.Add(this.textBox_PosX);
@@ -316,9 +329,8 @@
         private System.Windows.Forms.TextBox textBox_PosX;
         private System.Windows.Forms.TextBox textBox_PosY;
         private System.Windows.Forms.TextBox textBox_PosZ;
-        private System.Windows.Forms.TextBox textBox_DirX;
-        private System.Windows.Forms.TextBox textBox_DirY;
-        private System.Windows.Forms.TextBox textBox_DirZ;
+        private System.Windows.Forms.TextBox textBox_DirYaw;
+        private System.Windows.Forms.TextBox textBox_DirPitch;
         private System.Windows.Forms.ComboBox comboBox_Type;
         private System.Windows.Forms.TextBox textBox_DiffB;
         private System.Windows.Forms.TextBox textBox_DiffG;
@@ -333,5 +345,7 @@
         private System.Windows.Forms.TextBox textBox_Exp;
         private System.Windows.Forms.ListBox listBox_Lights;
         private System.Windows.Forms.CheckBox checkBox_LEnabled;
+        private System.Windows.Forms.Button button_Serialize;
+        private System.Windows.Forms.Button button_Deserialize;
     }
 }
