@@ -310,7 +310,7 @@ namespace LED_Engine
             // Передаем шейдеру Parallax Scale, если шейдер поддерживает это.
             TempLocation = shader.GetUniform("ParallaxScale");
             if (TempLocation != -1)
-                GL.Uniform1(TempLocation, 0.04f);
+                GL.Uniform1(TempLocation, v.Material.ParallaxScale);
             #endregion
             #endregion
 

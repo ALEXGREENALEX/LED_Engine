@@ -50,6 +50,7 @@
 	<Material>
 		<Name>Refraction</Name>
 		<Shader>ReflectRefract</Shader>
+		<CullFace>True</CullFace>
 		<Kd>0.8 0.95 1.0 0.4</Kd>
 		<ReflectionFactor>0.1</ReflectionFactor>
 		<RefractiveIndex>0.9</RefractiveIndex>
@@ -81,6 +82,7 @@
 	<Material>
 		<Name>Keypad</Name>
 		<Shader></Shader>
+		<CullFace>True</CullFace>
 		<Ks>1.0</Ks>
 		<Ke>1.3</Ke>
 		<Ka>0.5</Ka>
@@ -108,6 +110,7 @@
 	<Material>
 		<Name>Sponza_Thorn</Name>
 		<Shader></Shader>
+		<CullFace>False</CullFace>
 		<Transparent>True</Transparent>
 		<!--<Kd>0.588</Kd>
 		<Ks>0.588</Ks>
@@ -129,6 +132,7 @@
 	<Material>
 		<Name>Sponza_VasePlant</Name>
 		<Shader></Shader>
+		<CullFace>False</CullFace>
 		<Transparent>True</Transparent>
 		<!--<Kd>0.588</Kd>
 		<Ks>0.588</Ks>
@@ -146,6 +150,7 @@
 	<Material>
 		<Name>Sponza_VaseRound</Name>
 		<Shader></Shader>
+		<CullFace>True</CullFace>
 		<!--<Kd>0.588</Kd>
 		<Ks>0.588</Ks>
 		<Ka>0.588</Ka>
@@ -166,6 +171,7 @@
 	<Material>
 		<Name>Sponza_Background</Name>
 		<Shader></Shader>
+		<CullFace>True</CullFace>
 		<!--<Kd>0.588</Kd>
 		<Ks>0.588</Ks>
 		<Ka>0.588</Ka>
@@ -181,7 +187,9 @@
 	</Material>
 	<Material>
 		<Name>Sponza_Bricks</Name>
-		<!--<Shader></Shader>--><Shader>ParallaxOcclusionMapping</Shader>
+		<Shader>ParallaxOcclusionMapping</Shader>
+		<ParallaxScale>0.02</ParallaxScale>
+		<CullFace>True</CullFace>
 		<!--<Kd>0.588</Kd>
 		<Ks>0.588</Ks>
 		<Ka>0.588</Ka>
@@ -206,6 +214,7 @@
 	<Material>
 		<Name>Sponza_Arch</Name>
 		<Shader></Shader>
+		<CullFace>True</CullFace>
 		<!--<Kd>0.588</Kd>
 		<Ks>0.588</Ks>
 		<Ka>0.588</Ka>
@@ -226,6 +235,7 @@
 	<Material>
 		<Name>Sponza_Ceiling</Name>
 		<Shader></Shader>
+		<CullFace>True</CullFace>
 		<!--<Kd>0.588</Kd>
 		<Ks>0.588</Ks>
 		<Ka>0.588</Ka>
@@ -242,6 +252,7 @@
 	<Material>
 		<Name>Sponza_ColumnA</Name>
 		<Shader></Shader>
+		<CullFace>True</CullFace>
 		<!--<Kd>0.588</Kd>
 		<Ks>0.588</Ks>
 		<Ka>0.588</Ka>
@@ -262,6 +273,7 @@
 	<Material>
 		<Name>Sponza_Floor</Name>
 		<Shader></Shader>
+		<CullFace>True</CullFace>
 		<!--<Kd>0.588</Kd>
 		<Ks>0.588</Ks>
 		<Ka>0.588</Ka>
@@ -282,6 +294,7 @@
 	<Material>
 		<Name>Sponza_ColumnC</Name>
 		<Shader></Shader>
+		<CullFace>True</CullFace>
 		<!--<Kd>0.588</Kd>
 		<Ks>0.588</Ks>
 		<Ka>0.588</Ka>
@@ -302,6 +315,7 @@
 	<Material>
 		<Name>Sponza_Details</Name>
 		<Shader></Shader>
+		<CullFace>True</CullFace>
 		<!--<Kd>0.588</Kd>
 		<Ks>0.588</Ks>
 		<Ka>0.588</Ka>
@@ -318,6 +332,7 @@
 	<Material>
 		<Name>Sponza_ColumnB</Name>
 		<Shader></Shader>
+		<CullFace>True</CullFace>
 		<!--<Kd>0.588</Kd>
 		<Ks>0.588</Ks>
 		<Ka>0.588</Ka>
@@ -338,6 +353,7 @@
 	<Material>
 		<Name>Sponza_Fragpole</Name>
 		<Shader></Shader>
+		<CullFace>True</CullFace>
 		<!--<Kd>0.588</Kd>
 		<Ks>0.588</Ks>
 		<Ka>0.588</Ka>
@@ -354,6 +370,7 @@
 	<Material>
 		<Name>Sponza_Fabric_Green</Name>
 		<Shader></Shader>
+		<CullFace>True</CullFace>
 		<!--<Kd>0.588</Kd>
 		<Ks>0.588</Ks>
 		<Ka>0.588</Ka>
@@ -370,6 +387,7 @@
 	<Material>
 		<Name>Sponza_Fabric_Blue</Name>
 		<Shader></Shader>
+		<CullFace>True</CullFace>
 		<!--<Kd>0.588</Kd>
 		<Ks>0.588</Ks>
 		<Ka>0.588</Ka>
@@ -386,6 +404,7 @@
 	<Material>
 		<Name>Sponza_Fabric_Red</Name>
 		<Shader></Shader>
+		<CullFace>True</CullFace>
 		<!--<Kd>0.588</Kd>
 		<Ks>0.588</Ks>
 		<Ka>0.588</Ka>
@@ -402,6 +421,7 @@
 	<Material>
 		<Name>Sponza_FabricCurtain_Blue</Name>
 		<Shader></Shader>
+		<CullFace>True</CullFace>
 		<!--<Kd>0.588</Kd>
 		<Ks>0.588</Ks>
 		<Ka>0.588</Ka>
@@ -418,6 +438,7 @@
 	<Material>
 		<Name>Sponza_FabricCurtain_Red</Name>
 		<Shader></Shader>
+		<CullFace>True</CullFace>
 		<!--<Kd>0.588</Kd>
 		<Ks>0.588</Ks>
 		<Ka>0.588</Ka>
@@ -434,6 +455,7 @@
 	<Material>
 		<Name>Sponza_FabricCurtain_Green</Name>
 		<Shader></Shader>
+		<CullFace>True</CullFace>
 		<!--<Kd>0.588</Kd>
 		<Ks>0.588</Ks>
 		<Ka>0.588</Ka>
@@ -450,8 +472,8 @@
 	<Material>
 		<Name>Sponza_Chain</Name>
 		<Shader></Shader>
+		<CullFace>False</CullFace>
 		<Transparent>True</Transparent>
-		<CullFace>false</CullFace>
 		<!--<Kd>0.588</Kd>
 		<Ks>0.588</Ks>
 		<Ka>0.588</Ka>
@@ -468,6 +490,7 @@
 	<Material>
 		<Name>Sponza_VaseHanging</Name>
 		<Shader></Shader>
+		<CullFace>True</CullFace>
 		<Ke>2.0</Ke>
 		<!--<Kd>0.588</Kd>
 		<Ks>0.588</Ks>
@@ -489,6 +512,7 @@
 	<Material>
 		<Name>Sponza_Vase</Name>
 		<Shader></Shader>
+		<CullFace>True</CullFace>
 		<!--<Kd>0.588</Kd>
 		<Ks>0.588</Ks>
 		<Ka>0.588</Ka>
@@ -505,6 +529,7 @@
 	<Material>
 		<Name>Sponza_Lion</Name>
 		<Shader></Shader>
+		<CullFace>True</CullFace>
 		<!--<Kd>0.588</Kd>
 		<Ks>0.588</Ks>
 		<Ka>0.588</Ka>
@@ -521,6 +546,7 @@
 	<Material>
 		<Name>Sponza_Roof</Name>
 		<Shader></Shader>
+		<CullFace>True</CullFace>
 		<!--<Kd>0.588</Kd>
 		<Ks>0.588</Ks>
 		<Ka>0.588</Ka>
@@ -566,6 +592,7 @@
 	<Material>
 		<Name>ParallaxMapping_1</Name>
 		<Shader>ParallaxOcclusionMapping</Shader>
+		<ParallaxScale>0.04</ParallaxScale>
 		<CullFace>True</CullFace>
 		
 		<Texture>
@@ -588,6 +615,7 @@
 	<Material>
 		<Name>ParallaxMapping_2</Name>
 		<Shader>ParallaxOcclusionMapping</Shader>
+		<ParallaxScale>0.04</ParallaxScale>
 		<CullFace>True</CullFace>
 		
 		<Texture>
@@ -610,6 +638,7 @@
 	<Material>
 		<Name>ParallaxMapping_3</Name>
 		<Shader>ParallaxOcclusionMapping</Shader>
+		<ParallaxScale>0.04</ParallaxScale>
 		<CullFace>True</CullFace>
 		
 		<Texture>

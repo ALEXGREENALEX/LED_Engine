@@ -10,54 +10,63 @@
 	<Material>
 		<Name>Color_White</Name>
 		<Shader></Shader>
+		<CullFace>False</CullFace>
 		<Kd>1.0 1.0 1.0 1.0</Kd>
 	</Material>
 	
 	<Material>
 		<Name>Color_Gray</Name>
 		<Shader></Shader>
+		<CullFace>False</CullFace>
 		<Kd>0.5 0.5 0.5 1.0</Kd>
 	</Material>
 	
 	<Material>
 		<Name>Color_Black</Name>
 		<Shader></Shader>
+		<CullFace>False</CullFace>
 		<Kd>0.0 0.0 0.0 1.0</Kd>
 	</Material>
 	
 	<Material>
 		<Name>Color_Red</Name>
 		<Shader></Shader>
+		<CullFace>False</CullFace>
 		<Kd>1.0 0.0 0.0 1.0</Kd>
 	</Material>
 	
 	<Material>
 		<Name>Color_Green</Name>
 		<Shader></Shader>
+		<CullFace>False</CullFace>
 		<Kd>0.0 1.0 0.0 1.0</Kd>
 	</Material>
 	
 	<Material>
 		<Name>Color_Blue</Name>
 		<Shader></Shader>
+		<CullFace>False</CullFace>
 		<Kd>0.0 0.0 1.0 1.0</Kd>
 	</Material>
 	
 	<Material>
 		<Name>Color_Cyan</Name>
 		<Shader></Shader>
+		<CullFace>False</CullFace>
 		<Kd>0.0 1.0 1.0 1.0</Kd>
 	</Material>
 	
 	<Material>
 		<Name>Color_Magenta</Name>
 		<Shader></Shader>
+		<CullFace>False</CullFace>
 		<Kd>1.0 0.0 1.0 1.0</Kd>
 	</Material>
 	
 	<Material>
 		<Name>Color_Yellow</Name>
 		<Shader></Shader>
+		<CullFace>False</CullFace>
 		<Kd>1.0 1.0 0.0 1.0</Kd>
 	</Material>
 	

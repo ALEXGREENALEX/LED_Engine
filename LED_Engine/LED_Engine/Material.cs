@@ -227,6 +227,12 @@ namespace LED_Engine
                     if (xmlNodeList.Count > 0)
                         material.RefractiveIndex = float.Parse(xmlNodeList.Item(0).InnerText);
                     #endregion
+
+                    #region ParallaxScale
+                    xmlNodeList = xmlNode.SelectNodes("ParallaxScale");
+                    if (xmlNodeList.Count > 0)
+                        material.ParallaxScale = float.Parse(xmlNodeList.Item(0).InnerText);
+                    #endregion
                     #endregion
 
                     MaterialsList.Add(material);
@@ -340,6 +346,8 @@ namespace LED_Engine
         /// </summary>
         public float RefractiveIndex = 1.0f;
 
+        public float ParallaxScale = 0.04f;
+
         public Texture[] Textures = new Texture[Settings.GL.TextureImageUnits];
 
         public Material()
@@ -359,6 +367,7 @@ namespace LED_Engine
             Shininess = Original.Shininess;
             ReflectionFactor = Original.ReflectionFactor;
             RefractiveIndex = Original.RefractiveIndex;
+            ParallaxScale = Original.ParallaxScale;
 
             Textures = new Texture[Original.Textures.Length];
             for (int i = 0; i < Textures.Length; i++)

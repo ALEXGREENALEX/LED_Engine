@@ -185,36 +185,37 @@ namespace LED_Engine
 
         static void OnUpdateFrame()
         {
-            // Коеф. изменения позиций объектов относительно падения FPS
-            float timeK = FPS.Period;
-
             // Проверяем нажатия клавиш каждый кадр, а не по прерыванию!
             KeybrdState = KeyboardState.GetState(Window);
 
-            float camMoveSens = 5.0f * timeK;
+            float camMoveSens = 5.0f * FPS.Period;
+            float camRotateSens = 200.0f * FPS.Period;
+            float MoveX = 0.0f, MoveY = 0.0f, MoveZ = 0.0f,
+                RotateX = 0.0f, RotateY = 0.0f;
 
             if (KeybrdState[Key.W])
-                MainCamera.Move(0f, camMoveSens, 0f);
+                MoveY += camMoveSens;
             if (KeybrdState[Key.A])
-                MainCamera.Move(-camMoveSens, 0f, 0f);
+                MoveX -= camMoveSens;
             if (KeybrdState[Key.S])
-                MainCamera.Move(0f, -camMoveSens, 0f);
+                MoveY -= camMoveSens;
             if (KeybrdState[Key.D])
-                MainCamera.Move(camMoveSens, 0f, 0f);
+                MoveX += camMoveSens;
             if (KeybrdState[Key.E])
-                MainCamera.Move(0f, 0f, camMoveSens);
+                MoveZ += camMoveSens;
             if (KeybrdState[Key.Q])
-                MainCamera.Move(0f, 0f, -camMoveSens);
+                MoveZ -= camMoveSens;
+            MainCamera.Move(MoveX, MoveY, MoveZ);
 
-            float camRotateSens = 200.0f * timeK;
             if (KeybrdState[Key.Left])
-                MainCamera.AddRotation(camRotateSens, 0.0f);
+                RotateX += camRotateSens;
             if (KeybrdState[Key.Right])
-                MainCamera.AddRotation(-camRotateSens, 0.0f);
+                RotateX -= camRotateSens;
             if (KeybrdState[Key.Up])
-                MainCamera.AddRotation(0.0f, camRotateSens);
+                RotateY += camRotateSens;
             if (KeybrdState[Key.Down])
-                MainCamera.AddRotation(0.0f, -camRotateSens);
+                RotateY -= camRotateSens;
+            MainCamera.AddRotation(RotateX, RotateY);
 
             SkyBox.Position = MainCamera.Position;
         }
