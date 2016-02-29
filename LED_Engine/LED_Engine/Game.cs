@@ -111,14 +111,11 @@ namespace LED_Engine
         {
             if (Settings.Window.IsFocused)
             {
-                double deltaX = Settings.Window.X + Settings.Window.Width / 2 - posx;
-                double deltaY = Settings.Window.Y + Settings.Window.Height / 2 - posy;
+                double CenterX = Settings.Window.X + Settings.Window.Width / 2;
+                double CenterY = Settings.Window.Y + Settings.Window.Height / 2;
 
-                MainCamera.AddRotation((float)deltaX, (float)deltaY);
-
-                Glfw.SetCursorPos(window,
-                    (double)(Settings.Window.X + Settings.Window.Width / 2),
-                    (double)(Settings.Window.Y + Settings.Window.Height / 2));
+                MainCamera.AddRotation((float)(CenterX - posx), (float)(CenterY - posy));
+                Glfw.SetCursorPos(window, CenterX, CenterY);
             }
         }
 
@@ -205,7 +202,9 @@ namespace LED_Engine
                 MoveZ += camMoveSens;
             if (KeybrdState[Key.Q])
                 MoveZ -= camMoveSens;
-            MainCamera.Move(MoveX, MoveY, MoveZ);
+
+            if (MoveX != 0 || MoveY != 0 || MoveZ != 0)
+                MainCamera.Move(MoveX, MoveY, MoveZ);
 
             if (KeybrdState[Key.Left])
                 RotateX += camRotateSens;
@@ -215,7 +214,9 @@ namespace LED_Engine
                 RotateY += camRotateSens;
             if (KeybrdState[Key.Down])
                 RotateY -= camRotateSens;
-            MainCamera.AddRotation(RotateX, RotateY);
+            
+            if (RotateX != 0 || RotateY != 0)
+                MainCamera.AddRotation(RotateX, RotateY);
 
             SkyBox.Position = MainCamera.Position;
         }

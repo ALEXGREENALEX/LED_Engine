@@ -335,7 +335,7 @@
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.Name = "LightSettings";
-            this.Opacity = 0.5D;
+            this.Opacity = 0.7D;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Light Control";
             this.TopMost = true;

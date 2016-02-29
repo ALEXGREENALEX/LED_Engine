@@ -53,15 +53,13 @@ namespace LED_Engine
             return Matrix4.LookAt(Position, Position + Dir, Vector3.UnitY);
         }
 
-        public void Move(float x, float y, float z)
+        public void Move(float X, float Y, float Z)
         {
-            Vector3 Offset = new Vector3();
             Vector3 Forward = new Vector3((float)Math.Sin(YawPitch.X), 0, (float)Math.Cos(YawPitch.X));
             Vector3 Right = new Vector3(-Forward.Z, 0, Forward.X);
 
-            Offset += x * Right;
-            Offset += y * Forward;
-            Offset.Y += z; //offset.Y += Orientation.Y / 4;
+            Vector3 Offset = X * Right + Y * Forward;
+            Offset.Y += Z; //offset.Y += Orientation.Y / 4;
 
             Offset.NormalizeFast();
             Offset *= MoveSpeed;
@@ -72,15 +70,15 @@ namespace LED_Engine
         /// <summary>
         /// Добавляет вращение от движения мыши к ориентации камеры
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        public void AddRotation(float x, float y)
+        /// <param name="X"></param>
+        /// <param name="Y"></param>
+        public void AddRotation(float X, float Y)
         {
-            x = x * MouseSensitivity;
-            y = y * MouseSensitivity;
+            X *= MouseSensitivity;
+            Y *= MouseSensitivity;
 
-            YawPitch.X = (YawPitch.X + x) % (MathHelper.TwoPi);
-            YawPitch.Y = Math.Max(Math.Min(YawPitch.Y + y, MathHelper.PiOver2 - 0.01f), -MathHelper.PiOver2 + 0.01f);
+            YawPitch.X = (YawPitch.X + X) % MathHelper.TwoPi;
+            YawPitch.Y = Math.Max(Math.Min(YawPitch.Y + Y, MathHelper.PiOver2 - 0.01f), -MathHelper.PiOver2 + 0.01f);
         }
 
         public float FOV
