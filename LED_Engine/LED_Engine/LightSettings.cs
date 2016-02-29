@@ -32,13 +32,15 @@ namespace LED_Engine
 
         void ListsRefresh()
         {
-            LIndex = -1;
             listBox_Lights.Items.Clear();
             foreach (var l in Lights.LIGHTS)
                 listBox_Lights.Items.Add(l.Name);
 
             comboBox_Type.Items.Clear();
             comboBox_Type.Items.AddRange(Enum.GetNames(typeof(LightType)));
+
+            if (listBox_Lights.Items.Count != 0 && listBox_Lights.Items.Count > LIndex)
+                listBox_Lights.SelectedIndex = LIndex;
         }
 
         private void checkedListBox_Lights_Click(object sender, EventArgs e)
@@ -55,7 +57,10 @@ namespace LED_Engine
         void GetValues()
         {
             checkBox_LEnabled.Checked = Lights.LIGHTS[LIndex].Enabled;
+            
             comboBox_Type.Text = Lights.LIGHTS[LIndex].Type.ToString();
+            Enable_Disable_TextBoxes();
+
             textBox_Name.Text = Lights.LIGHTS[LIndex].Name;
 
             textBox_PosX.Text = Lights.LIGHTS[LIndex].Position.X.ToString();
@@ -82,6 +87,61 @@ namespace LED_Engine
             textBox_Exp.Text = Lights.LIGHTS[LIndex].Exponent.ToString();
         }
 
+        void Enable_Disable_TextBoxes()
+        {
+            //Enable All
+            textBox_PosX.Enabled = true;
+            textBox_PosY.Enabled = true;
+            textBox_PosZ.Enabled = true;
+            textBox_DirYaw.Enabled = true;
+            textBox_DirPitch.Enabled = true;
+            textBox_SpecR.Enabled = true;
+            textBox_SpecG.Enabled = true;
+            textBox_SpecB.Enabled = true;
+            textBox_AttC.Enabled = true;
+            textBox_AttL.Enabled = true;
+            textBox_AttQ.Enabled = true;
+            textBox_CutOFF.Enabled = true;
+            textBox_Exp.Enabled = true;
+
+            switch (Lights.LIGHTS[LIndex].Type)
+            {
+                case LightType.Ambient:
+                    textBox_PosX.Enabled = false;
+                    textBox_PosY.Enabled = false;
+                    textBox_PosZ.Enabled = false;
+                    textBox_DirYaw.Enabled = false;
+                    textBox_DirPitch.Enabled = false;
+                    textBox_SpecR.Enabled = false;
+                    textBox_SpecG.Enabled = false;
+                    textBox_SpecB.Enabled = false;
+                    textBox_AttC.Enabled = false;
+                    textBox_AttL.Enabled = false;
+                    textBox_AttQ.Enabled = false;
+                    textBox_CutOFF.Enabled = false;
+                    textBox_Exp.Enabled = false;
+                    break;
+                case LightType.Directional:
+                    textBox_PosX.Enabled = false;
+                    textBox_PosY.Enabled = false;
+                    textBox_PosZ.Enabled = false;
+                    textBox_AttC.Enabled = false;
+                    textBox_AttL.Enabled = false;
+                    textBox_AttQ.Enabled = false;
+                    textBox_CutOFF.Enabled = false;
+                    textBox_Exp.Enabled = false;
+                    break;
+                case LightType.Point:
+                    textBox_DirYaw.Enabled = false;
+                    textBox_DirPitch.Enabled = false;
+                    textBox_CutOFF.Enabled = false;
+                    textBox_Exp.Enabled = false;
+                    break;
+                case LightType.Spot:
+                    break;
+            }
+        }
+
         private void SomeChanged(object sender, EventArgs e)
         {
             if (LIndex != -1 && Lights.LIGHTS.Count > LIndex && !ChangeFreeze)
@@ -90,6 +150,7 @@ namespace LED_Engine
                 {
                     Lights.LIGHTS[LIndex].Enabled = checkBox_LEnabled.Checked;
                     Lights.LIGHTS[LIndex].Type = (LightType)Enum.Parse(typeof(LightType), comboBox_Type.Text, true);
+                    Enable_Disable_TextBoxes();
                     Lights.LIGHTS[LIndex].Name = textBox_Name.Text;
 
                     Lights.LIGHTS[LIndex].Position = new Vector3(
@@ -126,22 +187,30 @@ namespace LED_Engine
             }
         }
 
+        private void button_Add_Click(object sender, EventArgs e)
+        {
+            Light L = new Light();
+            L.Name = "Light_" + DateTime.Now.ToLongTimeString();
+
+            if (LIndex == -1)
+                LIndex = Lights.LIGHTS.Count - 1;
+
+            LIndex++;
+
+            Lights.LIGHTS.Insert(LIndex, L);
+            ListsRefresh();
+        }
+
         private void button_Del_Click(object sender, EventArgs e)
         {
             if (LIndex != -1)
             {
                 Lights.LIGHTS.RemoveAt(LIndex);
-                listBox_Lights.Items.RemoveAt(LIndex);
-                LIndex = -1;
+                LIndex--;
+                if (LIndex == -1 && Lights.LIGHTS.Count > 0)
+                    LIndex++;
+                ListsRefresh();
             }
-        }
-
-        private void button_Add_Click(object sender, EventArgs e)
-        {
-            Light L = new Light();
-            L.Name = "Light_" + DateTime.Now.ToLongTimeString();
-            Lights.LIGHTS.Add(L);
-            listBox_Lights.Items.Add(L.Name);
         }
 
         private void button_Serialize_Click(object sender, EventArgs e)
@@ -181,6 +250,32 @@ namespace LED_Engine
                 result = (T)ser.Deserialize(tr);
             }
             return result;
+        }
+
+        private void button_MoveLUp_Click(object sender, EventArgs e)
+        {
+            if (LIndex > 0)
+            {
+                Light L = Lights.LIGHTS[LIndex];
+                Lights.LIGHTS[LIndex] = Lights.LIGHTS[LIndex - 1];
+                Lights.LIGHTS[LIndex - 1] = L;
+                LIndex--;
+                ListsRefresh();
+                listBox_Lights.SelectedIndex = LIndex;
+            }
+        }
+
+        private void button_MoveLDown_Click(object sender, EventArgs e)
+        {
+            if (LIndex < listBox_Lights.Items.Count - 1)
+            {
+                Light L = Lights.LIGHTS[LIndex];
+                Lights.LIGHTS[LIndex] = Lights.LIGHTS[LIndex + 1];
+                Lights.LIGHTS[LIndex + 1] = L;
+                LIndex++;
+                ListsRefresh();
+                listBox_Lights.SelectedIndex = LIndex;
+            }
         }
     }
 }

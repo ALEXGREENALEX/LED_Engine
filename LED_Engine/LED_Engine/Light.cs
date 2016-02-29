@@ -50,19 +50,8 @@ namespace LED_Engine
             {
                 type = value;
 
-                switch (type)
-                {
-                    case LightType.Ambient:
-                        Diffuse = new Vector3(0.0f);
-                        break;
-                    case LightType.Directional:
-                        Direction = new Vector3(0.0f, MathHelper.PiOver2, 0.0f);
-                        break;
-                    case LightType.Spot:
-                        Direction = new Vector3(0.0f, -1.0f, 0.0f);
-                        ClampSpotLightAngle();
-                        break;
-                }
+                if (type == LightType.Spot)
+                    ClampSpotLightAngle();
             }
         }
 

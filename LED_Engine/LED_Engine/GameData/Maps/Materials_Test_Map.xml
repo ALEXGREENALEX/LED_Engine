@@ -167,8 +167,8 @@
 		<Name>SpotLight_Woods_1</Name>
 		<Type>Spot</Type>
 		<Enabled>true</Enabled>
-		<Diffuse>2.0</Diffuse>
-		<Specular>2.0</Specular>
+		<Diffuse>3.0</Diffuse>
+		<Specular>3.0</Specular>
 		<Position>0.0 2.0 -0.5</Position>
 		<Direction>0.0 -70.0</Direction>
 		<Attenuation>0.0 1.0 0.0</Attenuation>
@@ -179,8 +179,8 @@
 		<Name>SpotLight_Woods_2</Name>
 		<Type>Spot</Type>
 		<Enabled>true</Enabled>
-		<Diffuse>2.0</Diffuse>
-		<Specular>2.0</Specular>
+		<Diffuse>3.0</Diffuse>
+		<Specular>3.0</Specular>
 		<Position>0.0 2.0 4.0</Position>
 		<Direction>0.0 -70.0</Direction>
 		<Attenuation>0.0 1.0 0.0</Attenuation>
