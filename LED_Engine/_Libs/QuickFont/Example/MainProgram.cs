@@ -603,6 +603,7 @@ namespace Example
             controlsDrawing.Draw();
 
             drawing.Draw();
+			//GL.Disable(EnableCap.Blend);
         }
 
         static void PrintWithBounds(QFont font, string text, RectangleF bounds, QFontAlignment alignment, ref float yOffset)

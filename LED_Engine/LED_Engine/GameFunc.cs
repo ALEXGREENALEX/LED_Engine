@@ -172,7 +172,8 @@ namespace LED_Engine
 
             if (FB_Width > 0 && FB_Height > 0)
             {
-                MainCamera.SetProjectionMatrix(ProjectionTypes.Perspective, (float)FB_Width, (float)FB_Height, MainCamera.zNear, MainCamera.zFar, MainCamera.FOV);
+                MainCamera.SetProjectionMatrix(ProjectionTypes.Perspective, FB_Width, FB_Height, MainCamera.zNear, MainCamera.zFar, MainCamera.FOV);
+                FPS.FPS_Font_ProjectionMatrix = Matrix4.CreateOrthographicOffCenter(0, FB_Width, 0, FB_Height, -1.0f, 1.0f);
                 GL.Viewport(0, 0, FB_Width, FB_Height);
                 FBO.Init(FB_Width, FB_Height);
             }

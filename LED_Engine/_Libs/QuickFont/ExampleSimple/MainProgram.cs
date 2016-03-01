@@ -115,6 +115,7 @@ namespace Example
             drawing.Print(mainText, "ModernQuickFont", new Vector3(Width / 2, (Height + 56) / 2, 0), QFontAlignment.Centre, mainTextOptions);
             drawing.RefreshBuffers();
             drawing.Draw();
+			//GL.Disable(EnableCap.Blend);
         }
     }
 }

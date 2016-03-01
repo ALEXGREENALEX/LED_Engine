@@ -1779,42 +1779,51 @@
 		<Name>AmbientLight</Name>
 		<Type>Ambient</Type>
 		<Enabled>true</Enabled>
-		<Diffuse>0.5 0.5 0.5</Diffuse>
+		<Diffuse>0.2</Diffuse>
 	</Light>
 	<Light>
 		<Name>DirectionalLight_1</Name>
 		<Type>Directional</Type>
 		<Enabled>true</Enabled>
-		<Diffuse>0.7 0.7 0.7</Diffuse>
+		<Diffuse>0.7</Diffuse>
 		<Specular>0.1 0.3 0.9</Specular>
 		<Direction>-15.0 70.0</Direction>
 	</Light>
 	<Light>
-		<Name>PointLight_1</Name>
+		<Name>PointLight_Hanging_1</Name>
 		<Type>Point</Type>
 		<Enabled>true</Enabled>
-		<Diffuse>0.0 0.0 1.0</Diffuse>
-		<Specular>2.0 1.0 2.0</Specular>
-		<Position>5.0 1.5 1.5</Position>
-		<Attenuation>0.0 1.0 0.0</Attenuation>
+		<Diffuse>0.5 0.24 0.1</Diffuse>
+		<Specular>1.0 0.8 0.4</Specular>
+		<Position>-5.45 1.2 1.75</Position>
+		<Attenuation>0.0 0.9 0.0</Attenuation>
 	</Light>
 	<Light>
-		<Name>PointLight_2</Name>
+		<Name>PointLight_Hanging_2</Name>
 		<Type>Point</Type>
 		<Enabled>true</Enabled>
-		<Diffuse>1.0 1.0 1.0</Diffuse>
-		<Specular>1.0 1.0 1.0</Specular>
-		<Position>5.0 1.5 -2.0</Position>
-		<Attenuation>0.0 1.0 0.0</Attenuation>
+		<Diffuse>0.5 0.24 0.1</Diffuse>
+		<Specular>1.0 0.8 0.4</Specular>
+		<Position>5.48 1.2 1.75</Position>
+		<Attenuation>0.0 0.9 0.0</Attenuation>
 	</Light>
 	<Light>
-		<Name>PointLight_3</Name>
+		<Name>PointLight_Hanging_3</Name>
 		<Type>Point</Type>
 		<Enabled>true</Enabled>
-		<Diffuse>5.0 5.0 5.0</Diffuse>
-		<Specular>5.0 5.0 5.0</Specular>
-		<Position>0.0 5.0 0.0</Position>
-		<Attenuation>0.0 0.8 0.0</Attenuation>
+		<Diffuse>0.5 0.24 0.1</Diffuse>
+		<Specular>1.0 0.8 0.4</Specular>
+		<Position>5.4 1.2 -1.75</Position>
+		<Attenuation>0.0 0.9 0.0</Attenuation>
+	</Light>
+	<Light>
+		<Name>PointLight_Hanging_4</Name>
+		<Type>Point</Type>
+		<Enabled>true</Enabled>
+		<Diffuse>0.5 0.24 0.1</Diffuse>
+		<Specular>1.0 0.8 0.4</Specular>
+		<Position>-5.46 1.2 -1.75</Position>
+		<Attenuation>0.0 0.9 0.0</Attenuation>
 	</Light>
 	<Light>
 		<Name>SpotLight_1</Name>
@@ -1827,5 +1836,41 @@
 		<Attenuation>0.0 1.0 0.0</Attenuation>
 		<CutOFF>8.0</CutOFF>
 		<Exponent>80.0</Exponent>
+	</Light>
+	<Light>
+		<Name>Vase_Blue</Name>
+		<Type>Point</Type>
+		<Enabled>true</Enabled>
+		<Diffuse>0.0 0.0 3.0</Diffuse>
+		<Specular>2.0 0.0 0.0</Specular>
+		<Position>-11.8 1.5 -4.4</Position>
+		<Attenuation>0.0 0.0 1.1</Attenuation>
+	</Light>
+	<Light>
+		<Name>Vase_Green</Name>
+		<Type>Point</Type>
+		<Enabled>true</Enabled>
+		<Diffuse>0.0 2.0 0.0</Diffuse>
+		<Specular>0.0 0.0 0.0</Specular>
+		<Position>-11.8 1.5 4.4</Position>
+		<Attenuation>0.0 1.0 0.0</Attenuation>
+	</Light>
+	<Light>
+		<Name>Vase_Fire</Name>
+		<Type>Point</Type>
+		<Enabled>true</Enabled>
+		<Diffuse>2.0 1.0 0.0</Diffuse>
+		<Specular>2.0 1.0 0.0</Specular>
+		<Position>11.8 1.5 4.4</Position>
+		<Attenuation>0.0 0.0 1.1</Attenuation>
+	</Light>
+	<Light>
+		<Name>Vase_Violent</Name>
+		<Type>Point</Type>
+		<Enabled>true</Enabled>
+		<Diffuse>1.0 1.0 2.0</Diffuse>
+		<Specular>2.0 1.0 1.0</Specular>
+		<Position>11.8 1.5 -4.4</Position>
+		<Attenuation>0.0 1.0 0.0</Attenuation>
 	</Light>
 </Map>

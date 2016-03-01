@@ -43,12 +43,14 @@
 		<EngineShaders>Shaders</EngineShaders>
 		<EngineTextures>Textures</EngineTextures>
 		<EngineCubemapTextures>Cubemaps</EngineCubemapTextures>
+		<EngineFonts>Fonts</EngineFonts>
 		
 		<Maps>Maps</Maps>
 		<Meshes>Meshes</Meshes>
 		<Shaders>Shaders</Shaders>
 		<Textures>Textures</Textures>
 		<CubemapTextures>Cubemaps</CubemapTextures>
+		<Fonts>Fonts</Fonts>
 	</Paths>
 	<EngineContent>
 		<Maps>Maps.xml</Maps>

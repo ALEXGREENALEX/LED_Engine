@@ -51,6 +51,7 @@ namespace LED_Engine
                     int FB_Width, FB_Height;
                     Glfw.GetFramebufferSize(Window, out FB_Width, out FB_Height);
                     FBO.Init(FB_Width, FB_Height);
+                    FPS.Font_Init();
 
                     Engine.LoadEngineContent();
 
@@ -78,16 +79,17 @@ namespace LED_Engine
                     OnUpdateFrame();
                     OnRenderFrame();
 
-                    Glfw.SwapBuffers(Window); // Swap the front and back buffer, displaying the scene
-                    Glfw.PollEvents(); // Poll GLFW window events
-
                     if (FPS.ShowFPS)
                         FPS.CalcFPS(); //FPS Counter, must be at the END of the Render LOOP!
+
+                    Glfw.SwapBuffers(Window); // Swap the front and back buffer, displaying the scene
+                    Glfw.PollEvents(); // Poll GLFW window events
                 }
                 #endregion
             }
             Maps.Free(true); // Free all: Map -> Meshes, Shaders, Textures...
             FBO.Free();
+            FPS.Font_Free();
             Engine.ClearLists();
             Glfw.DestroyWindow(Window);
             Glfw.Terminate();

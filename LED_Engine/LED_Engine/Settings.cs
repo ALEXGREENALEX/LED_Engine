@@ -35,12 +35,14 @@ namespace LED_Engine
                 EngineTextures,
                 EngineCubemapTextures,
                 EngineShaders,
+                EngineFonts,
 
                 Maps,
                 Meshes,
                 Textures,
                 CubemapTextures,
-                Shaders;
+                Shaders,
+                Fonts;
 
             public static class ContentFiles
             {

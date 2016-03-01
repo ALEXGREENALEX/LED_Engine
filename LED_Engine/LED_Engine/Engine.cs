@@ -99,6 +99,8 @@ namespace LED_Engine
                 Settings.Paths.EngineCubemapTextures = Engine.CombinePaths(Settings.Paths.EngineContentPath, TempPathStr);
                 TempPathStr = Engine.FixPath(TempNode.SelectSingleNode("EngineShaders").InnerText);
                 Settings.Paths.EngineShaders = Engine.CombinePaths(Settings.Paths.EngineContentPath, TempPathStr);
+                TempPathStr = Engine.FixPath(TempNode.SelectSingleNode("EngineFonts").InnerText);
+                Settings.Paths.EngineFonts = Engine.CombinePaths(Settings.Paths.EngineContentPath, TempPathStr);
 
                 TempPathStr = Engine.FixPath(TempNode.SelectSingleNode("Maps").InnerText);
                 Settings.Paths.Maps = Engine.CombinePaths(Settings.Paths.GameDataPath, TempPathStr);
@@ -110,6 +112,8 @@ namespace LED_Engine
                 Settings.Paths.CubemapTextures = Engine.CombinePaths(Settings.Paths.GameDataPath, TempPathStr);
                 TempPathStr = Engine.FixPath(TempNode.SelectSingleNode("Shaders").InnerText);
                 Settings.Paths.Shaders = Engine.CombinePaths(Settings.Paths.GameDataPath, TempPathStr);
+                TempPathStr = Engine.FixPath(TempNode.SelectSingleNode("Fonts").InnerText);
+                Settings.Paths.Fonts = Engine.CombinePaths(Settings.Paths.GameDataPath, TempPathStr);
                 #endregion
 
                 #region Определяем пути к "*.xml" с инф. про ресурсы
@@ -292,12 +296,18 @@ namespace LED_Engine
         /// <returns>Fixed path</returns>
         public static string FixPath(string Path)
         {
+            if (Path == null)
+                return null;
+
             return Path.Replace('/', System.IO.Path.DirectorySeparatorChar).
                 Replace('\\', System.IO.Path.DirectorySeparatorChar).Trim();
         }
 
         public static string CombinePaths(string Path1, string Path2)
         {
+            if (Path1 == null || Path2 == null)
+                return null;
+
             Path1 = FixPath(Path1).Trim().TrimEnd(new char[] { '\\', '/' });
             Path2 = FixPath(Path2).Trim().TrimStart(new char[] { '\\', '/' });
             return Path1 + System.IO.Path.DirectorySeparatorChar + Path2;

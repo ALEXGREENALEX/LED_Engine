@@ -29,7 +29,7 @@ namespace LED_Engine
         public Vector3 Diffuse = new Vector3(1.0f); //Diffuse intensity
         public Vector3 Specular = new Vector3(1.0f); //Specular intensity
         public Vector3 Position = new Vector3(0.0f); //Position in eye coords
-        public Vector3 direction = new Vector3(0.0f, MathHelper.PiOver2, 0.0f);
+        Vector3 direction = new Vector3(0.0f, MathHelper.PiOver2, 0.0f);
         public Vector3 Attenuation = new Vector3(0.0f, 1.0f, 0.0f); //Attenuation: Constant, Linear, Quadric
         float cutOff = 45.0f;
         public float Exponent = 2.0f;
