@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Windows.Forms;
 using Pencil.Gaming;
 using Pencil.Gaming.Graphics;
 using Pencil.Gaming.MathUtils;
+
+using PixelFormat = Pencil.Gaming.Graphics.PixelFormat;
 
 namespace LED_Engine
 {
@@ -35,11 +39,13 @@ namespace LED_Engine
             DrawBuffersEnum.ColorAttachment1, //Normals.xy, Emissive.xy
             DrawBuffersEnum.ColorAttachment2, //Position, Emissive.z
             DrawBuffersEnum.ColorAttachment3, //Specular, Shininess
-            DrawBuffersEnum.ColorAttachment4};//AO, FREE
+            DrawBuffersEnum.ColorAttachment4, //AO, FREE
+            DrawBuffersEnum.ColorAttachment5};//SSAO_RandomNormals, FREE
 
         //Pass0 OUT textures
         public static int Depth;
         public static int[] Textures_P1 = new int[ColorAttachments_P1.Length];
+        public static Texture SSAO_RandomNormals;
 
         //Pass1 OUT Textures
         public static int Texture_PP;
@@ -106,6 +112,10 @@ namespace LED_Engine
             Texture_PP = GL.GenTexture();
 
             Rescale();
+
+            // SSAO
+            GL.DeleteTexture(Textures_P1[5]);
+            Textures_P1[5] = Textures.Load("SSAO_RandomNormals").ID;
             #endregion
 
             #region Generate FBO's
@@ -154,7 +164,7 @@ namespace LED_Engine
             #endregion
 
             #region Pass1
-            for (int i = 0; i < Textures_P1.Length; i++)
+            for (int i = 0; i < Textures_P1.Length - 1; i++) //Without SSAO Noise Texture
             {
                 GL.BindTexture(TextureTarget.Texture2D, Textures_P1[i]);
                 GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba16f, ScreenWidth, ScreenHeight, 0,
@@ -190,9 +200,9 @@ namespace LED_Engine
             GL.UseProgram(Shaders[ShaderIndex_P1].ProgramID);
             int TempLocation;
 
-            //TempLocation = Shaders[ShaderIndex_P1].GetUniform("ScreenSize");
-            //if (TempLocation != -1)
-            //   GL.Uniform2(TempLocation, (float)ScreenWidth, (float)ScreenHeight);
+            TempLocation = Shaders[ShaderIndex_P1].GetUniform("ScreenSize");
+            if (TempLocation != -1)
+                GL.Uniform2(TempLocation, (float)ScreenWidth, (float)ScreenHeight);
 
             TempLocation = Shaders[ShaderIndex_P1].GetUniform("ClipPlanes");
             if (TempLocation != -1) //zNear, zFar
@@ -310,7 +320,7 @@ namespace LED_Engine
                     GL.Uniform3(Shaders[ShaderIndex_P1].GetUniform("FogColor"), Settings.Graphics.Fog.Color);
                 }
                 else
-                    GL.Uniform2(TempLocation, -1.0f, 0.0f); // Disable Fog
+                    GL.Uniform2(TempLocation, float.MaxValue - 1.0f, float.MaxValue); // Disable Fog
             }
             #endregion
 

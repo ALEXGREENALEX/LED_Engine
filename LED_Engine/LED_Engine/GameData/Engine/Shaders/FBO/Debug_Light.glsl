@@ -1,10 +1,6 @@
 #version 330
-uniform sampler2D TextureUnit0; // Depth
-uniform sampler2D TextureUnit1; //vec4 Diffuse
 uniform sampler2D TextureUnit2; //vec2 Normal.xy,	vec2  Emissive.xy
 uniform sampler2D TextureUnit3; //vec3 EyePosition,	float Emissive.z
-uniform sampler2D TextureUnit4; //vec3 Specular,	float Shininess
-uniform sampler2D TextureUnit5; //vec3 Ka * AO_Map,	FREE
 
 in vec2 f_UV;
 

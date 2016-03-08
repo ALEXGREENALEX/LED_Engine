@@ -13,5 +13,5 @@ float GrayScale(vec3 InColor)
 vec3 GrayScale(vec3 InColor, float Opacity)
 {
 	float Gray = GrayScale(InColor);
-	return mix(InColor, vec3(Gray, Gray, Gray), Opacity);
+	return mix(InColor, vec3(Gray), Opacity);
 }

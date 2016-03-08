@@ -170,6 +170,8 @@ namespace LED_Engine
         {
             try
             {
+                ClearLists();
+
                 #region Paths
                 string[] Paths = new string[] { Settings.Paths.EngineContentPath, Settings.Paths.GameDataPath };
 

@@ -329,6 +329,32 @@ namespace Pencil.Gaming.MathUtils
 
         #endregion
 
+        #region Lerp
+        /// <summary>
+        /// Linearly interpolates between two values. 
+        /// </summary>
+        /// <param name="value1">Source value.</param>
+        /// <param name="value2">Source value.</param>
+        /// <param name="amount">Value between 0 and 1 indicating the weight of value2. </param>
+        /// <returns>Interpolated value.</returns>
+        public static float Lerp(float value1, float value2, float amount)
+        {
+            return value1 + (value2 - value1) * amount;
+        }
+
+        /// <summary>
+        /// Linearly interpolates between two values. 
+        /// </summary>
+        /// <param name="value1">Source value.</param>
+        /// <param name="value2">Source value.</param>
+        /// <param name="amount">Value between 0 and 1 indicating the weight of value2. </param>
+        /// <returns>Interpolated value.</returns>
+        public static double Lerp(double value1, double value2, double amount)
+        {
+            return value1 + (value2 - value1) * amount;
+        }
+        #endregion
+
         #endregion
     }
 }

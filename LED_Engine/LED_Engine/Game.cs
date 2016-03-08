@@ -127,7 +127,7 @@ namespace LED_Engine
 
         static void OnWindowResize(GlfwWindowPtr window, int Width, int Height)
         {
-            if (Width > 0 || Height > 0)
+            if (Width > 0 && Height > 0)
             {
                 Settings.Window.Width = Width;
                 Settings.Window.Height = Height;
@@ -214,7 +214,7 @@ namespace LED_Engine
                 RotateY += camRotateSens;
             if (KeybrdState[Key.Down])
                 RotateY -= camRotateSens;
-            
+
             if (RotateX != 0 || RotateY != 0)
                 MainCamera.AddRotation(RotateX, RotateY);
 

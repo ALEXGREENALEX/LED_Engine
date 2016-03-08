@@ -25,9 +25,7 @@ Ke - Emissive Color
 	Vector3
 Shininess - Specular Shininess
 	float
-ReflectionFactor
-	float
-RefractiveIndex
+Reflection
 	float
 Texture[]
 	string Name;

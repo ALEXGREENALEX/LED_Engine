@@ -5,20 +5,9 @@
 		<Fragment>Universal_FS.glsl</Fragment>
 	</Shader>
 	<Shader>
-		<Name>ParallaxOcclusionMapping</Name>
-		<Vertex>Universal_VS.glsl</Vertex>
-		<Fragment>ParallaxOcclusionMapping_FS.glsl</Fragment>
-	</Shader>
-	<Shader>
 		<Name>CubemapSky</Name>
 		<Vertex>CubemapSky_VS.glsl</Vertex>
 		<Fragment>CubemapSky_FS.glsl</Fragment>
-	</Shader>
-	
-	<Shader>
-		<Name>ReflectRefract</Name>
-		<Vertex>CubemapReflectRefract_VS.glsl</Vertex>
-		<Fragment>CubemapReflectRefract_FS.glsl</Fragment>
 	</Shader>
 	
 	<!--RenderToTexture(RTT) Shaders-->
