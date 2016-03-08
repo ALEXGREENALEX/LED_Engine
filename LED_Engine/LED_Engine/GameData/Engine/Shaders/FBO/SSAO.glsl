@@ -1,15 +1,14 @@
 // http://forum.devmaster.net/t/ssao-feedback/21608/9
 #include_StringOnce("uniform vec2 ScreenSize;")
 
-const float SampleScale = 7.0; //5.0
-const vec2 RandomScale = vec2(10.0, 5.25); //10.0, 5.25
+const float SampleScale = 5.0; //5.0
 const int SampleCount = 10; //10
-const float DepthScale = 0.05; //0.001
-const float JitterScale = 1.0; //0.1
+const float DepthScale = 0.1; //0.001
+const float JitterScale = 0.001; //0.1
 
 float SSAO(sampler2D ViewPosTexture, sampler2D NormalTexture, sampler2D RandNormalTexture, vec2 UV, vec3 ViewPos, vec3 Normal)
 {	
-	vec3 random = texture(RandNormalTexture, UV * RandomScale).xyz * 2.0 - 1.0;
+	vec3 random = texture(RandNormalTexture, UV).xyz * 2.0 - 1.0;
 	
 	float occlusion = 0.0;	     //< value where everything will accumulate
 	float incx = SampleScale / ScreenSize.x;  //< step size in x-direction
@@ -47,9 +46,9 @@ float SSAO(sampler2D ViewPosTexture, sampler2D NormalTexture, sampler2D RandNorm
 		/* Heavy wizardy and deep magic */
 		/* This code is actually computing amount of occlusion between two points - note that it's absolutely necessary to fine tune the
 		* constant numbers here to get the best result! */
-		occlusion += (1.0 - clamp(max(dot(norm, -v), 0.0) - 0.05, 0.0, 1.0)) *
-		clamp(max(dot(Normal, v), 0.0) - 0.05, 0.0, 1.0) *
-		(1.0 - 1.0 / sqrt(0.2 / (d * d * 23.0) + 1.0));
+		occlusion += (1.0 - clamp(max(dot(norm, -v), 0.0) - 0.15, 0.0, 1.0)) *
+		clamp(max(dot(Normal, v), 0.0) - 0.15, 0.0, 1.0) *
+		(1.0 - 1.0 / sqrt(0.5 / (d * d * 100.0) + 1.0));
 		
 		// Continue sampling in a "sphere" around the point
 		dx0 += incx;

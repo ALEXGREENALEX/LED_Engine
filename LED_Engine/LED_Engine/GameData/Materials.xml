@@ -273,7 +273,7 @@
 		<Name>Sponza_Floor</Name>
 		<Shader></Shader>
 		<CullFace>True</CullFace>
-		<Reflection>0.15</Reflection>
+		<Reflection>0.2</Reflection>
 		<!--<Kd>0.588</Kd>
 		<Ks>0.588</Ks>
 		<Ka>0.588</Ka>

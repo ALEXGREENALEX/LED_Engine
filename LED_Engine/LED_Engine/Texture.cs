@@ -364,6 +364,8 @@ namespace LED_Engine
                 if (AnisotropicFiltering && Glfw.ExtensionSupported("GL_EXT_texture_filter_anisotropic"))
                 {
                     int MaxAniso = GL.GetInteger((GetPName)ExtTextureFilterAnisotropic.MaxTextureMaxAnisotropyExt);
+                    if (Settings.Graphics.AnisotropicFiltering != -1)
+                        MaxAniso = Math.Min(MaxAniso, Settings.Graphics.AnisotropicFiltering);
                     GL.TexParameter(TextureTarget, (TextureParameterName)ExtTextureFilterAnisotropic.TextureMaxAnisotropyExt, MaxAniso);
                 }
 
@@ -459,6 +461,8 @@ namespace LED_Engine
                     if (AnisotropicFiltering && Glfw.ExtensionSupported("GL_EXT_texture_filter_anisotropic"))
                     {
                         int MaxAniso = GL.GetInteger((GetPName)ExtTextureFilterAnisotropic.MaxTextureMaxAnisotropyExt);
+                        if (Settings.Graphics.AnisotropicFiltering != -1)
+                            MaxAniso = Math.Min(MaxAniso, Settings.Graphics.AnisotropicFiltering);
                         GL.TexParameter(TextureTarget, (TextureParameterName)ExtTextureFilterAnisotropic.TextureMaxAnisotropyExt, MaxAniso);
                     }
 
