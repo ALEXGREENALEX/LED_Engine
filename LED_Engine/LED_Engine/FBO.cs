@@ -39,13 +39,13 @@ namespace LED_Engine
             DrawBuffersEnum.ColorAttachment1, //Normals.xy, Emissive.xy
             DrawBuffersEnum.ColorAttachment2, //Position, Emissive.z
             DrawBuffersEnum.ColorAttachment3, //Specular, Shininess
-            DrawBuffersEnum.ColorAttachment4, //AO, FREE
-            DrawBuffersEnum.ColorAttachment5};//SSAO_RandomNormals, FREE
+            DrawBuffersEnum.ColorAttachment4/*, //AO, FREE
+            DrawBuffersEnum.ColorAttachment5*/};//SSAO_RandomNormals, FREE
 
         //Pass0 OUT textures
         public static int Depth;
         public static int[] Textures_P1 = new int[ColorAttachments_P1.Length];
-        public static Texture SSAO_RandomNormals;
+        //public static Texture SSAO_RandomNormals;
 
         //Pass1 OUT Textures
         public static int Texture_PP;
@@ -114,8 +114,8 @@ namespace LED_Engine
             Rescale();
 
             // SSAO
-            GL.DeleteTexture(Textures_P1[5]);
-            Textures_P1[5] = Textures.Load("SSAO_RandomNormals").ID;
+            //GL.DeleteTexture(Textures_P1[5]);
+            //Textures_P1[5] = Textures.Load("SSAO_RandomNormals").ID;
             #endregion
 
             #region Generate FBO's
@@ -164,7 +164,8 @@ namespace LED_Engine
             #endregion
 
             #region Pass1
-            for (int i = 0; i < Textures_P1.Length - 1; i++) //Without SSAO Noise Texture
+            //for (int i = 0; i < Textures_P1.Length - 1; i++) //Without SSAO Noise Texture
+            for (int i = 0; i < Textures_P1.Length; i++)
             {
                 GL.BindTexture(TextureTarget.Texture2D, Textures_P1[i]);
                 GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba16f, ScreenWidth, ScreenHeight, 0,
@@ -173,6 +174,7 @@ namespace LED_Engine
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
+                //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureCompareMode, (int)TextureCompareMode.None);
             }
             #endregion
 
