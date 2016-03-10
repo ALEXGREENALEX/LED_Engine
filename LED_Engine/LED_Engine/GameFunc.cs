@@ -142,6 +142,7 @@ namespace LED_Engine
             Glfw.MakeContextCurrent(Window);
 
             #region Apply render settings AFTER window init
+            Log.WriteLine("GPU: " + GL.GetString(StringName.Renderer));
             Settings.Window.IsFocused = true;
             #region Mouse jump fix
             Glfw.SetInputMode(Window, InputMode.CursorMode, CursorMode.CursorCaptured);
