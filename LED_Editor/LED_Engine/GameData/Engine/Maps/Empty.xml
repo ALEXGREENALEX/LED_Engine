@@ -1,0 +1,9 @@
+﻿<Map>
+	<Name></Name>
+	<Description>Just empty map</Description>
+
+	<PlayerStart>
+		<Position>0.0 0.0 0.0</Position>
+		<Rotation>0.0 0.0 0.0</Rotation>
+	</PlayerStart>
+</Map>

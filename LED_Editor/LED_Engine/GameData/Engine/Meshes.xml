@@ -1,0 +1,18 @@
+<Meshes>
+	<Mesh>
+		<Name>DebugAmbientLight</Name>
+		<File>DebugAmbientLight.obj</File>
+	</Mesh>
+	<Mesh>
+		<Name>DebugDirectionalLight</Name>
+		<File>DebugDirectionalLight.obj</File>
+	</Mesh>
+	<Mesh>
+		<Name>DebugPointLight</Name>
+		<File>DebugPointLight.obj</File>
+	</Mesh>
+	<Mesh>
+		<Name>DebugSpotLight</Name>
+		<File>DebugSpotLight.obj</File>
+	</Mesh>
+</Meshes>

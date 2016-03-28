@@ -1,0 +1,69 @@
+Name:
+	string - Shader name
+Vertex:
+	string - File with Vertex Shader code
+Fragment:
+	string - File with Fragment Shader code
+Geometry:
+	string - File with Geometry Shader code
+TessControl:
+	string - File with Tesselation Control Shader code
+TessEvaluation:
+	string - File with Tesselation Evaluation Shader code
+Compute:
+	string - File with Compute Shader code
+
+--------------------------------
+			Examples			
+--------------------------------
+<Shader>
+	<Name>Default</Name>
+	<Vertex>Default_VS.glsl</Vertex>
+	<Geometry>Default_GS.glsl</Geometry>
+	<Fragment>Default_FS.glsl</Fragment>
+</Shader>
+--------------------------------
+<RTT_Shader>
+	<Name>Pass1</Name>
+	<Vertex>FBO\Universal_VS.glsl</Vertex>
+	<Fragment>FBO\Pass1.glsl</Fragment>
+</RTT_Shader>
+--------------------------------
+	*RTT_Shader - Render to texture shader.
+
+
+--------------------------------
+		TextureUnits
+--------------------------------
+Part of the Fragment Shader with samplers, like:
+	"uniform sampler2D TextureUnit0;"
+must be ONLY WITH TextureUnit0, TextureUnit1 ... TextureUnitN,
+where N = 'MaxTextureUnits' (or change "TextureUnit" string in Engine).
+
+
+--------------------------------
+		Include Function
+--------------------------------
+1) Include func. delete all comments from shaders!!!
+2) Register is not important.
+3) FileName from main Shader, Like: "NormalMap.glsl", "Fog\vs.glsl"
+--------------------------------
+Insert all text from file:
+	#include("FileName")
+
+Insert string with number N:
+	#include("FileName", N)
+
+Insert strings from N to M:
+	#include("FileName", N, M)
+
+#include_once(), #includeOnce(), ... some with "once" ("#include*once*"):
+	Include doesn't work if shader has text like in string\file
+
+#include_string(), #includeString(), ... some with "string" ("#include*string*"):
+	Include text to shader. Not usable, but work!!!
+
+It's maked just for combinations like:
+	1) #IncludeOnceString("Some code")
+	2) #Include_once_string("Some code")
+	3) #InClUdE_____OnCe_____StRiNg("Some code")...

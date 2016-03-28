@@ -1,0 +1,8 @@
+﻿<Textures>
+	<Texture>
+		<Name></Name>
+		<File>checker.bmp</File>
+		<MagFilter>Nearest</MagFilter>
+		<MinFilter>Nearest</MinFilter>
+	</Texture>
+</Textures>

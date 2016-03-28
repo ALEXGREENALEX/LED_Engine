@@ -1,3 +1,0 @@
-string FullPath = @"C:\A\B\1.txt";
-            string Dir = @"C:\A".TrimEnd(new char []{ '\\', '/'});
-            string Result = Engine.FixPath(FullPath.Substring(Dir.Length + 1, FullPath.Length - Dir.Length - 1));

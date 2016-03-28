@@ -1,0 +1,74 @@
+﻿<Shaders>
+	<Shader>
+		<Name></Name>
+		<Vertex>Universal_VS.glsl</Vertex>
+		<Fragment>Universal_FS.glsl</Fragment>
+	</Shader>
+	<Shader>
+		<Name>ParallaxOcclusionMapping</Name>
+		<Vertex>Universal_VS.glsl</Vertex>
+		<Fragment>ParallaxOcclusionMapping_FS.glsl</Fragment>
+	</Shader>
+	<Shader>
+		<Name>CubemapSky</Name>
+		<Vertex>CubemapSky_VS.glsl</Vertex>
+		<Fragment>CubemapSky_FS.glsl</Fragment>
+	</Shader>
+	
+	<Shader>
+		<Name>ReflectRefract</Name>
+		<Vertex>CubemapReflectRefract_VS.glsl</Vertex>
+		<Fragment>CubemapReflectRefract_FS.glsl</Fragment>
+	</Shader>
+	
+	<!--RenderToTexture(RTT) Shaders-->
+	<RTT_Shader>
+		<Name>Pass1</Name>
+		<Vertex>FBO\Universal_VS.glsl</Vertex>
+		<Fragment>FBO\Pass1.glsl</Fragment>
+	</RTT_Shader>
+	
+		<!--PostProcess Shaders-->
+	<RTT_Shader>
+		<Name>PostProcess</Name>
+		<Vertex>FBO\Universal_VS.glsl</Vertex>
+		<Fragment>PostProcess\PostProcess_FS.glsl</Fragment>
+	</RTT_Shader>
+
+	<!--Debug Shaders-->
+	<RTT_Shader>
+		<Name>Debug_Depth</Name>
+		<Vertex>FBO\Universal_VS.glsl</Vertex>
+		<Fragment>FBO\Debug_Depth.glsl</Fragment>
+	</RTT_Shader>
+	<RTT_Shader>
+		<Name>Debug_Diffuse</Name>
+		<Vertex>FBO\Universal_VS.glsl</Vertex>
+		<Fragment>FBO\Debug_Diffuse.glsl</Fragment>
+	</RTT_Shader>
+	<RTT_Shader>
+		<Name>Debug_Light</Name>
+		<Vertex>FBO\Universal_VS.glsl</Vertex>
+		<Fragment>FBO\Debug_Light.glsl</Fragment>
+	</RTT_Shader>
+	<RTT_Shader>
+		<Name>Debug_Normals</Name>
+		<Vertex>FBO\Universal_VS.glsl</Vertex>
+		<Fragment>FBO\Debug_Normals.glsl</Fragment>
+	</RTT_Shader>
+	<RTT_Shader>
+		<Name>Debug_AmbientOclusion</Name>
+		<Vertex>FBO\Universal_VS.glsl</Vertex>
+		<Fragment>FBO\Debug_AmbientOclusion.glsl</Fragment>
+	</RTT_Shader>
+	<RTT_Shader>
+		<Name>Debug_Emissive</Name>
+		<Vertex>FBO\Universal_VS.glsl</Vertex>
+		<Fragment>FBO\Debug_Emissive.glsl</Fragment>
+	</RTT_Shader>
+	<RTT_Shader>
+		<Name>Debug_Specular</Name>
+		<Vertex>FBO\Universal_VS.glsl</Vertex>
+		<Fragment>FBO\Debug_Specular.glsl</Fragment>
+	</RTT_Shader>
+</Shaders>

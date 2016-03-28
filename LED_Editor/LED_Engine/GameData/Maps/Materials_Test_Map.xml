@@ -1,0 +1,199 @@
+﻿<Map>
+	<Name>Materials_Test_Map</Name>
+	<Description></Description>
+
+	<PlayerStart>
+		<Position>0.0 0.4 3.0</Position>
+		<Rotation>180.0 -20.0</Rotation>
+	</PlayerStart>
+	
+	<Camera>
+		<Near>0.1</Near>
+		<Far>100.0</Far>
+		<FOV>60.0</FOV>
+		<MoveSpeed>0.05</MoveSpeed>
+	</Camera>
+	
+	<Skybox>SkyCubemap_WhiteRoom</Skybox>
+	
+	<Model>
+		<Name>Woods</Name>
+		<Visible>true</Visible>
+		<Mesh>
+			<Name>Woods_D</Name>
+			<Type>Mesh</Type>
+			<Mesh>Woods</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>0.0 0.0 0.0</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Woods_D</Material>
+				<Material>Woods_D</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Woods_DNS</Name>
+			<Type>Mesh</Type>
+			<Mesh>Woods</Mesh>
+			<Visible>true</Visible>
+			
+			<Position>0.0 0.0 4.5</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>Woods_DNS</Material>
+				<Material>Woods_DNS</Material>
+			</Materials>
+		</Mesh>
+	</Model>
+	
+	<Model>
+		<Name>POM</Name>
+		<Visible>true</Visible>
+		<Mesh>
+			<Name>Box_1</Name>
+			<Type>Box</Type>
+			<Visible>true</Visible>
+			<SideA>1.0</SideA>
+			<SideB>1.0</SideB>
+			<SideC>1.0</SideC>
+			<FlipPolygons>false</FlipPolygons>
+			
+			<Position>4.0 0.0 0.0</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>ParallaxMapping_1</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Box_2</Name>
+			<Type>Box</Type>
+			<Visible>true</Visible>
+			<SideA>1.0</SideA>
+			<SideB>1.0</SideB>
+			<SideC>1.0</SideC>
+			<FlipPolygons>false</FlipPolygons>
+			
+			<Position>4.0 0.0 1.5</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>ParallaxMapping_2</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Box_3</Name>
+			<Type>Box</Type>
+			<Visible>true</Visible>
+			<SideA>1.0</SideA>
+			<SideB>1.0</SideB>
+			<SideC>1.0</SideC>
+			<FlipPolygons>false</FlipPolygons>
+			
+			<Position>4.0 0.0 3.0</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>ParallaxMapping_3</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Plain_1</Name>
+			<Type>Plain</Type>
+			<Visible>true</Visible>
+			
+			<SideA>2.0</SideA>
+			<SideB>2.0</SideB>
+			
+			<Position>2.5 -0.7 0.0</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>ParallaxMapping_1</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Plain_2</Name>
+			<Type>Plain</Type>
+			<Visible>true</Visible>
+			
+			<SideA>2.0</SideA>
+			<SideB>2.0</SideB>
+			
+			<Position>2.5 -0.7 2.0</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>ParallaxMapping_2</Material>
+			</Materials>
+		</Mesh>
+		<Mesh>
+			<Name>Plain_3</Name>
+			<Type>Plain</Type>
+			<Visible>true</Visible>
+			
+			<SideA>2.0</SideA>
+			<SideB>2.0</SideB>
+			
+			<Position>2.5 -0.7 4.0</Position>
+			<Rotation>0.0 0.0 0.0</Rotation>
+			<Scale>1.0 1.0 1.0</Scale>
+			
+			<Materials>
+				<Material>ParallaxMapping_3</Material>
+			</Materials>
+		</Mesh>
+	</Model>
+	
+	<Light>
+		<Name>DirectionalLight_1</Name>
+		<Type>Directional</Type>
+		<Enabled>true</Enabled>
+		<Diffuse>0.3 0.3 0.3</Diffuse>
+		<Specular>0.5 0.5 0.5</Specular>
+		<Direction>0.0 90.0</Direction>
+	</Light>
+	<Light>
+		<Name>SpotLight_Woods_1</Name>
+		<Type>Spot</Type>
+		<Enabled>true</Enabled>
+		<Diffuse>3.0</Diffuse>
+		<Specular>3.0</Specular>
+		<Position>0.0 2.0 -0.5</Position>
+		<Direction>0.0 -70.0</Direction>
+		<Attenuation>0.0 1.0 0.0</Attenuation>
+		<CutOFF>55.0</CutOFF>
+		<Exponent>4.0</Exponent>
+	</Light>
+	<Light>
+		<Name>SpotLight_Woods_2</Name>
+		<Type>Spot</Type>
+		<Enabled>true</Enabled>
+		<Diffuse>3.0</Diffuse>
+		<Specular>3.0</Specular>
+		<Position>0.0 2.0 4.0</Position>
+		<Direction>0.0 -70.0</Direction>
+		<Attenuation>0.0 1.0 0.0</Attenuation>
+		<CutOFF>55.0</CutOFF>
+		<Exponent>4.0</Exponent>
+	</Light>
+	<Light>
+		<Name>PointLight_Box_1</Name>
+		<Type>Point</Type>
+		<Enabled>true</Enabled>
+		<Diffuse>2.0</Diffuse>
+		<Specular>2.0</Specular>
+		<Position>3.0 1.0 2.0</Position>
+		<Attenuation>0.0 1.0 0.0</Attenuation>
+	</Light>
+</Map>
