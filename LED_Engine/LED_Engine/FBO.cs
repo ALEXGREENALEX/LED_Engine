@@ -43,7 +43,7 @@ namespace LED_Engine
             DrawBuffersEnum.ColorAttachment5*/};//SSAO_RandomNormals, FREE
 
         //Pass0 OUT textures
-        public static int Depth;
+        public static int Texture_Depth;
         public static int[] Textures_P1 = new int[ColorAttachments_P1.Length];
         //public static Texture SSAO_RandomNormals;
 
@@ -58,10 +58,16 @@ namespace LED_Engine
             -1.0f,  1.0f,
              1.0f,  1.0f }; // Screen vertexes positions
 
+        static void CheckFBO(string FBO_Name)
+        {
+            FramebufferErrorCode FramebufferStatus = GL.CheckFramebufferStatus(FramebufferTarget.FramebufferExt);
+            if (FramebufferStatus != FramebufferErrorCode.FramebufferCompleteExt)
+                Log.WriteLineRed("GL.CheckFramebufferStatus: \"" + FBO_Name + "\" error {0}", FramebufferStatus.ToString());
+        }
+
         public static void Init(int ScrWidth, int ScrHeight)
         {
             Free();
-            FramebufferErrorCode FramebufferStatus;
 
             ScreenWidth = ScrWidth;
             ScreenHeight = ScrHeight;
@@ -107,7 +113,7 @@ namespace LED_Engine
             #endregion
 
             #region Gen Textures for Deffered rendering, Post Processesing
-            Depth = GL.GenTexture();
+            Texture_Depth = GL.GenTexture();
             GL.GenTextures(Textures_P1.Length, Textures_P1);
             Texture_PP = GL.GenTexture();
 
@@ -122,24 +128,18 @@ namespace LED_Engine
             //Pass1 (G-Buffer)
             FBO_P1 = GL.GenFramebuffer();
             GL.BindFramebuffer(FramebufferTarget.FramebufferExt, FBO_P1);
-            GL.FramebufferTexture2D(FramebufferTarget.FramebufferExt, FramebufferAttachment.DepthAttachmentExt, TextureTarget.Texture2D, Depth, 0);
+            GL.FramebufferTexture2D(FramebufferTarget.FramebufferExt, FramebufferAttachment.DepthAttachmentExt, TextureTarget.Texture2D, Texture_Depth, 0);
             for (int i = 0; i < Textures_P1.Length; i++)
                 GL.FramebufferTexture2D(FramebufferTarget.FramebufferExt, FramebufferAttachment.ColorAttachment0Ext + i, TextureTarget.Texture2D, Textures_P1[i], 0);
             GL.DrawBuffers(ColorAttachments_P1.Length, ColorAttachments_P1);
-
-            FramebufferStatus = GL.CheckFramebufferStatus(FramebufferTarget.FramebufferExt);
-            if (FramebufferStatus != FramebufferErrorCode.FramebufferCompleteExt)
-                Log.WriteLineRed("GL.CheckFramebufferStatus: \"FBO_P1\" error {0}", FramebufferStatus.ToString());
+            CheckFBO("FBO_P1 (G-Buffer)");
 
             //PostProcess FrameBuffer
             FBO_PP = GL.GenFramebuffer();
             GL.BindFramebuffer(FramebufferTarget.FramebufferExt, FBO_PP);
-            GL.FramebufferTexture2D(FramebufferTarget.FramebufferExt, FramebufferAttachment.DepthAttachmentExt, TextureTarget.Texture2D, Depth, 0);
+            GL.FramebufferTexture2D(FramebufferTarget.FramebufferExt, FramebufferAttachment.DepthAttachmentExt, TextureTarget.Texture2D, Texture_Depth, 0);
             GL.FramebufferTexture2D(FramebufferTarget.FramebufferExt, FramebufferAttachment.ColorAttachment0Ext, TextureTarget.Texture2D, Texture_PP, 0);
-
-            FramebufferStatus = GL.CheckFramebufferStatus(FramebufferTarget.FramebufferExt);
-            if (FramebufferStatus != FramebufferErrorCode.FramebufferCompleteExt)
-                Log.WriteLineRed("GL.CheckFramebufferStatus: \"FBO_PP\" error {0}", FramebufferStatus.ToString());
+            CheckFBO("FBO_PostProcess");
 
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0); //Bind default FrameBuffer
             #endregion
@@ -154,7 +154,7 @@ namespace LED_Engine
         {
             #region Depth
             // Depth
-            GL.BindTexture(TextureTarget.Texture2D, Depth);
+            GL.BindTexture(TextureTarget.Texture2D, Texture_Depth);
             GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.DepthComponent32f, ScreenWidth, ScreenHeight, 0,
                 PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
@@ -328,7 +328,7 @@ namespace LED_Engine
 
             //Bind Textures
             GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindTexture(TextureTarget.Texture2D, Depth);
+            GL.BindTexture(TextureTarget.Texture2D, Texture_Depth);
             for (int i = 0; i < Textures_P1.Length; i++)
             {
                 GL.ActiveTexture(TextureUnit.Texture1 + i);
@@ -429,9 +429,9 @@ namespace LED_Engine
                 Textures_P1[i] = 0;
             }
 
-            GL.DeleteTexture(Depth);
+            GL.DeleteTexture(Texture_Depth);
             GL.DeleteTexture(Texture_PP);
-            Depth = 0;
+            Texture_Depth = 0;
             Texture_PP = 0;
 
             GL.DeleteBuffer(VBO);
