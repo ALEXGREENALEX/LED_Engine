@@ -10,7 +10,7 @@ float SSAO(sampler2D ViewPosTexture, sampler2D NormalTexture, sampler2D RandNorm
 {	
 	vec3 random = texture(RandNormalTexture, UV).xyz * 2.0 - 1.0;
 	
-	float occlusion = 0.0;	     //< value where everything will accumulate
+	float occlusion = 0.0; //< value where everything will accumulate
 	float incx = SampleScale / ScreenSize.x;  //< step size in x-direction
 	float incy = SampleScale / ScreenSize.y;  //< step size in y-direction
 	

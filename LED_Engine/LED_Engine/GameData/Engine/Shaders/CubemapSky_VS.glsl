@@ -7,6 +7,6 @@ smooth out vec3 f_UV;
 
 void main()
 {
-    f_UV = v_Position;
-    gl_Position = MVP * vec4(v_Position, 1.0);
+	f_UV = v_Position;
+	gl_Position = MVP * vec4(v_Position, 1.0);
 }

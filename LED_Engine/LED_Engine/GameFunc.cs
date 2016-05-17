@@ -189,7 +189,7 @@ namespace LED_Engine
 
             if (FrustumCulling.SphereInFrustum(m.Position, m.BoundingSphere.Outer * Scale))
                 for (int i = 0; i < m.Parts.Count; i++)
-                    if (FrustumCulling.SphereInFrustum(m.Position + m.Parts[i].BoundingBox.Position, m.Parts[i].BoundingSphere.Outer * Scale))
+                    if (FrustumCulling.SphereInFrustum(m.Position + m.Parts[i].BoundingSphere.Position, m.Parts[i].BoundingSphere.Outer * Scale))
                         Draw(m, m.Parts[i]);
         }
 
