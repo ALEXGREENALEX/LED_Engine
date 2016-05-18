@@ -2,7 +2,7 @@
 
 
 					NVIDIA FXAA 3.11 by TIMOTHY LOTTES
-					Ported for OpenGL by Zelensky Alex
+				 Ported for OpenGL by Zelenskyi Alexander
 
 ------------------------------------------------------------------------------
 COPYRIGHT (C) 2010, 2011 NVIDIA CORPORATION. ALL RIGHTS RESERVED.

@@ -1751,7 +1751,7 @@
 			<Mesh>Sponza_Lion</Mesh>
 			<Visible>True</Visible>
 			
-			<Position>-13.26 1.72 0.0</Position>
+			<Position>-13.255 1.72 0.0</Position>
 			<Rotation>0.0 0.0 0.0</Rotation>
 			<Scale>1.0 1.0 1.0</Scale>
 			
@@ -1765,7 +1765,7 @@
 			<Mesh>Sponza_Lion</Mesh>
 			<Visible>True</Visible>
 			
-			<Position>13.26 1.72 0.0</Position>
+			<Position>13.255 1.72 0.0</Position>
 			<Rotation>0.0 180.0 0.0</Rotation>
 			<Scale>1.0 1.0 1.0</Scale>
 			
