@@ -58,7 +58,7 @@ namespace LED_Engine
 
                 Maps.Name = XML.DocumentElement.SelectSingleNode("Name").InnerText;
 
-                Log.WriteLine("Load map: \"{0}\"", MapName);
+                Log.WriteLine("Loading map: \"{0}\"", MapName);
 
                 if (XML.DocumentElement.SelectNodes("Description").Count > 0)
                     Maps.Description = XML.DocumentElement.SelectSingleNode("Description").InnerText;
