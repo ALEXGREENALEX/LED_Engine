@@ -35,29 +35,28 @@
 	
 	<!--Materials-->
 	<Material>
-		<Name>Reflection</Name>
-		<Shader>ReflectRefract</Shader>
+		<Name>Reflection_1</Name>
+		<Shader></Shader>
 		<CullFace>True</CullFace>
-		<Kd>0.831 0.686 0.216 0.9</Kd>
-		<ReflectionFactor>1.0</ReflectionFactor>
+		<Kd>0.831 0.686 0.216</Kd>
+		<Reflection>1.0</Reflection>
 		
 		<Texture>
 			<Name>Cubemap_Storforsen</Name>
-			<TextureUnit>0</TextureUnit>
+			<TextureUnit>5</TextureUnit>
 		</Texture>
 	</Material>
 	
 	<Material>
-		<Name>Refraction</Name>
-		<Shader>ReflectRefract</Shader>
+		<Name>Reflection_2</Name>
+		<Shader></Shader>
 		<CullFace>True</CullFace>
-		<Kd>0.8 0.95 1.0 0.4</Kd>
-		<ReflectionFactor>0.1</ReflectionFactor>
-		<RefractiveIndex>0.9</RefractiveIndex>
+		<Kd>0.8 0.95 1.0</Kd>
+		<Reflection>0.1</Reflection>
 		
 		<Texture>
 			<Name>Cubemap_Storforsen</Name>
-			<TextureUnit>0</TextureUnit>
+			<TextureUnit>5</TextureUnit>
 		</Texture>
 	</Material>
 	
@@ -187,7 +186,7 @@
 	</Material>
 	<Material>
 		<Name>Sponza_Bricks</Name>
-		<Shader>ParallaxOcclusionMapping</Shader>
+		<Shader></Shader>
 		<ParallaxScale>0.02</ParallaxScale>
 		<CullFace>True</CullFace>
 		<!--<Kd>0.588</Kd>
@@ -274,6 +273,7 @@
 		<Name>Sponza_Floor</Name>
 		<Shader></Shader>
 		<CullFace>True</CullFace>
+		<Reflection>0.2</Reflection>
 		<!--<Kd>0.588</Kd>
 		<Ks>0.588</Ks>
 		<Ka>0.588</Ka>
@@ -289,6 +289,10 @@
 		<Texture>
 			<Name>Sponza_Floor_S</Name>
 			<TextureUnit>2</TextureUnit>
+		</Texture>
+		<Texture>
+			<Name>Cubemap_SaintLazarusChurch</Name>
+			<TextureUnit>5</TextureUnit>
 		</Texture>
 	</Material>
 	<Material>
@@ -591,7 +595,7 @@
 	<!--POM-->
 	<Material>
 		<Name>ParallaxMapping_1</Name>
-		<Shader>ParallaxOcclusionMapping</Shader>
+		<Shader></Shader>
 		<ParallaxScale>0.04</ParallaxScale>
 		<CullFace>True</CullFace>
 		
@@ -614,7 +618,7 @@
 	</Material>
 	<Material>
 		<Name>ParallaxMapping_2</Name>
-		<Shader>ParallaxOcclusionMapping</Shader>
+		<Shader></Shader>
 		<ParallaxScale>0.04</ParallaxScale>
 		<CullFace>True</CullFace>
 		
@@ -637,7 +641,7 @@
 	</Material>
 	<Material>
 		<Name>ParallaxMapping_3</Name>
-		<Shader>ParallaxOcclusionMapping</Shader>
+		<Shader></Shader>
 		<ParallaxScale>0.04</ParallaxScale>
 		<CullFace>True</CullFace>
 		

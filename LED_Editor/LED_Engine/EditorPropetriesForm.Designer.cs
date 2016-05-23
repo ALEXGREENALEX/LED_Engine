@@ -33,13 +33,23 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.listBox1 = new System.Windows.Forms.ListBox();
+            this.ModelsComboBox1 = new System.Windows.Forms.ComboBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.button1 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.ObjToolsPanel = new System.Windows.Forms.Panel();
+            this.VisibleCheckBox1 = new System.Windows.Forms.CheckBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.SclBoxZ = new System.Windows.Forms.TextBox();
+            this.SclBoxY = new System.Windows.Forms.TextBox();
+            this.SclBoxX = new System.Windows.Forms.TextBox();
             this.button5 = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.RotBoxZ = new System.Windows.Forms.TextBox();
+            this.RotBoxY = new System.Windows.Forms.TextBox();
+            this.RotBoxX = new System.Windows.Forms.TextBox();
             this.FileButton = new System.Windows.Forms.Button();
             this.ObjFileTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -49,16 +59,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.EngineCheckBox1 = new System.Windows.Forms.CheckBox();
             this.NameTextBox = new System.Windows.Forms.TextBox();
-            this.ModelsComboBox1 = new System.Windows.Forms.ComboBox();
-            this.RotBoxX = new System.Windows.Forms.TextBox();
-            this.RotBoxY = new System.Windows.Forms.TextBox();
-            this.RotBoxZ = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.SclBoxZ = new System.Windows.Forms.TextBox();
-            this.SclBoxY = new System.Windows.Forms.TextBox();
-            this.SclBoxX = new System.Windows.Forms.TextBox();
-            this.VisibleCheckBox1 = new System.Windows.Forms.CheckBox();
             this.groupBox2.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -113,6 +113,16 @@
             this.listBox1.TabIndex = 0;
             this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
+            // ModelsComboBox1
+            // 
+            this.ModelsComboBox1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.ModelsComboBox1.FormattingEnabled = true;
+            this.ModelsComboBox1.Location = new System.Drawing.Point(0, 0);
+            this.ModelsComboBox1.Name = "ModelsComboBox1";
+            this.ModelsComboBox1.Size = new System.Drawing.Size(272, 21);
+            this.ModelsComboBox1.TabIndex = 6;
+            this.ModelsComboBox1.SelectedIndexChanged += new System.EventHandler(this.ModelsComboBox1_SelectedIndexChanged);
+            // 
             // panel2
             // 
             this.panel2.Controls.Add(this.button1);
@@ -166,6 +176,7 @@
             this.button2.Text = "Remove";
             this.button2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // ObjToolsPanel
             // 
@@ -194,6 +205,47 @@
             this.ObjToolsPanel.Size = new System.Drawing.Size(272, 199);
             this.ObjToolsPanel.TabIndex = 3;
             // 
+            // VisibleCheckBox1
+            // 
+            this.VisibleCheckBox1.AutoSize = true;
+            this.VisibleCheckBox1.Location = new System.Drawing.Point(60, 3);
+            this.VisibleCheckBox1.Name = "VisibleCheckBox1";
+            this.VisibleCheckBox1.Size = new System.Drawing.Size(56, 17);
+            this.VisibleCheckBox1.TabIndex = 29;
+            this.VisibleCheckBox1.Text = "Visible";
+            this.VisibleCheckBox1.UseVisualStyleBackColor = true;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label4.Location = new System.Drawing.Point(3, 136);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(27, 17);
+            this.label4.TabIndex = 28;
+            this.label4.Text = "Scl";
+            // 
+            // SclBoxZ
+            // 
+            this.SclBoxZ.Location = new System.Drawing.Point(139, 135);
+            this.SclBoxZ.Name = "SclBoxZ";
+            this.SclBoxZ.Size = new System.Drawing.Size(36, 20);
+            this.SclBoxZ.TabIndex = 27;
+            // 
+            // SclBoxY
+            // 
+            this.SclBoxY.Location = new System.Drawing.Point(97, 135);
+            this.SclBoxY.Name = "SclBoxY";
+            this.SclBoxY.Size = new System.Drawing.Size(36, 20);
+            this.SclBoxY.TabIndex = 26;
+            // 
+            // SclBoxX
+            // 
+            this.SclBoxX.Location = new System.Drawing.Point(54, 135);
+            this.SclBoxX.Name = "SclBoxX";
+            this.SclBoxX.Size = new System.Drawing.Size(36, 20);
+            this.SclBoxX.TabIndex = 25;
+            // 
             // button5
             // 
             this.button5.Location = new System.Drawing.Point(6, 170);
@@ -202,6 +254,37 @@
             this.button5.TabIndex = 24;
             this.button5.Text = "Apply";
             this.button5.UseVisualStyleBackColor = true;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label2.Location = new System.Drawing.Point(3, 110);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(30, 17);
+            this.label2.TabIndex = 23;
+            this.label2.Text = "Rot";
+            // 
+            // RotBoxZ
+            // 
+            this.RotBoxZ.Location = new System.Drawing.Point(139, 109);
+            this.RotBoxZ.Name = "RotBoxZ";
+            this.RotBoxZ.Size = new System.Drawing.Size(36, 20);
+            this.RotBoxZ.TabIndex = 22;
+            // 
+            // RotBoxY
+            // 
+            this.RotBoxY.Location = new System.Drawing.Point(97, 109);
+            this.RotBoxY.Name = "RotBoxY";
+            this.RotBoxY.Size = new System.Drawing.Size(36, 20);
+            this.RotBoxY.TabIndex = 21;
+            // 
+            // RotBoxX
+            // 
+            this.RotBoxX.Location = new System.Drawing.Point(54, 109);
+            this.RotBoxX.Name = "RotBoxX";
+            this.RotBoxX.Size = new System.Drawing.Size(36, 20);
+            this.RotBoxX.TabIndex = 20;
             // 
             // FileButton
             // 
@@ -276,88 +359,6 @@
             this.NameTextBox.Name = "NameTextBox";
             this.NameTextBox.Size = new System.Drawing.Size(212, 20);
             this.NameTextBox.TabIndex = 3;
-            // 
-            // ModelsComboBox1
-            // 
-            this.ModelsComboBox1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.ModelsComboBox1.FormattingEnabled = true;
-            this.ModelsComboBox1.Location = new System.Drawing.Point(0, 0);
-            this.ModelsComboBox1.Name = "ModelsComboBox1";
-            this.ModelsComboBox1.Size = new System.Drawing.Size(272, 21);
-            this.ModelsComboBox1.TabIndex = 6;
-            this.ModelsComboBox1.SelectedIndexChanged += new System.EventHandler(this.ModelsComboBox1_SelectedIndexChanged);
-            // 
-            // RotBoxX
-            // 
-            this.RotBoxX.Location = new System.Drawing.Point(54, 109);
-            this.RotBoxX.Name = "RotBoxX";
-            this.RotBoxX.Size = new System.Drawing.Size(36, 20);
-            this.RotBoxX.TabIndex = 20;
-            // 
-            // RotBoxY
-            // 
-            this.RotBoxY.Location = new System.Drawing.Point(97, 109);
-            this.RotBoxY.Name = "RotBoxY";
-            this.RotBoxY.Size = new System.Drawing.Size(36, 20);
-            this.RotBoxY.TabIndex = 21;
-            // 
-            // RotBoxZ
-            // 
-            this.RotBoxZ.Location = new System.Drawing.Point(139, 109);
-            this.RotBoxZ.Name = "RotBoxZ";
-            this.RotBoxZ.Size = new System.Drawing.Size(36, 20);
-            this.RotBoxZ.TabIndex = 22;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label2.Location = new System.Drawing.Point(3, 110);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(30, 17);
-            this.label2.TabIndex = 23;
-            this.label2.Text = "Rot";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label4.Location = new System.Drawing.Point(3, 136);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(27, 17);
-            this.label4.TabIndex = 28;
-            this.label4.Text = "Scl";
-            // 
-            // SclBoxZ
-            // 
-            this.SclBoxZ.Location = new System.Drawing.Point(139, 135);
-            this.SclBoxZ.Name = "SclBoxZ";
-            this.SclBoxZ.Size = new System.Drawing.Size(36, 20);
-            this.SclBoxZ.TabIndex = 27;
-            // 
-            // SclBoxY
-            // 
-            this.SclBoxY.Location = new System.Drawing.Point(97, 135);
-            this.SclBoxY.Name = "SclBoxY";
-            this.SclBoxY.Size = new System.Drawing.Size(36, 20);
-            this.SclBoxY.TabIndex = 26;
-            // 
-            // SclBoxX
-            // 
-            this.SclBoxX.Location = new System.Drawing.Point(54, 135);
-            this.SclBoxX.Name = "SclBoxX";
-            this.SclBoxX.Size = new System.Drawing.Size(36, 20);
-            this.SclBoxX.TabIndex = 25;
-            // 
-            // VisibleCheckBox1
-            // 
-            this.VisibleCheckBox1.AutoSize = true;
-            this.VisibleCheckBox1.Location = new System.Drawing.Point(60, 3);
-            this.VisibleCheckBox1.Name = "VisibleCheckBox1";
-            this.VisibleCheckBox1.Size = new System.Drawing.Size(56, 17);
-            this.VisibleCheckBox1.TabIndex = 29;
-            this.VisibleCheckBox1.Text = "Visible";
-            this.VisibleCheckBox1.UseVisualStyleBackColor = true;
             // 
             // EditorPropetriesForm
             // 

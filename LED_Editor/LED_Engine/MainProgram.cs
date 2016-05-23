@@ -13,15 +13,10 @@ namespace LED_Engine
 {
     partial class Game
     {
-        public static bool GLContextIsLoaded = false;
+        public static bool ContextIsLoaded = false;
         public static GlfwWindowPtr Window = GlfwWindowPtr.Null;
 
         static KeyboardState KeybrdState;
-
-        //EDITOR
-        public static EditorTopForm editor_topform = new EditorTopForm();
-        public static EditorPropetriesForm editor_propetriesform = new EditorPropetriesForm();
-        public static EditorObjForm editor_objform = new EditorObjForm();
 
         [STAThread]
         private static void Main(string[] args)
@@ -44,20 +39,18 @@ namespace LED_Engine
             while (Settings.Window.NeedReinitWindow)
             {
                 ApplySettingsAndCreateWindow();
-                RescaleToWindowSize();
+                Engine.GetGLSettings();
+                Engine.LoadContentLists();
+
+                int FB_Width, FB_Height;
+                Glfw.GetFramebufferSize(Window, out FB_Width, out FB_Height);
+                FBO.Init(FB_Width, FB_Height);
+                RescaleToWindowSize(); // This function call FBO.Init()!!! That's is needed! (mb GLFW bug...)
+                
                 Settings.Window.NeedReinitWindow = false;
 
-                if (!GLContextIsLoaded)
+                if (!ContextIsLoaded)
                 {
-                    Engine.GetGLSettings();
-                    Engine.LoadContentLists();
-
-                    // FBO Init
-                    int FB_Width, FB_Height;
-                    Glfw.GetFramebufferSize(Window, out FB_Width, out FB_Height);
-                    FBO.Init(FB_Width, FB_Height);
-                    FPS.Font_Init();
-
                     Engine.LoadEngineContent();
 
                     //Load Map
@@ -66,7 +59,7 @@ namespace LED_Engine
                     else
                         Maps.LoadMap("Sponza"); //Sponza //SampleMap //Materials_Test_Map
 
-                    GLContextIsLoaded = true;
+                    ContextIsLoaded = true;
                 }
 
                 // On...DoSomething functions
@@ -77,15 +70,6 @@ namespace LED_Engine
                 Glfw.SetWindowFocusCallback(Window, OnFocusChanged);
                 Glfw.SetWindowPosCallback(Window, OnWindowPositionChange);
                 Glfw.SetWindowSizeCallback(Window, OnWindowResize);
-
-                //EDITOR
-                editor_topform.Show();
-                editor_topform.Focus();
-                editor_propetriesform.Show();
-                editor_propetriesform.Focus();
-                editor_objform.Show();
-                editor_objform.Focus();
-                editor_topform.Focus();
 
                 #region Main Loop
                 while (!(Glfw.WindowShouldClose(Window) || Settings.Window.NeedReinitWindow))

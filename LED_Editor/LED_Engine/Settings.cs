@@ -95,8 +95,29 @@ namespace LED_Engine
         public static class Graphics
         {
             public static int VSyncSwapInterval = 0;
-
             public static bool UsePostEffects = true;
+
+            static int anisotropicFiltering = -1;
+            public static int AnisotropicFiltering
+            {
+                get { return anisotropicFiltering; }
+                set
+                {
+                    switch (value)
+                    {
+                        case 1: //OFF
+                        case 2: //2x
+                        case 4: //4x
+                        case 8: //8x
+                        case 16: //16x
+                            Settings.Graphics.anisotropicFiltering = value;
+                            break;
+                        default:
+                            Settings.Graphics.anisotropicFiltering = -1; // Default(Maximum) value (a lot of times = 16x)
+                            break;
+                    }
+                }
+            }
 
             public static class FXAA
             {

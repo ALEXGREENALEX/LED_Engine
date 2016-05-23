@@ -36,6 +36,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>
@@ -45,14 +46,6 @@
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\Not Sure\Documents\OpenTK\1.1\Binaries\OpenTK\Release\OpenTK.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenTK.GLControl, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\Not Sure\Documents\OpenTK\1.1\Binaries\OpenTK\Release\OpenTK.GLControl.dll</HintPath>
-    </Reference>
     <Reference Include="Pencil.Gaming">
       <HintPath>..\_Libs\Pencil.Gaming\Pencil.Gaming\bin\Pencil.Gaming.dll</HintPath>
     </Reference>
@@ -71,19 +64,19 @@
     <Compile Include="EditorObjForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="EditorObjForm.Designer.cs">
+    <Compile Include="EditorObjForm.designer.cs">
       <DependentUpon>EditorObjForm.cs</DependentUpon>
     </Compile>
     <Compile Include="EditorPropetriesForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="EditorPropetriesForm.Designer.cs">
+    <Compile Include="EditorPropetriesForm.designer.cs">
       <DependentUpon>EditorPropetriesForm.cs</DependentUpon>
     </Compile>
     <Compile Include="EditorTopForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="EditorTopForm.Designer.cs">
+    <Compile Include="EditorTopForm.designer.cs">
       <DependentUpon>EditorTopForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Engine.cs" />
@@ -115,15 +108,6 @@
     <Compile Include="Settings.cs" />
     <Compile Include="Shader.cs" />
     <Compile Include="Texture.cs" />
-    <Compile Include="TextureEditor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TextureEditor.Designer.cs">
-      <DependentUpon>TextureEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="TextureEditorFunc.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <EmbeddedResource Include="EditorObjForm.resx">
       <DependentUpon>EditorObjForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -141,9 +125,7 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="TextureEditor.resx">
-      <DependentUpon>TextureEditor.cs</DependentUpon>
-    </EmbeddedResource>
+    <None Include="ClassDiagram1.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

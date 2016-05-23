@@ -55,6 +55,7 @@ namespace LED_Engine
                 catch { }
 
                 Settings.Graphics.VSyncSwapInterval = Convert.ToInt32(XML.DocumentElement.SelectSingleNode("VSyncSwapInterval").InnerText);
+                Settings.Graphics.AnisotropicFiltering = Convert.ToInt32(XML.DocumentElement.SelectSingleNode("AnisotropicFiltering").InnerText);
                 Settings.Graphics.FXAA.Enabled = Convert.ToBoolean(XML.DocumentElement.SelectSingleNode("FXAAEnabled").InnerText);
 
                 Settings.Graphics.UsePostEffects = Convert.ToBoolean(XML.DocumentElement.SelectSingleNode("UsePostEffects").InnerText);
@@ -170,6 +171,8 @@ namespace LED_Engine
         {
             try
             {
+                ClearLists();
+
                 #region Paths
                 string[] Paths = new string[] { Settings.Paths.EngineContentPath, Settings.Paths.GameDataPath };
 

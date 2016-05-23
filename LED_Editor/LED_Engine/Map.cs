@@ -15,6 +15,9 @@ namespace LED_Engine
         public static string Name = String.Empty;
         public static string Description = String.Empty;
 
+        public static Vector3 PlayerStartPos = Vector3.Zero;
+        public static Vector2 PlayerStartRot = Vector2.Zero;
+
         public static void LoadMapList(string MapPath, bool EngineContent)
         {
             string[] Maps = Directory.GetFiles(MapPath, "*.xml", SearchOption.TopDirectoryOnly);
@@ -58,7 +61,7 @@ namespace LED_Engine
 
                 Maps.Name = XML.DocumentElement.SelectSingleNode("Name").InnerText;
 
-                Log.WriteLine("Load map: \"{0}\"", MapName);
+                Log.WriteLine("Loading map: \"{0}\"", MapName);
 
                 if (XML.DocumentElement.SelectNodes("Description").Count > 0)
                     Maps.Description = XML.DocumentElement.SelectSingleNode("Description").InnerText;
@@ -72,14 +75,18 @@ namespace LED_Engine
                     {
                         string[] Position = xmlNode.SelectSingleNode("Position").InnerText.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
                         Game.MainCamera.Position = new Vector3(float.Parse(Position[0]), float.Parse(Position[1]), float.Parse(Position[2]));
+                        PlayerStartPos = Game.MainCamera.Position;
                     }
 
                     if (xmlNode.SelectNodes("Rotation").Count > 0)
                     {
                         string[] Rotation = xmlNode.SelectSingleNode("Rotation").InnerText.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                        float Yaw = float.Parse(Rotation[0]);
+                        float Pitch = float.Parse(Rotation[1]);
                         Game.MainCamera.YawPitch = new Vector2(
-                            MathHelper.DegreesToRadians(-float.Parse(Rotation[0])),
-                            MathHelper.DegreesToRadians(float.Parse(Rotation[1])));
+                            MathHelper.DegreesToRadians(-Yaw),
+                            MathHelper.DegreesToRadians(Pitch));
+                        PlayerStartRot = new Vector2(Yaw, Pitch);
                     }
                 }
                 #endregion

@@ -18,9 +18,6 @@ float Vignette(vec2 UV, float Radius, float Softness)
 // float Opacity: range [0..1], default 0.5
 vec3 Vignette(vec3 InColor, vec2 UV, float Radius, float Softness, float Opacity)
 {
-	if (Opacity <= 0.0)
-		return InColor;
-	
 	float Vignette = Vignette(UV, Radius, Softness);
 	return mix(InColor, InColor * Vignette, Opacity);
 }

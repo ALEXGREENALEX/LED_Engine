@@ -216,16 +216,10 @@ namespace LED_Engine
                         material.Shininess = float.Parse(xmlNodeList.Item(0).InnerText);
                     #endregion
 
-                    #region Reflection Factor
-                    xmlNodeList = xmlNode.SelectNodes("ReflectionFactor");
+                    #region Reflection
+                    xmlNodeList = xmlNode.SelectNodes("Reflection");
                     if (xmlNodeList.Count > 0)
-                        material.ReflectionFactor = float.Parse(xmlNodeList.Item(0).InnerText);
-                    #endregion
-
-                    #region Refractive Index
-                    xmlNodeList = xmlNode.SelectNodes("RefractiveIndex");
-                    if (xmlNodeList.Count > 0)
-                        material.RefractiveIndex = float.Parse(xmlNodeList.Item(0).InnerText);
+                        material.Reflection = float.Parse(xmlNodeList.Item(0).InnerText);
                     #endregion
 
                     #region ParallaxScale
@@ -326,25 +320,14 @@ namespace LED_Engine
         static Random R = new Random();
         public Vector4 Kd = new Vector4((float)R.NextDouble(), (float)R.NextDouble(), (float)R.NextDouble(), 1.0f);
         public Vector3 Ks = new Vector3(0.2f);
-        public Vector3 Ka = new Vector3(0.1f);
+        public Vector3 Ka = new Vector3(1.0f);
         public Vector3 Ke = new Vector3(0.0f);
         public float Shininess = 50.0f;
 
         /// <summary>
-        /// Коефициент отражения (процент отраженного света). Диапазон 0.0 - 1.0.<br>
-        /// По умолчанию = 0.5;
-        /// Данный параметр позволяет выбирать между отражением (при 1.0) ИЛИ преломлением (при 0.0)!
-        /// Если приломления не будет (RefractiveIndex = 1), как и отражений (ReflectionFactor = 0),
-        /// то объект будет невидимым!
+        /// Коефициент отражения (процент отраженного света). Диапазон 0.0 - 1.0. По умолчанию = 0.5.
         /// </summary>
-        public float ReflectionFactor = 0.5f;
-
-        /// <summary>
-        /// Коефициент преломлнения. Диапазон 0.0 - 1.0.
-        /// По умолчанию = 1; Refraction = Угол1/Угол2. Рекомендуется брать примерно от 0.9 до 1.1.
-        /// Работает только при ReflectionFactor меньше 1.0!
-        /// </summary>
-        public float RefractiveIndex = 1.0f;
+        public float Reflection = 0.0f;
 
         public float ParallaxScale = 0.04f;
 
@@ -365,8 +348,7 @@ namespace LED_Engine
             Ks = Original.Ks;
             Ke = Original.Ke;
             Shininess = Original.Shininess;
-            ReflectionFactor = Original.ReflectionFactor;
-            RefractiveIndex = Original.RefractiveIndex;
+            Reflection = Original.Reflection;
             ParallaxScale = Original.ParallaxScale;
 
             Textures = new Texture[Original.Textures.Length];

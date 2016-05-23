@@ -44,10 +44,8 @@
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.meshBrowserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.shaderBrowserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.materialBrowserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.engineConfigToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.runEngineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.lIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.extraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip2.SuspendLayout();
@@ -100,6 +98,7 @@
             this.SaveFileButton.Name = "SaveFileButton";
             this.SaveFileButton.Size = new System.Drawing.Size(36, 36);
             this.SaveFileButton.Text = "Save";
+            this.SaveFileButton.Click += new System.EventHandler(this.SaveFileButton_Click);
             // 
             // toolStripSeparator1
             // 
@@ -176,44 +175,35 @@
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.meshBrowserToolStripMenuItem,
-            this.shaderBrowserToolStripMenuItem,
             this.materialBrowserToolStripMenuItem,
-            this.engineConfigToolToolStripMenuItem,
-            this.runEngineToolStripMenuItem});
+            this.lIToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
             // 
             // meshBrowserToolStripMenuItem
             // 
+            this.meshBrowserToolStripMenuItem.CheckOnClick = true;
             this.meshBrowserToolStripMenuItem.Name = "meshBrowserToolStripMenuItem";
-            this.meshBrowserToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
-            this.meshBrowserToolStripMenuItem.Text = "Mesh browser";
-            // 
-            // shaderBrowserToolStripMenuItem
-            // 
-            this.shaderBrowserToolStripMenuItem.Name = "shaderBrowserToolStripMenuItem";
-            this.shaderBrowserToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
-            this.shaderBrowserToolStripMenuItem.Text = "Shader browser";
+            this.meshBrowserToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.meshBrowserToolStripMenuItem.Text = "Object settings";
+            this.meshBrowserToolStripMenuItem.Click += new System.EventHandler(this.meshBrowserToolStripMenuItem_Click);
             // 
             // materialBrowserToolStripMenuItem
             // 
+            this.materialBrowserToolStripMenuItem.CheckOnClick = true;
             this.materialBrowserToolStripMenuItem.Name = "materialBrowserToolStripMenuItem";
-            this.materialBrowserToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
-            this.materialBrowserToolStripMenuItem.Text = "Material editor";
+            this.materialBrowserToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.materialBrowserToolStripMenuItem.Text = "Texture settings";
             this.materialBrowserToolStripMenuItem.Click += new System.EventHandler(this.materialBrowserToolStripMenuItem_Click);
             // 
-            // engineConfigToolToolStripMenuItem
+            // lIToolStripMenuItem
             // 
-            this.engineConfigToolToolStripMenuItem.Name = "engineConfigToolToolStripMenuItem";
-            this.engineConfigToolToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
-            this.engineConfigToolToolStripMenuItem.Text = "Engine config tool";
-            // 
-            // runEngineToolStripMenuItem
-            // 
-            this.runEngineToolStripMenuItem.Name = "runEngineToolStripMenuItem";
-            this.runEngineToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
-            this.runEngineToolStripMenuItem.Text = "Run engine";
+            this.lIToolStripMenuItem.CheckOnClick = true;
+            this.lIToolStripMenuItem.Name = "lIToolStripMenuItem";
+            this.lIToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.lIToolStripMenuItem.Text = "Light settings";
+            this.lIToolStripMenuItem.Click += new System.EventHandler(this.lIToolStripMenuItem_Click);
             // 
             // extraToolStripMenuItem
             // 
@@ -240,7 +230,9 @@
             this.MinimizeBox = false;
             this.Name = "EditorTopForm";
             this.Text = "EditorTopForm";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EditorTopForm_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.EditorTopForm_FormClosed);
+            this.Load += new System.EventHandler(this.EditorTopForm_Load);
             this.toolStrip2.ResumeLayout(false);
             this.toolStrip2.PerformLayout();
             this.menuStrip2.ResumeLayout(false);
@@ -267,11 +259,9 @@
         private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem meshBrowserToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem shaderBrowserToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem materialBrowserToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem engineConfigToolToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem runEngineToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem extraToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem lIToolStripMenuItem;
     }
 }

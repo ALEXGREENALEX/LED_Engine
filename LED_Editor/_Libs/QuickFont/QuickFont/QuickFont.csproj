@@ -45,7 +45,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Pencil.Gaming">
-      <HintPath>..\..\..\Documents\Visual Studio 2013\Projects\LED\LED_Engine\_Libs\Pencil.Gaming\Pencil.Gaming\bin\Pencil.Gaming.dll</HintPath>
+      <HintPath>..\..\Pencil.Gaming\Pencil.Gaming\bin\Pencil.Gaming.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />

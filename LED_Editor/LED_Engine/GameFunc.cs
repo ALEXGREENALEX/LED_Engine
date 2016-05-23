@@ -23,9 +23,6 @@ namespace LED_Engine
         public static Mesh DebugPointLight = new Mesh();
         public static Mesh DebugSpotLight = new Mesh();
 
-        //EDITOR
-        public static bool focused = false;
-
         static void ApplySettingsAndCreateWindow()
         {
             #region Apply render settings BEFORE window init
@@ -145,6 +142,7 @@ namespace LED_Engine
             Glfw.MakeContextCurrent(Window);
 
             #region Apply render settings AFTER window init
+            Log.WriteLine("GPU: " + GL.GetString(StringName.Renderer));
             Settings.Window.IsFocused = true;
             #region Mouse jump fix
             Glfw.SetInputMode(Window, InputMode.CursorMode, CursorMode.CursorCaptured);
@@ -175,10 +173,11 @@ namespace LED_Engine
 
             if (FB_Width > 0 && FB_Height > 0)
             {
-                MainCamera.SetProjectionMatrix(ProjectionTypes.Perspective, FB_Width, FB_Height, MainCamera.zNear, MainCamera.zFar, MainCamera.FOV);
-                FPS.FPS_Font_ProjectionMatrix = Matrix4.CreateOrthographicOffCenter(0, FB_Width, 0, FB_Height, -1.0f, 1.0f);
-                GL.Viewport(0, 0, FB_Width, FB_Height);
                 FBO.Init(FB_Width, FB_Height);
+                MainCamera.SetProjectionMatrix(ProjectionTypes.Perspective, FB_Width, FB_Height, MainCamera.zNear, MainCamera.zFar, MainCamera.FOV);
+                GL.Viewport(0, 0, FB_Width, FB_Height);
+                FPS.Font_Init();
+                FPS.FPS_Font_ProjectionMatrix = Matrix4.CreateOrthographicOffCenter(0, FB_Width, 0, FB_Height, -1.0f, 1.0f);
             }
         }
 
@@ -190,7 +189,7 @@ namespace LED_Engine
 
             if (FrustumCulling.SphereInFrustum(m.Position, m.BoundingSphere.Outer * Scale))
                 for (int i = 0; i < m.Parts.Count; i++)
-                    if (FrustumCulling.SphereInFrustum(m.Position + m.Parts[i].BoundingBox.Position, m.Parts[i].BoundingSphere.Outer * Scale))
+                    if (FrustumCulling.SphereInFrustum(m.Position + m.Parts[i].BoundingSphere.Position, m.Parts[i].BoundingSphere.Outer * Scale))
                         Draw(m, m.Parts[i]);
         }
 
@@ -302,14 +301,9 @@ namespace LED_Engine
                 GL.Uniform1(TempLocation, v.Material.Shininess);
 
             // Передаем шейдеру значение ReflectFactor, если шейдер поддерживает это.
-            TempLocation = shader.GetUniform("ReflectFactor");
+            TempLocation = shader.GetUniform("Reflection");
             if (TempLocation != -1)
-                GL.Uniform1(TempLocation, v.Material.ReflectionFactor);
-
-            // Передаем шейдеру значение RefractiveIndex, если шейдер поддерживает это.
-            TempLocation = shader.GetUniform("RefractIndex");
-            if (TempLocation != -1)
-                GL.Uniform1(TempLocation, v.Material.RefractiveIndex);
+                GL.Uniform1(TempLocation, v.Material.Reflection);
 
             // Передаем шейдеру Parallax Scale, если шейдер поддерживает это.
             TempLocation = shader.GetUniform("ParallaxScale");

@@ -26,7 +26,7 @@ namespace QuickFont
         public QFontDrawing(bool useDefaultBlendFunction = true)
         {
             _useDefaultBlendFunction = useDefaultBlendFunction;
-            _glFontDrawingPimitives =new List<QFontDrawingPimitive>();
+            _glFontDrawingPimitives = new List<QFontDrawingPimitive>();
             InitialiseState();
         }
 
@@ -175,7 +175,7 @@ namespace QuickFont
 
             //var viewportTransform = new Viewport(left, top, right - left, bottom - top);
             Viewport viewportTransform = ViewportHelper.GetViewportFromOrthographicProjection(ref _projectionMatrix);
-            fontScale = Math.Abs(ViewportHelper.CurrentViewport.Value.Height/viewportTransform.Height);
+            fontScale = Math.Abs(ViewportHelper.CurrentViewport.Value.Height / viewportTransform.Height);
             return viewportTransform;
         }
 
@@ -217,7 +217,7 @@ namespace QuickFont
                 GL.DrawArrays(dpt, start, primitive.CurrentVertexRepr.Count);
                 start += primitive.CurrentVertexRepr.Count;
             }
-            
+
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
         }
 
@@ -287,7 +287,7 @@ namespace QuickFont
         {
             var dp = new QFontDrawingPimitive(font);
             DrawingPimitiveses.Add(dp);
-            if( color.HasValue )
+            if (color.HasValue)
                 return dp.Print(text, position, alignment, color.Value, clippingRectangle);
             return dp.Print(text, position, alignment, clippingRectangle);
         }
@@ -299,7 +299,7 @@ namespace QuickFont
             return dp.Print(text, position, maxSize, alignment, clippingRectangle);
         }
 
-        public SizeF Print(QFont font, string text, Vector3 position, SizeF maxSize, QFontAlignment alignment, QFontRenderOptions opt )
+        public SizeF Print(QFont font, string text, Vector3 position, SizeF maxSize, QFontAlignment alignment, QFontRenderOptions opt)
         {
             var dp = new QFontDrawingPimitive(font, opt);
             DrawingPimitiveses.Add(dp);
@@ -343,7 +343,8 @@ namespace QuickFont
                 if (disposing)
                 {
                     //QFontDrawingPimitive.Font.FontData.Dispose();
-                    _vertexArrayObject.Dispose();
+                    if (_vertexArrayObject != null)
+                        _vertexArrayObject.Dispose();
                 }
 
                 // Note disposing has been done.

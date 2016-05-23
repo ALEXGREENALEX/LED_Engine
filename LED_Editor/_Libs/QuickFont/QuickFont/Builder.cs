@@ -83,7 +83,7 @@ namespace QuickFont
 
             return minSize;
         }
-
+я
         /// <summary>
         /// Returns true if all glyph widths are within 5% of each other
         /// </summary>

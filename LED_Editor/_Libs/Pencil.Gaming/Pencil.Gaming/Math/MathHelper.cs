@@ -183,33 +183,29 @@ namespace Pencil.Gaming.MathUtils
             }
         }
 
-        /// <summary>
-        /// Returns an approximation of the inverse square root of left number.
-        /// </summary>
-        /// <param name="x">A number.</param>
-        /// <returns>An approximation of the inverse square root of the specified number, with an upper error bound of 0.001</returns>
-        /// <remarks>
-        /// This is an improved implementation of the the method known as Carmack's inverse square root
-        /// which is found in the Quake III source code. This implementation comes from
-        /// http://www.codemaestro.com/reviews/review00000105.html. For the history of this method, see
-        /// http://www.beyond3d.com/content/articles/8/
-        /// </remarks>
-        public static double InverseSqrtFast(double x)
-        {
-            return InverseSqrtFast((float)x);
-            // TODO: The following code is wrong. Fix it, to improve precision.
-#if false
-            unsafe
-            {
-                double xhalf = 0.5f * x;
-                int i = *(int*)&x;              // Read bits as integer.
-                i = 0x5f375a86 - (i >> 1);      // Make an initial guess for Newton-Raphson approximation
-                x = *(float*)&i;                // Convert bits back to float
-                x = x * (1.5f - xhalf * x * x); // Perform left single Newton-Raphson step.
-                return x;
-            }
-#endif
-        }
+		/// <summary>
+		/// Returns an approximation of the inverse square root of left number.
+		/// </summary>
+		/// <param name="x">A number.</param>
+		/// <returns>An approximation of the inverse square root of the specified number, with an upper error bound of 0.001</returns>
+		/// <remarks>
+		/// This is an improved implementation of the the method known as Carmack's inverse square root
+		/// which is found in the Quake III source code. This implementation comes from
+		/// http://www.codemaestro.com/reviews/review00000105.html. For the history of this method, see
+		/// http://www.beyond3d.com/content/articles/8/. The 64 bit implementation uses a different magic
+		/// demon number found at https://en.wikipedia.org/wiki/Fast_inverse_square_root#History_and_investigation
+		/// </remarks>
+		public static double InverseSqrtFast(double x) {
+			unsafe
+			{
+				double xhalf = 0.5 * x;
+				long i = *(long*)&x;			  // Read bits as long integer.
+				i = 0x5fe6eb50c7b537a9 - (i >> 1);	  // what the fuck?
+				x = *(double*)&i;				// Convert bits back to double
+				x = x * (1.5f - xhalf * x * x); // Perform left single Newton-Raphson step.
+				return x;
+			}
+		}
 
         #endregion
 
@@ -327,6 +323,32 @@ namespace Pencil.Gaming.MathUtils
             return Math.Max(Math.Min(n, max), min);
         }
 
+        #endregion
+
+        #region Lerp
+        /// <summary>
+        /// Linearly interpolates between two values. 
+        /// </summary>
+        /// <param name="value1">Source value.</param>
+        /// <param name="value2">Source value.</param>
+        /// <param name="amount">Value between 0 and 1 indicating the weight of value2. </param>
+        /// <returns>Interpolated value.</returns>
+        public static float Lerp(float value1, float value2, float amount)
+        {
+            return value1 + (value2 - value1) * amount;
+        }
+
+        /// <summary>
+        /// Linearly interpolates between two values. 
+        /// </summary>
+        /// <param name="value1">Source value.</param>
+        /// <param name="value2">Source value.</param>
+        /// <param name="amount">Value between 0 and 1 indicating the weight of value2. </param>
+        /// <returns>Interpolated value.</returns>
+        public static double Lerp(double value1, double value2, double amount)
+        {
+            return value1 + (value2 - value1) * amount;
+        }
         #endregion
 
         #endregion

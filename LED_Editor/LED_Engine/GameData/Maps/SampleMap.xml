@@ -75,11 +75,11 @@
 			<Visible>true</Visible>
 			
 			<Position>0.0 1.0 0.0</Position>
-			<Rotation>0.0 0.0 0.0</Rotation>
+			<Rotation>90.0 0.0 0.0</Rotation>
 			<Scale>1.0 1.0 1.0</Scale>
 			
 			<Materials>
-				<Material>Refraction</Material>
+				<Material>Reflection_1</Material>
 			</Materials>
 		</Mesh>
 		<Mesh>
@@ -89,11 +89,11 @@
 			<Visible>true</Visible>
 			
 			<Position>0.0 2.0 0.0</Position>
-			<Rotation>0.0 0.0 0.0</Rotation>
+			<Rotation>90.0 0.0 0.0</Rotation>
 			<Scale>1.0 1.0 1.0</Scale>
 			
 			<Materials>
-				<Material>Reflection</Material>
+				<Material>Reflection_2</Material>
 			</Materials>
 		</Mesh>
 	</Model>
@@ -214,15 +214,15 @@
 		<Name>AmbientLight</Name>
 		<Type>Ambient</Type>
 		<Enabled>true</Enabled>
-		<Diffuse>0.5 0.5 0.5</Diffuse>
+		<Diffuse>0.05</Diffuse>
 	</Light>
 	<Light>
 		<Name>DirectionalLight_1</Name>
 		<Type>Directional</Type>
 		<Enabled>true</Enabled>
-		<Diffuse>0.5 0.5 0.5</Diffuse>
+		<Diffuse>1.0</Diffuse>
 		<Specular>0.1 0.3 0.9</Specular>
-		<Direction>0.0 90.0</Direction>
+		<Direction>270.0 60.0</Direction>
 	</Light>
 	<Light>
 		<Name>PointLight_1</Name>

@@ -5,8 +5,11 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
 using System.Xml;
+
 using Pencil.Gaming;
 using Pencil.Gaming.Graphics;
+
+using PixelFormat = Pencil.Gaming.Graphics.PixelFormat;
 
 namespace LED_Engine
 {
@@ -14,12 +17,6 @@ namespace LED_Engine
     {
         public static List<Texture> TEXTURES = new List<Texture>(); // Loaded Textures
         public static List<Texture> TexturesList = new List<Texture>(); // All Textures
-
-        //FOR EDITOR
-        public static List<Texture> GetTexturesList()
-        {
-            return TexturesList;
-        }
 
         public static void LoadTexturesList(string XmlFile, string TexturePath, bool EngineContent)
         {
@@ -322,10 +319,6 @@ namespace LED_Engine
         public TextureWrapMode WrapR = TextureWrapMode.ClampToEdge;
         public TextureEnvMode EnvironmentMode = TextureEnvMode.Modulate; //Modulate - default value in OpenGL
 
-        //EDITOR VARIABLES
-        public bool UndefinedMagFilter = true;
-        public bool UndefinedMinFilter = true;
-
         public void Load_Texture2D()
         {
             try
@@ -359,7 +352,7 @@ namespace LED_Engine
                     ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
                 GL.TexImage2D(TextureTarget, 0, PixelInternalFormat.Rgba, data.Width, data.Height, 0,
-                    Pencil.Gaming.Graphics.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
+                    PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
 
                 Image.UnlockBits(data);
                 data = null;
@@ -371,6 +364,8 @@ namespace LED_Engine
                 if (AnisotropicFiltering && Glfw.ExtensionSupported("GL_EXT_texture_filter_anisotropic"))
                 {
                     int MaxAniso = GL.GetInteger((GetPName)ExtTextureFilterAnisotropic.MaxTextureMaxAnisotropyExt);
+                    if (Settings.Graphics.AnisotropicFiltering != -1)
+                        MaxAniso = Math.Min(MaxAniso, Settings.Graphics.AnisotropicFiltering);
                     GL.TexParameter(TextureTarget, (TextureParameterName)ExtTextureFilterAnisotropic.TextureMaxAnisotropyExt, MaxAniso);
                 }
 
@@ -454,7 +449,7 @@ namespace LED_Engine
                         data = CubemapTextures[i].LockBits(new System.Drawing.Rectangle(0, 0, CubemapTextures[i].Width,
                             CubemapTextures[i].Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                         GL.TexImage2D(targets[5 - i], 0, PixelInternalFormat.Rgba8, data.Width, data.Height, 0,
-                            Pencil.Gaming.Graphics.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
+                            PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
                         CubemapTextures[i].UnlockBits(data);
                     }
                     data = null;
@@ -466,6 +461,8 @@ namespace LED_Engine
                     if (AnisotropicFiltering && Glfw.ExtensionSupported("GL_EXT_texture_filter_anisotropic"))
                     {
                         int MaxAniso = GL.GetInteger((GetPName)ExtTextureFilterAnisotropic.MaxTextureMaxAnisotropyExt);
+                        if (Settings.Graphics.AnisotropicFiltering != -1)
+                            MaxAniso = Math.Min(MaxAniso, Settings.Graphics.AnisotropicFiltering);
                         GL.TexParameter(TextureTarget, (TextureParameterName)ExtTextureFilterAnisotropic.TextureMaxAnisotropyExt, MaxAniso);
                     }
 

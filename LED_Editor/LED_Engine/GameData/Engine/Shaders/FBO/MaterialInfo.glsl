@@ -6,5 +6,6 @@ struct MaterialInfo {
 	float S;		// Specular shininess factor
 };
 
-uniform bool TexUnits[min(min(gl_MaxTextureImageUnits, gl_MaxVertexTextureImageUnits), gl_MaxGeometryTextureImageUnits)]; // Use Texture Units?
 // TexUnits[] is used for check, have Material some texture in TextureUnit or not.
+//uniform bool TexUnits[min(min(gl_MaxTextureImageUnits, gl_MaxVertexTextureImageUnits), gl_MaxGeometryTextureImageUnits)];
+uniform bool TexUnits[gl_MaxTextureImageUnits]; // Use Texture Units? (Check Fragment shader only for optimization)

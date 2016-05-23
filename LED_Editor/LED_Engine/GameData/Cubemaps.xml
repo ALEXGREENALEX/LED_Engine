@@ -41,4 +41,15 @@
 		<File>negz.jpg</File>
 		<Size>256</Size>
 	</CubemapTexture>
+	<CubemapTexture>
+		<Name>Cubemap_SaintLazarusChurch</Name>
+		<Dir>SaintLazarusChurch</Dir>
+		<File>posx.jpg</File>
+		<File>negx.jpg</File>
+		<File>posy.jpg</File>
+		<File>negy.jpg</File>
+		<File>posz.jpg</File>
+		<File>negz.jpg</File>
+		<Size>256</Size>
+	</CubemapTexture>
 </CubemapTextures>

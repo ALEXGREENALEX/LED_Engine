@@ -5,4 +5,13 @@
 		<MagFilter>Nearest</MagFilter>
 		<MinFilter>Nearest</MinFilter>
 	</Texture>
+	<Texture>
+		<Name>SSAO_RandomNormals</Name>
+		<File>SSAO_RandomNormals.png</File>
+		<MagFilter>Nearest</MagFilter>
+		<MinFilter>Nearest</MinFilter>
+		<Mipmaps>False</Mipmaps>
+		<TextureWrapS>Repeat</TextureWrapS>
+		<TextureWrapT>Repeat</TextureWrapT>
+	</Texture>
 </Textures>

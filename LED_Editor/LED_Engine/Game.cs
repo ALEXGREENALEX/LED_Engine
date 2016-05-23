@@ -16,6 +16,8 @@ namespace LED_Engine
 {
     partial class Game
     {
+        static EditorTopForm EditorMainForm;
+
         static void OnError(GlfwError ErrCode, string Description)
         {
             Log.WriteLineRed("GLFW Error ({0}): {1}", ErrCode, Description);
@@ -30,10 +32,7 @@ namespace LED_Engine
         static void OnKeyPress(GlfwWindowPtr window, Key KeyCode, int Scancode, KeyAction Action, KeyModifiers Mods)
         {
             if (KeyCode == Key.Escape)
-            {
-                focused = false;
-                editor_topform.Focus();
-            }
+                Glfw.SetWindowShouldClose(window, true);
 
             if ((Mods == KeyModifiers.Alt || Mods == KeyModifiers.AltGr) && KeyCode == Key.Enter && Action == KeyAction.Press)
             {
@@ -95,8 +94,9 @@ namespace LED_Engine
 
             if (KeyCode == Key.F12 && Action == KeyAction.Press)
             {
-                LightSettings lightSettings = new LightSettings();
-                lightSettings.Show();
+                if (EditorMainForm == null || EditorMainForm.IsDisposed)
+                    EditorMainForm = new EditorTopForm();
+                EditorMainForm.Show();
             }
         }
 
@@ -108,21 +108,17 @@ namespace LED_Engine
             //Glfw.SetCursorPos(Window,
             //    (double)(Settings.Window.X + Settings.Window.Width / 2),
             //    (double)(Settings.Window.Y + Settings.Window.Height / 2));
-            focused = true;
         }
 
         static void OnMouseMove(GlfwWindowPtr window, double posx, double posy)
         {
             if (Settings.Window.IsFocused)
             {
-                if (focused)
-                {
-                    double CenterX = Settings.Window.X + Settings.Window.Width / 2;
-                    double CenterY = Settings.Window.Y + Settings.Window.Height / 2;
+                double CenterX = Settings.Window.X + Settings.Window.Width / 2;
+                double CenterY = Settings.Window.Y + Settings.Window.Height / 2;
 
-                    MainCamera.AddRotation((float)(CenterX - posx), (float)(CenterY - posy));
-                    Glfw.SetCursorPos(window, CenterX, CenterY);
-                }
+                MainCamera.AddRotation((float)(CenterX - posx), (float)(CenterY - posy));
+                Glfw.SetCursorPos(window, CenterX, CenterY);
             }
         }
 
@@ -134,7 +130,7 @@ namespace LED_Engine
 
         static void OnWindowResize(GlfwWindowPtr window, int Width, int Height)
         {
-            if (Width > 0 || Height > 0)
+            if (Width > 0 && Height > 0)
             {
                 Settings.Window.Width = Width;
                 Settings.Window.Height = Height;
@@ -192,43 +188,40 @@ namespace LED_Engine
             // Проверяем нажатия клавиш каждый кадр, а не по прерыванию!
             KeybrdState = KeyboardState.GetState(Window);
 
-            if (focused == true)
-            {
-                float camMoveSens = 5.0f * FPS.Period;
-                float camRotateSens = 200.0f * FPS.Period;
-                float MoveX = 0.0f, MoveY = 0.0f, MoveZ = 0.0f,
-                    RotateX = 0.0f, RotateY = 0.0f;
+            float camMoveSens = 5.0f * FPS.Period;
+            float camRotateSens = 200.0f * FPS.Period;
+            float MoveX = 0.0f, MoveY = 0.0f, MoveZ = 0.0f,
+                RotateX = 0.0f, RotateY = 0.0f;
 
-                if (KeybrdState[Key.W])
-                    MoveY += camMoveSens;
-                if (KeybrdState[Key.A])
-                    MoveX -= camMoveSens;
-                if (KeybrdState[Key.S])
-                    MoveY -= camMoveSens;
-                if (KeybrdState[Key.D])
-                    MoveX += camMoveSens;
-                if (KeybrdState[Key.E])
-                    MoveZ += camMoveSens;
-                if (KeybrdState[Key.Q])
-                    MoveZ -= camMoveSens;
+            if (KeybrdState[Key.W])
+                MoveY += camMoveSens;
+            if (KeybrdState[Key.A])
+                MoveX -= camMoveSens;
+            if (KeybrdState[Key.S])
+                MoveY -= camMoveSens;
+            if (KeybrdState[Key.D])
+                MoveX += camMoveSens;
+            if (KeybrdState[Key.E])
+                MoveZ += camMoveSens;
+            if (KeybrdState[Key.Q])
+                MoveZ -= camMoveSens;
 
-                if (MoveX != 0 || MoveY != 0 || MoveZ != 0)
-                    MainCamera.Move(MoveX, MoveY, MoveZ);
+            if (MoveX != 0 || MoveY != 0 || MoveZ != 0)
+                MainCamera.Move(MoveX, MoveY, MoveZ);
 
-                if (KeybrdState[Key.Left])
-                    RotateX += camRotateSens;
-                if (KeybrdState[Key.Right])
-                    RotateX -= camRotateSens;
-                if (KeybrdState[Key.Up])
-                    RotateY += camRotateSens;
-                if (KeybrdState[Key.Down])
-                    RotateY -= camRotateSens;
+            if (KeybrdState[Key.Left])
+                RotateX += camRotateSens;
+            if (KeybrdState[Key.Right])
+                RotateX -= camRotateSens;
+            if (KeybrdState[Key.Up])
+                RotateY += camRotateSens;
+            if (KeybrdState[Key.Down])
+                RotateY -= camRotateSens;
 
-                if (RotateX != 0 || RotateY != 0)
-                    MainCamera.AddRotation(RotateX, RotateY);
+            if (RotateX != 0 || RotateY != 0)
+                MainCamera.AddRotation(RotateX, RotateY);
 
-                SkyBox.Position = MainCamera.Position;
-            }
+            SkyBox.Position = MainCamera.Position;
         }
     }
 }
