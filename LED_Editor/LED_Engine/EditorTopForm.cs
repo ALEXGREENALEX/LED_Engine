@@ -101,67 +101,127 @@ namespace LED_Engine
 
                 foreach (Model mdl in Models.MODELS)
                 {
-                            XmlNode element = XML.CreateElement("Model");
-                            XML.DocumentElement.AppendChild(element); // указываем родителя
-                            //XmlAttribute attribute = XML.CreateAttribute("number"); // создаём атрибут
-                            //attribute.Value = "1"; // устанавливаем значение атрибута
-                            //element.Attributes.Append(attribute); // добавляем атрибут
+                    XmlNode element = XML.CreateElement("Model");
+                    XML.DocumentElement.AppendChild(element); // указываем родителя
+                    //XmlAttribute attribute = XML.CreateAttribute("number"); // создаём атрибут
+                    //attribute.Value = "1"; // устанавливаем значение атрибута
+                    //element.Attributes.Append(attribute); // добавляем атрибут
 
-                            XmlNode subElement1 = XML.CreateElement("Name"); // даём имя
-                            subElement1.InnerText = mdl.Name; // и значение
-                            element.AppendChild(subElement1); // и указываем кому принадлежит
+                    XmlNode subElement1 = XML.CreateElement("Name"); // даём имя
+                    subElement1.InnerText = mdl.Name; // и значение
+                    element.AppendChild(subElement1); // и указываем кому принадлежит
 
-                            XmlNode subElement2 = XML.CreateElement("Visible"); // даём имя
-                            subElement2.InnerText = mdl.Visible.ToString(); // и значение
-                            element.AppendChild(subElement2); // и указываем кому принадлежит
-                            foreach (Mesh msh in mdl.Meshes)
-                            {
-                                XmlNode meshelement = XML.CreateElement("Mesh");
-                                element.AppendChild(meshelement); // указываем родителя
+                    XmlNode subElement2 = XML.CreateElement("Visible"); // даём имя
+                    subElement2.InnerText = mdl.Visible.ToString(); // и значение
+                    element.AppendChild(subElement2); // и указываем кому принадлежит
+                    foreach (Mesh msh in mdl.Meshes)
+                    {
+                        XmlNode meshelement = XML.CreateElement("Mesh");
+                        element.AppendChild(meshelement); // указываем родителя
 
-                                XmlNode meshSubElement1 = XML.CreateElement("Name"); // даём имя
-                                meshSubElement1.InnerText = msh.Name; // и значение
-                                meshelement.AppendChild(meshSubElement1); // и указываем кому принадлежит
+                        XmlNode meshSubElement1 = XML.CreateElement("Name"); // даём имя
+                        meshSubElement1.InnerText = msh.Name; // и значение
+                        meshelement.AppendChild(meshSubElement1); // и указываем кому принадлежит
 
-                                XmlNode meshSubElement2 = XML.CreateElement("Type"); // даём имя
-                                meshSubElement2.InnerText = msh.MeshName; // и значение
-                                meshelement.AppendChild(meshSubElement2); // и указываем кому принадлежит
+                        XmlNode meshSubElement2 = XML.CreateElement("Type"); // даём имя
+                        meshSubElement2.InnerText = msh.MeshName; // и значение
+                        meshelement.AppendChild(meshSubElement2); // и указываем кому принадлежит
 
-                                XmlNode meshSubElement3 = XML.CreateElement("Mesh"); // даём имя
-                                meshSubElement3.InnerText = msh.MeshName; // и значение
-                                meshelement.AppendChild(meshSubElement3); // и указываем кому принадлежит
+                        XmlNode meshSubElement3 = XML.CreateElement("Mesh"); // даём имя
+                        meshSubElement3.InnerText = msh.MeshName; // и значение
+                        meshelement.AppendChild(meshSubElement3); // и указываем кому принадлежит
 
-                                XmlNode meshSubElement4 = XML.CreateElement("Visible"); // даём имя
-                                meshSubElement4.InnerText = msh.Visible.ToString(); // и значение
-                                meshelement.AppendChild(meshSubElement4); // и указываем кому принадлежит
+                        XmlNode meshSubElement4 = XML.CreateElement("Visible"); // даём имя
+                        meshSubElement4.InnerText = msh.Visible.ToString(); // и значение
+                        meshelement.AppendChild(meshSubElement4); // и указываем кому принадлежит
 
-                                XmlNode meshSubElement5 = XML.CreateElement("Position"); // даём имя
-                                meshSubElement5.InnerText = msh.Position.X + " " + msh.Position.Y + " " + msh.Position.Z; // и значение
-                                meshelement.AppendChild(meshSubElement5); // и указываем кому принадлежит
+                        XmlNode meshSubElement5 = XML.CreateElement("Position"); // даём имя
+                        meshSubElement5.InnerText = msh.Position.X + " " + msh.Position.Y + " " + msh.Position.Z; // и значение
+                        meshelement.AppendChild(meshSubElement5); // и указываем кому принадлежит
 
-                                XmlNode meshSubElement6 = XML.CreateElement("Rotation"); // даём имя
-                                meshSubElement6.InnerText = MathHelper.RadiansToDegrees(msh.Rotation.X) + " " + MathHelper.RadiansToDegrees(msh.Rotation.Y) + " " + MathHelper.RadiansToDegrees(msh.Rotation.Z); // и значение
-                                meshelement.AppendChild(meshSubElement6); // и указываем кому принадлежит
+                        XmlNode meshSubElement6 = XML.CreateElement("Rotation"); // даём имя
+                        meshSubElement6.InnerText = MathHelper.RadiansToDegrees(msh.Rotation.X) + " " + MathHelper.RadiansToDegrees(msh.Rotation.Y) + " " + MathHelper.RadiansToDegrees(msh.Rotation.Z); // и значение
+                        meshelement.AppendChild(meshSubElement6); // и указываем кому принадлежит
 
-                                XmlNode meshSubElement8 = XML.CreateElement("Scale"); // даём имя
-                                meshSubElement8.InnerText = msh.Scale.X + " " + msh.Scale.Y + " " + msh.Scale.Z; // и значение
-                                meshelement.AppendChild(meshSubElement8); // и указываем кому принадлежит
+                        XmlNode meshSubElement8 = XML.CreateElement("Scale"); // даём имя
+                        meshSubElement8.InnerText = msh.Scale.X + " " + msh.Scale.Y + " " + msh.Scale.Z; // и значение
+                        meshelement.AppendChild(meshSubElement8); // и указываем кому принадлежит
 
-                                XmlNode materialselement = XML.CreateElement("Materials");
-                                meshelement.AppendChild(materialselement); // указываем родителя
+                        XmlNode materialselement = XML.CreateElement("Materials");
+                        meshelement.AppendChild(materialselement); // указываем родителя
 
-                                foreach (MeshPart mpt in msh.Parts)
-                                {
-                                    XmlNode materialSubElement1 = XML.CreateElement("Material"); // даём имя
-                                    materialSubElement1.InnerText = mpt.Material.Name; // и значение
-                                    materialselement.AppendChild(materialSubElement1); // и указываем кому принадлежит
-                                }
-                            }
+                        foreach (MeshPart mpt in msh.Parts)
+                        {
+                            XmlNode materialSubElement1 = XML.CreateElement("Material"); // даём имя
+                            materialSubElement1.InnerText = mpt.Material.Name; // и значение
+                            materialselement.AppendChild(materialSubElement1); // и указываем кому принадлежит
+                        }
+                    }
                 }
 
                 foreach (Light lgt in Lights.LIGHTS)
                 {
+                    XmlNode Light = XML.CreateElement("Light");
+                    XML.DocumentElement.AppendChild(Light); // указываем родителя
 
+                    XmlNode LightName = XML.CreateElement("Name"); // даём имя
+                    LightName.InnerText = lgt.Name; // и значение
+                    Light.AppendChild(LightName); // и указываем кому принадлежит
+
+                    XmlNode LightTp = XML.CreateElement("Type"); // даём имя
+                    LightTp.InnerText = lgt.Type.ToString(); // и значение
+                    Light.AppendChild(LightTp); // и указываем кому принадлежит
+
+                    XmlNode LightEnabled = XML.CreateElement("Enabled"); // даём имя
+                    LightEnabled.InnerText = lgt.Enabled.ToString(); // и значение
+                    Light.AppendChild(LightEnabled); // и указываем кому принадлежит
+
+                    XmlNode LightDiffuse = XML.CreateElement("Diffuse"); // даём имя
+                    LightDiffuse.InnerText = lgt.Diffuse.X + " " + lgt.Diffuse.Y + " " + lgt.Diffuse.Z; // и значение
+                    Light.AppendChild(LightDiffuse); // и указываем кому принадлежит
+
+                    switch (lgt.Type)
+                    {
+                        case LightType.Directional:
+                            XmlNode LightSpec = XML.CreateElement("Specular"); // даём имя
+                            LightSpec.InnerText = lgt.Specular.X + " " + lgt.Specular.Y + " " + lgt.Specular.Z; // и значение
+                            Light.AppendChild(LightSpec); // и указываем кому принадлежит
+                            XmlNode LightDir = XML.CreateElement("Direction"); // даём имя
+                            LightDir.InnerText = MathHelper.RadiansToDegrees(lgt.Direction.ExtractYawPitch().X) + " " + MathHelper.RadiansToDegrees(lgt.Direction.ExtractYawPitch().Y); // и значение
+                            Light.AppendChild(LightDir); // и указываем кому принадлежит
+                            break;
+                        case LightType.Point:
+                            XmlNode LightSpec2 = XML.CreateElement("Specular"); // даём имя
+                            LightSpec2.InnerText = lgt.Specular.X + " " + lgt.Specular.Y + " " + lgt.Specular.Z; // и значение
+                            Light.AppendChild(LightSpec2); // и указываем кому принадлежит
+                            XmlNode LightPos = XML.CreateElement("Position"); // даём имя
+                            LightPos.InnerText = lgt.Position.X + " " + lgt.Position.Y + " " + lgt.Position.Z; // и значение
+                            Light.AppendChild(LightPos); // и указываем кому принадлежит
+                            XmlNode LightAtt = XML.CreateElement("Attenuation"); // даём имя
+                            LightAtt.InnerText = lgt.Attenuation.X + " " + lgt.Attenuation.Y + " " + lgt.Attenuation.Z; // и значение
+                            Light.AppendChild(LightAtt); // и указываем кому принадлежит
+                            break;
+                        case LightType.Spot:
+                            XmlNode LightSpec3 = XML.CreateElement("Specular"); // даём имя
+                            LightSpec3.InnerText = lgt.Specular.X + " " + lgt.Specular.Y + " " + lgt.Specular.Z; // и значение
+                            Light.AppendChild(LightSpec3); // и указываем кому принадлежит
+                            XmlNode LightPos2 = XML.CreateElement("Position"); // даём имя
+                            LightPos2.InnerText = lgt.Position.X + " " + lgt.Position.Y + " " + lgt.Position.Z; // и значение
+                            Light.AppendChild(LightPos2); // и указываем кому принадлежит
+                            XmlNode LightDir2 = XML.CreateElement("Direction"); // даём имя
+                            LightDir2.InnerText = MathHelper.RadiansToDegrees(lgt.Direction.ExtractYawPitch().X) + " " + MathHelper.RadiansToDegrees(lgt.Direction.ExtractYawPitch().Y); // и значение
+                            Light.AppendChild(LightDir2); // и указываем кому принадлежит
+                            XmlNode LightAtt2 = XML.CreateElement("Attenuation"); // даём имя
+                            LightAtt2.InnerText = lgt.Attenuation.X + " " + lgt.Attenuation.Y + " " + lgt.Attenuation.Z; // и значение
+                            Light.AppendChild(LightAtt2); // и указываем кому принадлежит
+                            XmlNode LightExp = XML.CreateElement("Exponent"); // даём имя
+                            LightExp.InnerText = lgt.Exponent.ToString(); // и значение
+                            Light.AppendChild(LightExp); // и указываем кому принадлежит
+                            XmlNode LightCOFF = XML.CreateElement("CutOFF"); // даём имя
+                            LightCOFF.InnerText = lgt.CutOFF.ToString(); // и значение
+                            Light.AppendChild(LightCOFF); // и указываем кому принадлежит
+                            break;
+                    }
                 }
 
                 XML.Save(XmlFile);
