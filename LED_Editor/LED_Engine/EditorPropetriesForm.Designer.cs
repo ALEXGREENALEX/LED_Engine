@@ -35,30 +35,29 @@
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.ModelsComboBox1 = new System.Windows.Forms.ComboBox();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
+            this.AddButton = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.RemoveButton = new System.Windows.Forms.Button();
             this.ObjToolsPanel = new System.Windows.Forms.Panel();
             this.VisibleCheckBox1 = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.SclBoxZ = new System.Windows.Forms.TextBox();
             this.SclBoxY = new System.Windows.Forms.TextBox();
             this.SclBoxX = new System.Windows.Forms.TextBox();
-            this.button5 = new System.Windows.Forms.Button();
+            this.PropetriesApplyButton = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.RotBoxZ = new System.Windows.Forms.TextBox();
             this.RotBoxY = new System.Windows.Forms.TextBox();
             this.RotBoxX = new System.Windows.Forms.TextBox();
-            this.FileButton = new System.Windows.Forms.Button();
-            this.ObjFileTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.ZtextBox3 = new System.Windows.Forms.TextBox();
             this.YtextBox2 = new System.Windows.Forms.TextBox();
             this.XtextBox1 = new System.Windows.Forms.TextBox();
+            this.MeshComboBox = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.NameBox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.EngineCheckBox1 = new System.Windows.Forms.CheckBox();
-            this.NameTextBox = new System.Windows.Forms.TextBox();
             this.groupBox2.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -72,7 +71,7 @@
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Location = new System.Drawing.Point(0, 0);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(284, 429);
+            this.groupBox2.Size = new System.Drawing.Size(284, 440);
             this.groupBox2.TabIndex = 11;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Models";
@@ -89,7 +88,7 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(278, 410);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(278, 421);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // panel1
@@ -100,7 +99,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(3, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(272, 199);
+            this.panel1.Size = new System.Drawing.Size(272, 204);
             this.panel1.TabIndex = 2;
             // 
             // listBox1
@@ -109,7 +108,7 @@
             this.listBox1.FormattingEnabled = true;
             this.listBox1.Location = new System.Drawing.Point(0, 21);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(272, 147);
+            this.listBox1.Size = new System.Drawing.Size(272, 152);
             this.listBox1.TabIndex = 0;
             this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
@@ -125,27 +124,27 @@
             // 
             // panel2
             // 
-            this.panel2.Controls.Add(this.button1);
+            this.panel2.Controls.Add(this.AddButton);
             this.panel2.Controls.Add(this.button4);
             this.panel2.Controls.Add(this.button3);
-            this.panel2.Controls.Add(this.button2);
+            this.panel2.Controls.Add(this.RemoveButton);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 168);
+            this.panel2.Location = new System.Drawing.Point(0, 173);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(272, 31);
             this.panel2.TabIndex = 5;
             // 
-            // button1
+            // AddButton
             // 
-            this.button1.Image = ((System.Drawing.Image)(resources.GetObject("button1.Image")));
-            this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button1.Location = new System.Drawing.Point(3, 4);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(51, 24);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "Add";
-            this.button1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.button1.UseVisualStyleBackColor = true;
+            this.AddButton.Image = ((System.Drawing.Image)(resources.GetObject("AddButton.Image")));
+            this.AddButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.AddButton.Location = new System.Drawing.Point(3, 4);
+            this.AddButton.Name = "AddButton";
+            this.AddButton.Size = new System.Drawing.Size(51, 24);
+            this.AddButton.TabIndex = 1;
+            this.AddButton.Text = "Add";
+            this.AddButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.AddButton.UseVisualStyleBackColor = true;
             // 
             // button4
             // 
@@ -165,50 +164,49 @@
             this.button3.TabIndex = 3;
             this.button3.UseVisualStyleBackColor = true;
             // 
-            // button2
+            // RemoveButton
             // 
-            this.button2.Image = ((System.Drawing.Image)(resources.GetObject("button2.Image")));
-            this.button2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button2.Location = new System.Drawing.Point(60, 4);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(73, 24);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "Remove";
-            this.button2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.RemoveButton.Image = ((System.Drawing.Image)(resources.GetObject("RemoveButton.Image")));
+            this.RemoveButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.RemoveButton.Location = new System.Drawing.Point(60, 4);
+            this.RemoveButton.Name = "RemoveButton";
+            this.RemoveButton.Size = new System.Drawing.Size(73, 24);
+            this.RemoveButton.TabIndex = 2;
+            this.RemoveButton.Text = "Remove";
+            this.RemoveButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.RemoveButton.UseVisualStyleBackColor = true;
+            this.RemoveButton.Click += new System.EventHandler(this.RemoveButton_Click);
             // 
             // ObjToolsPanel
             // 
+            this.ObjToolsPanel.Controls.Add(this.label3);
+            this.ObjToolsPanel.Controls.Add(this.NameBox);
+            this.ObjToolsPanel.Controls.Add(this.label5);
+            this.ObjToolsPanel.Controls.Add(this.MeshComboBox);
             this.ObjToolsPanel.Controls.Add(this.VisibleCheckBox1);
             this.ObjToolsPanel.Controls.Add(this.label4);
             this.ObjToolsPanel.Controls.Add(this.SclBoxZ);
             this.ObjToolsPanel.Controls.Add(this.SclBoxY);
             this.ObjToolsPanel.Controls.Add(this.SclBoxX);
-            this.ObjToolsPanel.Controls.Add(this.button5);
+            this.ObjToolsPanel.Controls.Add(this.PropetriesApplyButton);
             this.ObjToolsPanel.Controls.Add(this.label2);
             this.ObjToolsPanel.Controls.Add(this.RotBoxZ);
             this.ObjToolsPanel.Controls.Add(this.RotBoxY);
             this.ObjToolsPanel.Controls.Add(this.RotBoxX);
-            this.ObjToolsPanel.Controls.Add(this.FileButton);
-            this.ObjToolsPanel.Controls.Add(this.ObjFileTextBox);
             this.ObjToolsPanel.Controls.Add(this.label1);
             this.ObjToolsPanel.Controls.Add(this.ZtextBox3);
             this.ObjToolsPanel.Controls.Add(this.YtextBox2);
             this.ObjToolsPanel.Controls.Add(this.XtextBox1);
-            this.ObjToolsPanel.Controls.Add(this.label3);
-            this.ObjToolsPanel.Controls.Add(this.EngineCheckBox1);
-            this.ObjToolsPanel.Controls.Add(this.NameTextBox);
             this.ObjToolsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ObjToolsPanel.Location = new System.Drawing.Point(3, 208);
+            this.ObjToolsPanel.Location = new System.Drawing.Point(3, 213);
             this.ObjToolsPanel.Name = "ObjToolsPanel";
-            this.ObjToolsPanel.Size = new System.Drawing.Size(272, 199);
+            this.ObjToolsPanel.Size = new System.Drawing.Size(272, 205);
             this.ObjToolsPanel.TabIndex = 3;
             // 
             // VisibleCheckBox1
             // 
             this.VisibleCheckBox1.AutoSize = true;
-            this.VisibleCheckBox1.Location = new System.Drawing.Point(60, 3);
+            this.VisibleCheckBox1.Location = new System.Drawing.Point(6, 3);
             this.VisibleCheckBox1.Name = "VisibleCheckBox1";
             this.VisibleCheckBox1.Size = new System.Drawing.Size(56, 17);
             this.VisibleCheckBox1.TabIndex = 29;
@@ -219,7 +217,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label4.Location = new System.Drawing.Point(3, 136);
+            this.label4.Location = new System.Drawing.Point(3, 141);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(27, 17);
             this.label4.TabIndex = 28;
@@ -227,39 +225,40 @@
             // 
             // SclBoxZ
             // 
-            this.SclBoxZ.Location = new System.Drawing.Point(139, 135);
+            this.SclBoxZ.Location = new System.Drawing.Point(139, 140);
             this.SclBoxZ.Name = "SclBoxZ";
             this.SclBoxZ.Size = new System.Drawing.Size(36, 20);
             this.SclBoxZ.TabIndex = 27;
             // 
             // SclBoxY
             // 
-            this.SclBoxY.Location = new System.Drawing.Point(97, 135);
+            this.SclBoxY.Location = new System.Drawing.Point(97, 140);
             this.SclBoxY.Name = "SclBoxY";
             this.SclBoxY.Size = new System.Drawing.Size(36, 20);
             this.SclBoxY.TabIndex = 26;
             // 
             // SclBoxX
             // 
-            this.SclBoxX.Location = new System.Drawing.Point(54, 135);
+            this.SclBoxX.Location = new System.Drawing.Point(54, 140);
             this.SclBoxX.Name = "SclBoxX";
             this.SclBoxX.Size = new System.Drawing.Size(36, 20);
             this.SclBoxX.TabIndex = 25;
             // 
-            // button5
+            // PropetriesApplyButton
             // 
-            this.button5.Location = new System.Drawing.Point(6, 170);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(75, 23);
-            this.button5.TabIndex = 24;
-            this.button5.Text = "Apply";
-            this.button5.UseVisualStyleBackColor = true;
+            this.PropetriesApplyButton.Location = new System.Drawing.Point(6, 175);
+            this.PropetriesApplyButton.Name = "PropetriesApplyButton";
+            this.PropetriesApplyButton.Size = new System.Drawing.Size(75, 23);
+            this.PropetriesApplyButton.TabIndex = 24;
+            this.PropetriesApplyButton.Text = "Apply";
+            this.PropetriesApplyButton.UseVisualStyleBackColor = true;
+            this.PropetriesApplyButton.Click += new System.EventHandler(this.PropetriesApplyButton_Click);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label2.Location = new System.Drawing.Point(3, 110);
+            this.label2.Location = new System.Drawing.Point(3, 115);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(30, 17);
             this.label2.TabIndex = 23;
@@ -267,46 +266,30 @@
             // 
             // RotBoxZ
             // 
-            this.RotBoxZ.Location = new System.Drawing.Point(139, 109);
+            this.RotBoxZ.Location = new System.Drawing.Point(139, 114);
             this.RotBoxZ.Name = "RotBoxZ";
             this.RotBoxZ.Size = new System.Drawing.Size(36, 20);
             this.RotBoxZ.TabIndex = 22;
             // 
             // RotBoxY
             // 
-            this.RotBoxY.Location = new System.Drawing.Point(97, 109);
+            this.RotBoxY.Location = new System.Drawing.Point(97, 114);
             this.RotBoxY.Name = "RotBoxY";
             this.RotBoxY.Size = new System.Drawing.Size(36, 20);
             this.RotBoxY.TabIndex = 21;
             // 
             // RotBoxX
             // 
-            this.RotBoxX.Location = new System.Drawing.Point(54, 109);
+            this.RotBoxX.Location = new System.Drawing.Point(54, 114);
             this.RotBoxX.Name = "RotBoxX";
             this.RotBoxX.Size = new System.Drawing.Size(36, 20);
             this.RotBoxX.TabIndex = 20;
-            // 
-            // FileButton
-            // 
-            this.FileButton.Location = new System.Drawing.Point(206, 52);
-            this.FileButton.Name = "FileButton";
-            this.FileButton.Size = new System.Drawing.Size(60, 20);
-            this.FileButton.TabIndex = 19;
-            this.FileButton.Text = "Browse";
-            this.FileButton.UseVisualStyleBackColor = true;
-            // 
-            // ObjFileTextBox
-            // 
-            this.ObjFileTextBox.Location = new System.Drawing.Point(6, 52);
-            this.ObjFileTextBox.Name = "ObjFileTextBox";
-            this.ObjFileTextBox.Size = new System.Drawing.Size(193, 20);
-            this.ObjFileTextBox.TabIndex = 18;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.Location = new System.Drawing.Point(3, 84);
+            this.label1.Location = new System.Drawing.Point(3, 89);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(32, 17);
             this.label1.TabIndex = 17;
@@ -314,58 +297,66 @@
             // 
             // ZtextBox3
             // 
-            this.ZtextBox3.Location = new System.Drawing.Point(139, 83);
+            this.ZtextBox3.Location = new System.Drawing.Point(139, 88);
             this.ZtextBox3.Name = "ZtextBox3";
             this.ZtextBox3.Size = new System.Drawing.Size(36, 20);
             this.ZtextBox3.TabIndex = 16;
             // 
             // YtextBox2
             // 
-            this.YtextBox2.Location = new System.Drawing.Point(97, 83);
+            this.YtextBox2.Location = new System.Drawing.Point(97, 88);
             this.YtextBox2.Name = "YtextBox2";
             this.YtextBox2.Size = new System.Drawing.Size(36, 20);
             this.YtextBox2.TabIndex = 15;
             // 
             // XtextBox1
             // 
-            this.XtextBox1.Location = new System.Drawing.Point(54, 83);
+            this.XtextBox1.Location = new System.Drawing.Point(54, 88);
             this.XtextBox1.Name = "XtextBox1";
             this.XtextBox1.Size = new System.Drawing.Size(36, 20);
             this.XtextBox1.TabIndex = 14;
+            // 
+            // MeshComboBox
+            // 
+            this.MeshComboBox.FormattingEnabled = true;
+            this.MeshComboBox.Location = new System.Drawing.Point(54, 26);
+            this.MeshComboBox.Name = "MeshComboBox";
+            this.MeshComboBox.Size = new System.Drawing.Size(212, 21);
+            this.MeshComboBox.TabIndex = 30;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label5.Location = new System.Drawing.Point(3, 30);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(42, 17);
+            this.label5.TabIndex = 31;
+            this.label5.Text = "Mesh";
+            // 
+            // NameBox
+            // 
+            this.NameBox.Location = new System.Drawing.Point(54, 53);
+            this.NameBox.Name = "NameBox";
+            this.NameBox.Size = new System.Drawing.Size(212, 20);
+            this.NameBox.TabIndex = 32;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label3.Location = new System.Drawing.Point(3, 26);
+            this.label3.Location = new System.Drawing.Point(3, 56);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(45, 17);
-            this.label3.TabIndex = 13;
+            this.label3.TabIndex = 33;
             this.label3.Text = "Name";
-            // 
-            // EngineCheckBox1
-            // 
-            this.EngineCheckBox1.AutoSize = true;
-            this.EngineCheckBox1.Location = new System.Drawing.Point(3, 3);
-            this.EngineCheckBox1.Name = "EngineCheckBox1";
-            this.EngineCheckBox1.Size = new System.Drawing.Size(59, 17);
-            this.EngineCheckBox1.TabIndex = 4;
-            this.EngineCheckBox1.Text = "Engine";
-            this.EngineCheckBox1.UseVisualStyleBackColor = true;
-            // 
-            // NameTextBox
-            // 
-            this.NameTextBox.Location = new System.Drawing.Point(54, 26);
-            this.NameTextBox.Name = "NameTextBox";
-            this.NameTextBox.Size = new System.Drawing.Size(212, 20);
-            this.NameTextBox.TabIndex = 3;
             // 
             // EditorPropetriesForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(284, 429);
+            this.ClientSize = new System.Drawing.Size(284, 440);
             this.ControlBox = false;
             this.Controls.Add(this.groupBox2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -389,21 +380,16 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button AddButton;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button RemoveButton;
         private System.Windows.Forms.Panel ObjToolsPanel;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button FileButton;
-        private System.Windows.Forms.TextBox ObjFileTextBox;
+        private System.Windows.Forms.Button PropetriesApplyButton;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox ZtextBox3;
         private System.Windows.Forms.TextBox YtextBox2;
         private System.Windows.Forms.TextBox XtextBox1;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.CheckBox EngineCheckBox1;
-        private System.Windows.Forms.TextBox NameTextBox;
         private System.Windows.Forms.ComboBox ModelsComboBox1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox SclBoxZ;
@@ -414,5 +400,9 @@
         private System.Windows.Forms.TextBox RotBoxY;
         private System.Windows.Forms.TextBox RotBoxX;
         private System.Windows.Forms.CheckBox VisibleCheckBox1;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ComboBox MeshComboBox;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox NameBox;
     }
 }

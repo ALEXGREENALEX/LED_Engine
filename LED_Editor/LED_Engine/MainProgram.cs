@@ -89,6 +89,14 @@ namespace LED_Engine
             FBO.Free();
             FPS.Font_Free();
             Engine.ClearLists();
+            try
+            {
+                Game.EditorMainForm.Close(); // Editor
+            }
+            catch
+            {
+
+            }
             Glfw.DestroyWindow(Window);
             Glfw.Terminate();
 
