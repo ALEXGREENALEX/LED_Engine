@@ -12,6 +12,8 @@ namespace LED_Engine
 {
     public partial class EditorPropetriesForm : Form
     {
+        static int usecounter = 1;
+
         public EditorPropetriesForm()
         {
             InitializeComponent();
@@ -33,47 +35,47 @@ namespace LED_Engine
         {
             //foreach (Mesh element in Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes)
             //{
-                NameBox.Text = Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex].Name;
-                try
-                {
-                    //string path = Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex].FileName;
-                    //ObjFileTextBox.Text = path.Replace(Settings.Paths.Meshes,"");
-                    //ObjFileTextBox.Text = Settings.Paths.Meshes;
-                    MeshComboBox.SelectedIndex = MeshComboBox.FindString(Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex].MeshName);
-                }
-                catch
-                {
-                    //ObjFileTextBox.Clear();
-                }
+            NameBox.Text = Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex].Name;
+            try
+            {
+                //string path = Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex].FileName;
+                //ObjFileTextBox.Text = path.Replace(Settings.Paths.Meshes,"");
+                //ObjFileTextBox.Text = Settings.Paths.Meshes;
+                MeshComboBox.SelectedIndex = MeshComboBox.FindString(Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex].MeshName);
+            }
+            catch
+            {
+                //ObjFileTextBox.Clear();
+            }
 
-                ////Engine content
-                //if (Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex].EngineContent == true)
-                //    EngineCheckBox1.Checked = true;
-                //else
-                //    EngineCheckBox1.Checked = false;
+            ////Engine content
+            //if (Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex].EngineContent == true)
+            //    EngineCheckBox1.Checked = true;
+            //else
+            //    EngineCheckBox1.Checked = false;
 
-                //Visible
-                if (Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex].Visible == true)
-                    VisibleCheckBox1.Checked = true;
-                else
-                    VisibleCheckBox1.Checked = false;
+            //Visible
+            if (Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex].Visible == true)
+                VisibleCheckBox1.Checked = true;
+            else
+                VisibleCheckBox1.Checked = false;
 
-                //Position
-                XtextBox1.Text = Convert.ToString(Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex].Position.X);
-                YtextBox2.Text = Convert.ToString(Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex].Position.Y);
-                ZtextBox3.Text = Convert.ToString(Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex].Position.Z);
+            //Position
+            XtextBox1.Text = Convert.ToString(Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex].Position.X);
+            YtextBox2.Text = Convert.ToString(Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex].Position.Y);
+            ZtextBox3.Text = Convert.ToString(Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex].Position.Z);
 
-                //Rotation
-                RotBoxX.Text = Convert.ToString(MathHelper.RadiansToDegrees(Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex].Rotation.X));
-                RotBoxY.Text = Convert.ToString(MathHelper.RadiansToDegrees(Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex].Rotation.Y));
-                RotBoxZ.Text = Convert.ToString(MathHelper.RadiansToDegrees(Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex].Rotation.Z));
+            //Rotation
+            RotBoxX.Text = Convert.ToString(MathHelper.RadiansToDegrees(Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex].Rotation.X));
+            RotBoxY.Text = Convert.ToString(MathHelper.RadiansToDegrees(Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex].Rotation.Y));
+            RotBoxZ.Text = Convert.ToString(MathHelper.RadiansToDegrees(Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex].Rotation.Z));
 
-                //Scale
-                SclBoxX.Text = Convert.ToString(Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex].Scale.X);
-                SclBoxY.Text = Convert.ToString(Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex].Scale.Y);
-                SclBoxZ.Text = Convert.ToString(Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex].Scale.Z);
+            //Scale
+            SclBoxX.Text = Convert.ToString(Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex].Scale.X);
+            SclBoxY.Text = Convert.ToString(Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex].Scale.Y);
+            SclBoxZ.Text = Convert.ToString(Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex].Scale.Z);
             //}
-                
+
         }
 
         private void ModelsComboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -87,15 +89,25 @@ namespace LED_Engine
 
         private void PropetriesApplyButton_Click(object sender, EventArgs e)
         {
-            //Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex].Name = NameBox.Text;
-
             Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex].MeshName = MeshComboBox.GetItemText(MeshComboBox.SelectedItem);
+            List<string> matlist = new List<string>();
+            string tempmat = String.Empty;
+            int Count = 0;
+            foreach (MeshPart msh in Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex].Parts)
+            {
+                if (msh.Material.ToString() != tempmat)
+                {
+                    tempmat = msh.Material.ToString();
+                    matlist.Add(msh.Material.Name.ToString());
+                    Count++;
+                }
+            }
+
             Meshes.Unload(Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex]);
             Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex] = Meshes.Load(NameBox.Text, MeshComboBox.GetItemText(MeshComboBox.SelectedItem));
 
-            int Count = Math.Min(1, Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex].Parts.Count);
             for (int i = 0; i < Count; i++)
-                Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex].Parts[i].Material = Materials.Load("Checker");
+                Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex].Parts[i].Material = Materials.Load(matlist[i]);
 
             if (Count < Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes[listBox1.SelectedIndex].Parts.Count && Count > 0)
             {
@@ -160,6 +172,23 @@ namespace LED_Engine
                 listBox1.Items.Add(element.Name);
             }
             listBox1.SelectedIndex = temp_index;
+        }
+
+        private void AddButton_Click(object sender, EventArgs e)
+        {
+            Mesh AddNewMesh = new Mesh();
+            AddNewMesh = Meshes.Load("NewObj" + usecounter, "DebugPointLight");
+            usecounter++;
+            int Count = AddNewMesh.Parts.Count();
+            for (int i = 0; i < Count; i++)
+                AddNewMesh.Parts[i].Material = Materials.Load("Checker");
+
+            if (Count < AddNewMesh.Parts.Count && Count > 0)
+            {
+                for (int i = Count; i < AddNewMesh.Parts.Count; i++)
+                    AddNewMesh.Parts[i].Material = AddNewMesh.Parts[0].Material;
+            }
+            Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes.Add(AddNewMesh);
         }
     }
 }

@@ -97,6 +97,7 @@ namespace LED_Engine
                 if (EditorMainForm == null || EditorMainForm.IsDisposed)
                     EditorMainForm = new EditorTopForm();
                 EditorMainForm.Show();
+                EditorMainForm.Focus();
             }
         }
 

@@ -40,6 +40,10 @@
             this.button3 = new System.Windows.Forms.Button();
             this.RemoveButton = new System.Windows.Forms.Button();
             this.ObjToolsPanel = new System.Windows.Forms.Panel();
+            this.label3 = new System.Windows.Forms.Label();
+            this.NameBox = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.MeshComboBox = new System.Windows.Forms.ComboBox();
             this.VisibleCheckBox1 = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.SclBoxZ = new System.Windows.Forms.TextBox();
@@ -54,10 +58,6 @@
             this.ZtextBox3 = new System.Windows.Forms.TextBox();
             this.YtextBox2 = new System.Windows.Forms.TextBox();
             this.XtextBox1 = new System.Windows.Forms.TextBox();
-            this.MeshComboBox = new System.Windows.Forms.ComboBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.NameBox = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.groupBox2.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -145,6 +145,7 @@
             this.AddButton.Text = "Add";
             this.AddButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.AddButton.UseVisualStyleBackColor = true;
+            this.AddButton.Click += new System.EventHandler(this.AddButton_Click);
             // 
             // button4
             // 
@@ -202,6 +203,41 @@
             this.ObjToolsPanel.Name = "ObjToolsPanel";
             this.ObjToolsPanel.Size = new System.Drawing.Size(272, 205);
             this.ObjToolsPanel.TabIndex = 3;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label3.Location = new System.Drawing.Point(3, 56);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(45, 17);
+            this.label3.TabIndex = 33;
+            this.label3.Text = "Name";
+            // 
+            // NameBox
+            // 
+            this.NameBox.Location = new System.Drawing.Point(54, 53);
+            this.NameBox.Name = "NameBox";
+            this.NameBox.Size = new System.Drawing.Size(212, 20);
+            this.NameBox.TabIndex = 32;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label5.Location = new System.Drawing.Point(3, 30);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(42, 17);
+            this.label5.TabIndex = 31;
+            this.label5.Text = "Mesh";
+            // 
+            // MeshComboBox
+            // 
+            this.MeshComboBox.FormattingEnabled = true;
+            this.MeshComboBox.Location = new System.Drawing.Point(54, 26);
+            this.MeshComboBox.Name = "MeshComboBox";
+            this.MeshComboBox.Size = new System.Drawing.Size(212, 21);
+            this.MeshComboBox.TabIndex = 30;
             // 
             // VisibleCheckBox1
             // 
@@ -315,41 +351,6 @@
             this.XtextBox1.Name = "XtextBox1";
             this.XtextBox1.Size = new System.Drawing.Size(36, 20);
             this.XtextBox1.TabIndex = 14;
-            // 
-            // MeshComboBox
-            // 
-            this.MeshComboBox.FormattingEnabled = true;
-            this.MeshComboBox.Location = new System.Drawing.Point(54, 26);
-            this.MeshComboBox.Name = "MeshComboBox";
-            this.MeshComboBox.Size = new System.Drawing.Size(212, 21);
-            this.MeshComboBox.TabIndex = 30;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label5.Location = new System.Drawing.Point(3, 30);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(42, 17);
-            this.label5.TabIndex = 31;
-            this.label5.Text = "Mesh";
-            // 
-            // NameBox
-            // 
-            this.NameBox.Location = new System.Drawing.Point(54, 53);
-            this.NameBox.Name = "NameBox";
-            this.NameBox.Size = new System.Drawing.Size(212, 20);
-            this.NameBox.TabIndex = 32;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label3.Location = new System.Drawing.Point(3, 56);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(45, 17);
-            this.label3.TabIndex = 33;
-            this.label3.Text = "Name";
             // 
             // EditorPropetriesForm
             // 
