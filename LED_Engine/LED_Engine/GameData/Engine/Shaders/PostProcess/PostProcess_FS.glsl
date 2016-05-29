@@ -4,7 +4,7 @@ uniform sampler2D TextureUnit0; //MainTexture
 in vec2 f_UV;
 
 uniform vec2 ScreenSize;
-uniform float Gamma = 1.0;
+//uniform float Gamma = 1.0;
 
 uniform bool FXAAEnabled = true;
 uniform vec3 FXAASettings = vec3(0.75, 0.166, 0.0833); //fxaaQualitySubpix, fxaaQualityEdgeThreshold, fxaaQualityEdgeThresholdMin
@@ -35,6 +35,6 @@ void main()
 	Color = GrayScale(Color, SepiaGrayscale.y);
 	
 	//Gamma correction
-	Color = pow(Color, vec3(1.0 / Gamma));
+	//Color = pow(Color, vec3(1.0 / Gamma));
 	FragColor = Color;
 }
