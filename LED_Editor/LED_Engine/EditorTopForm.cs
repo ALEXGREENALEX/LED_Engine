@@ -16,6 +16,7 @@ namespace LED_Engine
     {
         public LightSettings lightSettings = new LightSettings();
         public EditorPropetriesForm EditorObjectForm = new EditorPropetriesForm();
+        public TextureEditor TextureEditorForm = new TextureEditor();
 
         public EditorTopForm()
         {
@@ -242,9 +243,10 @@ namespace LED_Engine
 
         private void materialBrowserToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //TextureEditor НУЖНО ДОПИСАТЬ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            //TextureEditor TextureEditorForm = new TextureEditor();
-            //TextureEditorForm.Show();
+            if (materialBrowserToolStripMenuItem.Checked == true)
+                TextureEditorForm.Show();
+            else
+                TextureEditorForm.Hide();
         }
 
         private void lIToolStripMenuItem_Click(object sender, EventArgs e)
@@ -272,6 +274,7 @@ namespace LED_Engine
         {
             lightSettings.Close();
             EditorObjectForm.Close();
+            TextureEditorForm.Close();
         }
 
         private void SaveFileButton_Click(object sender, EventArgs e)
