@@ -498,6 +498,7 @@
             this.Controls.Add(this.MaterialTabs);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.toolStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(798, 482);
             this.Name = "TextureEditor";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

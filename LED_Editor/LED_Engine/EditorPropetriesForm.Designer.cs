@@ -35,7 +35,10 @@
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.ModelsComboBox1 = new System.Windows.Forms.ComboBox();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.objcountlabel = new System.Windows.Forms.Label();
             this.AddButton = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             this.RemoveButton = new System.Windows.Forms.Button();
             this.ObjToolsPanel = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
@@ -56,9 +59,6 @@
             this.ZtextBox3 = new System.Windows.Forms.TextBox();
             this.YtextBox2 = new System.Windows.Forms.TextBox();
             this.XtextBox1 = new System.Windows.Forms.TextBox();
-            this.objcountlabel = new System.Windows.Forms.Label();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
             this.groupBox2.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -136,6 +136,16 @@
             this.panel2.Size = new System.Drawing.Size(272, 31);
             this.panel2.TabIndex = 5;
             // 
+            // objcountlabel
+            // 
+            this.objcountlabel.AutoSize = true;
+            this.objcountlabel.Location = new System.Drawing.Point(205, 10);
+            this.objcountlabel.Name = "objcountlabel";
+            this.objcountlabel.Size = new System.Drawing.Size(23, 13);
+            this.objcountlabel.TabIndex = 34;
+            this.objcountlabel.Text = "null";
+            this.objcountlabel.Visible = false;
+            // 
             // AddButton
             // 
             this.AddButton.Image = ((System.Drawing.Image)(resources.GetObject("AddButton.Image")));
@@ -148,6 +158,24 @@
             this.AddButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.AddButton.UseVisualStyleBackColor = true;
             this.AddButton.Click += new System.EventHandler(this.AddButton_Click);
+            // 
+            // button4
+            // 
+            this.button4.Image = ((System.Drawing.Image)(resources.GetObject("button4.Image")));
+            this.button4.Location = new System.Drawing.Point(172, 4);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(27, 24);
+            this.button4.TabIndex = 4;
+            this.button4.UseVisualStyleBackColor = true;
+            // 
+            // button3
+            // 
+            this.button3.Image = ((System.Drawing.Image)(resources.GetObject("button3.Image")));
+            this.button3.Location = new System.Drawing.Point(139, 4);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(27, 24);
+            this.button3.TabIndex = 3;
+            this.button3.UseVisualStyleBackColor = true;
             // 
             // RemoveButton
             // 
@@ -336,34 +364,6 @@
             this.XtextBox1.Size = new System.Drawing.Size(36, 20);
             this.XtextBox1.TabIndex = 14;
             // 
-            // objcountlabel
-            // 
-            this.objcountlabel.AutoSize = true;
-            this.objcountlabel.Location = new System.Drawing.Point(205, 10);
-            this.objcountlabel.Name = "objcountlabel";
-            this.objcountlabel.Size = new System.Drawing.Size(23, 13);
-            this.objcountlabel.TabIndex = 34;
-            this.objcountlabel.Text = "null";
-            this.objcountlabel.Visible = false;
-            // 
-            // button3
-            // 
-            this.button3.Image = ((System.Drawing.Image)(resources.GetObject("button3.Image")));
-            this.button3.Location = new System.Drawing.Point(139, 4);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(27, 24);
-            this.button3.TabIndex = 3;
-            this.button3.UseVisualStyleBackColor = true;
-            // 
-            // button4
-            // 
-            this.button4.Image = ((System.Drawing.Image)(resources.GetObject("button4.Image")));
-            this.button4.Location = new System.Drawing.Point(172, 4);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(27, 24);
-            this.button4.TabIndex = 4;
-            this.button4.UseVisualStyleBackColor = true;
-            // 
             // EditorPropetriesForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -373,6 +373,7 @@
             this.ControlBox = false;
             this.Controls.Add(this.groupBox2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "EditorPropetriesForm";
             this.Text = "EditorPropetriesForm";
             this.Load += new System.EventHandler(this.EditorPropetriesForm_Load);

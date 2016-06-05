@@ -75,7 +75,7 @@
             this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
             this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(113, 36);
+            this.toolStripButton1.Size = new System.Drawing.Size(42, 36);
             this.toolStripButton1.Text = "toolStripButton1";
             // 
             // toolStripButton2
@@ -84,7 +84,7 @@
             this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
             this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(113, 36);
+            this.toolStripButton2.Size = new System.Drawing.Size(42, 36);
             this.toolStripButton2.Text = "toolStripButton2";
             // 
             // toolStripButton3
@@ -93,7 +93,7 @@
             this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
             this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton3.Name = "toolStripButton3";
-            this.toolStripButton3.Size = new System.Drawing.Size(113, 36);
+            this.toolStripButton3.Size = new System.Drawing.Size(42, 36);
             this.toolStripButton3.Text = "toolStripButton3";
             // 
             // toolStripButton5
@@ -102,7 +102,7 @@
             this.toolStripButton5.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton5.Image")));
             this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton5.Name = "toolStripButton5";
-            this.toolStripButton5.Size = new System.Drawing.Size(113, 36);
+            this.toolStripButton5.Size = new System.Drawing.Size(42, 36);
             this.toolStripButton5.Text = "toolStripButton5";
             // 
             // groupBox1
@@ -125,6 +125,7 @@
             this.ControlBox = false;
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "EditorObjForm";
             this.Text = "Objects";
             this.toolStrip1.ResumeLayout(false);
