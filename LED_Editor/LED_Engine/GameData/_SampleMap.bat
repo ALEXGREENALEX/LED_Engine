@@ -1,2 +1,2 @@
 @echo off
-"..\Bin\Debug\LED_Engine.exe" SampleMap
+"..\Bin\Release\LED_Engine.exe" SampleMap

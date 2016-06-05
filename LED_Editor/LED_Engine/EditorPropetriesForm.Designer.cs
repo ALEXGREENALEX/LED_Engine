@@ -36,8 +36,6 @@
             this.ModelsComboBox1 = new System.Windows.Forms.ComboBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.AddButton = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
             this.RemoveButton = new System.Windows.Forms.Button();
             this.ObjToolsPanel = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
@@ -58,6 +56,9 @@
             this.ZtextBox3 = new System.Windows.Forms.TextBox();
             this.YtextBox2 = new System.Windows.Forms.TextBox();
             this.XtextBox1 = new System.Windows.Forms.TextBox();
+            this.objcountlabel = new System.Windows.Forms.Label();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
             this.groupBox2.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -124,6 +125,7 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.objcountlabel);
             this.panel2.Controls.Add(this.AddButton);
             this.panel2.Controls.Add(this.button4);
             this.panel2.Controls.Add(this.button3);
@@ -146,24 +148,6 @@
             this.AddButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.AddButton.UseVisualStyleBackColor = true;
             this.AddButton.Click += new System.EventHandler(this.AddButton_Click);
-            // 
-            // button4
-            // 
-            this.button4.Image = ((System.Drawing.Image)(resources.GetObject("button4.Image")));
-            this.button4.Location = new System.Drawing.Point(172, 4);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(27, 24);
-            this.button4.TabIndex = 4;
-            this.button4.UseVisualStyleBackColor = true;
-            // 
-            // button3
-            // 
-            this.button3.Image = ((System.Drawing.Image)(resources.GetObject("button3.Image")));
-            this.button3.Location = new System.Drawing.Point(139, 4);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(27, 24);
-            this.button3.TabIndex = 3;
-            this.button3.UseVisualStyleBackColor = true;
             // 
             // RemoveButton
             // 
@@ -352,6 +336,34 @@
             this.XtextBox1.Size = new System.Drawing.Size(36, 20);
             this.XtextBox1.TabIndex = 14;
             // 
+            // objcountlabel
+            // 
+            this.objcountlabel.AutoSize = true;
+            this.objcountlabel.Location = new System.Drawing.Point(205, 10);
+            this.objcountlabel.Name = "objcountlabel";
+            this.objcountlabel.Size = new System.Drawing.Size(23, 13);
+            this.objcountlabel.TabIndex = 34;
+            this.objcountlabel.Text = "null";
+            this.objcountlabel.Visible = false;
+            // 
+            // button3
+            // 
+            this.button3.Image = ((System.Drawing.Image)(resources.GetObject("button3.Image")));
+            this.button3.Location = new System.Drawing.Point(139, 4);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(27, 24);
+            this.button3.TabIndex = 3;
+            this.button3.UseVisualStyleBackColor = true;
+            // 
+            // button4
+            // 
+            this.button4.Image = ((System.Drawing.Image)(resources.GetObject("button4.Image")));
+            this.button4.Location = new System.Drawing.Point(172, 4);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(27, 24);
+            this.button4.TabIndex = 4;
+            this.button4.UseVisualStyleBackColor = true;
+            // 
             // EditorPropetriesForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -368,6 +380,7 @@
             this.tableLayoutPanel1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.ObjToolsPanel.ResumeLayout(false);
             this.ObjToolsPanel.PerformLayout();
             this.ResumeLayout(false);
@@ -382,8 +395,6 @@
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button AddButton;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button RemoveButton;
         private System.Windows.Forms.Panel ObjToolsPanel;
         private System.Windows.Forms.Button PropetriesApplyButton;
@@ -405,5 +416,8 @@
         private System.Windows.Forms.ComboBox MeshComboBox;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox NameBox;
+        private System.Windows.Forms.Label objcountlabel;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button button3;
     }
 }

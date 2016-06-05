@@ -305,6 +305,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(678, 193);
+            this.ControlBox = false;
             this.Controls.Add(this.button_MoveLUp);
             this.Controls.Add(this.button_MoveLDown);
             this.Controls.Add(this.button_Deserialize);
@@ -335,7 +336,6 @@
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.Name = "LightSettings";
-            this.Opacity = 0.7D;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Light Control";
             this.TopMost = true;

@@ -10,46 +10,21 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
-using OpenTK;
-using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL;
-using OpenTK.Input;
-
+using Pencil.Gaming;
+using Pencil.Gaming.Graphics;
 
 namespace LED_Engine
 {
     public partial class TextureEditor : Form
     {
-        public static List<Texture> TexturesListParse = new List<Texture>(); // All Textures
         public static int TexturesListIndexCounter;
-        public static string EnginePath;
-        public static string TexturePath;
-        public static string EngineTexturePath;
-        public static string TextureXMLPath;
-        public static string EngineTextureXMLPath;
-        public static string CubeMapPath;
-        public static string EngineCubeMapPath;
-        public static string CubeMapXMLPath;
-        public static string EngineCubeMapXMLPath;
-        public static string CutTexturePath;
-        public static string CutEngineTexturePath;
-        public static string CutCubeMapPath;
-        public static string CutEngineCubeMapPath;
-        public static string MaterialXMLPath;
-        public static string EngineMaterialXMLPath;
-        public static string ShaderXMLPath;
-        public static string EngineShaderPath;
-        public static string EngineShaderXMLPath;
-        public static uint OpenGLTexture;
-        public static string OpenGLPath;
-        public static int id; //GLtexture id
+
 
         public TextureEditor()
         {
             InitializeComponent();
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; //For fix parsing values like "0.5" and "0,5"
 
-            TexturesListParse = Textures.GetTexturesList();
             MagFilterComboBox.Items.Add("Undefined");
             MinFilterComboBox.Items.Add("Undefined");
 
@@ -61,124 +36,14 @@ namespace LED_Engine
             foreach (TextureMinFilter items in Enum.GetValues(typeof(TextureMinFilter)))
             {
                 MinFilterComboBox.Items.Add(items);
-            }
+            }  
 
-            /////////////////////////////ПЕРЕПИСАТЬ! ИСПОЛЬЗУЕТСЯ ТОЛЬКО ДЛЯ ТЕСТОВ
-            EnginePath = "D:/KTU/Диплом/game/led_engine/LED_Engine/LED_Engine/GameData";
-            TexturePath = "D:/KTU/Диплом/game/led_engine/LED_Engine/LED_Engine/GameData/Textures";
-            EngineTexturePath = "D:/KTU/Диплом/game/led_engine/LED_Engine/LED_Engine/GameData/Engine/Textures";
-            CubeMapPath = "D:/KTU/Диплом/game/led_engine/LED_Engine/LED_Engine/GameData/Cubemaps";
-            EngineCubeMapPath = "D:/KTU/Диплом/game/led_engine/LED_Engine/LED_Engine/GameData/Engine/Cubemaps";
-            TextureXMLPath = "D:/KTU/Диплом/game/led_engine/LED_Engine/LED_Engine/GameData/Textures.xml";
-            EngineTextureXMLPath = "D:/KTU/Диплом/game/led_engine/LED_Engine/LED_Engine/GameData/Engine/Textures.xml";
-            CubeMapXMLPath = "D:/KTU/Диплом/game/led_engine/LED_Engine/LED_Engine/GameData/Cubemaps.xml";
-            EngineCubeMapXMLPath = "D:/KTU/Диплом/game/led_engine/LED_Engine/LED_Engine/GameData/Engine/Cubemaps.xml";
-            OpenGLPath = @"D:\KTU\Диплом\game\led_engine\LED_Engine\LED_Engine\GameData\Textures\brick-wall.jpg";
-            MaterialXMLPath = "D:/KTU/Диплом/game/led_engine/LED_Engine/LED_Engine/GameData/Materials.xml";
-            EngineMaterialXMLPath = "D:/KTU/Диплом/game/led_engine/LED_Engine/LED_Engine/GameData/Engine/Materials.xml";
-            ShaderXMLPath = "D:/KTU/Диплом/game/led_engine/LED_Engine/LED_Engine/GameData/Shaders.xml";
-            EngineShaderXMLPath = "D:/KTU/Диплом/game/led_engine/LED_Engine/LED_Engine/GameData/Engine/Shaders.xml";
-            EngineShaderPath = "D:/KTU/Диплом/game/led_engine/LED_Engine/LED_Engine/GameData/Engine/Shaders";
-
-            CutTexturePath = TexturePath.TrimEnd(new char[] { '\\', '/' });
-            CutEngineTexturePath = EngineTexturePath.TrimEnd(new char[] { '\\', '/' });
-            CutTexturePath = CubeMapPath.TrimEnd(new char[] { '\\', '/' });
-            CutEngineTexturePath = EngineCubeMapPath.TrimEnd(new char[] { '\\', '/' });
-
-            Engine.GetGLSettings();
-
-
-            ////Загружаем engine текстуры
-            //Textures.LoadTexturesList(EngineTextureXMLPath, EngineTexturePath, true);
-
-            ////Загружаем НЕ engine текстуры
-            //Textures.LoadTexturesList(TextureXMLPath, TexturePath, false);
-
-            ////Загружаем engine cubemap-текстуры
-            //Textures.LoadCubemapTexturesList(EngineCubeMapXMLPath, EngineCubeMapPath, true);
-
-            ////Загружаем НЕ engine cubemap-текстуры
-            //Textures.LoadCubemapTexturesList(CubeMapXMLPath, CubeMapPath, false);
-
-            //Shaders.LoadShadersList(EngineShaderXMLPath, EngineShaderPath, true);
-
-            //Materials.LoadMaterialsList(EngineMaterialXMLPath, true);
-            //Materials.LoadMaterialsList(MaterialXMLPath, false);
-
-            foreach (Texture element in TexturesListParse)
+            foreach (Texture element in Textures.TexturesList)
             {
                 if (element.TextureTarget == Pencil.Gaming.Graphics.TextureTarget.Texture2D)
                     TexturesListBox.Items.Add(element.Name);
             }
         }
-
-        #region OpenGL Stuff
-        private void SetupViewport()
-        {
-            int w = TexturesGLControl.Width;
-            int h = TexturesGLControl.Height;
-
-            MainCamera.SetProjectionMatrix(ProjectionTypes.Perspective, w, h, zNear, zFar, FOV);
-            GL.Viewport(0, 0, w, h); // Use all of the glControl painting area
-        }
-
-        private void TexturesGLControl_Resize(object sender, EventArgs e)
-        {
-            SetupViewport();
-            TexturesGLControl.Invalidate();
-        }
-
-        private void TexturesGLControl_Load(object sender, EventArgs e)
-        {
-            //TEMPLATE
-            CubemapFiles[0] = @"D:\KTU\Диплом\game\led_engine\LED_Engine\LED_Engine\GameData\Cubemaps\Storforsen\posx.jpg";
-            CubemapFiles[1] = @"D:\KTU\Диплом\game\led_engine\LED_Engine\LED_Engine\GameData\Cubemaps\Storforsen\negx.jpg";
-            CubemapFiles[2] = @"D:\KTU\Диплом\game\led_engine\LED_Engine\LED_Engine\GameData\Cubemaps\Storforsen\posy.jpg";
-            CubemapFiles[3] = @"D:\KTU\Диплом\game\led_engine\LED_Engine\LED_Engine\GameData\Cubemaps\Storforsen\negy.jpg";
-            CubemapFiles[4] = @"D:\KTU\Диплом\game\led_engine\LED_Engine\LED_Engine\GameData\Cubemaps\Storforsen\posz.jpg";
-            CubemapFiles[5] = @"D:\KTU\Диплом\game\led_engine\LED_Engine\LED_Engine\GameData\Cubemaps\Storforsen\negz.jpg";
-            TextureFile = @"D:\KTU\Диплом\game\led_engine\LED_Engine\LED_Engine\GameData\Textures\brick-wall.jpg";
-
-
-            TexturesGLControl.MakeCurrent();
-            GL.ClearColor(Color.White);
-
-            Shader1.LoadShader();
-            Material1.Shader = Shader1;
-
-            //TexPlain = Mesh.MakePlain(TexturesGLControl.Width, TexturesGLControl.Height);
-            TexPlain = Mesh.MakePlain(438, 383);
-            TexPlain.CalculateMatrices(MainCamera);
-            TexPlain.Position.Z = -410.0f;
-            TexPlain.Rotation = new Vector3((float)Math.PI / 2f, 0.0f, 0.0f);
-
-            MainCamera.Orientation = new Vector3((float)Math.PI, 0f, 0f);
-            Material1.TextureID = Load_BlankTexture2D();
-            TexPlain.Material = Material1;
-
-            SkyCube = Mesh.MakeBox(zFar * 2.0f / (float)Math.Sqrt(3.0), true);
-            SkyCube.CalculateMatrices(MainCamera);
-
-            SetupViewport();
-        }
-
-        private void TexturesGLControl_Paint(object sender, PaintEventArgs e)
-        {
-            GL.Clear(ClearBufferMask.ColorBufferBit);
-            GL.Disable(EnableCap.CullFace);
-
-            if (MaterialTabs.SelectedTab == MaterialTabs.TabPages[0])
-            {
-                DrawObject(TexPlain);
-            }
-            if (MaterialTabs.SelectedTab == MaterialTabs.TabPages[1])
-            {
-                DrawObject(SkyCube);
-            }
-            TexturesGLControl.SwapBuffers();
-        }
-
-        #endregion
 
         public static void WriteTexturesList(string XmlFile, string XmlFileEngine)
         {
@@ -203,7 +68,7 @@ namespace LED_Engine
                 XML.Load(XmlFile);
                 EngineXML.Load(XmlFileEngine);
 
-                foreach (Texture tex in TexturesListParse)
+                foreach (Texture tex in Textures.TexturesList)
                 {
                     if (tex.TextureTarget == Pencil.Gaming.Graphics.TextureTarget.Texture2D)
                     {
@@ -251,9 +116,8 @@ namespace LED_Engine
             }
             catch (Exception e)
             {
-                //Log.WriteLineRed("Textures.LoadTexturesList() Exception.");
-                //Log.WriteLineRed("XmlFile: \"{0}\", EngineContent: \"{1}\"", XmlFile, EngineContent);
-                //Log.WriteLineYellow(e.Message);
+                Log.WriteLineRed("TextureEditor.WriteTexturesList() Exception.");
+                Log.WriteLineYellow(e.Message);
             }
         }
 
@@ -281,7 +145,7 @@ namespace LED_Engine
                 XML.Load(XmlFile);
                 EngineXML.Load(XmlFileEngine);
 
-                foreach (Texture tex in TexturesListParse)
+                foreach (Texture tex in Textures.TexturesList)
                 {
                     if (tex.TextureTarget == Pencil.Gaming.Graphics.TextureTarget.TextureCubeMap)
                     {
@@ -399,9 +263,8 @@ namespace LED_Engine
             }
             catch (Exception e)
             {
-                //Log.WriteLineRed("Textures.LoadTexturesList() Exception.");
-                //Log.WriteLineRed("XmlFile: \"{0}\", EngineContent: \"{1}\"", XmlFile, EngineContent);
-                //Log.WriteLineYellow(e.Message);
+                Log.WriteLineRed("TextureEditor.WriteCubemapList() Exception.");
+                Log.WriteLineYellow(e.Message);
             }
         }
 
@@ -409,7 +272,6 @@ namespace LED_Engine
         {
             try
             {
-                MainCamera.Orientation = new Vector3((float)Math.PI, 0f, 0f);
                 if (MaterialTabs.SelectedTab == MaterialTabs.TabPages[0])
                 {
                     #region Enable controls
@@ -423,7 +285,7 @@ namespace LED_Engine
                     #endregion
                     try
                     {
-                        NameTextBox.Text = TexturesListParse[TexturesListBox.SelectedIndex].Name;
+                        NameTextBox.Text = Textures.TexturesList[TexturesListBox.SelectedIndex].Name;
                     }
                     catch
                     {
@@ -432,9 +294,9 @@ namespace LED_Engine
 
                     try
                     {
-                        if (TexturesListParse[TexturesListBox.SelectedIndex].UndefinedMagFilter == true)
+                        if (Textures.TexturesList[TexturesListBox.SelectedIndex].MagFilter.ToString() == String.Empty)
                             MagFilterComboBox.SelectedIndex = MagFilterComboBox.FindString("Undefined");
-                        if (TexturesListParse[TexturesListBox.SelectedIndex].UndefinedMinFilter == true)
+                        if (Textures.TexturesList[TexturesListBox.SelectedIndex].MinFilter.ToString() == String.Empty)
                             MinFilterComboBox.SelectedIndex = MinFilterComboBox.FindString("Undefined");
                     }
                     catch
@@ -442,13 +304,12 @@ namespace LED_Engine
 
                     }
 
-                    TexturesGLControl.Show();
+                    pictureBox1.Show();
                     string path = String.Empty;
 
                     try
                     {
-                        path = TexturesListParse[TexturesListBox.SelectedIndex].File;
-                        OpenGLPath = path;
+                        path = Textures.TexturesList[TexturesListBox.SelectedIndex].File;
                     }
                     catch
                     {
@@ -457,41 +318,38 @@ namespace LED_Engine
 
                     try
                     {
-                        if (TexturesListParse[TexturesListBox.SelectedIndex].EngineContent == true)
+                        if (Textures.TexturesList[TexturesListBox.SelectedIndex].EngineContent == true)
                         {
                             FileTextBox.BackColor = Color.White;
-                            FileTextBox.Text = Engine.FixPath(path.Substring(CutEngineTexturePath.Length + 1, path.Length - CutEngineTexturePath.Length - 1));
+                            FileTextBox.Text = Engine.FixPath(path.Substring(Settings.Paths.EngineTextures.Length + 1, path.Length - Settings.Paths.EngineTextures.Length - 1));
                         }
-                        if (TexturesListParse[TexturesListBox.SelectedIndex].EngineContent == false)
+                        if (Textures.TexturesList[TexturesListBox.SelectedIndex].EngineContent == false)
                         {
                             FileTextBox.BackColor = Color.White;
-                            FileTextBox.Text = Engine.FixPath(path.Substring(CutTexturePath.Length + 1, path.Length - CutTexturePath.Length - 1));
+                            FileTextBox.Text = Engine.FixPath(path.Substring(Settings.Paths.Textures.Length + 1, path.Length - Settings.Paths.Textures.Length - 1));
                         }
                     }
                     catch
                     {
                         FileTextBox.BackColor = Color.Tomato;
                         FileTextBox.Text = "Error";
-                        TexturesGLControl.Hide();
+                        pictureBox1.Hide();
                     }
                     try
                     {
-                        MainCamera.Orientation = new Vector3((float)Math.PI, 0f, 0f);
-                        Material1.TextureID = Load_Texture2D(path);
-                        TexPlain.Material = Material1;
-                        TexturesGLControl.Invalidate();
+                        pictureBox1.Image = Image.FromFile(path);
                     }
                     catch
                     {
                         FileTextBox.BackColor = Color.Tomato;
                         FileTextBox.Text = "Error";
-                        TexturesGLControl.Hide();
+                        pictureBox1.Hide();
                     }
                     try
                     {
-                        if (TexturesListParse[TexturesListBox.SelectedIndex].EngineContent == true)
+                        if (Textures.TexturesList[TexturesListBox.SelectedIndex].EngineContent == true)
                             EngineCheckBox.Checked = true;
-                        if (TexturesListParse[TexturesListBox.SelectedIndex].EngineContent == false)
+                        if (Textures.TexturesList[TexturesListBox.SelectedIndex].EngineContent == false)
                             EngineCheckBox.Checked = false;
                     }
                     catch
@@ -522,15 +380,15 @@ namespace LED_Engine
                     CubeMapFileTextBox6.Enabled = true;
                     #endregion
                     string path = String.Empty;
-                    NameTextBox.Text = TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].Name;
+                    NameTextBox.Text = Textures.TexturesList[TexturesListBox.SelectedIndex + TexturesListIndexCounter].Name;
 
-                    TexturesGLControl.Show();
+                    pictureBox1.Show();
 
                     try
                     {
-                        if (TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].UndefinedMagFilter == true)
+                        if (Textures.TexturesList[TexturesListBox.SelectedIndex + TexturesListIndexCounter].MagFilter.ToString() == String.Empty)
                             MagFilterComboBox.SelectedIndex = MagFilterComboBox.FindString("Undefined");
-                        if (TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].UndefinedMinFilter == true)
+                        if (Textures.TexturesList[TexturesListBox.SelectedIndex + TexturesListIndexCounter].MinFilter.ToString() == String.Empty)
                             MinFilterComboBox.SelectedIndex = MinFilterComboBox.FindString("Undefined");
                     }
                     catch
@@ -540,7 +398,7 @@ namespace LED_Engine
 
                     try
                     {
-                        path = TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles[0];
+                        path = Textures.TexturesList[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles[0];
                         CubeMapFileTextBox1.BackColor = Color.White;
                         CubeMapFileTextBox1.Text = path.Substring(path.LastIndexOf("Cubemaps"));
                     }
@@ -552,7 +410,7 @@ namespace LED_Engine
 
                     try
                     {
-                        path = TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles[1];
+                        path = Textures.TexturesList[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles[1];
                         CubeMapFileTextBox2.BackColor = Color.White;
                         CubeMapFileTextBox2.Text = path.Substring(path.LastIndexOf("Cubemaps"));
                     }
@@ -564,7 +422,7 @@ namespace LED_Engine
 
                     try
                     {
-                        path = TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles[2];
+                        path = Textures.TexturesList[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles[2];
                         CubeMapFileTextBox3.BackColor = Color.White;
                         CubeMapFileTextBox3.Text = path.Substring(path.LastIndexOf("Cubemaps"));
                     }
@@ -576,7 +434,7 @@ namespace LED_Engine
 
                     try
                     {
-                        path = TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles[3];
+                        path = Textures.TexturesList[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles[3];
                         CubeMapFileTextBox4.BackColor = Color.White;
                         CubeMapFileTextBox4.Text = path.Substring(path.LastIndexOf("Cubemaps"));
                     }
@@ -588,7 +446,7 @@ namespace LED_Engine
 
                     try
                     {
-                        path = TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles[4];
+                        path = Textures.TexturesList[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles[4];
                         CubeMapFileTextBox5.BackColor = Color.White;
                         CubeMapFileTextBox5.Text = path.Substring(path.LastIndexOf("Cubemaps"));
                     }
@@ -600,7 +458,7 @@ namespace LED_Engine
 
                     try
                     {
-                        path = TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles[5];
+                        path = Textures.TexturesList[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles[5];
                         CubeMapFileTextBox6.BackColor = Color.White;
                         CubeMapFileTextBox6.Text = path.Substring(path.LastIndexOf("Cubemaps"));
                     }
@@ -612,19 +470,21 @@ namespace LED_Engine
 
                     try
                     {
-                        MainCamera.Orientation = new Vector3((float)Math.PI, 0f, 0f);
-                        CubemapFiles = TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles;
-                        Material1.TextureID = Load_TextureCubemap();
-                        SkyCube.Material = Material1;
-                        TexturesGLControl.Invalidate();
+                        pictureBox1.Image = Image.FromFile(path);
+                        Game.SkyBox.Free();
+                        Game.SkyBox = new Mesh();
+                        MeshPart MPart = MeshPart.MakeBox(Game.MainCamera.zFar * 2.0f / (float)Math.Sqrt(3.0), true); // Cube diagonal = side / sqrt(3)
+                        MPart.Material = Materials.Load(Textures.TexturesList[TexturesListBox.SelectedIndex + TexturesListIndexCounter].Name);
+                        Game.SkyBox.Parts.Add(MPart);
+                        Game.SkyBox.CalcBoundingObjects();
                     }
                     catch
                     {
 
                     }
-                    if (TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].EngineContent == true)
+                    if (Textures.TexturesList[TexturesListBox.SelectedIndex + TexturesListIndexCounter].EngineContent == true)
                         EngineCheckBox.Checked = true;
-                    if (TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].EngineContent == false)
+                    if (Textures.TexturesList[TexturesListBox.SelectedIndex + TexturesListIndexCounter].EngineContent == false)
                         EngineCheckBox.Checked = false;
                 }
                 try
@@ -633,21 +493,21 @@ namespace LED_Engine
                     {
                         if (MaterialTabs.SelectedTab == MaterialTabs.TabPages[0])
                         {
-                            if (TexturesListParse[TexturesListBox.SelectedIndex].UndefinedMagFilter == false)
+                            if (Textures.TexturesList[TexturesListBox.SelectedIndex].MagFilter.ToString() != String.Empty)
                             {
-                                if (item.ToString() == TexturesListParse[TexturesListBox.SelectedIndex].MagFilter.ToString())
+                                if (item.ToString() == Textures.TexturesList[TexturesListBox.SelectedIndex].MagFilter.ToString())
                                 {
-                                    MagFilterComboBox.SelectedIndex = MagFilterComboBox.FindString(TexturesListParse[TexturesListBox.SelectedIndex].MagFilter.ToString());
+                                    MagFilterComboBox.SelectedIndex = MagFilterComboBox.FindString(Textures.TexturesList[TexturesListBox.SelectedIndex].MagFilter.ToString());
                                 }
                             }
                         }
                         if (MaterialTabs.SelectedTab == MaterialTabs.TabPages[1])
                         {
-                            if (TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].UndefinedMagFilter == false)
+                            if (Textures.TexturesList[TexturesListBox.SelectedIndex + TexturesListIndexCounter].MagFilter.ToString() != String.Empty)
                             {
-                                if (item.ToString() == TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].MagFilter.ToString())
+                                if (item.ToString() == Textures.TexturesList[TexturesListBox.SelectedIndex + TexturesListIndexCounter].MagFilter.ToString())
                                 {
-                                    MagFilterComboBox.SelectedIndex = MagFilterComboBox.FindString(TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].MagFilter.ToString());
+                                    MagFilterComboBox.SelectedIndex = MagFilterComboBox.FindString(Textures.TexturesList[TexturesListBox.SelectedIndex + TexturesListIndexCounter].MagFilter.ToString());
                                 }
                             }
                         }
@@ -657,21 +517,21 @@ namespace LED_Engine
                     {
                         if (MaterialTabs.SelectedTab == MaterialTabs.TabPages[0])
                         {
-                            if (TexturesListParse[TexturesListBox.SelectedIndex].UndefinedMinFilter == false)
+                            if (Textures.TexturesList[TexturesListBox.SelectedIndex].MinFilter.ToString() != String.Empty)
                             {
-                                if (item.ToString() == TexturesListParse[TexturesListBox.SelectedIndex].MinFilter.ToString())
+                                if (item.ToString() == Textures.TexturesList[TexturesListBox.SelectedIndex].MinFilter.ToString())
                                 {
-                                    MinFilterComboBox.SelectedIndex = MinFilterComboBox.FindString(TexturesListParse[TexturesListBox.SelectedIndex].MinFilter.ToString());
+                                    MinFilterComboBox.SelectedIndex = MinFilterComboBox.FindString(Textures.TexturesList[TexturesListBox.SelectedIndex].MinFilter.ToString());
                                 }
                             }
                         }
                         if (MaterialTabs.SelectedTab == MaterialTabs.TabPages[1])
                         {
-                            if (TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].UndefinedMinFilter == false)
+                            if (Textures.TexturesList[TexturesListBox.SelectedIndex + TexturesListIndexCounter].MinFilter.ToString() != String.Empty)
                             {
-                                if (item.ToString() == TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].MinFilter.ToString())
+                                if (item.ToString() == Textures.TexturesList[TexturesListBox.SelectedIndex + TexturesListIndexCounter].MinFilter.ToString())
                                 {
-                                    MinFilterComboBox.SelectedIndex = MinFilterComboBox.FindString(TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].MinFilter.ToString());
+                                    MinFilterComboBox.SelectedIndex = MinFilterComboBox.FindString(Textures.TexturesList[TexturesListBox.SelectedIndex + TexturesListIndexCounter].MinFilter.ToString());
                                 }
                             }
                         }
@@ -679,27 +539,21 @@ namespace LED_Engine
                 }
                 catch
                 {
-                    
+                    //Log.WriteLineRed("Texture Load Error.");
                 }
             }
             catch
             {
-
+                //Log.WriteLineRed("Texture Load Error.");
             }
         }
 
         private void TextureEditor_FormClosed(object sender, FormClosedEventArgs e)
         {
-            TexturesListParse.Clear();
             TexturesListBox.Items.Clear();
             MagFilterComboBox.Items.Clear();
             MinFilterComboBox.Items.Clear();
             FileTextBox.Clear();
-            GL.DeleteTexture(Material1.TextureID);
-            Shader1.Free();
-            SkyCube.Free();
-            TexPlain.Free();
-            TexturesGLControl.Dispose();
         }
 
         private void MaterialTabs_SelectedIndexChanged(object sender, EventArgs e)
@@ -731,7 +585,6 @@ namespace LED_Engine
             this.MinimumSize = new System.Drawing.Size(0, 0);
             if (MaterialTabs.SelectedTab == MaterialTabs.TabPages[0])
             {
-                //TexturesGLControl.MakeCurrent();
                 this.Size = new System.Drawing.Size(798, 482);
                 this.MinimumSize = new System.Drawing.Size(798, 482);
 
@@ -741,8 +594,8 @@ namespace LED_Engine
                 MagFilterComboBox.SelectedIndex = -1;
                 MinFilterComboBox.SelectedIndex = -1;
                 FileTextBox.Clear();
-                TexturesGLControl.Hide();
-                foreach (Texture element in TexturesListParse)
+                pictureBox1.Hide();
+                foreach (Texture element in Textures.TexturesList)
                 {
                     if (element.TextureTarget == Pencil.Gaming.Graphics.TextureTarget.Texture2D)
                         TexturesListBox.Items.Add(element.Name);
@@ -750,7 +603,6 @@ namespace LED_Engine
             }
             if (MaterialTabs.SelectedTab == MaterialTabs.TabPages[1])
             {
-                //CubeMapsGLControl.MakeCurrent();
                 this.Size = new System.Drawing.Size(798, 604);
                 this.MinimumSize = new System.Drawing.Size(798, 604);
 
@@ -761,8 +613,8 @@ namespace LED_Engine
                 MagFilterComboBox.SelectedIndex = -1;
                 MinFilterComboBox.SelectedIndex = -1;
                 FileTextBox.Clear();
-                TexturesGLControl.Hide();
-                foreach (Texture element in TexturesListParse)
+                pictureBox1.Hide();
+                foreach (Texture element in Textures.TexturesList)
                 {
                     if (element.TextureTarget == Pencil.Gaming.Graphics.TextureTarget.TextureCubeMap)
                         TexturesListBox.Items.Add(element.Name);
@@ -783,14 +635,14 @@ namespace LED_Engine
             {
                 Texture newtexture = new Texture();
                 newtexture.TextureTarget = Pencil.Gaming.Graphics.TextureTarget.Texture2D;
-                TexturesListParse.Insert(TexturesListBox.Items.Count, newtexture);
+                Textures.TexturesList.Insert(TexturesListBox.Items.Count, newtexture);
                 TexturesListBox.Items.Add(newtexture.Name);
             }
             if (MaterialTabs.SelectedTab == MaterialTabs.TabPages[1])
             {
                 Texture newtexture = new Texture();
                 newtexture.TextureTarget = Pencil.Gaming.Graphics.TextureTarget.TextureCubeMap;
-                TexturesListParse.Add(newtexture);
+                Textures.TexturesList.Add(newtexture);
                 TexturesListBox.Items.Add(newtexture.Name);
             }
         }
@@ -799,12 +651,12 @@ namespace LED_Engine
         {
             if (MaterialTabs.SelectedTab == MaterialTabs.TabPages[0])
             {
-                TexturesListParse.RemoveAt(TexturesListBox.SelectedIndex);
+                Textures.TexturesList.RemoveAt(TexturesListBox.SelectedIndex);
                 TexturesListBox.Items.RemoveAt(TexturesListBox.SelectedIndex);
             }
             if (MaterialTabs.SelectedTab == MaterialTabs.TabPages[1])
             {
-                TexturesListParse.RemoveAt(TexturesListBox.SelectedIndex + TexturesListIndexCounter);
+                Textures.TexturesList.RemoveAt(TexturesListBox.SelectedIndex + TexturesListIndexCounter);
                 TexturesListBox.Items.RemoveAt(TexturesListBox.SelectedIndex);
             }
         }
@@ -813,19 +665,13 @@ namespace LED_Engine
         {
             if (MaterialTabs.SelectedTab == MaterialTabs.TabPages[0])
             {
-                TexturesListParse[TexturesListBox.SelectedIndex].Name = NameTextBox.Text;
-
-                if (MagFilterComboBox.SelectedItem.ToString() == "Undefined")
-                    TexturesListParse[TexturesListBox.SelectedIndex].UndefinedMagFilter = true;
-                if (MinFilterComboBox.SelectedItem.ToString() == "Undefined")
-                    TexturesListParse[TexturesListBox.SelectedIndex].UndefinedMinFilter = true;
+                Textures.TexturesList[TexturesListBox.SelectedIndex].Name = NameTextBox.Text;
 
                 foreach (Pencil.Gaming.Graphics.TextureMagFilter items in Enum.GetValues(typeof(TextureMagFilter)))
                 {
                     if (items.ToString() == MagFilterComboBox.SelectedItem.ToString())
                     {
-                        TexturesListParse[TexturesListBox.SelectedIndex].MagFilter = items;
-                        TexturesListParse[TexturesListBox.SelectedIndex].UndefinedMagFilter = false;
+                        Textures.TexturesList[TexturesListBox.SelectedIndex].MagFilter = items;
                     }
                 }
 
@@ -833,25 +679,24 @@ namespace LED_Engine
                 {
                     if (items.ToString() == MinFilterComboBox.SelectedItem.ToString())
                     {
-                        TexturesListParse[TexturesListBox.SelectedIndex].MinFilter = items;
-                        TexturesListParse[TexturesListBox.SelectedIndex].UndefinedMinFilter = false;
+                        Textures.TexturesList[TexturesListBox.SelectedIndex].MinFilter = items;
                     }
                 }
 
                 if (EngineCheckBox.Checked == true)
                 {
-                    TexturesListParse[TexturesListBox.SelectedIndex].EngineContent = true;
-                    TexturesListParse[TexturesListBox.SelectedIndex].File = Engine.CombinePaths(EngineTexturePath, FileTextBox.Text);
+                    Textures.TexturesList[TexturesListBox.SelectedIndex].EngineContent = true;
+                    Textures.TexturesList[TexturesListBox.SelectedIndex].File = Engine.CombinePaths(Settings.Paths.EngineTextures, FileTextBox.Text);
                 }
                 if (EngineCheckBox.Checked == false)
                 {
-                    TexturesListParse[TexturesListBox.SelectedIndex].EngineContent = false;
-                    TexturesListParse[TexturesListBox.SelectedIndex].File = Engine.CombinePaths(TexturePath, FileTextBox.Text);
+                    Textures.TexturesList[TexturesListBox.SelectedIndex].EngineContent = false;
+                    Textures.TexturesList[TexturesListBox.SelectedIndex].File = Engine.CombinePaths(Settings.Paths.Textures, FileTextBox.Text);
                 }
 
                 int tempind = TexturesListBox.SelectedIndex;
                 TexturesListBox.Items.Clear();
-                foreach (Texture element in TexturesListParse)
+                foreach (Texture element in Textures.TexturesList)
                 {
                     if (element.TextureTarget == Pencil.Gaming.Graphics.TextureTarget.Texture2D)
                         TexturesListBox.Items.Add(element.Name);
@@ -860,19 +705,13 @@ namespace LED_Engine
             }
             if (MaterialTabs.SelectedTab == MaterialTabs.TabPages[1])
             {
-                TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].Name = NameTextBox.Text;
-
-                if (MagFilterComboBox.SelectedItem.ToString() == "Undefined")
-                    TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].UndefinedMagFilter = true;
-                if (MinFilterComboBox.SelectedItem.ToString() == "Undefined")
-                    TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].UndefinedMinFilter = true;
+                Textures.TexturesList[TexturesListBox.SelectedIndex + TexturesListIndexCounter].Name = NameTextBox.Text;
 
                 foreach (Pencil.Gaming.Graphics.TextureMagFilter items in Enum.GetValues(typeof(TextureMagFilter)))
                 {
                     if (items.ToString() == MagFilterComboBox.SelectedItem.ToString())
                     {
-                        TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].MagFilter = items;
-                        TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].UndefinedMagFilter = false;
+                        Textures.TexturesList[TexturesListBox.SelectedIndex + TexturesListIndexCounter].MagFilter = items;
                     }
                 }
 
@@ -880,60 +719,39 @@ namespace LED_Engine
                 {
                     if (items.ToString() == MinFilterComboBox.SelectedItem.ToString())
                     {
-                        TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].MinFilter = items;
-                        TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].UndefinedMinFilter = false;
+                        Textures.TexturesList[TexturesListBox.SelectedIndex + TexturesListIndexCounter].MinFilter = items;
                     }
                 }
 
                 if (EngineCheckBox.Checked == true)
                 {
-                    TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].EngineContent = true;
-                    TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles[0] = Engine.CombinePaths(EngineCubeMapPath, CubeMapFileTextBox1.Text);
-                    TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles[1] = Engine.CombinePaths(EngineCubeMapPath, CubeMapFileTextBox2.Text);
-                    TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles[2] = Engine.CombinePaths(EngineCubeMapPath, CubeMapFileTextBox3.Text);
-                    TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles[3] = Engine.CombinePaths(EngineCubeMapPath, CubeMapFileTextBox4.Text);
-                    TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles[4] = Engine.CombinePaths(EngineCubeMapPath, CubeMapFileTextBox5.Text);
-                    TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles[5] = Engine.CombinePaths(EngineCubeMapPath, CubeMapFileTextBox6.Text);
+                    Textures.TexturesList[TexturesListBox.SelectedIndex + TexturesListIndexCounter].EngineContent = true;
+                    Textures.TexturesList[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles[0] = Engine.CombinePaths(Settings.Paths.EngineCubemapTextures, CubeMapFileTextBox1.Text);
+                    Textures.TexturesList[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles[1] = Engine.CombinePaths(Settings.Paths.EngineCubemapTextures, CubeMapFileTextBox2.Text);
+                    Textures.TexturesList[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles[2] = Engine.CombinePaths(Settings.Paths.EngineCubemapTextures, CubeMapFileTextBox3.Text);
+                    Textures.TexturesList[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles[3] = Engine.CombinePaths(Settings.Paths.EngineCubemapTextures, CubeMapFileTextBox4.Text);
+                    Textures.TexturesList[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles[4] = Engine.CombinePaths(Settings.Paths.EngineCubemapTextures, CubeMapFileTextBox5.Text);
+                    Textures.TexturesList[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles[5] = Engine.CombinePaths(Settings.Paths.EngineCubemapTextures, CubeMapFileTextBox6.Text);
                 }
                 if (EngineCheckBox.Checked == false)
                 {
-                    TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].EngineContent = false;
-                    TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles[0] = Engine.CombinePaths(CubeMapPath, CubeMapFileTextBox1.Text);
-                    TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles[1] = Engine.CombinePaths(CubeMapPath, CubeMapFileTextBox2.Text);
-                    TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles[2] = Engine.CombinePaths(CubeMapPath, CubeMapFileTextBox3.Text);
-                    TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles[3] = Engine.CombinePaths(CubeMapPath, CubeMapFileTextBox4.Text);
-                    TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles[4] = Engine.CombinePaths(CubeMapPath, CubeMapFileTextBox5.Text);
-                    TexturesListParse[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles[5] = Engine.CombinePaths(CubeMapPath, CubeMapFileTextBox6.Text);
+                    Textures.TexturesList[TexturesListBox.SelectedIndex + TexturesListIndexCounter].EngineContent = false;
+                    Textures.TexturesList[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles[0] = Engine.CombinePaths(Settings.Paths.CubemapTextures, CubeMapFileTextBox1.Text);
+                    Textures.TexturesList[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles[1] = Engine.CombinePaths(Settings.Paths.CubemapTextures, CubeMapFileTextBox2.Text);
+                    Textures.TexturesList[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles[2] = Engine.CombinePaths(Settings.Paths.CubemapTextures, CubeMapFileTextBox3.Text);
+                    Textures.TexturesList[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles[3] = Engine.CombinePaths(Settings.Paths.CubemapTextures, CubeMapFileTextBox4.Text);
+                    Textures.TexturesList[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles[4] = Engine.CombinePaths(Settings.Paths.CubemapTextures, CubeMapFileTextBox5.Text);
+                    Textures.TexturesList[TexturesListBox.SelectedIndex + TexturesListIndexCounter].CubemapFiles[5] = Engine.CombinePaths(Settings.Paths.CubemapTextures, CubeMapFileTextBox6.Text);
                 }
                 int tempind = TexturesListBox.SelectedIndex;
                 TexturesListBox.Items.Clear();
-                foreach (Texture element in TexturesListParse)
+                foreach (Texture element in Textures.TexturesList)
                 {
                     if (element.TextureTarget == Pencil.Gaming.Graphics.TextureTarget.TextureCubeMap)
                         TexturesListBox.Items.Add(element.Name);
                 }
                 TexturesListBox.SelectedIndex = tempind;
             }
-        }
-
-        private void TexturesGLControl_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            if (MaterialTabs.SelectedTab == MaterialTabs.TabPages[1])
-            {
-                if (e.Button == MouseButtons.Left)
-                {
-                    this.Cursor = Cursors.Hand;
-                    double deltaX = TexturesGLControl.Location.X + TexturesGLControl.Width / 2 - e.X;
-                    double deltaY = TexturesGLControl.Location.X + TexturesGLControl.Height / 2 - e.Y;
-                    MainCamera.AddRotation((float)deltaX / 100, (float)deltaY / 100);
-                    TexturesGLControl.Invalidate();
-                }
-            }
-        }
-
-        private void TexturesGLControl_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            this.Cursor = Cursors.Default;
         }
     }
 }

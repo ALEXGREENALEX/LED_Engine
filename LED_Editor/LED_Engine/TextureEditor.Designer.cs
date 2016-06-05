@@ -63,11 +63,11 @@
             this.MaterialTabs = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.TexturesGLControl = new OpenTK.GLControl();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.SaveButton = new System.Windows.Forms.ToolStripButton();
             this.RevertButton = new System.Windows.Forms.ToolStripButton();
             this.GLControlPanel = new System.Windows.Forms.Panel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -77,6 +77,7 @@
             this.MaterialTabs.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.GLControlPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -91,7 +92,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel1.Location = new System.Drawing.Point(442, 39);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(340, 405);
+            this.panel1.Size = new System.Drawing.Size(340, 427);
             this.panel1.TabIndex = 3;
             // 
             // label3
@@ -432,21 +433,6 @@
             this.tabPage3.Text = "CubeMap";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
-            // TexturesGLControl
-            // 
-            this.TexturesGLControl.BackColor = System.Drawing.Color.Black;
-            this.TexturesGLControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TexturesGLControl.Location = new System.Drawing.Point(0, 0);
-            this.TexturesGLControl.Name = "TexturesGLControl";
-            this.TexturesGLControl.Size = new System.Drawing.Size(438, 383);
-            this.TexturesGLControl.TabIndex = 0;
-            this.TexturesGLControl.VSync = false;
-            this.TexturesGLControl.Load += new System.EventHandler(this.TexturesGLControl_Load);
-            this.TexturesGLControl.Paint += new System.Windows.Forms.PaintEventHandler(this.TexturesGLControl_Paint);
-            this.TexturesGLControl.MouseMove += new System.Windows.Forms.MouseEventHandler(this.TexturesGLControl_MouseMove);
-            this.TexturesGLControl.MouseUp += new System.Windows.Forms.MouseEventHandler(this.TexturesGLControl_MouseUp);
-            this.TexturesGLControl.Resize += new System.EventHandler(this.TexturesGLControl_Resize);
-            // 
             // toolStrip1
             // 
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
@@ -485,18 +471,29 @@
             // 
             this.GLControlPanel.BackColor = System.Drawing.SystemColors.Window;
             this.GLControlPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.GLControlPanel.Controls.Add(this.TexturesGLControl);
+            this.GLControlPanel.Controls.Add(this.pictureBox1);
             this.GLControlPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.GLControlPanel.Location = new System.Drawing.Point(0, 57);
             this.GLControlPanel.Name = "GLControlPanel";
-            this.GLControlPanel.Size = new System.Drawing.Size(442, 387);
+            this.GLControlPanel.Size = new System.Drawing.Size(442, 409);
             this.GLControlPanel.TabIndex = 6;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(438, 405);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 0;
+            this.pictureBox1.TabStop = false;
             // 
             // TextureEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(782, 444);
+            this.ClientSize = new System.Drawing.Size(782, 466);
+            this.ControlBox = false;
             this.Controls.Add(this.GLControlPanel);
             this.Controls.Add(this.MaterialTabs);
             this.Controls.Add(this.panel1);
@@ -522,6 +519,7 @@
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.GLControlPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -566,7 +564,7 @@
         private System.Windows.Forms.Button ApplyButton;
         private System.Windows.Forms.TextBox NameTextBox;
         private System.Windows.Forms.Label label3;
-        private OpenTK.GLControl TexturesGLControl;
         private System.Windows.Forms.Panel GLControlPanel;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }

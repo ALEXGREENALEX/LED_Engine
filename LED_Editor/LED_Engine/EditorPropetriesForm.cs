@@ -84,6 +84,8 @@ namespace LED_Engine
             foreach (Mesh element in Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes)
             {
                 listBox1.Items.Add(element.Name);
+                objcountlabel.Visible = true;
+                objcountlabel.Text = Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes.Count().ToString() + " object(s)";
             }
         }
 
@@ -160,6 +162,8 @@ namespace LED_Engine
                 listBox1.Items.Add(element.Name);
             }
             listBox1.SelectedIndex = temp_index;
+            objcountlabel.Visible = true;
+            objcountlabel.Text = Models.MODELS[ModelsComboBox1.SelectedIndex].Meshes.Count().ToString() + " object(s)";
         }
 
         private void RemoveButton_Click(object sender, EventArgs e)
