@@ -1,2 +1,2 @@
 @echo off
-"..\Bin\Release\LED_Engine.exe" Sponza232
+"..\Bin\Release\LED_Engine.exe" mappp

@@ -56,12 +56,9 @@
 		<Visible>true</Visible>
 		<Mesh>
 			<Name>Box_1</Name>
-			<Type>Box</Type>
+			<Type>Mesh</Type>
+			<Mesh>Box</Mesh>
 			<Visible>true</Visible>
-			<SideA>1.0</SideA>
-			<SideB>1.0</SideB>
-			<SideC>1.0</SideC>
-			<FlipPolygons>false</FlipPolygons>
 			
 			<Position>4.0 0.0 0.0</Position>
 			<Rotation>0.0 0.0 0.0</Rotation>
@@ -73,12 +70,9 @@
 		</Mesh>
 		<Mesh>
 			<Name>Box_2</Name>
-			<Type>Box</Type>
+			<Type>Mesh</Type>
+			<Mesh>Box</Mesh>
 			<Visible>true</Visible>
-			<SideA>1.0</SideA>
-			<SideB>1.0</SideB>
-			<SideC>1.0</SideC>
-			<FlipPolygons>false</FlipPolygons>
 			
 			<Position>4.0 0.0 1.5</Position>
 			<Rotation>0.0 0.0 0.0</Rotation>
@@ -90,12 +84,9 @@
 		</Mesh>
 		<Mesh>
 			<Name>Box_3</Name>
-			<Type>Box</Type>
+			<Type>Mesh</Type>
+			<Mesh>Box</Mesh>
 			<Visible>true</Visible>
-			<SideA>1.0</SideA>
-			<SideB>1.0</SideB>
-			<SideC>1.0</SideC>
-			<FlipPolygons>false</FlipPolygons>
 			
 			<Position>4.0 0.0 3.0</Position>
 			<Rotation>0.0 0.0 0.0</Rotation>
@@ -107,15 +98,13 @@
 		</Mesh>
 		<Mesh>
 			<Name>Plain_1</Name>
-			<Type>Plain</Type>
+			<Type>Mesh</Type>
+			<Mesh>Plain</Mesh>
 			<Visible>true</Visible>
-			
-			<SideA>2.0</SideA>
-			<SideB>2.0</SideB>
 			
 			<Position>2.5 -0.7 0.0</Position>
 			<Rotation>0.0 0.0 0.0</Rotation>
-			<Scale>1.0 1.0 1.0</Scale>
+			<Scale>2.0 2.0 2.0</Scale>
 			
 			<Materials>
 				<Material>ParallaxMapping_1</Material>
@@ -123,15 +112,13 @@
 		</Mesh>
 		<Mesh>
 			<Name>Plain_2</Name>
-			<Type>Plain</Type>
+			<Type>Mesh</Type>
+			<Mesh>Plain</Mesh>
 			<Visible>true</Visible>
-			
-			<SideA>2.0</SideA>
-			<SideB>2.0</SideB>
 			
 			<Position>2.5 -0.7 2.0</Position>
 			<Rotation>0.0 0.0 0.0</Rotation>
-			<Scale>1.0 1.0 1.0</Scale>
+			<Scale>2.0 2.0 2.0</Scale>
 			
 			<Materials>
 				<Material>ParallaxMapping_2</Material>
@@ -139,15 +126,13 @@
 		</Mesh>
 		<Mesh>
 			<Name>Plain_3</Name>
-			<Type>Plain</Type>
+			<Type>Mesh</Type>
+			<Mesh>Plain</Mesh>
 			<Visible>true</Visible>
-			
-			<SideA>2.0</SideA>
-			<SideB>2.0</SideB>
 			
 			<Position>2.5 -0.7 4.0</Position>
 			<Rotation>0.0 0.0 0.0</Rotation>
-			<Scale>1.0 1.0 1.0</Scale>
+			<Scale>2.0 2.0 2.0</Scale>
 			
 			<Materials>
 				<Material>ParallaxMapping_3</Material>

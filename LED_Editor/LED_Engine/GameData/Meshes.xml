@@ -1,5 +1,13 @@
 <Meshes>
 	<Mesh>
+		<Name>Plain</Name>
+		<File>Plain.obj</File>
+	</Mesh>
+	<Mesh>
+		<Name>Box</Name>
+		<File>Box.obj</File>
+	</Mesh>
+	<Mesh>
 		<Name>Teapot</Name>
 		<File>Teapot.obj</File>
 	</Mesh>

@@ -28,15 +28,13 @@
 		<Visible>true</Visible>
 		<Mesh>
 			<Name>Plain_1</Name>
-			<Type>Plain</Type>
+			<Type>Mesh</Type>
+			<Mesh>Plain</Mesh>
 			<Visible>true</Visible>
-			
-			<SideA>100.0</SideA>
-			<SideB>100.0</SideB>
 			
 			<Position>0.0 -0.5 0.0</Position>
 			<Rotation>0.0 0.0 0.0</Rotation>
-			<Scale>1.0 1.0 1.0</Scale>
+			<Scale>100.0 100.0 100.0</Scale>
 			
 			<Materials>
 				<Material>BrickWall</Material>
@@ -48,13 +46,9 @@
 		<Visible>true</Visible>
 		<Mesh>
 			<Name>Box_1</Name>
-			<Type>Box</Type>
+			<Type>Mesh</Type>
+			<Mesh>Box</Mesh>
 			<Visible>true</Visible>
-			
-			<SideA>1.0</SideA>
-			<SideB>1.0</SideB>
-			<SideC>1.0</SideC>
-			<FlipPolygons>false</FlipPolygons>
 			
 			<Position>-2.0 0.0 0.0</Position>
 			<Rotation>0.0 0.0 0.0</Rotation>
