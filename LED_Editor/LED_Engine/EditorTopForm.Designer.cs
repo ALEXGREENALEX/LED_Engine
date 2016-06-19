@@ -182,14 +182,14 @@
             this.materialBrowserToolStripMenuItem,
             this.lIToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
             // 
             // meshBrowserToolStripMenuItem
             // 
             this.meshBrowserToolStripMenuItem.CheckOnClick = true;
             this.meshBrowserToolStripMenuItem.Name = "meshBrowserToolStripMenuItem";
-            this.meshBrowserToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.meshBrowserToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.meshBrowserToolStripMenuItem.Text = "Object settings";
             this.meshBrowserToolStripMenuItem.Click += new System.EventHandler(this.meshBrowserToolStripMenuItem_Click);
             // 
@@ -197,7 +197,7 @@
             // 
             this.materialBrowserToolStripMenuItem.CheckOnClick = true;
             this.materialBrowserToolStripMenuItem.Name = "materialBrowserToolStripMenuItem";
-            this.materialBrowserToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.materialBrowserToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.materialBrowserToolStripMenuItem.Text = "Texture settings";
             this.materialBrowserToolStripMenuItem.Click += new System.EventHandler(this.materialBrowserToolStripMenuItem_Click);
             // 
@@ -205,7 +205,7 @@
             // 
             this.lIToolStripMenuItem.CheckOnClick = true;
             this.lIToolStripMenuItem.Name = "lIToolStripMenuItem";
-            this.lIToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.lIToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.lIToolStripMenuItem.Text = "Light settings";
             this.lIToolStripMenuItem.Click += new System.EventHandler(this.lIToolStripMenuItem_Click);
             // 
@@ -256,6 +256,7 @@
             this.Controls.Add(this.MapNameTextBox);
             this.Controls.Add(this.toolStrip2);
             this.Controls.Add(this.menuStrip2);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "EditorTopForm";

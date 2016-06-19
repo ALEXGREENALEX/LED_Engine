@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LightSettings));
             this.button_Add = new System.Windows.Forms.Button();
             this.button_Del = new System.Windows.Forms.Button();
             this.textBox_Name = new System.Windows.Forms.TextBox();
@@ -333,6 +334,7 @@
             this.Controls.Add(this.button_Del);
             this.Controls.Add(this.button_Add);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.Name = "LightSettings";
