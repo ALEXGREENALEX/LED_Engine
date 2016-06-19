@@ -267,7 +267,7 @@ namespace LED_Engine
 
         private void EditorTopForm_Load(object sender, EventArgs e)
         {
-
+            MapNameTextBox.Text = Maps.Name;
         }
 
         private void EditorTopForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -279,7 +279,46 @@ namespace LED_Engine
 
         private void SaveFileButton_Click(object sender, EventArgs e)
         {
-            WriteMapData("D:/mappp.xml");
+            Maps.Name = MapNameTextBox.Text;
+            WriteMapData(Engine.FixPath(Settings.Paths.Maps + "/" + Maps.Name + ".xml"));
+        }
+
+        private void MapNameTextBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void OpenFileButton_Click(object sender, EventArgs e)
+        {
+            if (openFileDialog1.ShowDialog() != DialogResult.OK) return;
+            XmlDocument XML = new XmlDocument();
+
+            try
+            {
+                XML.Load(openFileDialog1.FileName);
+                string Name = XML.DocumentElement.SelectSingleNode("Name").InnerText;
+                if ((Name != null) && !Maps.MapsList.ContainsKey(Name))
+                {
+                    Maps.MapsList.Add(Name, openFileDialog1.FileName);
+                    Maps.Free();
+                    Maps.LoadMap(Name);
+                }
+                else
+                {
+                    Maps.Free();
+                    Maps.LoadMap(Name);
+                }
+            }
+
+            catch (Exception e1)
+            {
+                Log.WriteLineRed("Maps.LoadMapList() Exception.");
+                Log.WriteLineRed("XmlFile: \"{0}\"", openFileDialog1.FileName);
+                Log.WriteLineYellow("Maybe some XML file in Map directory is not a valid map.");
+                Log.WriteLineYellow(e1.Message);
+            }
+            
+            //MessageBox.Show("Chosen file: " + openFileDialog1.FileName);
         }
 
     }

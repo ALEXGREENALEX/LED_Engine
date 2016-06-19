@@ -48,6 +48,9 @@
             this.lIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.extraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.label1 = new System.Windows.Forms.Label();
+            this.MapNameTextBox = new System.Windows.Forms.TextBox();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.toolStrip2.SuspendLayout();
             this.menuStrip2.SuspendLayout();
             this.SuspendLayout();
@@ -89,6 +92,7 @@
             this.OpenFileButton.Name = "OpenFileButton";
             this.OpenFileButton.Size = new System.Drawing.Size(36, 36);
             this.OpenFileButton.Text = "Open";
+            this.OpenFileButton.Click += new System.EventHandler(this.OpenFileButton_Click);
             // 
             // SaveFileButton
             // 
@@ -219,11 +223,37 @@
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.aboutToolStripMenuItem.Text = "About";
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label1.Location = new System.Drawing.Point(219, 35);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(76, 17);
+            this.label1.TabIndex = 19;
+            this.label1.Text = "Map Name";
+            // 
+            // MapNameTextBox
+            // 
+            this.MapNameTextBox.Location = new System.Drawing.Point(301, 35);
+            this.MapNameTextBox.Name = "MapNameTextBox";
+            this.MapNameTextBox.Size = new System.Drawing.Size(145, 20);
+            this.MapNameTextBox.TabIndex = 18;
+            this.MapNameTextBox.TextChanged += new System.EventHandler(this.MapNameTextBox_TextChanged);
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            this.openFileDialog1.Filter = "XML File|*.xml";
+            this.openFileDialog1.Title = "Choose XML file:";
+            // 
             // EditorTopForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(632, 66);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.MapNameTextBox);
             this.Controls.Add(this.toolStrip2);
             this.Controls.Add(this.menuStrip2);
             this.MaximizeBox = false;
@@ -263,5 +293,8 @@
         private System.Windows.Forms.ToolStripMenuItem extraToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem lIToolStripMenuItem;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox MapNameTextBox;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }
