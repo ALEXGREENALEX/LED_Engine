@@ -297,6 +297,7 @@ namespace LED_Engine
             {
                 XML.Load(openFileDialog1.FileName);
                 string Name = XML.DocumentElement.SelectSingleNode("Name").InnerText;
+                MapNameTextBox.Text = Name;
                 if ((Name != null) && !Maps.MapsList.ContainsKey(Name))
                 {
                     Maps.MapsList.Add(Name, openFileDialog1.FileName);
