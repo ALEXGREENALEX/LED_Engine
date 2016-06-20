@@ -57,7 +57,7 @@ namespace LED_Engine
                     if (args.Length > 0)
                         Maps.LoadMap(args[0]);
                     else
-                        Maps.LoadMap("Sponza"); //Sponza //SampleMap //Materials_Test_Map
+                        Maps.LoadMap("Materials_Test_Map"); //Sponza //SampleMap //Materials_Test_Map
 
                     ContextIsLoaded = true;
                 }

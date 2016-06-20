@@ -41,6 +41,10 @@
             this.button3 = new System.Windows.Forms.Button();
             this.RemoveButton = new System.Windows.Forms.Button();
             this.ObjToolsPanel = new System.Windows.Forms.Panel();
+            this.label7 = new System.Windows.Forms.Label();
+            this.ObjMaterialComboBox = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.MaterialsComboBox = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.NameBox = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -72,7 +76,7 @@
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Location = new System.Drawing.Point(0, 0);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(284, 440);
+            this.groupBox2.Size = new System.Drawing.Size(284, 556);
             this.groupBox2.TabIndex = 11;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Models";
@@ -89,7 +93,7 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(278, 421);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(278, 537);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // panel1
@@ -100,7 +104,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(3, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(272, 204);
+            this.panel1.Size = new System.Drawing.Size(272, 262);
             this.panel1.TabIndex = 2;
             // 
             // listBox1
@@ -109,7 +113,7 @@
             this.listBox1.FormattingEnabled = true;
             this.listBox1.Location = new System.Drawing.Point(0, 21);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(272, 152);
+            this.listBox1.Size = new System.Drawing.Size(272, 210);
             this.listBox1.TabIndex = 0;
             this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
@@ -131,7 +135,7 @@
             this.panel2.Controls.Add(this.button3);
             this.panel2.Controls.Add(this.RemoveButton);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 173);
+            this.panel2.Location = new System.Drawing.Point(0, 231);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(272, 31);
             this.panel2.TabIndex = 5;
@@ -194,6 +198,10 @@
             // 
             // ObjToolsPanel
             // 
+            this.ObjToolsPanel.Controls.Add(this.label7);
+            this.ObjToolsPanel.Controls.Add(this.ObjMaterialComboBox);
+            this.ObjToolsPanel.Controls.Add(this.label6);
+            this.ObjToolsPanel.Controls.Add(this.MaterialsComboBox);
             this.ObjToolsPanel.Controls.Add(this.label3);
             this.ObjToolsPanel.Controls.Add(this.NameBox);
             this.ObjToolsPanel.Controls.Add(this.label5);
@@ -213,10 +221,51 @@
             this.ObjToolsPanel.Controls.Add(this.YtextBox2);
             this.ObjToolsPanel.Controls.Add(this.XtextBox1);
             this.ObjToolsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ObjToolsPanel.Location = new System.Drawing.Point(3, 213);
+            this.ObjToolsPanel.Location = new System.Drawing.Point(3, 271);
             this.ObjToolsPanel.Name = "ObjToolsPanel";
-            this.ObjToolsPanel.Size = new System.Drawing.Size(272, 205);
+            this.ObjToolsPanel.Size = new System.Drawing.Size(272, 263);
             this.ObjToolsPanel.TabIndex = 3;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Cursor = System.Windows.Forms.Cursors.Default;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label7.Location = new System.Drawing.Point(3, 110);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(31, 17);
+            this.label7.TabIndex = 37;
+            this.label7.Text = "Tex";
+            // 
+            // ObjMaterialComboBox
+            // 
+            this.ObjMaterialComboBox.FormattingEnabled = true;
+            this.ObjMaterialComboBox.Location = new System.Drawing.Point(54, 79);
+            this.ObjMaterialComboBox.Name = "ObjMaterialComboBox";
+            this.ObjMaterialComboBox.Size = new System.Drawing.Size(212, 21);
+            this.ObjMaterialComboBox.TabIndex = 36;
+            this.ObjMaterialComboBox.SelectedIndexChanged += new System.EventHandler(this.ObjMaterialComboBox_SelectedIndexChanged);
+            this.ObjMaterialComboBox.Click += new System.EventHandler(this.ObjMaterialComboBox_Click);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label6.Location = new System.Drawing.Point(3, 83);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(34, 17);
+            this.label6.TabIndex = 35;
+            this.label6.Text = "Part";
+            // 
+            // MaterialsComboBox
+            // 
+            this.MaterialsComboBox.Enabled = false;
+            this.MaterialsComboBox.FormattingEnabled = true;
+            this.MaterialsComboBox.Location = new System.Drawing.Point(54, 106);
+            this.MaterialsComboBox.Name = "MaterialsComboBox";
+            this.MaterialsComboBox.Size = new System.Drawing.Size(212, 21);
+            this.MaterialsComboBox.TabIndex = 34;
+            this.MaterialsComboBox.SelectedIndexChanged += new System.EventHandler(this.MaterialsComboBox_SelectedIndexChanged);
             // 
             // label3
             // 
@@ -224,13 +273,13 @@
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label3.Location = new System.Drawing.Point(3, 56);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(45, 17);
+            this.label3.Size = new System.Drawing.Size(42, 17);
             this.label3.TabIndex = 33;
-            this.label3.Text = "Name";
+            this.label3.Text = "Mesh";
             // 
             // NameBox
             // 
-            this.NameBox.Location = new System.Drawing.Point(54, 53);
+            this.NameBox.Location = new System.Drawing.Point(54, 26);
             this.NameBox.Name = "NameBox";
             this.NameBox.Size = new System.Drawing.Size(212, 20);
             this.NameBox.TabIndex = 32;
@@ -241,17 +290,18 @@
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label5.Location = new System.Drawing.Point(3, 30);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(42, 17);
+            this.label5.Size = new System.Drawing.Size(45, 17);
             this.label5.TabIndex = 31;
-            this.label5.Text = "Mesh";
+            this.label5.Text = "Name";
             // 
             // MeshComboBox
             // 
             this.MeshComboBox.FormattingEnabled = true;
-            this.MeshComboBox.Location = new System.Drawing.Point(54, 26);
+            this.MeshComboBox.Location = new System.Drawing.Point(54, 52);
             this.MeshComboBox.Name = "MeshComboBox";
             this.MeshComboBox.Size = new System.Drawing.Size(212, 21);
             this.MeshComboBox.TabIndex = 30;
+            this.MeshComboBox.SelectedIndexChanged += new System.EventHandler(this.MeshComboBox_SelectedIndexChanged);
             // 
             // VisibleCheckBox1
             // 
@@ -267,7 +317,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label4.Location = new System.Drawing.Point(3, 141);
+            this.label4.Location = new System.Drawing.Point(3, 201);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(27, 17);
             this.label4.TabIndex = 28;
@@ -275,28 +325,28 @@
             // 
             // SclBoxZ
             // 
-            this.SclBoxZ.Location = new System.Drawing.Point(139, 140);
+            this.SclBoxZ.Location = new System.Drawing.Point(139, 200);
             this.SclBoxZ.Name = "SclBoxZ";
             this.SclBoxZ.Size = new System.Drawing.Size(36, 20);
             this.SclBoxZ.TabIndex = 27;
             // 
             // SclBoxY
             // 
-            this.SclBoxY.Location = new System.Drawing.Point(97, 140);
+            this.SclBoxY.Location = new System.Drawing.Point(97, 200);
             this.SclBoxY.Name = "SclBoxY";
             this.SclBoxY.Size = new System.Drawing.Size(36, 20);
             this.SclBoxY.TabIndex = 26;
             // 
             // SclBoxX
             // 
-            this.SclBoxX.Location = new System.Drawing.Point(54, 140);
+            this.SclBoxX.Location = new System.Drawing.Point(54, 200);
             this.SclBoxX.Name = "SclBoxX";
             this.SclBoxX.Size = new System.Drawing.Size(36, 20);
             this.SclBoxX.TabIndex = 25;
             // 
             // PropetriesApplyButton
             // 
-            this.PropetriesApplyButton.Location = new System.Drawing.Point(6, 175);
+            this.PropetriesApplyButton.Location = new System.Drawing.Point(6, 234);
             this.PropetriesApplyButton.Name = "PropetriesApplyButton";
             this.PropetriesApplyButton.Size = new System.Drawing.Size(75, 23);
             this.PropetriesApplyButton.TabIndex = 24;
@@ -308,7 +358,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label2.Location = new System.Drawing.Point(3, 115);
+            this.label2.Location = new System.Drawing.Point(3, 175);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(30, 17);
             this.label2.TabIndex = 23;
@@ -316,21 +366,21 @@
             // 
             // RotBoxZ
             // 
-            this.RotBoxZ.Location = new System.Drawing.Point(139, 114);
+            this.RotBoxZ.Location = new System.Drawing.Point(139, 174);
             this.RotBoxZ.Name = "RotBoxZ";
             this.RotBoxZ.Size = new System.Drawing.Size(36, 20);
             this.RotBoxZ.TabIndex = 22;
             // 
             // RotBoxY
             // 
-            this.RotBoxY.Location = new System.Drawing.Point(97, 114);
+            this.RotBoxY.Location = new System.Drawing.Point(97, 174);
             this.RotBoxY.Name = "RotBoxY";
             this.RotBoxY.Size = new System.Drawing.Size(36, 20);
             this.RotBoxY.TabIndex = 21;
             // 
             // RotBoxX
             // 
-            this.RotBoxX.Location = new System.Drawing.Point(54, 114);
+            this.RotBoxX.Location = new System.Drawing.Point(54, 174);
             this.RotBoxX.Name = "RotBoxX";
             this.RotBoxX.Size = new System.Drawing.Size(36, 20);
             this.RotBoxX.TabIndex = 20;
@@ -339,7 +389,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.Location = new System.Drawing.Point(3, 89);
+            this.label1.Location = new System.Drawing.Point(3, 149);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(32, 17);
             this.label1.TabIndex = 17;
@@ -347,21 +397,21 @@
             // 
             // ZtextBox3
             // 
-            this.ZtextBox3.Location = new System.Drawing.Point(139, 88);
+            this.ZtextBox3.Location = new System.Drawing.Point(139, 148);
             this.ZtextBox3.Name = "ZtextBox3";
             this.ZtextBox3.Size = new System.Drawing.Size(36, 20);
             this.ZtextBox3.TabIndex = 16;
             // 
             // YtextBox2
             // 
-            this.YtextBox2.Location = new System.Drawing.Point(97, 88);
+            this.YtextBox2.Location = new System.Drawing.Point(97, 148);
             this.YtextBox2.Name = "YtextBox2";
             this.YtextBox2.Size = new System.Drawing.Size(36, 20);
             this.YtextBox2.TabIndex = 15;
             // 
             // XtextBox1
             // 
-            this.XtextBox1.Location = new System.Drawing.Point(54, 88);
+            this.XtextBox1.Location = new System.Drawing.Point(54, 148);
             this.XtextBox1.Name = "XtextBox1";
             this.XtextBox1.Size = new System.Drawing.Size(36, 20);
             this.XtextBox1.TabIndex = 14;
@@ -371,7 +421,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(284, 440);
+            this.ClientSize = new System.Drawing.Size(284, 556);
             this.ControlBox = false;
             this.Controls.Add(this.groupBox2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -421,5 +471,9 @@
         private System.Windows.Forms.Label objcountlabel;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.ComboBox MaterialsComboBox;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.ComboBox ObjMaterialComboBox;
     }
 }

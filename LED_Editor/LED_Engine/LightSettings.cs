@@ -30,7 +30,7 @@ namespace LED_Engine
             //    this.Close();
         }
 
-        void ListsRefresh()
+        public void ListsRefresh()
         {
             listBox_Lights.Items.Clear();
             foreach (var l in Lights.LIGHTS)

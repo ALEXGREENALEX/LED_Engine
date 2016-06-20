@@ -125,7 +125,7 @@ namespace LED_Engine
                         meshelement.AppendChild(meshSubElement1); // и указываем кому принадлежит
 
                         XmlNode meshSubElement2 = XML.CreateElement("Type"); // даём имя
-                        meshSubElement2.InnerText = msh.MeshName; // и значение
+                        meshSubElement2.InnerText = "Mesh"; // и значение
                         meshelement.AppendChild(meshSubElement2); // и указываем кому принадлежит
 
                         XmlNode meshSubElement3 = XML.CreateElement("Mesh"); // даём имя
@@ -309,6 +309,7 @@ namespace LED_Engine
                     Maps.Free();
                     Maps.LoadMap(Name);
                 }
+                lightSettings.ListsRefresh();
             }
 
             catch (Exception e1)
@@ -320,6 +321,49 @@ namespace LED_Engine
             }
             
             //MessageBox.Show("Chosen file: " + openFileDialog1.FileName);
+        }
+
+        private void NewFileButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                System.IO.File.Delete(Settings.Paths.Maps + "/New_map.xml");
+            }
+            catch
+            {
+
+            }
+
+            System.IO.File.Copy(Settings.Paths.EngineMaps + "/Default/New_map.xml", Settings.Paths.Maps + "/New_map.xml");
+
+            XmlDocument XML = new XmlDocument();
+
+            try
+            {
+                XML.Load(Settings.Paths.Maps + "/New_map.xml");
+                string Name = XML.DocumentElement.SelectSingleNode("Name").InnerText;
+                MapNameTextBox.Text = Name;
+                if ((Name != null) && !Maps.MapsList.ContainsKey(Name))
+                {
+                    Maps.MapsList.Add(Name, openFileDialog1.FileName);
+                    Maps.Free();
+                    Maps.LoadMap(Name);
+                }
+                else
+                {
+                    Maps.Free();
+                    Maps.LoadMap(Name);
+                }
+                lightSettings.ListsRefresh();
+            }
+
+            catch (Exception e1)
+            {
+                Log.WriteLineRed("Maps.LoadMapList() Exception.");
+                Log.WriteLineRed("XmlFile: \"{0}\"", openFileDialog1.FileName);
+                Log.WriteLineYellow("Maybe some XML file in Map directory is not a valid map.");
+                Log.WriteLineYellow(e1.Message);
+            }
         }
 
     }
