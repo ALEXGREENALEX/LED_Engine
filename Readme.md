@@ -1,4 +1,4 @@
-# LED Engine
+# LED Engine (deprecated, see links)
 
 ## Description
 LED Engine is a .NET(C#) 3D engine based on OpenGL, "Pencil.Gaming" wrapper and "GLFW" lib.
