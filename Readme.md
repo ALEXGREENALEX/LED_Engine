@@ -4,9 +4,8 @@
 LED Engine is a .NET(C#) 3D engine based on OpenGL, "Pencil.Gaming" wrapper and "GLFW" lib.
 
 ## Links
-
-1. https://bitbucket.org/ksm12/led_engine
-2. https://github.com/ALEXGREENALEX/LED_Engine
+* https://gitlab.com/Alex_Green/led_engine (current repo)
+* https://github.com/ALEXGREENALEX/LED_Engine (deprecated, without updates, don't use it)
 
 ## Compilation order
 
